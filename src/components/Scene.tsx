@@ -6,7 +6,7 @@ import type { Cubie, DragPreview, FrameId } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
 import FrameGuides from './FrameGuides';
 
-export type CameraPreset = 'reset' | 'front' | 'top' | 'side';
+export type CameraPreset = 'reset' | 'up' | 'down' | 'front' | 'back' | 'right' | 'left';
 
 interface SceneProps {
   cubies: Cubie[];
@@ -23,9 +23,12 @@ interface SceneProps {
 
 const targetMap: Record<CameraPreset, Vector3> = {
   reset: new Vector3(6, 6, 6),
+  up: new Vector3(0, 8, 0),
+  down: new Vector3(0, -8, 0),
   front: new Vector3(0, 0, 8),
-  top: new Vector3(0, 8, 0),
-  side: new Vector3(8, 0, 0),
+  back: new Vector3(0, 0, -8),
+  right: new Vector3(8, 0, 0),
+  left: new Vector3(-8, 0, 0),
 };
 
 function CameraRig({ cameraPreset }: { cameraPreset: CameraPreset }) {

@@ -15,12 +15,12 @@ interface Props {
 }
 
 const faceColors = [
-  new Color('#ef4444'),
-  new Color('#3b82f6'),
-  new Color('#22c55e'),
-  new Color('#f97316'),
-  new Color('#a855f7'),
-  new Color('#eab308'),
+  new Color('#c41e3a'), // Right (Red)
+  new Color('#ff5800'), // Left (Orange)
+  new Color('#ffffff'), // Top (White)
+  new Color('#ffd500'), // Bottom (Yellow)
+  new Color('#009e60'), // Front (Green)
+  new Color('#0051ba'), // Back (Blue)
 ];
 
 export default function CubieMesh({

@@ -72,10 +72,13 @@ export default function ControlPanel({
       <div>
         <p className="mb-2 text-xs text-slate-300">Camera presets</p>
         <div className="grid grid-cols-2 gap-2">
-          <button onClick={() => onSetCameraPreset('reset')}>Reset camera</button>
-          <button onClick={() => onSetCameraPreset('front')}>Front view</button>
-          <button onClick={() => onSetCameraPreset('top')}>Top view</button>
-          <button onClick={() => onSetCameraPreset('side')}>Side view</button>
+          <button onClick={() => onSetCameraPreset('reset')} className="col-span-2">Reset camera</button>
+          <button onClick={() => onSetCameraPreset('up')}>Up (White)</button>
+          <button onClick={() => onSetCameraPreset('down')}>Down (Yellow)</button>
+          <button onClick={() => onSetCameraPreset('front')}>Front (Green)</button>
+          <button onClick={() => onSetCameraPreset('back')}>Back (Blue)</button>
+          <button onClick={() => onSetCameraPreset('right')}>Right (Red)</button>
+          <button onClick={() => onSetCameraPreset('left')}>Left (Orange)</button>
         </div>
       </div>
     </div>
