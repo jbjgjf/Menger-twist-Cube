@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.vercel/
+*.tsbuildinfo
+.DS_Store
+*.local
+verification-*.png
+.vercel

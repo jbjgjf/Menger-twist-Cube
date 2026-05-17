@@ -1,10 +1,11 @@
-import { useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
 import { frames } from './engine/frameDefinitions';
 import { createMove, getAffectedCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
+import { findKeyboardCommand, ignoresKeyboardControls, keyboardFrameOrder } from './input/keyboardControls';
 import type { FrameId, TwistAngle } from './types/puzzle';
 
 const animationDurationMs = 380;
@@ -18,8 +19,7 @@ export default function App() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
 
-  const onMove = (angle: TwistAngle) => {
-    const frame = state.puzzle.selectedFrame;
+  const runMove = (frame: FrameId | null, angle: TwistAngle) => {
     if (!frame) {
       dispatch({ type: 'INVALID', message: 'Select a frame before rotating.' });
       return;
@@ -49,6 +49,10 @@ export default function App() {
     requestAnimationFrame(animate);
   };
 
+  const onMove = (angle: TwistAngle) => {
+    runMove(state.puzzle.selectedFrame, angle);
+  };
+
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
     const scrambleMoves = Array.from({ length: 14 }).map(() => {
@@ -57,6 +61,61 @@ export default function App() {
     });
     dispatch({ type: 'SCRAMBLE', moves: scrambleMoves });
   };
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.repeat || ignoresKeyboardControls(event.target)) return;
+
+      const command = findKeyboardCommand(event);
+      if (!command) return;
+
+      event.preventDefault();
+
+      switch (command.type) {
+        case 'select-frame':
+          dispatch({ type: 'SELECT_FRAME', frameId: command.frameId });
+          return;
+        case 'cycle-frame': {
+          const selected = state.puzzle.selectedFrame;
+          const currentIndex = selected ? keyboardFrameOrder.indexOf(selected) : -1;
+          const nextIndex = (currentIndex + command.direction + keyboardFrameOrder.length) % keyboardFrameOrder.length;
+          dispatch({ type: 'SELECT_FRAME', frameId: keyboardFrameOrder[nextIndex]! });
+          return;
+        }
+        case 'rotate-selected':
+          runMove(state.puzzle.selectedFrame, command.angle);
+          return;
+        case 'rotate-frame':
+          dispatch({ type: 'SELECT_FRAME', frameId: command.frameId });
+          runMove(command.frameId, command.angle);
+          return;
+        case 'undo':
+          dispatch({ type: 'UNDO' });
+          return;
+        case 'redo':
+          dispatch({ type: 'REDO' });
+          return;
+        case 'reset':
+          dispatch({ type: 'RESET_PUZZLE' });
+          return;
+        case 'scramble':
+          scramble();
+          return;
+        case 'toggle-transparent':
+          dispatch({ type: 'TOGGLE_TRANSPARENCY' });
+          return;
+        case 'toggle-guides':
+          dispatch({ type: 'TOGGLE_GUIDES' });
+          return;
+        case 'camera':
+          setCameraPreset(command.preset);
+          return;
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [state.puzzle.isAnimating, state.puzzle.selectedFrame]);
 
   const hoverPreviewCount = useMemo(() => {
     const frame = state.ui.hoveredFrame ?? state.puzzle.selectedFrame;
@@ -126,6 +185,9 @@ export default function App() {
               <li>• Scroll: zoom</li>
               <li>• Hover guide previews affected cubies ({hoverPreviewCount})</li>
               <li>• Drag guide for temporary rotation preview + snap</li>
+              <li>• 1-9: select frame, Q/E: cycle frame</li>
+              <li>• A/D/S or J/L/K: rotate selected frame</li>
+              <li>• Shift+1-9 / Alt+1-9: quick turn frame</li>
             </ul>
           </div>
           <MoveHistory moves={state.puzzle.moveHistory} />

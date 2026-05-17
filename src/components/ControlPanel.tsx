@@ -40,6 +40,12 @@ export default function ControlPanel({
         <span className="font-semibold text-cyan-300">{selectedFrame ?? 'None'}</span>
       </div>
 
+      <div className="rounded-md border border-slate-700 bg-slate-950/40 p-2 text-xs text-slate-300">
+        <p className="mb-1 font-semibold text-slate-100">Keyboard</p>
+        <p>1-9 select frames, Q/E cycle, A/D/S or J/L/K rotate.</p>
+        <p>Shift+1-9 and Alt+1-9 quick-turn a frame directly.</p>
+      </div>
+
       {invalidFeedback && <div className="rounded-md border border-rose-700 bg-rose-900/40 p-2 text-xs">{invalidFeedback}</div>}
 
       <div className="grid grid-cols-3 gap-2">
