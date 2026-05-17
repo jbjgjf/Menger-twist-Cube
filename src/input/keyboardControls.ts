@@ -11,7 +11,7 @@ export type KeyboardCommand =
   | { type: 'scramble' }
   | { type: 'toggle-transparent' }
   | { type: 'toggle-guides' }
-  | { type: 'camera'; preset: 'reset' | 'front' | 'top' | 'side' };
+  | { type: 'camera'; preset: 'reset' | 'up' | 'down' | 'front' | 'back' | 'right' | 'left' };
 
 export interface KeyboardBinding {
   code: string;
@@ -69,8 +69,8 @@ export const keyboardBindings: KeyboardBinding[] = [
   { code: 'KeyF', label: 'F', description: 'Toggle frame guides', command: { type: 'toggle-guides' } },
   { code: 'KeyC', label: 'C', description: 'Reset camera', command: { type: 'camera', preset: 'reset' } },
   { code: 'KeyV', label: 'V', description: 'Front camera', command: { type: 'camera', preset: 'front' } },
-  { code: 'KeyB', label: 'B', description: 'Top camera', command: { type: 'camera', preset: 'top' } },
-  { code: 'KeyN', label: 'N', description: 'Side camera', command: { type: 'camera', preset: 'side' } },
+  { code: 'KeyB', label: 'B', description: 'Up camera', command: { type: 'camera', preset: 'up' } },
+  { code: 'KeyN', label: 'N', description: 'Right camera', command: { type: 'camera', preset: 'right' } },
 ];
 
 export const keyboardFrameOrder = frameOrder;
