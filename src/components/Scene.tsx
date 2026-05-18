@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import { Vector3 } from 'three';
@@ -16,6 +16,7 @@ interface SceneProps {
   showGuides: boolean;
   dragPreview: DragPreview | null;
   cameraPreset: CameraPreset;
+  cameraPresetRequest: number;
   onHoverFrame: (frame: FrameId | null) => void;
   onSelectFrame: (frame: FrameId) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
@@ -31,13 +32,27 @@ const targetMap: Record<CameraPreset, Vector3> = {
   left: new Vector3(-8, 0, 0),
 };
 
-function CameraRig({ cameraPreset }: { cameraPreset: CameraPreset }) {
+function CameraRig({ cameraPreset, cameraPresetRequest }: { cameraPreset: CameraPreset; cameraPresetRequest: number }) {
   const { camera } = useThree();
   const goal = useMemo(() => targetMap[cameraPreset].clone(), [cameraPreset]);
+  const activeGoal = useRef(goal.clone());
+  const isMoving = useRef(true);
+
+  useEffect(() => {
+    activeGoal.current = goal.clone();
+    isMoving.current = true;
+  }, [goal, cameraPresetRequest]);
 
   useFrame(() => {
-    camera.position.lerp(goal, 0.1);
+    if (!isMoving.current) return;
+
+    camera.position.lerp(activeGoal.current, 0.12);
     camera.lookAt(0, 0, 0);
+    if (camera.position.distanceTo(activeGoal.current) < 0.02) {
+      camera.position.copy(activeGoal.current);
+      camera.lookAt(0, 0, 0);
+      isMoving.current = false;
+    }
   });
 
   return null;
@@ -45,13 +60,14 @@ function CameraRig({ cameraPreset }: { cameraPreset: CameraPreset }) {
 
 export default function Scene(props: SceneProps) {
   const controlsRef = useRef<any>(null);
+  const [twistActive, setTwistActive] = useState(false);
 
   useEffect(() => {
     controlsRef.current?.update();
-  }, [props.cameraPreset]);
+  }, [props.cameraPreset, props.cameraPresetRequest]);
 
   return (
-    <Canvas shadows camera={{ position: [6, 6, 6], fov: 50, near: 0.1, far: 100 }}>
+    <Canvas className="touch-none" shadows camera={{ position: [6, 6, 6], fov: 50, near: 0.1, far: 100 }}>
       <color attach="background" args={['#070b14']} />
       <fog attach="fog" args={['#070b14', 12, 28]} />
 
@@ -70,6 +86,9 @@ export default function Scene(props: SceneProps) {
         hoveredFrame={props.hoveredFrame}
         transparentView={props.transparentView}
         dragPreview={props.dragPreview}
+        onSelectFrame={props.onSelectFrame}
+        onDragPreview={props.onDragPreview}
+        onTwistActiveChange={setTwistActive}
       />
 
       {props.showGuides && (
@@ -89,16 +108,20 @@ export default function Scene(props: SceneProps) {
 
       <OrbitControls
         ref={controlsRef}
+        makeDefault
+        enabled={!twistActive}
         enableDamping
         dampingFactor={0.08}
-        screenSpacePanning
+        enablePan={false}
         mouseButtons={{ LEFT: 0, MIDDLE: 1, RIGHT: 2 }}
         touches={{ ONE: 0, TWO: 2 }}
-        rotateSpeed={0.9}
+        rotateSpeed={0.8}
         panSpeed={0.8}
         zoomSpeed={0.9}
+        minDistance={4}
+        maxDistance={16}
       />
-      <CameraRig cameraPreset={props.cameraPreset} />
+      <CameraRig cameraPreset={props.cameraPreset} cameraPresetRequest={props.cameraPresetRequest} />
 
       <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
         <GizmoViewport axisColors={['#ef4444', '#38bdf8', '#4ade80']} labelColor="white" />

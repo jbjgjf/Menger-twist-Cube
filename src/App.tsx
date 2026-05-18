@@ -18,6 +18,12 @@ const randomAngle = (): TwistAngle => {
 export default function App() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
+  const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
+
+  const requestCameraPreset = (preset: CameraPreset) => {
+    setCameraPreset(preset);
+    setCameraPresetRequest((request) => request + 1);
+  };
 
   const runMove = (frame: FrameId | null, angle: TwistAngle) => {
     if (!frame) {
@@ -108,7 +114,7 @@ export default function App() {
           dispatch({ type: 'TOGGLE_GUIDES' });
           return;
         case 'camera':
-          setCameraPreset(command.preset);
+          requestCameraPreset(command.preset);
           return;
       }
     };
@@ -128,14 +134,13 @@ export default function App() {
     if (angle === null) {
       const preview = state.ui.dragPreview;
       if (!preview || Math.abs(preview.angle) < 25) {
-        dispatch({ type: 'INVALID', message: 'Drag farther to commit a quarter turn.' });
         dispatch({ type: 'SET_DRAG_PREVIEW', preview: null });
         return;
       }
 
       const snapped = (Math.abs(preview.angle) > 65 ? Math.sign(preview.angle) * 90 : Math.sign(preview.angle) * 45) as number;
       const moveAngle = (Math.abs(snapped) === 45 ? (snapped > 0 ? 90 : -90) : snapped) as TwistAngle;
-      onMove(moveAngle);
+      runMove(frameId, moveAngle);
       return;
     }
 
@@ -153,6 +158,7 @@ export default function App() {
         showGuides={state.ui.showGuides}
         dragPreview={state.ui.dragPreview}
         cameraPreset={cameraPreset}
+        cameraPresetRequest={cameraPresetRequest}
         onHoverFrame={(frame) => {
           const affected = frame ? getAffectedCubieIds(state.puzzle.cubies, frame) : new Set<string>();
           dispatch({ type: 'SET_HOVER', frameId: frame, affectedIds: affected });
@@ -161,7 +167,7 @@ export default function App() {
         onDragPreview={onGuideDrag}
       />
 
-      <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-4">
+      <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-2 sm:p-4">
         <ControlPanel
           selectedFrame={state.puzzle.selectedFrame}
           isAnimating={state.puzzle.isAnimating}
@@ -173,18 +179,19 @@ export default function App() {
           onRedo={() => dispatch({ type: 'REDO' })}
           onToggleTransparent={() => dispatch({ type: 'TOGGLE_TRANSPARENCY' })}
           onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
-          onSetCameraPreset={setCameraPreset}
+          onSetCameraPreset={requestCameraPreset}
         />
 
-        <div className="pointer-events-auto w-[280px] space-y-3">
+        <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">
           <div className="rounded-lg border border-slate-700 bg-slate-900/70 p-3 text-xs text-slate-300">
             <p className="mb-1 font-semibold text-slate-100">Interaction hints</p>
             <ul className="space-y-1">
-              <li>• Left drag: orbit</li>
-              <li>• Right drag / Shift+drag: pan</li>
+              <li>• Drag empty space: orbit view</li>
+              <li>• Tap cubie face: select and highlight a frame</li>
+              <li>• Drag highlighted cubies: preview and release to turn</li>
+              <li>• Bottom-right axis: tap a direction to reorient view</li>
               <li>• Scroll: zoom</li>
-              <li>• Hover guide previews affected cubies ({hoverPreviewCount})</li>
-              <li>• Drag guide for temporary rotation preview + snap</li>
+              <li>• Hover/drag guide rings still work ({hoverPreviewCount})</li>
               <li>• 1-9: select frame, Q/E: cycle frame</li>
               <li>• A/D/S or J/L/K: rotate selected frame</li>
               <li>• Shift+1-9 / Alt+1-9: quick turn frame</li>

@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
 import type { Quaternion, Vector3Tuple } from 'three';
 import { Color, Quaternion as ThreeQuaternion, Vector3 } from 'three';
+import type { ThreeEvent } from '@react-three/fiber';
+import { Edges } from '@react-three/drei';
 import { frameById } from '../engine/frameDefinitions';
 import type { Cubie, FrameId } from '../types/puzzle';
 
@@ -10,8 +12,13 @@ interface Props {
   gap: number;
   transparent: boolean;
   dimmed: boolean;
+  highlighted: boolean;
   selectedFrame: FrameId | null;
   dragPreview: { frameId: FrameId; angle: number } | null;
+  onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
+  onPointerMove: (event: ThreeEvent<PointerEvent>) => void;
+  onPointerUp: (event: ThreeEvent<PointerEvent>) => void;
+  onClick: (cubie: Cubie, event: ThreeEvent<MouseEvent>) => void;
 }
 
 const faceColors = [
@@ -29,8 +36,13 @@ export default function CubieMesh({
   gap,
   transparent,
   dimmed,
+  highlighted,
   selectedFrame,
   dragPreview,
+  onPointerDown,
+  onPointerMove,
+  onPointerUp,
+  onClick,
 }: Props) {
   const previewQuaternion = useMemo(() => {
     if (!dragPreview) return null;
@@ -64,10 +76,20 @@ export default function CubieMesh({
     return [rotated.x * (size + gap), rotated.y * (size + gap), rotated.z * (size + gap)];
   }, [cubie.currentPosition, dragPreview, gap, size]);
 
-  const emissiveIntensity = selectedFrame ? 0.08 : 0.02;
+  const emissiveIntensity = highlighted ? 0.18 : selectedFrame ? 0.04 : 0.02;
 
   return (
-    <mesh position={position} quaternion={orientation} castShadow receiveShadow>
+    <mesh
+      position={position}
+      quaternion={orientation}
+      castShadow
+      receiveShadow
+      onPointerDown={(event) => onPointerDown(cubie, event)}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onClick={(event) => onClick(cubie, event)}
+    >
       <boxGeometry args={[size, size, size]} />
       {faceColors.map((color, index) => (
         <meshStandardMaterial
@@ -75,13 +97,21 @@ export default function CubieMesh({
           attach={`material-${index}`}
           color={color}
           transparent={transparent || dimmed}
-          opacity={dimmed ? 0.25 : transparent ? 0.5 : 0.95}
+          opacity={dimmed ? 0.18 : transparent ? 0.52 : 0.96}
           metalness={0.25}
           roughness={0.35}
           emissive={color}
           emissiveIntensity={emissiveIntensity}
         />
       ))}
+      {highlighted && (
+        <Edges
+          threshold={15}
+          color={dragPreview ? '#f8fafc' : '#67e8f9'}
+          scale={1.015}
+          renderOrder={20}
+        />
+      )}
     </mesh>
   );
 }
