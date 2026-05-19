@@ -1,4 +1,4 @@
-import type { FrameId, TwistAngle } from '../types/puzzle';
+import type { FrameId, RotationFrame, TwistAngle } from '../types/puzzle';
 
 export type KeyboardCommand =
   | { type: 'select-frame'; frameId: FrameId }
@@ -24,16 +24,16 @@ export interface KeyboardBinding {
   ctrlKey?: boolean;
 }
 
-const frameOrder: FrameId[] = ['X_PLUS', 'X_MINUS', 'Y_PLUS', 'Y_MINUS', 'Z_PLUS', 'Z_MINUS', 'H_X', 'H_Y', 'H_Z'];
+const frameOrderFromFrames = (frames: RotationFrame[]): FrameId[] => frames.map((frame) => frame.id);
 
-const numberFrameBindings: KeyboardBinding[] = frameOrder.map((frameId, index) => ({
+const numberFrameBindings = (frameOrder: FrameId[]): KeyboardBinding[] => frameOrder.slice(0, 9).map((frameId, index) => ({
   code: `Digit${index + 1}`,
   label: `${index + 1}`,
   description: `Select ${frameId}`,
   command: { type: 'select-frame', frameId },
 }));
 
-const quickTurnBindings: KeyboardBinding[] = frameOrder.flatMap((frameId, index) => [
+const quickTurnBindings = (frameOrder: FrameId[]): KeyboardBinding[] => frameOrder.slice(0, 9).flatMap((frameId, index) => [
   {
     code: `Digit${index + 1}`,
     label: `Shift+${index + 1}`,
@@ -50,9 +50,11 @@ const quickTurnBindings: KeyboardBinding[] = frameOrder.flatMap((frameId, index)
   },
 ]);
 
-export const keyboardBindings: KeyboardBinding[] = [
-  ...quickTurnBindings,
-  ...numberFrameBindings,
+export const createKeyboardBindings = (frames: RotationFrame[]): KeyboardBinding[] => {
+  const frameOrder = frameOrderFromFrames(frames);
+  return [
+  ...quickTurnBindings(frameOrder),
+  ...numberFrameBindings(frameOrder),
   { code: 'KeyQ', label: 'Q', description: 'Previous frame', command: { type: 'cycle-frame', direction: -1 } },
   { code: 'KeyE', label: 'E', description: 'Next frame', command: { type: 'cycle-frame', direction: 1 } },
   { code: 'KeyA', label: 'A', description: 'Turn selected frame -90', command: { type: 'rotate-selected', angle: -90 } },
@@ -71,11 +73,14 @@ export const keyboardBindings: KeyboardBinding[] = [
   { code: 'KeyV', label: 'V', description: 'Front camera', command: { type: 'camera', preset: 'front' } },
   { code: 'KeyB', label: 'B', description: 'Up camera', command: { type: 'camera', preset: 'up' } },
   { code: 'KeyN', label: 'N', description: 'Right camera', command: { type: 'camera', preset: 'right' } },
-];
+  ];
+};
 
-export const keyboardFrameOrder = frameOrder;
+export const keyboardBindings: KeyboardBinding[] = createKeyboardBindings([]);
+export const keyboardFrameOrder: FrameId[] = [];
 
-export const findKeyboardCommand = (event: KeyboardEvent): KeyboardCommand | null => {
+export const findKeyboardCommand = (event: KeyboardEvent, frames: RotationFrame[]): KeyboardCommand | null => {
+  const keyboardBindings = createKeyboardBindings(frames);
   const binding = keyboardBindings.find((candidate) => {
     const modifierMatches =
       Boolean(candidate.shiftKey) === event.shiftKey &&

@@ -1,6 +1,6 @@
 # Menger Twist Cube
 
-Menger Twist Cube is a React + Three.js prototype for a 3D rotational puzzle inspired by a level-1 Menger cube.
+Menger Twist Cube is a React + Three.js prototype for a 3D rotational puzzle inspired by Menger cubes.
 
 The current build focuses on validating the core interaction model:
 
@@ -8,7 +8,8 @@ The current build focuses on validating the core interaction model:
 - selectable rotation frames
 - animated quarter-turn and half-turn moves
 - move history, undo, redo, reset, and scramble
-- keyboard-first controls that can be extended for future Level N puzzles
+- Level 1 and Level 2 puzzle generation
+- keyboard-first controls generated from the active level's rotation frames
 
 ## Requirements
 
@@ -42,18 +43,16 @@ npm run build
 | Action | Control |
 | --- | --- |
 | Orbit camera | Left drag |
-| Pan camera | Right drag or Shift + drag |
 | Zoom | Scroll |
-| Preview frame | Hover a guide |
-| Select frame | Click a guide |
-| Drag rotation preview | Drag a guide |
+| Select frame | Tap/click a cubie face or guide |
+| Drag rotation preview | Drag highlighted cubies or a guide |
 
 ### Keyboard
 
 | Action | Key |
 | --- | --- |
-| Select frame | `1` to `9` |
-| Previous / next frame | `Q` / `E` |
+| Select first nine frames | `1` to `9` |
+| Previous / next frame across all frames | `Q` / `E` |
 | Rotate selected frame -90 | `A` or `J` |
 | Rotate selected frame +90 | `D` or `L` |
 | Rotate selected frame 180 | `S` or `K` |
@@ -78,7 +77,15 @@ The file exposes:
 - `keyboardBindings`: declarative key bindings mapped to commands
 - `findKeyboardCommand`: a small resolver used by `App.tsx`
 
-For future Level N expansion, add or generate new frame IDs in the puzzle/frame layer, then update the frame order and bindings in one place. The app only consumes commands such as `select-frame`, `rotate-selected`, and `rotate-frame`, so the UI does not need to know how many frames a future level contains.
+Keyboard bindings are generated from the active level's frame list. Number keys target the first nine frames, while `Q/E` cycles through every generated frame for the current level.
+
+## Level Scaling
+
+Puzzle generation is centralized in `src/engine/generateMenger.ts`.
+
+- `generateMenger(level)` creates the recursive Menger cell set. Level 1 produces 20 cubies; Level 2 produces 400 cubies.
+- `generateRotationFrames(level)` in `src/engine/frameDefinitions.ts` creates one slice frame per coordinate for each axis. Level 1 has 9 frames; Level 2 has 27 frames.
+- Move application receives the active frame map, so reducer, UI, keyboard, scramble, undo, and redo work without hard-coded frame IDs.
 
 ## Project Structure
 

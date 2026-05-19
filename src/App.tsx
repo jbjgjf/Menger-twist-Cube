@@ -2,10 +2,9 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
-import { frames } from './engine/frameDefinitions';
 import { createMove, getAffectedCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
-import { findKeyboardCommand, ignoresKeyboardControls, keyboardFrameOrder } from './input/keyboardControls';
+import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
 import type { FrameId, TwistAngle } from './types/puzzle';
 
 const animationDurationMs = 380;
@@ -62,8 +61,8 @@ export default function App() {
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
     const scrambleMoves = Array.from({ length: 14 }).map(() => {
-      const frame = frames[Math.floor(Math.random() * frames.length)]!;
-      return createMove(frame.id, randomAngle());
+      const frame = state.puzzle.frames[Math.floor(Math.random() * state.puzzle.frames.length)]!;
+      return createMove(frame.id, randomAngle(), state.puzzle.frameById);
     });
     dispatch({ type: 'SCRAMBLE', moves: scrambleMoves });
   };
@@ -72,7 +71,7 @@ export default function App() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.repeat || ignoresKeyboardControls(event.target)) return;
 
-      const command = findKeyboardCommand(event);
+      const command = findKeyboardCommand(event, state.puzzle.frames);
       if (!command) return;
 
       event.preventDefault();
@@ -83,6 +82,7 @@ export default function App() {
           return;
         case 'cycle-frame': {
           const selected = state.puzzle.selectedFrame;
+          const keyboardFrameOrder = state.puzzle.frames.map((frame) => frame.id);
           const currentIndex = selected ? keyboardFrameOrder.indexOf(selected) : -1;
           const nextIndex = (currentIndex + command.direction + keyboardFrameOrder.length) % keyboardFrameOrder.length;
           dispatch({ type: 'SELECT_FRAME', frameId: keyboardFrameOrder[nextIndex]! });
@@ -121,13 +121,13 @@ export default function App() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [state.puzzle.isAnimating, state.puzzle.selectedFrame]);
+  }, [state.puzzle.frames, state.puzzle.frameById, state.puzzle.isAnimating, state.puzzle.selectedFrame]);
 
   const hoverPreviewCount = useMemo(() => {
     const frame = state.ui.hoveredFrame ?? state.puzzle.selectedFrame;
     if (!frame) return 0;
-    return getAffectedCubieIds(state.puzzle.cubies, frame).size;
-  }, [state.puzzle.cubies, state.puzzle.selectedFrame, state.ui.hoveredFrame]);
+    return getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById).size;
+  }, [state.puzzle.cubies, state.puzzle.frameById, state.puzzle.selectedFrame, state.ui.hoveredFrame]);
 
   const onGuideDrag = (frameId: FrameId, angle: number | null) => {
     dispatch({ type: 'SELECT_FRAME', frameId });
@@ -152,6 +152,9 @@ export default function App() {
     <div className="relative h-full w-full">
       <Scene
         cubies={state.puzzle.cubies}
+        level={state.puzzle.level}
+        frames={state.puzzle.frames}
+        frameById={state.puzzle.frameById}
         selectedFrame={state.puzzle.selectedFrame}
         hoveredFrame={state.ui.hoveredFrame}
         transparentView={state.ui.transparentView}
@@ -160,7 +163,7 @@ export default function App() {
         cameraPreset={cameraPreset}
         cameraPresetRequest={cameraPresetRequest}
         onHoverFrame={(frame) => {
-          const affected = frame ? getAffectedCubieIds(state.puzzle.cubies, frame) : new Set<string>();
+          const affected = frame ? getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById) : new Set<string>();
           dispatch({ type: 'SET_HOVER', frameId: frame, affectedIds: affected });
         }}
         onSelectFrame={(frameId) => dispatch({ type: 'SELECT_FRAME', frameId })}
@@ -170,6 +173,9 @@ export default function App() {
       <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-2 sm:p-4">
         <ControlPanel
           selectedFrame={state.puzzle.selectedFrame}
+          level={state.puzzle.level}
+          cubieCount={state.puzzle.cubies.length}
+          frameCount={state.puzzle.frames.length}
           isAnimating={state.puzzle.isAnimating}
           invalidFeedback={state.ui.invalidFeedback}
           onMove={onMove}
@@ -180,6 +186,7 @@ export default function App() {
           onToggleTransparent={() => dispatch({ type: 'TOGGLE_TRANSPARENCY' })}
           onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
           onSetCameraPreset={requestCameraPreset}
+          onSetLevel={(level) => dispatch({ type: 'SET_LEVEL', level })}
         />
 
         <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">

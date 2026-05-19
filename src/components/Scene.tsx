@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import { Vector3 } from 'three';
-import type { Cubie, DragPreview, FrameId } from '../types/puzzle';
+import type { Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
 import FrameGuides from './FrameGuides';
 
@@ -10,6 +10,9 @@ export type CameraPreset = 'reset' | 'up' | 'down' | 'front' | 'back' | 'right' 
 
 interface SceneProps {
   cubies: Cubie[];
+  level: number;
+  frames: RotationFrame[];
+  frameById: Map<FrameId, RotationFrame>;
   selectedFrame: FrameId | null;
   hoveredFrame: FrameId | null;
   transparentView: boolean;
@@ -61,6 +64,10 @@ function CameraRig({ cameraPreset, cameraPresetRequest }: { cameraPreset: Camera
 export default function Scene(props: SceneProps) {
   const controlsRef = useRef<any>(null);
   const [twistActive, setTwistActive] = useState(false);
+  const gridSize = 3 ** props.level;
+  const cubieSize = 2.65 / gridSize;
+  const gap = 0.24 / gridSize;
+  const cellStride = cubieSize + gap;
 
   useEffect(() => {
     controlsRef.current?.update();
@@ -82,6 +89,8 @@ export default function Scene(props: SceneProps) {
 
       <PuzzleCube
         cubies={props.cubies}
+        level={props.level}
+        frameById={props.frameById}
         selectedFrame={props.selectedFrame}
         hoveredFrame={props.hoveredFrame}
         transparentView={props.transparentView}
@@ -93,6 +102,8 @@ export default function Scene(props: SceneProps) {
 
       {props.showGuides && (
         <FrameGuides
+          frames={props.frames}
+          cellStride={cellStride}
           selectedFrame={props.selectedFrame}
           hoveredFrame={props.hoveredFrame}
           onHover={props.onHoverFrame}

@@ -3,8 +3,7 @@ import type { Quaternion, Vector3Tuple } from 'three';
 import { Color, Quaternion as ThreeQuaternion, Vector3 } from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Edges } from '@react-three/drei';
-import { frameById } from '../engine/frameDefinitions';
-import type { Cubie, FrameId } from '../types/puzzle';
+import type { Cubie, FrameId, RotationFrame } from '../types/puzzle';
 
 interface Props {
   cubie: Cubie;
@@ -13,6 +12,7 @@ interface Props {
   transparent: boolean;
   dimmed: boolean;
   highlighted: boolean;
+  frameById: Map<FrameId, RotationFrame>;
   selectedFrame: FrameId | null;
   dragPreview: { frameId: FrameId; angle: number } | null;
   onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
@@ -37,6 +37,7 @@ export default function CubieMesh({
   transparent,
   dimmed,
   highlighted,
+  frameById,
   selectedFrame,
   dragPreview,
   onPointerDown,
@@ -52,7 +53,7 @@ export default function CubieMesh({
       new Vector3(frame.axis[0], frame.axis[1], frame.axis[2]),
       (dragPreview.angle * Math.PI) / 180,
     );
-  }, [dragPreview, cubie.currentPosition]);
+  }, [dragPreview, cubie.currentPosition, frameById]);
 
   const orientation = useMemo<Quaternion>(() => {
     if (!previewQuaternion) return cubie.orientation;
@@ -74,7 +75,7 @@ export default function CubieMesh({
     );
 
     return [rotated.x * (size + gap), rotated.y * (size + gap), rotated.z * (size + gap)];
-  }, [cubie.currentPosition, dragPreview, gap, size]);
+  }, [cubie.currentPosition, dragPreview, frameById, gap, size]);
 
   const emissiveIntensity = highlighted ? 0.18 : selectedFrame ? 0.04 : 0.02;
 

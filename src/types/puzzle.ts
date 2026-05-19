@@ -1,15 +1,7 @@
 import type { Quaternion, Vector3Tuple } from 'three';
 
-export type FrameId =
-  | 'X_PLUS'
-  | 'X_MINUS'
-  | 'Y_PLUS'
-  | 'Y_MINUS'
-  | 'Z_PLUS'
-  | 'Z_MINUS'
-  | 'H_X'
-  | 'H_Y'
-  | 'H_Z';
+export type FrameId = string;
+export type AxisName = 'X' | 'Y' | 'Z';
 
 export type CubieType = 'outer' | 'hole' | 'corner' | 'edge' | 'innerWall';
 
@@ -31,6 +23,9 @@ export interface Cubie {
 }
 
 export interface PuzzleState {
+  level: number;
+  frames: RotationFrame[];
+  frameById: Map<FrameId, RotationFrame>;
   cubies: Cubie[];
   moveHistory: Move[];
   redoStack: Move[];
@@ -41,7 +36,11 @@ export interface PuzzleState {
 export interface RotationFrame {
   id: FrameId;
   name: string;
+  axisName: AxisName;
   axis: Vector3Tuple;
+  layer: number;
+  extent: number;
+  kind: 'slice' | 'core';
   selector: (position: Vector3Tuple) => boolean;
   color: string;
   radius: number;

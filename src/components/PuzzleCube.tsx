@@ -1,13 +1,14 @@
 import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Quaternion, Vector2, Vector3 } from 'three';
-import type { Cubie, DragPreview, FrameId } from '../types/puzzle';
+import type { AxisName, Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
 import { getAffectedCubieIds } from '../engine/moves';
-import { frameById } from '../engine/frameDefinitions';
 import CubieMesh from './CubieMesh';
 
 interface Props {
   cubies: Cubie[];
+  level: number;
+  frameById: Map<FrameId, RotationFrame>;
   selectedFrame: FrameId | null;
   hoveredFrame: FrameId | null;
   transparentView: boolean;
@@ -16,9 +17,6 @@ interface Props {
   onDragPreview: (frame: FrameId, angle: number | null) => void;
   onTwistActiveChange: (active: boolean) => void;
 }
-
-const CUBIE_SIZE = 0.88;
-const GAP = 0.08;
 
 type TwistGesture = {
   frameId: FrameId;
@@ -29,7 +27,13 @@ type TwistGesture = {
   hasMoved: boolean;
 };
 
-const frameForCubieHit = (cubie: Cubie, event: ThreeEvent<MouseEvent | PointerEvent>): FrameId => {
+const layerLabel = (layer: number): string => (layer > 0 ? `+${layer}` : `${layer}`);
+
+const frameForCubieHit = (
+  cubie: Cubie,
+  event: ThreeEvent<MouseEvent | PointerEvent>,
+  frameById: Map<FrameId, RotationFrame>,
+): FrameId | null => {
   const normal = event.face?.normal.clone() ?? new Vector3(...cubie.currentPosition).normalize();
   const worldQuaternion = new Quaternion();
   event.object.getWorldQuaternion(worldQuaternion);
@@ -43,11 +47,10 @@ const frameForCubieHit = (cubie: Cubie, event: ThreeEvent<MouseEvent | PointerEv
       ? 1
       : 2;
 
-  const axisNames = ['X', 'Y', 'Z'] as const;
+  const axisNames = ['X', 'Y', 'Z'] as AxisName[];
   const value = cubie.currentPosition[axisIndex] ?? 0;
-  if (value > 0) return `${axisNames[axisIndex]}_PLUS` as FrameId;
-  if (value < 0) return `${axisNames[axisIndex]}_MINUS` as FrameId;
-  return `H_${axisNames[axisIndex]}` as FrameId;
+  const id = `${axisNames[axisIndex]}_${layerLabel(value)}`;
+  return frameById.has(id) ? id : null;
 };
 
 const screenPoint = (point: Vector3, event: ThreeEvent<PointerEvent>): Vector2 => {
@@ -59,7 +62,12 @@ const screenPoint = (point: Vector3, event: ThreeEvent<PointerEvent>): Vector2 =
   );
 };
 
-const screenTangentForTwist = (frameId: FrameId, hitPoint: Vector3, event: ThreeEvent<PointerEvent>): Vector2 => {
+const screenTangentForTwist = (
+  frameId: FrameId,
+  hitPoint: Vector3,
+  event: ThreeEvent<PointerEvent>,
+  frameById: Map<FrameId, RotationFrame>,
+): Vector2 => {
   const frame = frameById.get(frameId);
   if (!frame) return new Vector2(1, 0);
 
@@ -77,6 +85,8 @@ const screenTangentForTwist = (frameId: FrameId, hitPoint: Vector3, event: Three
 
 export default function PuzzleCube({
   cubies,
+  level,
+  frameById,
   selectedFrame,
   hoveredFrame,
   transparentView,
@@ -87,12 +97,15 @@ export default function PuzzleCube({
 }: Props) {
   const twistGesture = useRef<TwistGesture | null>(null);
   const suppressNextClick = useRef(false);
+  const gridSize = 3 ** level;
+  const cubieSize = 2.65 / gridSize;
+  const gap = 0.24 / gridSize;
 
   const highlightedIds = useMemo(() => {
     const targetFrame = hoveredFrame ?? selectedFrame;
     if (!targetFrame) return new Set<string>();
-    return getAffectedCubieIds(cubies, targetFrame);
-  }, [cubies, hoveredFrame, selectedFrame]);
+    return getAffectedCubieIds(cubies, targetFrame, frameById);
+  }, [cubies, frameById, hoveredFrame, selectedFrame]);
 
   const endTwist = (event: ThreeEvent<PointerEvent>) => {
     const gesture = twistGesture.current;
@@ -115,11 +128,12 @@ export default function PuzzleCube({
           <CubieMesh
             key={cubie.id}
             cubie={cubie}
-            size={CUBIE_SIZE}
-            gap={GAP}
+            size={cubieSize}
+            gap={gap}
             transparent={transparentView}
             dimmed={dimmed}
             highlighted={highlighted}
+            frameById={frameById}
             selectedFrame={selectedFrame}
             dragPreview={dragPreview}
             onPointerDown={(targetCubie, event) => {
@@ -131,7 +145,7 @@ export default function PuzzleCube({
                 pointerId: event.pointerId,
                 startX: event.clientX,
                 startY: event.clientY,
-                screenTangent: screenTangentForTwist(selectedFrame, event.point, event),
+                screenTangent: screenTangentForTwist(selectedFrame, event.point, event, frameById),
                 hasMoved: false,
               };
               onTwistActiveChange(true);
@@ -158,7 +172,8 @@ export default function PuzzleCube({
                 return;
               }
               event.stopPropagation();
-              onSelectFrame(frameForCubieHit(targetCubie, event));
+              const frameId = frameForCubieHit(targetCubie, event, frameById);
+              if (frameId) onSelectFrame(frameId);
             }}
           />
         );

@@ -1,10 +1,11 @@
 import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Torus } from '@react-three/drei';
-import type { FrameId } from '../types/puzzle';
-import { frames } from '../engine/frameDefinitions';
+import type { FrameId, RotationFrame } from '../types/puzzle';
 
 interface Props {
+  frames: RotationFrame[];
+  cellStride: number;
   selectedFrame: FrameId | null;
   hoveredFrame: FrameId | null;
   onHover: (frame: FrameId | null) => void;
@@ -12,13 +13,27 @@ interface Props {
   onDragPreview: (frame: FrameId, angle: number | null) => void;
 }
 
-const ringRotation = (frameId: FrameId): [number, number, number] => {
-  if (frameId.includes('X')) return [0, Math.PI / 2, 0];
-  if (frameId.includes('Y')) return [Math.PI / 2, 0, 0];
+const ringRotation = (frame: RotationFrame): [number, number, number] => {
+  if (frame.axisName === 'X') return [0, Math.PI / 2, 0];
+  if (frame.axisName === 'Y') return [Math.PI / 2, 0, 0];
   return [0, 0, 0];
 };
 
-export default function FrameGuides({ selectedFrame, hoveredFrame, onHover, onSelect, onDragPreview }: Props) {
+const ringPosition = (frame: RotationFrame, cellStride: number): [number, number, number] => [
+  frame.axis[0] * frame.layer * cellStride,
+  frame.axis[1] * frame.layer * cellStride,
+  frame.axis[2] * frame.layer * cellStride,
+];
+
+export default function FrameGuides({
+  frames,
+  cellStride,
+  selectedFrame,
+  hoveredFrame,
+  onHover,
+  onSelect,
+  onDragPreview,
+}: Props) {
   const dragStart = useRef<{ x: number; frame: FrameId } | null>(null);
 
   const orderedFrames = useMemo(() => [...frames].sort((a, b) => b.radius - a.radius), []);
@@ -33,8 +48,9 @@ export default function FrameGuides({ selectedFrame, hoveredFrame, onHover, onSe
         return (
           <Torus
             key={frame.id}
-            args={[frame.radius, frame.id.startsWith('H_') ? 0.04 : 0.03, 24, 120]}
-            rotation={ringRotation(frame.id)}
+            args={[frame.radius * cellStride, frame.kind === 'core' ? 0.04 : 0.02, 16, 96]}
+            position={ringPosition(frame, cellStride)}
+            rotation={ringRotation(frame)}
             onPointerOver={(event: ThreeEvent<PointerEvent>) => {
               event.stopPropagation();
               onHover(frame.id);

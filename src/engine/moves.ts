@@ -1,22 +1,17 @@
-import type { Cubie, FrameId, Move, TwistAngle } from '../types/puzzle';
-import { frameById } from './frameDefinitions';
+import type { Cubie, FrameId, Move, RotationFrame, TwistAngle } from '../types/puzzle';
 import { angleToNotation, rotatePosition, rotateQuaternion } from './geometry';
 
-export const notationForMove = (frameId: FrameId, angle: TwistAngle): string => {
-  const base = frameId
-    .replace('PLUS', '+')
-    .replace('MINUS', '-')
-    .replace('X_', 'X')
-    .replace('Y_', 'Y')
-    .replace('Z_', 'Z')
-    .replace('H_X', 'Hx')
-    .replace('H_Y', 'Hy')
-    .replace('H_Z', 'Hz');
+export const notationForMove = (frame: RotationFrame | undefined, frameId: FrameId, angle: TwistAngle): string => {
+  const base = frame?.name ?? frameId;
 
   return `${base}${angleToNotation(angle)}`;
 };
 
-export const getAffectedCubieIds = (cubies: Cubie[], frameId: FrameId): Set<string> => {
+export const getAffectedCubieIds = (
+  cubies: Cubie[],
+  frameId: FrameId,
+  frameById: Map<FrameId, RotationFrame>,
+): Set<string> => {
   const frame = frameById.get(frameId);
   if (!frame) return new Set();
 
@@ -24,7 +19,12 @@ export const getAffectedCubieIds = (cubies: Cubie[], frameId: FrameId): Set<stri
   return new Set(ids);
 };
 
-export const applyTwistToCubies = (cubies: Cubie[], frameId: FrameId, angle: TwistAngle): Cubie[] => {
+export const applyTwistToCubies = (
+  cubies: Cubie[],
+  frameId: FrameId,
+  angle: TwistAngle,
+  frameById: Map<FrameId, RotationFrame>,
+): Cubie[] => {
   const frame = frameById.get(frameId);
   if (!frame) return cubies;
 
@@ -41,9 +41,13 @@ export const applyTwistToCubies = (cubies: Cubie[], frameId: FrameId, angle: Twi
   });
 };
 
-export const createMove = (frameId: FrameId, angle: TwistAngle): Move => ({
+export const createMove = (
+  frameId: FrameId,
+  angle: TwistAngle,
+  frameById: Map<FrameId, RotationFrame>,
+): Move => ({
   frameId,
   angle,
-  notation: notationForMove(frameId, angle),
+  notation: notationForMove(frameById.get(frameId), frameId, angle),
   timestamp: Date.now(),
 });
