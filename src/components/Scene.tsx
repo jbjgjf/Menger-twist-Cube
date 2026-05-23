@@ -70,7 +70,10 @@ export default function Scene(props: SceneProps) {
   const cellStride = cubieSize + gap;
 
   useEffect(() => {
-    controlsRef.current?.update();
+    if (controlsRef.current) {
+      controlsRef.current.target.set(0, 0, 0);
+      controlsRef.current.update();
+    }
   }, [props.cameraPreset, props.cameraPresetRequest]);
 
   return (
@@ -127,14 +130,14 @@ export default function Scene(props: SceneProps) {
         enabled={!twistActive}
         enableDamping
         dampingFactor={0.08}
-        enablePan={false}
+        enablePan={true}
         mouseButtons={{ LEFT: 0, MIDDLE: 1, RIGHT: 2 }}
         touches={{ ONE: 0, TWO: 2 }}
         rotateSpeed={0.8}
         panSpeed={0.8}
         zoomSpeed={0.9}
-        minDistance={4}
-        maxDistance={16}
+        minDistance={2}
+        maxDistance={50}
       />
       <CameraRig cameraPreset={props.cameraPreset} cameraPresetRequest={props.cameraPresetRequest} />
 

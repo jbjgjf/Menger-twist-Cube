@@ -36,11 +36,12 @@ const frameForCubieHit = (
   cubie: Cubie,
   event: ThreeEvent<MouseEvent | PointerEvent>,
   frameById: Map<FrameId, RotationFrame>,
+  selectedFrame: FrameId | null,
 ): FrameId | null => {
   const normal = event.face?.normal.clone() ?? new Vector3(...cubie.currentPosition).normalize();
   normal.applyQuaternion(cubie.orientation).normalize();
 
-  const axisIndex = Math.abs(normal.x) > Math.abs(normal.y)
+  const normalAxisIndex = Math.abs(normal.x) > Math.abs(normal.y)
     ? Math.abs(normal.x) > Math.abs(normal.z)
       ? 0
       : 2
@@ -49,9 +50,26 @@ const frameForCubieHit = (
       : 2;
 
   const axisNames = ['X', 'Y', 'Z'] as AxisName[];
-  const value = cubie.currentPosition[axisIndex] ?? 0;
-  const id = `${axisNames[axisIndex]}_${layerLabel(value)}`;
-  return frameById.has(id) ? id : null;
+  
+  // Prioritize axes perpendicular to the clicked face (i.e. going deep)
+  const deepAxes = [0, 1, 2].filter((i) => i !== normalAxisIndex);
+  const preferredOrder = [...deepAxes, normalAxisIndex];
+
+  const candidateFrames = preferredOrder.map((index) => {
+    const value = cubie.currentPosition[index] ?? 0;
+    return `${axisNames[index]}_${layerLabel(value)}`;
+  }).filter((id) => frameById.has(id));
+
+  if (candidateFrames.length === 0) return null;
+
+  const currentIndex = selectedFrame ? candidateFrames.indexOf(selectedFrame) : -1;
+  if (currentIndex !== -1) {
+    // Cycle to the next frame in the preferred order
+    return candidateFrames[(currentIndex + 1) % candidateFrames.length]!;
+  }
+
+  // Default to the first deep axis
+  return candidateFrames[0]!;
 };
 
 const screenPoint = (point: Vector3, event: ThreeEvent<PointerEvent>): Vector2 => {
@@ -168,7 +186,7 @@ export default function PuzzleCube({
           return;
         }
         event.stopPropagation();
-        const frameId = frameForCubieHit(targetCubie, event, frameById);
+        const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
         if (frameId) onSelectFrame(frameId);
       },
     };
@@ -254,7 +272,7 @@ export default function PuzzleCube({
                 return;
               }
               event.stopPropagation();
-              const frameId = frameForCubieHit(targetCubie, event, frameById);
+              const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
               if (frameId) onSelectFrame(frameId);
             }}
           />
