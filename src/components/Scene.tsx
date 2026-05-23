@@ -78,13 +78,17 @@ export default function Scene(props: SceneProps) {
       <color attach="background" args={['#070b14']} />
       <fog attach="fog" args={['#070b14', 12, 28]} />
 
-      <ambientLight intensity={0.45} />
+      <ambientLight intensity={0.85} />
       <directionalLight
         castShadow
         position={[8, 10, 6]}
-        intensity={1.2}
+        intensity={1.8}
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
+      />
+      <directionalLight
+        position={[-8, -2, -6]}
+        intensity={0.6}
       />
 
       <PuzzleCube

@@ -20,8 +20,8 @@ interface Props {
 }
 
 const faceColors = [
-  new Color('#ef4444'),
-  new Color('#f97316'),
+  new Color('#dc2626'), // deeper red (tailwind red-600)
+  new Color('#fb923c'), // lighter orange (tailwind orange-400)
   new Color('#ffffff'),
   new Color('#facc15'),
   new Color('#22c55e'),
