@@ -1,9 +1,10 @@
 import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
-import { Quaternion, Vector2, Vector3 } from 'three';
+import { Vector2, Vector3 } from 'three';
 import type { AxisName, Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
 import { getAffectedCubieIds } from '../engine/moves';
 import CubieMesh from './CubieMesh';
+import InstancedCubieMeshes from './InstancedCubieMeshes';
 
 interface Props {
   cubies: Cubie[];
@@ -27,6 +28,8 @@ type TwistGesture = {
   hasMoved: boolean;
 };
 
+const instancedRenderingThreshold = 1200;
+
 const layerLabel = (layer: number): string => (layer > 0 ? `+${layer}` : `${layer}`);
 
 const frameForCubieHit = (
@@ -35,9 +38,7 @@ const frameForCubieHit = (
   frameById: Map<FrameId, RotationFrame>,
 ): FrameId | null => {
   const normal = event.face?.normal.clone() ?? new Vector3(...cubie.currentPosition).normalize();
-  const worldQuaternion = new Quaternion();
-  event.object.getWorldQuaternion(worldQuaternion);
-  normal.applyQuaternion(worldQuaternion).normalize();
+  normal.applyQuaternion(cubie.orientation).normalize();
 
   const axisIndex = Math.abs(normal.x) > Math.abs(normal.y)
     ? Math.abs(normal.x) > Math.abs(normal.z)
@@ -107,6 +108,16 @@ export default function PuzzleCube({
     return getAffectedCubieIds(cubies, targetFrame, frameById);
   }, [cubies, frameById, hoveredFrame, selectedFrame]);
 
+  const highlightedCubies = useMemo(() => {
+    if (cubies.length <= instancedRenderingThreshold || highlightedIds.size === 0) return [];
+    return cubies.filter((cubie) => highlightedIds.has(cubie.id));
+  }, [cubies, highlightedIds]);
+
+  const baseCubies = useMemo(() => {
+    if (cubies.length <= instancedRenderingThreshold || highlightedIds.size === 0) return cubies;
+    return cubies.filter((cubie) => !highlightedIds.has(cubie.id));
+  }, [cubies, highlightedIds]);
+
   const endTwist = (event: ThreeEvent<PointerEvent>) => {
     const gesture = twistGesture.current;
     if (!gesture || gesture.pointerId !== event.pointerId) return;
@@ -118,6 +129,77 @@ export default function PuzzleCube({
     onDragPreview(gesture.frameId, null);
     (event.target as HTMLElement).releasePointerCapture?.(event.pointerId);
   };
+
+  if (cubies.length > instancedRenderingThreshold) {
+    const sharedHandlers = {
+      onPointerDown: (targetCubie: Cubie, event: ThreeEvent<PointerEvent>) => {
+        if (!selectedFrame || !highlightedIds.has(targetCubie.id)) return;
+
+        event.stopPropagation();
+        twistGesture.current = {
+          frameId: selectedFrame,
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          screenTangent: screenTangentForTwist(selectedFrame, event.point, event, frameById),
+          hasMoved: false,
+        };
+        onTwistActiveChange(true);
+        onDragPreview(selectedFrame, 0);
+        (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
+      },
+      onPointerMove: (event: ThreeEvent<PointerEvent>) => {
+        const gesture = twistGesture.current;
+        if (!gesture || gesture.pointerId !== event.pointerId) return;
+
+        event.stopPropagation();
+        const delta = new Vector2(event.clientX - gesture.startX, event.clientY - gesture.startY);
+        const travel = delta.length();
+        if (travel > 6) gesture.hasMoved = true;
+
+        const signedTravel = delta.dot(gesture.screenTangent);
+        const preview = Math.max(-105, Math.min(105, signedTravel * 0.95));
+        onDragPreview(gesture.frameId, preview);
+      },
+      onPointerUp: endTwist,
+      onClick: (targetCubie: Cubie, event: ThreeEvent<MouseEvent>) => {
+        if (suppressNextClick.current) {
+          suppressNextClick.current = false;
+          return;
+        }
+        event.stopPropagation();
+        const frameId = frameForCubieHit(targetCubie, event, frameById);
+        if (frameId) onSelectFrame(frameId);
+      },
+    };
+
+    return (
+      <group>
+        <InstancedCubieMeshes
+          cubies={baseCubies}
+          size={cubieSize}
+          gap={gap}
+          transparent={transparentView}
+          dimmed={highlightedIds.size > 0}
+          highlighted={false}
+          frameById={frameById}
+          dragPreview={null}
+          {...sharedHandlers}
+        />
+        <InstancedCubieMeshes
+          cubies={highlightedCubies}
+          size={cubieSize}
+          gap={gap}
+          transparent={transparentView}
+          dimmed={false}
+          highlighted
+          frameById={frameById}
+          dragPreview={dragPreview}
+          {...sharedHandlers}
+        />
+      </group>
+    );
+  }
 
   return (
     <group>

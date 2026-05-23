@@ -1,5 +1,6 @@
 import type { FrameId, TwistAngle } from '../types/puzzle';
 import type { CameraPreset } from './Scene';
+import { supportedLevels } from '../engine/levels';
 
 interface Props {
   selectedFrame: FrameId | null;
@@ -50,8 +51,8 @@ export default function ControlPanel({
 
       <div className="grid grid-cols-[auto_1fr] items-center gap-2 rounded-md border border-slate-700 bg-slate-950/40 p-2 text-xs text-slate-300">
         <span className="font-semibold text-slate-100">Level</span>
-        <div className="grid grid-cols-2 gap-2">
-          {[1, 2].map((targetLevel) => (
+        <div className="grid grid-cols-4 gap-2">
+          {supportedLevels.map((targetLevel) => (
             <button
               key={targetLevel}
               disabled={isAnimating || level === targetLevel}

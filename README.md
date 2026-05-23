@@ -8,7 +8,7 @@ The current build focuses on validating the core interaction model:
 - selectable rotation frames
 - animated quarter-turn and half-turn moves
 - move history, undo, redo, reset, and scramble
-- Level 1 and Level 2 puzzle generation
+- Level 1 through Level 4 puzzle generation
 - keyboard-first controls generated from the active level's rotation frames
 
 ## Requirements
@@ -83,9 +83,10 @@ Keyboard bindings are generated from the active level's frame list. Number keys 
 
 Puzzle generation is centralized in `src/engine/generateMenger.ts`.
 
-- `generateMenger(level)` creates the recursive Menger cell set. Level 1 produces 20 cubies; Level 2 produces 400 cubies.
-- `generateRotationFrames(level)` in `src/engine/frameDefinitions.ts` creates one slice frame per coordinate for each axis. Level 1 has 9 frames; Level 2 has 27 frames.
-- Move application receives the active frame map, so reducer, UI, keyboard, scramble, undo, and redo work without hard-coded frame IDs.
+- `generateMenger(level)` creates the recursive Menger cell set. Levels 1-4 produce 20, 400, 8,000, and 160,000 cubies.
+- `generateRotationFrames(level)` in `src/engine/frameDefinitions.ts` creates one slice frame per coordinate for each axis. Levels 1-4 have 9, 27, 81, and 243 frames.
+- Move application receives the active frame map, so reducer, UI, scramble, undo, and redo work without hard-coded frame IDs.
+- Level 3 and Level 4 use instanced rendering for cubies so the higher cell counts can share the same interaction model without creating one React mesh per cubie.
 
 ## Project Structure
 

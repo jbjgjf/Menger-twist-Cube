@@ -36,7 +36,7 @@ export default function FrameGuides({
 }: Props) {
   const dragStart = useRef<{ x: number; frame: FrameId } | null>(null);
 
-  const orderedFrames = useMemo(() => [...frames].sort((a, b) => b.radius - a.radius), []);
+  const orderedFrames = useMemo(() => [...frames].sort((a, b) => b.radius - a.radius), [frames]);
 
   return (
     <group>

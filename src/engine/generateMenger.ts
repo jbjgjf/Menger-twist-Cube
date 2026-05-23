@@ -1,6 +1,7 @@
 import { Quaternion } from 'three';
 import type { Vector3Tuple } from 'three';
 import type { Cubie, CubieType } from '../types/puzzle';
+import { normalizePuzzleLevel } from './levels';
 
 export interface PuzzleConfig {
   level: number;
@@ -10,7 +11,7 @@ export interface PuzzleConfig {
 }
 
 export const createPuzzleConfig = (level: number): PuzzleConfig => {
-  const safeLevel = Math.max(1, Math.floor(level));
+  const safeLevel = normalizePuzzleLevel(level);
   const gridSize = 3 ** safeLevel;
   const extent = (gridSize - 1) / 2;
   const coordinates = Array.from({ length: gridSize }, (_, index) => index - extent);
