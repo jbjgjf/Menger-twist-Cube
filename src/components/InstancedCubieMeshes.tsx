@@ -20,12 +20,12 @@ interface Props {
 }
 
 const faceColors = [
-  new Color('#c41e3a'),
-  new Color('#ff5800'),
+  new Color('#ef4444'),
+  new Color('#f97316'),
   new Color('#ffffff'),
-  new Color('#ffd500'),
-  new Color('#009e60'),
-  new Color('#0051ba'),
+  new Color('#facc15'),
+  new Color('#22c55e'),
+  new Color('#3b82f6'),
 ];
 
 const dummy = new Object3D();
@@ -126,8 +126,8 @@ export default function InstancedCubieMeshes({
           color={color}
           transparent={transparent || dimmed}
           opacity={materialOpacity}
-          metalness={0.25}
-          roughness={0.35}
+          metalness={0.1}
+          roughness={0.2}
           emissive={color}
           emissiveIntensity={emissiveIntensity}
         />
