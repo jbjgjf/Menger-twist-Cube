@@ -1,8 +1,8 @@
 import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Vector2, Vector3 } from 'three';
-import type { AxisName, Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
-import { getAffectedCubieIds } from '../engine/moves';
+import type { AxisName, Cubie, DragPreview, FrameId, InteractionMode, RotationFrame } from '../types/puzzle';
+import { getAffectedCubieIds, isSelectableInCubieMode } from '../engine/moves';
 import CubieMesh from './CubieMesh';
 import InstancedCubieMeshes from './InstancedCubieMeshes';
 
@@ -11,10 +11,13 @@ interface Props {
   level: number;
   frameById: Map<FrameId, RotationFrame>;
   selectedFrame: FrameId | null;
+  selectedCubie: string | null;
+  interactionMode: InteractionMode;
   hoveredFrame: FrameId | null;
   transparentView: boolean;
   dragPreview: DragPreview | null;
   onSelectFrame: (frame: FrameId) => void;
+  onSelectCubie: (cubieId: string | null) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
   onTwistActiveChange: (active: boolean) => void;
 }
@@ -107,10 +110,13 @@ export default function PuzzleCube({
   level,
   frameById,
   selectedFrame,
+  selectedCubie,
+  interactionMode,
   hoveredFrame,
   transparentView,
   dragPreview,
   onSelectFrame,
+  onSelectCubie,
   onDragPreview,
   onTwistActiveChange,
 }: Props) {
@@ -186,8 +192,13 @@ export default function PuzzleCube({
           return;
         }
         event.stopPropagation();
-        const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
-        if (frameId) onSelectFrame(frameId);
+        if (interactionMode === 'cubie') {
+          if (!isSelectableInCubieMode(targetCubie.type)) return;
+          onSelectCubie(selectedCubie === targetCubie.id ? null : targetCubie.id);
+        } else {
+          const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
+          if (frameId) onSelectFrame(frameId);
+        }
       },
     };
 
@@ -233,6 +244,7 @@ export default function PuzzleCube({
             transparent={transparentView}
             dimmed={dimmed}
             highlighted={highlighted}
+            isCubieSelected={cubie.id === selectedCubie}
             frameById={frameById}
             selectedFrame={selectedFrame}
             dragPreview={dragPreview}
@@ -272,8 +284,13 @@ export default function PuzzleCube({
                 return;
               }
               event.stopPropagation();
-              const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
-              if (frameId) onSelectFrame(frameId);
+              if (interactionMode === 'cubie') {
+                if (!isSelectableInCubieMode(targetCubie.type)) return;
+                onSelectCubie(selectedCubie === targetCubie.id ? null : targetCubie.id);
+              } else {
+                const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
+                if (frameId) onSelectFrame(frameId);
+              }
             }}
           />
         );

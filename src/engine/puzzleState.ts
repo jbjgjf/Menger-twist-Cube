@@ -1,7 +1,8 @@
-import type { DragPreview, FrameId, Move, PuzzleState, TwistAngle } from '../types/puzzle';
+import type { DragPreview, FrameId, InteractionMode, Move, PuzzleState, TwistAngle } from '../types/puzzle';
+import type { Vector3Tuple } from 'three';
 import { generateMenger } from './generateMenger';
 import { createFrameMap, generateRotationFrames } from './frameDefinitions';
-import { applyTwistToCubies, createMove } from './moves';
+import { applyCubieRotation, applyTwistToCubies, createMove } from './moves';
 
 export interface PuzzleUiState {
   transparentView: boolean;
@@ -10,6 +11,7 @@ export interface PuzzleUiState {
   hoverAffectedIds: Set<string>;
   invalidFeedback: string | null;
   dragPreview: DragPreview | null;
+  interactionMode: InteractionMode;
 }
 
 export interface RootState {
@@ -20,10 +22,12 @@ export interface RootState {
 
 export type Action =
   | { type: 'SELECT_FRAME'; frameId: FrameId | null }
+  | { type: 'SELECT_CUBIE'; cubieId: string | null }
   | { type: 'SET_HOVER'; frameId: FrameId | null; affectedIds: Set<string> }
   | { type: 'SET_ANIMATING'; isAnimating: boolean }
   | { type: 'SET_DRAG_PREVIEW'; preview: DragPreview | null }
   | { type: 'COMMIT_MOVE'; frameId: FrameId; angle: TwistAngle }
+  | { type: 'COMMIT_CUBIE_MOVE'; cubieId: string; axis: Vector3Tuple; angle: TwistAngle }
   | { type: 'SET_LEVEL'; level: number }
   | { type: 'UNDO' }
   | { type: 'REDO' }
@@ -31,6 +35,7 @@ export type Action =
   | { type: 'SCRAMBLE'; moves: Move[] }
   | { type: 'TOGGLE_TRANSPARENCY' }
   | { type: 'TOGGLE_GUIDES' }
+  | { type: 'TOGGLE_MODE' }
   | { type: 'INVALID'; message: string | null };
 
 const cloneMove = (move: Move): Move => ({ ...move });
@@ -48,6 +53,7 @@ const createPuzzle = (level: number): PuzzleState & { initialCubies: ReturnType<
     moveHistory: [],
     redoStack: [],
     selectedFrame: null,
+    selectedCubie: null,
     isAnimating: false,
   };
 };
@@ -64,6 +70,7 @@ export const createInitialState = (): RootState => {
       moveHistory: puzzle.moveHistory,
       redoStack: puzzle.redoStack,
       selectedFrame: puzzle.selectedFrame,
+      selectedCubie: puzzle.selectedCubie,
       isAnimating: puzzle.isAnimating,
     },
     ui: {
@@ -73,6 +80,7 @@ export const createInitialState = (): RootState => {
       hoverAffectedIds: new Set(),
       invalidFeedback: null,
       dragPreview: null,
+      interactionMode: 'slice',
     },
   };
 };
@@ -84,6 +92,23 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         ...state,
         puzzle: { ...state.puzzle, selectedFrame: action.frameId },
         ui: { ...state.ui, invalidFeedback: null },
+      };
+    case 'SELECT_CUBIE':
+      return {
+        ...state,
+        puzzle: { ...state.puzzle, selectedCubie: action.cubieId },
+        ui: { ...state.ui, invalidFeedback: null },
+      };
+    case 'TOGGLE_MODE':
+      return {
+        ...state,
+        puzzle: { ...state.puzzle, selectedFrame: null, selectedCubie: null },
+        ui: {
+          ...state.ui,
+          interactionMode: state.ui.interactionMode === 'slice' ? 'cubie' : 'slice',
+          invalidFeedback: null,
+          dragPreview: null,
+        },
       };
     case 'SET_HOVER':
       return {
@@ -111,16 +136,43 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
       };
     }
+    case 'COMMIT_CUBIE_MOVE': {
+      const cubie = state.puzzle.cubies.find((c) => c.id === action.cubieId);
+      if (!cubie) return state;
+      const axisLabel = action.axis[0] ? 'X' : action.axis[1] ? 'Y' : 'Z';
+      const notation = `C(${cubie.currentPosition.join(',')})${axisLabel}${action.angle > 0 ? '+' : ''}${action.angle}`;
+      const move: Move = {
+        frameId: '',
+        cubieId: action.cubieId,
+        cubieAxis: action.axis,
+        angle: action.angle,
+        notation,
+        timestamp: Date.now(),
+      };
+      return {
+        ...state,
+        puzzle: {
+          ...state.puzzle,
+          cubies: applyCubieRotation(state.puzzle.cubies, action.cubieId, action.axis, action.angle),
+          moveHistory: [...state.puzzle.moveHistory, move],
+          redoStack: [],
+        },
+        ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
+      };
+    }
     case 'UNDO': {
       const lastMove = state.puzzle.moveHistory[state.puzzle.moveHistory.length - 1];
       if (!lastMove) return state;
 
       const inverseAngle = (lastMove.angle === 180 ? 180 : -lastMove.angle) as TwistAngle;
+      const newCubies = lastMove.cubieId && lastMove.cubieAxis
+        ? applyCubieRotation(state.puzzle.cubies, lastMove.cubieId, lastMove.cubieAxis, inverseAngle)
+        : applyTwistToCubies(state.puzzle.cubies, lastMove.frameId, inverseAngle, state.puzzle.frameById);
       return {
         ...state,
         puzzle: {
           ...state.puzzle,
-          cubies: applyTwistToCubies(state.puzzle.cubies, lastMove.frameId, inverseAngle, state.puzzle.frameById),
+          cubies: newCubies,
           moveHistory: state.puzzle.moveHistory.slice(0, -1),
           redoStack: [cloneMove(lastMove), ...state.puzzle.redoStack],
         },
@@ -129,11 +181,14 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
     case 'REDO': {
       const [nextMove, ...rest] = state.puzzle.redoStack;
       if (!nextMove) return state;
+      const newCubies = nextMove.cubieId && nextMove.cubieAxis
+        ? applyCubieRotation(state.puzzle.cubies, nextMove.cubieId, nextMove.cubieAxis, nextMove.angle)
+        : applyTwistToCubies(state.puzzle.cubies, nextMove.frameId, nextMove.angle, state.puzzle.frameById);
       return {
         ...state,
         puzzle: {
           ...state.puzzle,
-          cubies: applyTwistToCubies(state.puzzle.cubies, nextMove.frameId, nextMove.angle, state.puzzle.frameById),
+          cubies: newCubies,
           moveHistory: [...state.puzzle.moveHistory, cloneMove(nextMove)],
           redoStack: rest,
         },
@@ -162,6 +217,7 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
           cubies: state.initialCubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
           moveHistory: [],
           redoStack: [],
+          selectedCubie: null,
           isAnimating: false,
         },
         ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
@@ -179,6 +235,7 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
           moveHistory: puzzle.moveHistory,
           redoStack: puzzle.redoStack,
           selectedFrame: puzzle.selectedFrame,
+          selectedCubie: null,
           isAnimating: false,
         },
         ui: {
@@ -187,6 +244,7 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
           hoverAffectedIds: new Set(),
           invalidFeedback: null,
           dragPreview: null,
+          interactionMode: 'slice',
         },
       };
     }

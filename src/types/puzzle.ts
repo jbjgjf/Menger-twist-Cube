@@ -7,11 +7,16 @@ export type CubieType = 'outer' | 'hole' | 'corner' | 'edge' | 'innerWall';
 
 export type TwistAngle = 90 | -90 | 180;
 
+export type InteractionMode = 'slice' | 'cubie';
+
 export interface Move {
   frameId: FrameId;
   angle: TwistAngle;
   notation: string;
   timestamp: number;
+  // cubie rotation fields — when cubieId is set, this is an in-place cubie rotation
+  cubieId?: string;
+  cubieAxis?: Vector3Tuple;
 }
 
 export interface Cubie {
@@ -30,6 +35,7 @@ export interface PuzzleState {
   moveHistory: Move[];
   redoStack: Move[];
   selectedFrame: FrameId | null;
+  selectedCubie: string | null;
   isAnimating: boolean;
 }
 
@@ -47,6 +53,8 @@ export interface RotationFrame {
 }
 
 export interface DragPreview {
-  frameId: FrameId;
+  frameId?: FrameId;
+  cubieId?: string;
+  cubieAxis?: Vector3Tuple;
   angle: number;
 }

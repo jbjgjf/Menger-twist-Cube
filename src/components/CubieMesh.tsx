@@ -12,9 +12,10 @@ interface Props {
   transparent: boolean;
   dimmed: boolean;
   highlighted: boolean;
+  isCubieSelected: boolean;
   frameById: Map<FrameId, RotationFrame>;
   selectedFrame: FrameId | null;
-  dragPreview: { frameId: FrameId; angle: number } | null;
+  dragPreview: { frameId?: FrameId; cubieId?: string; cubieAxis?: [number, number, number]; angle: number } | null;
   onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void;
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void;
@@ -37,6 +38,7 @@ export default function CubieMesh({
   transparent,
   dimmed,
   highlighted,
+  isCubieSelected,
   frameById,
   selectedFrame,
   dragPreview,
@@ -47,13 +49,22 @@ export default function CubieMesh({
 }: Props) {
   const previewQuaternion = useMemo(() => {
     if (!dragPreview) return null;
-    const frame = frameById.get(dragPreview.frameId);
+    // cubie-specific drag preview
+    if (dragPreview.cubieId) {
+      if (cubie.id !== dragPreview.cubieId || !dragPreview.cubieAxis) return null;
+      return new ThreeQuaternion().setFromAxisAngle(
+        new Vector3(...dragPreview.cubieAxis),
+        (dragPreview.angle * Math.PI) / 180,
+      );
+    }
+    // frame drag preview
+    const frame = dragPreview.frameId ? frameById.get(dragPreview.frameId) : null;
     if (!frame || !frame.selector(cubie.currentPosition)) return null;
     return new ThreeQuaternion().setFromAxisAngle(
       new Vector3(frame.axis[0], frame.axis[1], frame.axis[2]),
       (dragPreview.angle * Math.PI) / 180,
     );
-  }, [dragPreview, cubie.currentPosition, frameById]);
+  }, [dragPreview, cubie.currentPosition, cubie.id, frameById]);
 
   const orientation = useMemo<Quaternion>(() => {
     if (!previewQuaternion) return cubie.orientation;
@@ -64,7 +75,11 @@ export default function CubieMesh({
     if (!dragPreview) {
       return cubie.currentPosition.map((v) => v * (size + gap)) as Vector3Tuple;
     }
-    const frame = frameById.get(dragPreview.frameId);
+    // cubie drag preview keeps the cubie in place
+    if (dragPreview.cubieId) {
+      return cubie.currentPosition.map((v) => v * (size + gap)) as Vector3Tuple;
+    }
+    const frame = dragPreview.frameId ? frameById.get(dragPreview.frameId) : null;
     if (!frame || !frame.selector(cubie.currentPosition)) {
       return cubie.currentPosition.map((v) => v * (size + gap)) as Vector3Tuple;
     }
@@ -77,7 +92,7 @@ export default function CubieMesh({
     return [rotated.x * (size + gap), rotated.y * (size + gap), rotated.z * (size + gap)];
   }, [cubie.currentPosition, dragPreview, frameById, gap, size]);
 
-  const emissiveIntensity = highlighted ? 0.18 : selectedFrame ? 0.04 : 0.02;
+  const emissiveIntensity = highlighted ? 0.18 : isCubieSelected ? 0.22 : selectedFrame ? 0.04 : 0.02;
 
   return (
     <mesh
@@ -111,6 +126,14 @@ export default function CubieMesh({
           color={dragPreview ? '#f8fafc' : '#67e8f9'}
           scale={1.015}
           renderOrder={20}
+        />
+      )}
+      {isCubieSelected && (
+        <Edges
+          threshold={15}
+          color={dragPreview?.cubieId === cubie.id ? '#fde68a' : '#f59e0b'}
+          scale={1.02}
+          renderOrder={21}
         />
       )}
     </mesh>

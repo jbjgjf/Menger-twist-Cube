@@ -2,7 +2,7 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
-import { createMove, getAffectedCubieIds } from './engine/moves';
+import { createMove, cubieNaturalAxis, getAffectedCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
 import type { FrameId, TwistAngle } from './types/puzzle';
@@ -54,8 +54,46 @@ export default function App() {
     requestAnimationFrame(animate);
   };
 
+  const runCubieRotation = (cubieId: string | null, angle: TwistAngle) => {
+    if (!cubieId) {
+      dispatch({ type: 'INVALID', message: 'Select a cubie before rotating.' });
+      return;
+    }
+    if (state.puzzle.isAnimating) {
+      dispatch({ type: 'INVALID', message: 'Animation in progress. Please wait.' });
+      return;
+    }
+
+    const cubie = state.puzzle.cubies.find((c) => c.id === cubieId);
+    if (!cubie) return;
+    const axis = cubieNaturalAxis(cubie.currentPosition);
+
+    dispatch({ type: 'SET_ANIMATING', isAnimating: true });
+    dispatch({ type: 'SET_DRAG_PREVIEW', preview: { cubieId, cubieAxis: axis, angle: 0 } });
+
+    const start = performance.now();
+    const animate = (timestamp: number) => {
+      const progress = Math.min(1, (timestamp - start) / animationDurationMs);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      dispatch({ type: 'SET_DRAG_PREVIEW', preview: { cubieId, cubieAxis: axis, angle: angle * eased } });
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        dispatch({ type: 'COMMIT_CUBIE_MOVE', cubieId, axis, angle });
+        dispatch({ type: 'SET_ANIMATING', isAnimating: false });
+      }
+    };
+
+    requestAnimationFrame(animate);
+  };
+
   const onMove = (angle: TwistAngle) => {
-    runMove(state.puzzle.selectedFrame, angle);
+    if (state.ui.interactionMode === 'cubie') {
+      runCubieRotation(state.puzzle.selectedCubie, angle);
+    } else {
+      runMove(state.puzzle.selectedFrame, angle);
+    }
   };
 
   const scramble = () => {
@@ -89,7 +127,11 @@ export default function App() {
           return;
         }
         case 'rotate-selected':
-          runMove(state.puzzle.selectedFrame, command.angle);
+          if (state.ui.interactionMode === 'cubie') {
+            runCubieRotation(state.puzzle.selectedCubie, command.angle);
+          } else {
+            runMove(state.puzzle.selectedFrame, command.angle);
+          }
           return;
         case 'rotate-frame':
           dispatch({ type: 'SELECT_FRAME', frameId: command.frameId });
@@ -113,6 +155,9 @@ export default function App() {
         case 'toggle-guides':
           dispatch({ type: 'TOGGLE_GUIDES' });
           return;
+        case 'toggle-mode':
+          dispatch({ type: 'TOGGLE_MODE' });
+          return;
         case 'camera':
           requestCameraPreset(command.preset);
           return;
@@ -121,7 +166,7 @@ export default function App() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [state.puzzle.frames, state.puzzle.frameById, state.puzzle.isAnimating, state.puzzle.selectedFrame]);
+  }, [state.puzzle.frames, state.puzzle.frameById, state.puzzle.isAnimating, state.puzzle.selectedFrame, state.puzzle.selectedCubie, state.ui.interactionMode]);
 
   const hoverPreviewCount = useMemo(() => {
     const frame = state.ui.hoveredFrame ?? state.puzzle.selectedFrame;
@@ -156,6 +201,8 @@ export default function App() {
         frames={state.puzzle.frames}
         frameById={state.puzzle.frameById}
         selectedFrame={state.puzzle.selectedFrame}
+        selectedCubie={state.puzzle.selectedCubie}
+        interactionMode={state.ui.interactionMode}
         hoveredFrame={state.ui.hoveredFrame}
         transparentView={state.ui.transparentView}
         showGuides={state.ui.showGuides}
@@ -167,6 +214,7 @@ export default function App() {
           dispatch({ type: 'SET_HOVER', frameId: frame, affectedIds: affected });
         }}
         onSelectFrame={(frameId) => dispatch({ type: 'SELECT_FRAME', frameId })}
+        onSelectCubie={(cubieId) => dispatch({ type: 'SELECT_CUBIE', cubieId })}
         onDragPreview={onGuideDrag}
       />
 
@@ -191,17 +239,32 @@ export default function App() {
 
         <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">
           <div className="rounded-lg border border-slate-700 bg-slate-900/70 p-3 text-xs text-slate-300">
-            <p className="mb-1 font-semibold text-slate-100">Interaction hints</p>
+            <p className="mb-1 font-semibold text-slate-100">
+              Interaction hints
+              <span className={`ml-2 rounded px-1.5 py-0.5 text-[10px] font-bold ${state.ui.interactionMode === 'cubie' ? 'bg-amber-500/30 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>
+                {state.ui.interactionMode === 'cubie' ? 'CUBIE MODE' : 'SLICE MODE'}
+              </span>
+            </p>
             <ul className="space-y-1">
+              <li>• Tab: toggle Slice / Cubie mode</li>
+              {state.ui.interactionMode === 'slice' ? (
+                <>
+                  <li>• Tap cubie face: select and highlight a frame</li>
+                  <li>• Drag highlighted cubies: preview and release to turn</li>
+                  <li>• 1-9: select frame, Q/E: cycle frame</li>
+                  <li>• A/D/S or J/L/K: rotate selected frame</li>
+                  <li>• Shift+1-9 / Alt+1-9: quick turn frame</li>
+                </>
+              ) : (
+                <>
+                  <li>• Tap non-corner cubie: select it (gold outline)</li>
+                  <li>• A/D: rotate selected cubie ±90°</li>
+                  <li>• S: rotate selected cubie 180°</li>
+                  <li>• Rotation axis: perpendicular to the edge</li>
+                </>
+              )}
               <li>• Drag empty space: orbit view</li>
-              <li>• Tap cubie face: select and highlight a frame</li>
-              <li>• Drag highlighted cubies: preview and release to turn</li>
-              <li>• Bottom-right axis: tap a direction to reorient view</li>
-              <li>• Scroll: zoom</li>
-              <li>• Hover/drag guide rings still work ({hoverPreviewCount})</li>
-              <li>• 1-9: select frame, Q/E: cycle frame</li>
-              <li>• A/D/S or J/L/K: rotate selected frame</li>
-              <li>• Shift+1-9 / Alt+1-9: quick turn frame</li>
+              <li>• Hover/drag guide rings work ({hoverPreviewCount})</li>
             </ul>
           </div>
           <MoveHistory moves={state.puzzle.moveHistory} />

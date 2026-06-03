@@ -11,6 +11,7 @@ export type KeyboardCommand =
   | { type: 'scramble' }
   | { type: 'toggle-transparent' }
   | { type: 'toggle-guides' }
+  | { type: 'toggle-mode' }
   | { type: 'camera'; preset: 'reset' | 'up' | 'down' | 'front' | 'back' | 'right' | 'left' };
 
 export interface KeyboardBinding {
@@ -69,6 +70,7 @@ export const createKeyboardBindings = (frames: RotationFrame[]): KeyboardBinding
   { code: 'KeyG', label: 'G', description: 'Scramble', command: { type: 'scramble' } },
   { code: 'KeyT', label: 'T', description: 'Toggle transparent view', command: { type: 'toggle-transparent' } },
   { code: 'KeyF', label: 'F', description: 'Toggle frame guides', command: { type: 'toggle-guides' } },
+  { code: 'Tab', label: 'Tab', description: 'Toggle Slice / Cubie mode', command: { type: 'toggle-mode' } },
   { code: 'KeyC', label: 'C', description: 'Reset camera', command: { type: 'camera', preset: 'reset' } },
   { code: 'KeyV', label: 'V', description: 'Front camera', command: { type: 'camera', preset: 'front' } },
   { code: 'KeyB', label: 'B', description: 'Up camera', command: { type: 'camera', preset: 'up' } },

@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import type { InstancedMesh } from 'three';
 import { Color, DynamicDrawUsage, Object3D, Quaternion as ThreeQuaternion, Vector3 } from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
-import type { Cubie, FrameId, RotationFrame } from '../types/puzzle';
+import type { Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
 
 interface Props {
   cubies: Cubie[];
@@ -12,7 +12,7 @@ interface Props {
   dimmed: boolean;
   highlighted: boolean;
   frameById: Map<FrameId, RotationFrame>;
-  dragPreview: { frameId: FrameId; angle: number } | null;
+  dragPreview: DragPreview | null;
   onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void;
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void;
@@ -37,14 +37,14 @@ const applyCubieMatrix = (
   size: number,
   gap: number,
   frameById: Map<FrameId, RotationFrame>,
-  dragPreview: { frameId: FrameId; angle: number } | null,
+  dragPreview: DragPreview | null,
 ) => {
   const stride = size + gap;
   const position = new Vector3(...cubie.currentPosition);
   const orientation = cubie.orientation.clone();
 
-  if (dragPreview) {
-    const frame = frameById.get(dragPreview.frameId);
+  if (dragPreview && !dragPreview.cubieId) {
+    const frame = dragPreview.frameId ? frameById.get(dragPreview.frameId) : null;
     if (frame?.selector(cubie.currentPosition)) {
       const axis = new Vector3(...frame.axis);
       const previewQuaternion = new ThreeQuaternion().setFromAxisAngle(axis, (dragPreview.angle * Math.PI) / 180);

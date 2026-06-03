@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import { Vector3 } from 'three';
-import type { Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
+import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
 import FrameGuides from './FrameGuides';
 
@@ -14,6 +14,8 @@ interface SceneProps {
   frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;
   selectedFrame: FrameId | null;
+  selectedCubie: string | null;
+  interactionMode: InteractionMode;
   hoveredFrame: FrameId | null;
   transparentView: boolean;
   showGuides: boolean;
@@ -22,6 +24,7 @@ interface SceneProps {
   cameraPresetRequest: number;
   onHoverFrame: (frame: FrameId | null) => void;
   onSelectFrame: (frame: FrameId) => void;
+  onSelectCubie: (cubieId: string | null) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
 }
 
@@ -99,10 +102,13 @@ export default function Scene(props: SceneProps) {
         level={props.level}
         frameById={props.frameById}
         selectedFrame={props.selectedFrame}
+        selectedCubie={props.selectedCubie}
+        interactionMode={props.interactionMode}
         hoveredFrame={props.hoveredFrame}
         transparentView={props.transparentView}
         dragPreview={props.dragPreview}
         onSelectFrame={props.onSelectFrame}
+        onSelectCubie={props.onSelectCubie}
         onDragPreview={props.onDragPreview}
         onTwistActiveChange={setTwistActive}
       />
