@@ -1,10 +1,13 @@
-import type { FrameId, RotationFrame, TwistAngle } from '../types/puzzle';
+import type { AxisName, FrameId, RotationFrame, TwistAngle } from '../types/puzzle';
 
 export type KeyboardCommand =
   | { type: 'select-frame'; frameId: FrameId }
   | { type: 'cycle-frame'; direction: 1 | -1 }
   | { type: 'rotate-selected'; angle: TwistAngle }
   | { type: 'rotate-frame'; frameId: FrameId; angle: TwistAngle }
+  | { type: 'select-axis'; axisName: AxisName }
+  | { type: 'cycle-layer'; direction: 1 | -1 }
+  | { type: 'change-scale'; direction: 1 | -1 }
   | { type: 'undo' }
   | { type: 'redo' }
   | { type: 'reset' }
@@ -75,6 +78,14 @@ export const createKeyboardBindings = (frames: RotationFrame[]): KeyboardBinding
   { code: 'KeyV', label: 'V', description: 'Front camera', command: { type: 'camera', preset: 'front' } },
   { code: 'KeyB', label: 'B', description: 'Up camera', command: { type: 'camera', preset: 'up' } },
   { code: 'KeyN', label: 'N', description: 'Right camera', command: { type: 'camera', preset: 'right' } },
+  // Axis / layer / scale navigation (scalable for any level N)
+  { code: 'KeyX', label: 'X', description: 'Select X axis', command: { type: 'select-axis', axisName: 'X' } },
+  { code: 'KeyY', label: 'Y', description: 'Select Y axis', command: { type: 'select-axis', axisName: 'Y' } },
+  { code: 'KeyZ', label: 'Z', description: 'Select Z axis', command: { type: 'select-axis', axisName: 'Z' } },
+  { code: 'BracketLeft', label: '[', description: 'Previous layer / group', command: { type: 'cycle-layer', direction: -1 } },
+  { code: 'BracketRight', label: ']', description: 'Next layer / group', command: { type: 'cycle-layer', direction: 1 } },
+  { code: 'Minus', label: '-', description: 'Thinner slices (scale down)', command: { type: 'change-scale', direction: -1 } },
+  { code: 'Equal', label: '=', description: 'Thicker slices (scale up)', command: { type: 'change-scale', direction: 1 } },
   ];
 };
 

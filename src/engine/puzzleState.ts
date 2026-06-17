@@ -12,6 +12,7 @@ export interface PuzzleUiState {
   invalidFeedback: string | null;
   dragPreview: DragPreview | null;
   interactionMode: InteractionMode;
+  frameScale: number;
 }
 
 export interface RootState {
@@ -29,6 +30,7 @@ export type Action =
   | { type: 'COMMIT_MOVE'; frameId: FrameId; angle: TwistAngle }
   | { type: 'COMMIT_CUBIE_MOVE'; cubieId: string; axis: Vector3Tuple; angle: TwistAngle }
   | { type: 'SET_LEVEL'; level: number }
+  | { type: 'SET_FRAME_SCALE'; scale: number }
   | { type: 'UNDO' }
   | { type: 'REDO' }
   | { type: 'RESET_PUZZLE' }
@@ -81,6 +83,7 @@ export const createInitialState = (): RootState => {
       invalidFeedback: null,
       dragPreview: null,
       interactionMode: 'slice',
+      frameScale: 1,
     },
   };
 };
@@ -245,9 +248,12 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
           invalidFeedback: null,
           dragPreview: null,
           interactionMode: 'slice',
+          frameScale: 1,
         },
       };
     }
+    case 'SET_FRAME_SCALE':
+      return { ...state, ui: { ...state.ui, frameScale: action.scale } };
     case 'TOGGLE_TRANSPARENCY':
       return { ...state, ui: { ...state.ui, transparentView: !state.ui.transparentView } };
     case 'TOGGLE_GUIDES':

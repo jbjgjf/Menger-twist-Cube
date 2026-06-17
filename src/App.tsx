@@ -4,8 +4,63 @@ import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
 import { createMove, cubieNaturalAxis, getAffectedCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
+import { availableScalesForLevel } from './engine/levels';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
-import type { FrameId, TwistAngle } from './types/puzzle';
+import type { AxisName, FrameId, RotationFrame, TwistAngle } from './types/puzzle';
+
+// --- Frame navigation helpers ---
+
+const findFrameForAxis = (
+  axisName: AxisName,
+  frames: RotationFrame[],
+  currentFrameId: FrameId | null,
+  frameById: Map<FrameId, RotationFrame>,
+  frameScale: number,
+): FrameId | null => {
+  const currentFrame = currentFrameId ? frameById.get(currentFrameId) : null;
+  if (currentFrame?.axisName === axisName) return currentFrameId; // already on this axis
+  const axisFrames = frames.filter((f) => f.axisName === axisName && f.scale === frameScale);
+  if (axisFrames.length === 0) return null;
+  const targetGroupIndex = Math.min(
+    currentFrame?.groupIndex ?? Math.floor(axisFrames.length / 2),
+    axisFrames.length - 1,
+  );
+  return axisFrames.find((f) => f.groupIndex === targetGroupIndex)?.id ?? axisFrames[0]?.id ?? null;
+};
+
+const cycleLayerFrame = (
+  direction: 1 | -1,
+  frames: RotationFrame[],
+  currentFrameId: FrameId | null,
+  frameById: Map<FrameId, RotationFrame>,
+  frameScale: number,
+): FrameId | null => {
+  const currentFrame = currentFrameId ? frameById.get(currentFrameId) : null;
+  const axis = currentFrame?.axisName ?? 'X';
+  const axisFrames = frames
+    .filter((f) => f.axisName === axis && f.scale === frameScale)
+    .sort((a, b) => a.groupIndex - b.groupIndex);
+  if (axisFrames.length === 0) return null;
+  const currentIndex = currentFrame ? axisFrames.findIndex((f) => f.id === currentFrame.id) : -1;
+  const nextIndex = (currentIndex + direction + axisFrames.length) % axisFrames.length;
+  return axisFrames[nextIndex]?.id ?? null;
+};
+
+const findFrameAtScale = (
+  newScale: number,
+  frames: RotationFrame[],
+  currentFrameId: FrameId | null,
+  frameById: Map<FrameId, RotationFrame>,
+): FrameId | null => {
+  const currentFrame = currentFrameId ? frameById.get(currentFrameId) : null;
+  const axis = currentFrame?.axisName ?? 'X';
+  const axisFrames = frames.filter((f) => f.axisName === axis && f.scale === newScale);
+  if (axisFrames.length === 0) return null;
+  if (!currentFrame) return axisFrames[Math.floor(axisFrames.length / 2)]?.id ?? null;
+  return axisFrames.reduce((best, f) =>
+    Math.abs(f.layer - currentFrame.layer) < Math.abs(best.layer - currentFrame.layer) ? f : best,
+  ).id;
+};
 
 const animationDurationMs = 380;
 
@@ -96,6 +151,26 @@ export default function App() {
     }
   };
 
+  const selectAxis = (axisName: AxisName) => {
+    const frameId = findFrameForAxis(
+      axisName, state.puzzle.frames, state.puzzle.selectedFrame, state.puzzle.frameById, state.ui.frameScale,
+    );
+    if (frameId) dispatch({ type: 'SELECT_FRAME', frameId });
+  };
+
+  const cycleLayer = (direction: 1 | -1) => {
+    const frameId = cycleLayerFrame(
+      direction, state.puzzle.frames, state.puzzle.selectedFrame, state.puzzle.frameById, state.ui.frameScale,
+    );
+    if (frameId) dispatch({ type: 'SELECT_FRAME', frameId });
+  };
+
+  const setFrameScale = (scale: number) => {
+    const frameId = findFrameAtScale(scale, state.puzzle.frames, state.puzzle.selectedFrame, state.puzzle.frameById);
+    dispatch({ type: 'SET_FRAME_SCALE', scale });
+    if (frameId) dispatch({ type: 'SELECT_FRAME', frameId });
+  };
+
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
     const scrambleMoves = Array.from({ length: 14 }).map(() => {
@@ -161,12 +236,25 @@ export default function App() {
         case 'camera':
           requestCameraPreset(command.preset);
           return;
+        case 'select-axis':
+          selectAxis(command.axisName);
+          return;
+        case 'cycle-layer':
+          cycleLayer(command.direction);
+          return;
+        case 'change-scale': {
+          const available = availableScalesForLevel(state.puzzle.level);
+          const idx = available.indexOf(state.ui.frameScale);
+          const newIdx = Math.max(0, Math.min(available.length - 1, idx + command.direction));
+          if (newIdx !== idx) setFrameScale(available[newIdx]!);
+          return;
+        }
       }
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [state.puzzle.frames, state.puzzle.frameById, state.puzzle.isAnimating, state.puzzle.selectedFrame, state.puzzle.selectedCubie, state.ui.interactionMode]);
+  }, [state.puzzle.frames, state.puzzle.frameById, state.puzzle.isAnimating, state.puzzle.selectedFrame, state.puzzle.selectedCubie, state.ui.interactionMode, state.ui.frameScale, state.puzzle.level]);
 
   const hoverPreviewCount = useMemo(() => {
     const frame = state.ui.hoveredFrame ?? state.puzzle.selectedFrame;
@@ -200,6 +288,7 @@ export default function App() {
         level={state.puzzle.level}
         frames={state.puzzle.frames}
         frameById={state.puzzle.frameById}
+        frameScale={state.ui.frameScale}
         selectedFrame={state.puzzle.selectedFrame}
         selectedCubie={state.puzzle.selectedCubie}
         interactionMode={state.ui.interactionMode}
@@ -223,9 +312,13 @@ export default function App() {
           selectedFrame={state.puzzle.selectedFrame}
           level={state.puzzle.level}
           cubieCount={state.puzzle.cubies.length}
-          frameCount={state.puzzle.frames.length}
+          frameCount={state.puzzle.frames.filter((f) => f.scale === state.ui.frameScale).length}
           isAnimating={state.puzzle.isAnimating}
           invalidFeedback={state.ui.invalidFeedback}
+          interactionMode={state.ui.interactionMode}
+          frameScale={state.ui.frameScale}
+          availableScales={availableScalesForLevel(state.puzzle.level)}
+          frameById={state.puzzle.frameById}
           onMove={onMove}
           onScramble={scramble}
           onReset={() => dispatch({ type: 'RESET_PUZZLE' })}
@@ -235,6 +328,9 @@ export default function App() {
           onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
           onSetCameraPreset={requestCameraPreset}
           onSetLevel={(level) => dispatch({ type: 'SET_LEVEL', level })}
+          onSetFrameScale={setFrameScale}
+          onSelectAxis={selectAxis}
+          onCycleLayer={cycleLayer}
         />
 
         <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">
@@ -249,11 +345,14 @@ export default function App() {
               <li>• Tab: toggle Slice / Cubie mode</li>
               {state.ui.interactionMode === 'slice' ? (
                 <>
-                  <li>• Tap cubie face: select and highlight a frame</li>
+                  <li>• Tap cubie face: select frame (current scale ×{state.ui.frameScale})</li>
                   <li>• Drag highlighted cubies: preview and release to turn</li>
-                  <li>• 1-9: select frame, Q/E: cycle frame</li>
+                  <li>• X/Y/Z: select axis &nbsp; [/]: prev/next layer</li>
+                  {availableScalesForLevel(state.puzzle.level).length > 1 && (
+                    <li>• -/=: thinner/thicker slices</li>
+                  )}
                   <li>• A/D/S or J/L/K: rotate selected frame</li>
-                  <li>• Shift+1-9 / Alt+1-9: quick turn frame</li>
+                  <li>• 1-9: quick select, Q/E: cycle frame</li>
                 </>
               ) : (
                 <>
@@ -264,7 +363,7 @@ export default function App() {
                 </>
               )}
               <li>• Drag empty space: orbit view</li>
-              <li>• Hover/drag guide rings work ({hoverPreviewCount})</li>
+              <li>• Hover/drag guide rings ({hoverPreviewCount} affected)</li>
             </ul>
           </div>
           <MoveHistory moves={state.puzzle.moveHistory} />

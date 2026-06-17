@@ -2,6 +2,7 @@ import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Vector2, Vector3 } from 'three';
 import type { AxisName, Cubie, DragPreview, FrameId, InteractionMode, RotationFrame } from '../types/puzzle';
+
 import { getAffectedCubieIds, isSelectableInCubieMode } from '../engine/moves';
 import CubieMesh from './CubieMesh';
 import InstancedCubieMeshes from './InstancedCubieMeshes';
@@ -9,7 +10,9 @@ import InstancedCubieMeshes from './InstancedCubieMeshes';
 interface Props {
   cubies: Cubie[];
   level: number;
+  frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;
+  frameScale: number;
   selectedFrame: FrameId | null;
   selectedCubie: string | null;
   interactionMode: InteractionMode;
@@ -33,13 +36,13 @@ type TwistGesture = {
 
 const instancedRenderingThreshold = 1200;
 
-const layerLabel = (layer: number): string => (layer > 0 ? `+${layer}` : `${layer}`);
-
 const frameForCubieHit = (
   cubie: Cubie,
   event: ThreeEvent<MouseEvent | PointerEvent>,
+  frames: RotationFrame[],
   frameById: Map<FrameId, RotationFrame>,
   selectedFrame: FrameId | null,
+  frameScale: number,
 ): FrameId | null => {
   const normal = event.face?.normal.clone() ?? new Vector3(...cubie.currentPosition).normalize();
   normal.applyQuaternion(cubie.orientation).normalize();
@@ -53,15 +56,18 @@ const frameForCubieHit = (
       : 2;
 
   const axisNames = ['X', 'Y', 'Z'] as AxisName[];
-  
+
   // Prioritize axes perpendicular to the clicked face (i.e. going deep)
   const deepAxes = [0, 1, 2].filter((i) => i !== normalAxisIndex);
   const preferredOrder = [...deepAxes, normalAxisIndex];
 
-  const candidateFrames = preferredOrder.map((index) => {
-    const value = cubie.currentPosition[index] ?? 0;
-    return `${axisNames[index]}_${layerLabel(value)}`;
-  }).filter((id) => frameById.has(id));
+  // Find the frame of current scale that contains this cubie for each axis
+  const candidateFrames = preferredOrder.map((axisIdx) => {
+    const axisName = axisNames[axisIdx]!;
+    return frames.find(
+      (f) => f.axisName === axisName && f.scale === frameScale && f.selector(cubie.currentPosition),
+    )?.id ?? null;
+  }).filter((id): id is FrameId => id !== null && frameById.has(id));
 
   if (candidateFrames.length === 0) return null;
 
@@ -108,7 +114,9 @@ const screenTangentForTwist = (
 export default function PuzzleCube({
   cubies,
   level,
+  frames,
   frameById,
+  frameScale,
   selectedFrame,
   selectedCubie,
   interactionMode,
@@ -196,7 +204,7 @@ export default function PuzzleCube({
           if (!isSelectableInCubieMode(targetCubie.type)) return;
           onSelectCubie(selectedCubie === targetCubie.id ? null : targetCubie.id);
         } else {
-          const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
+          const frameId = frameForCubieHit(targetCubie, event, frames, frameById, selectedFrame, frameScale);
           if (frameId) onSelectFrame(frameId);
         }
       },
@@ -288,7 +296,7 @@ export default function PuzzleCube({
                 if (!isSelectableInCubieMode(targetCubie.type)) return;
                 onSelectCubie(selectedCubie === targetCubie.id ? null : targetCubie.id);
               } else {
-                const frameId = frameForCubieHit(targetCubie, event, frameById, selectedFrame);
+                const frameId = frameForCubieHit(targetCubie, event, frames, frameById, selectedFrame, frameScale);
                 if (frameId) onSelectFrame(frameId);
               }
             }}

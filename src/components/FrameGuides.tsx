@@ -48,7 +48,7 @@ export default function FrameGuides({
         return (
           <Torus
             key={frame.id}
-            args={[frame.radius * cellStride, frame.kind === 'core' ? 0.04 : 0.02, 16, 96]}
+            args={[frame.radius * cellStride, frame.scale > 1 ? 0.035 : frame.kind === 'core' ? 0.04 : 0.02, 16, 96]}
             position={ringPosition(frame, cellStride)}
             rotation={ringRotation(frame)}
             onPointerOver={(event: ThreeEvent<PointerEvent>) => {

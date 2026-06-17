@@ -44,7 +44,9 @@ export interface RotationFrame {
   name: string;
   axisName: AxisName;
   axis: Vector3Tuple;
-  layer: number;
+  layer: number;       // center coordinate of this frame's layers
+  scale: number;       // 1 = single layer, 3 = 3-layer block, 9 = 9-layer block, etc.
+  groupIndex: number;  // 0-based index within same axis+scale
   extent: number;
   kind: 'slice' | 'core';
   selector: (position: Vector3Tuple) => boolean;

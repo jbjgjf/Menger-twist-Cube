@@ -13,6 +13,7 @@ interface SceneProps {
   level: number;
   frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;
+  frameScale: number;
   selectedFrame: FrameId | null;
   selectedCubie: string | null;
   interactionMode: InteractionMode;
@@ -72,6 +73,12 @@ export default function Scene(props: SceneProps) {
   const gap = 0.24 / gridSize;
   const cellStride = cubieSize + gap;
 
+  // Only show guide rings for the current active scale
+  const guidedFrames = useMemo(
+    () => props.frames.filter((f) => f.scale === props.frameScale),
+    [props.frames, props.frameScale],
+  );
+
   useEffect(() => {
     if (controlsRef.current) {
       controlsRef.current.target.set(0, 0, 0);
@@ -100,7 +107,9 @@ export default function Scene(props: SceneProps) {
       <PuzzleCube
         cubies={props.cubies}
         level={props.level}
+        frames={props.frames}
         frameById={props.frameById}
+        frameScale={props.frameScale}
         selectedFrame={props.selectedFrame}
         selectedCubie={props.selectedCubie}
         interactionMode={props.interactionMode}
@@ -115,7 +124,7 @@ export default function Scene(props: SceneProps) {
 
       {props.showGuides && (
         <FrameGuides
-          frames={props.frames}
+          frames={guidedFrames}
           cellStride={cellStride}
           selectedFrame={props.selectedFrame}
           hoveredFrame={props.hoveredFrame}
