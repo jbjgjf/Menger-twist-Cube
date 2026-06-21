@@ -295,9 +295,54 @@ const solveFramePhaseWithCubing = async (
     return { cubies: cloneCubies(inputCubies), moves: [], success: true, notes: 'Frame quotient already solved.', expanded: 0 };
   }
 
-  const pattern = await cubiesToKPattern(inputCubies, puzzle);
-  const alg = await experimentalSolve3x3x3IgnoringCenters(pattern);
-  const tokens = algTokens(alg.toString());
+  const basePattern = await cubiesToKPattern(inputCubies, puzzle);
+  
+  let finalAlg = '';
+  let usedM = false;
+  let solved = false;
+
+  const variants = [
+    { m: false, flip: false },
+    { m: true, flip: false },
+    { m: false, flip: true },
+    { m: true, flip: true },
+  ];
+
+  for (const variant of variants) {
+    let pData = JSON.parse(JSON.stringify(basePattern.patternData));
+    
+    if (variant.m) {
+      const pTemp = new KPattern(basePattern.kpuzzle, pData).applyAlg('M');
+      pData = JSON.parse(JSON.stringify(pTemp.patternData));
+      pData.CENTERS.pieces = [0, 1, 2, 3, 4, 5];
+      pData.CENTERS.orientation = [0, 0, 0, 0, 0, 0];
+    }
+    
+    if (variant.flip) {
+      pData.EDGES.orientation[0] = 1 - pData.EDGES.orientation[0];
+    }
+
+    const pTest = new KPattern(basePattern.kpuzzle, pData);
+
+    try {
+      const alg = await experimentalSolve3x3x3IgnoringCenters(pTest);
+      finalAlg = alg.toString();
+      usedM = variant.m;
+      solved = true;
+      break;
+    } catch {
+      // Continue to next variant
+    }
+  }
+
+  if (!solved) {
+     throw new Error('All parity variants failed to solve.');
+  }
+
+  const tokens = algTokens(finalAlg);
+  if (usedM) {
+    tokens.unshift('M');
+  }
   const moves: SolverMove[] = [];
   let cubies = cloneCubies(inputCubies);
 
