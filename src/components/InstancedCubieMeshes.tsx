@@ -2,7 +2,8 @@ import { useLayoutEffect, useRef } from 'react';
 import type { InstancedMesh } from 'three';
 import { Color, DynamicDrawUsage, Object3D, Quaternion as ThreeQuaternion, Vector3 } from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
-import type { Cubie, DragPreview, FrameId, RotationFrame } from '../types/puzzle';
+import type { Cubie, DragPreview, FrameId, RotationFrame, TurnTarget } from '../types/puzzle';
+import { rotatePositionAroundPivot } from '../engine/geometry';
 
 interface Props {
   cubies: Cubie[];
@@ -12,6 +13,7 @@ interface Props {
   dimmed: boolean;
   highlighted: boolean;
   frameById: Map<FrameId, RotationFrame>;
+  turnTargetById: Map<string, TurnTarget>;
   dragPreview: DragPreview | null;
   onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void;
@@ -37,13 +39,23 @@ const applyCubieMatrix = (
   size: number,
   gap: number,
   frameById: Map<FrameId, RotationFrame>,
+  turnTargetById: Map<string, TurnTarget>,
   dragPreview: DragPreview | null,
 ) => {
   const stride = size + gap;
   const position = new Vector3(...cubie.currentPosition);
   const orientation = cubie.orientation.clone();
 
-  if (dragPreview && !dragPreview.cubieId) {
+  if (dragPreview?.extensionTargetId) {
+    const target = turnTargetById.get(dragPreview.extensionTargetId);
+    if (target?.selector(cubie.currentPosition)) {
+      const axis = new Vector3(...target.axis);
+      const previewQuaternion = new ThreeQuaternion().setFromAxisAngle(axis, (dragPreview.angle * Math.PI) / 180);
+      const rotated = rotatePositionAroundPivot(cubie.currentPosition, target.axis, dragPreview.angle, target.pivot);
+      position.set(rotated[0], rotated[1], rotated[2]);
+      orientation.premultiply(previewQuaternion);
+    }
+  } else if (dragPreview && !dragPreview.cubieId) {
     const frame = dragPreview.frameId ? frameById.get(dragPreview.frameId) : null;
     if (frame?.selector(cubie.currentPosition)) {
       const axis = new Vector3(...frame.axis);
@@ -68,6 +80,7 @@ export default function InstancedCubieMeshes({
   dimmed,
   highlighted,
   frameById,
+  turnTargetById,
   dragPreview,
   onPointerDown,
   onPointerMove,
@@ -83,11 +96,11 @@ export default function InstancedCubieMeshes({
     mesh.count = cubies.length;
     mesh.instanceMatrix.setUsage(DynamicDrawUsage);
     for (let index = 0; index < cubies.length; index += 1) {
-      applyCubieMatrix(mesh, index, cubies[index]!, size, gap, frameById, dragPreview);
+      applyCubieMatrix(mesh, index, cubies[index]!, size, gap, frameById, turnTargetById, dragPreview);
     }
     mesh.instanceMatrix.needsUpdate = true;
     mesh.computeBoundingSphere();
-  }, [cubies, dragPreview, frameById, gap, size]);
+  }, [cubies, dragPreview, frameById, gap, size, turnTargetById]);
 
   if (cubies.length === 0) return null;
 

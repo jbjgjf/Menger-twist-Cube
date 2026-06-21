@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import { Vector3 } from 'three';
-import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame } from '../types/puzzle';
+import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
 import FrameGuides from './FrameGuides';
 
@@ -13,9 +13,13 @@ interface SceneProps {
   level: number;
   frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;
+  extensionTargets: TurnTarget[];
+  turnTargetById: Map<string, TurnTarget>;
   frameScale: number;
+  extensionDepth: number;
   selectedFrame: FrameId | null;
   selectedCubie: string | null;
+  selectedExtension: string | null;
   interactionMode: InteractionMode;
   hoveredFrame: FrameId | null;
   transparentView: boolean;
@@ -26,6 +30,7 @@ interface SceneProps {
   onHoverFrame: (frame: FrameId | null) => void;
   onSelectFrame: (frame: FrameId) => void;
   onSelectCubie: (cubieId: string | null) => void;
+  onSelectExtension: (targetId: string | null) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
 }
 
@@ -109,15 +114,20 @@ export default function Scene(props: SceneProps) {
         level={props.level}
         frames={props.frames}
         frameById={props.frameById}
+        extensionTargets={props.extensionTargets}
+        turnTargetById={props.turnTargetById}
         frameScale={props.frameScale}
+        extensionDepth={props.extensionDepth}
         selectedFrame={props.selectedFrame}
         selectedCubie={props.selectedCubie}
+        selectedExtension={props.selectedExtension}
         interactionMode={props.interactionMode}
         hoveredFrame={props.hoveredFrame}
         transparentView={props.transparentView}
         dragPreview={props.dragPreview}
         onSelectFrame={props.onSelectFrame}
         onSelectCubie={props.onSelectCubie}
+        onSelectExtension={props.onSelectExtension}
         onDragPreview={props.onDragPreview}
         onTwistActiveChange={setTwistActive}
       />

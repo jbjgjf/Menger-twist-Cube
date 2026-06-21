@@ -1,6 +1,6 @@
-import type { Cubie, CubieType, FrameId, Move, RotationFrame, TwistAngle } from '../types/puzzle';
+import type { Cubie, CubieType, FrameId, Move, RotationFrame, TurnTarget, TwistAngle } from '../types/puzzle';
 import type { Vector3Tuple } from 'three';
-import { angleToNotation, rotatePosition, rotateQuaternion } from './geometry';
+import { angleToNotation, rotatePosition, rotatePositionAroundPivot, rotateQuaternion } from './geometry';
 
 export const notationForMove = (frame: RotationFrame | undefined, frameId: FrameId, angle: TwistAngle): string => {
   const base = frame?.name ?? frameId;
@@ -18,6 +18,17 @@ export const getAffectedCubieIds = (
 
   const ids = cubies.filter((cubie) => frame.selector(cubie.currentPosition)).map((cubie) => cubie.id);
   return new Set(ids);
+};
+
+export const getAffectedTurnTargetCubieIds = (
+  cubies: Cubie[],
+  targetId: string,
+  targetById: Map<string, TurnTarget>,
+): Set<string> => {
+  const target = targetById.get(targetId);
+  if (!target) return new Set();
+
+  return new Set(cubies.filter((cubie) => target.selector(cubie.currentPosition)).map((cubie) => cubie.id));
 };
 
 export const applyTwistToCubies = (
@@ -48,6 +59,8 @@ export const createMove = (
   frameById: Map<FrameId, RotationFrame>,
 ): Move => ({
   frameId,
+  targetId: `frame:${frameId}`,
+  targetKind: 'frame',
   angle,
   notation: notationForMove(frameById.get(frameId), frameId, angle),
   timestamp: Date.now(),
@@ -74,6 +87,25 @@ export const applyCubieRotation = (
     return { ...cubie, orientation: rotateQuaternion(cubie.orientation, axis, angle) };
   });
 
+export const applyExtensionRotation = (
+  cubies: Cubie[],
+  targetId: string,
+  angle: TwistAngle,
+  targetById: Map<string, TurnTarget>,
+): Cubie[] => {
+  const target = targetById.get(targetId);
+  if (!target || target.kind !== 'extension') return cubies;
+
+  return cubies.map((cubie) => {
+    if (!target.selector(cubie.currentPosition)) return cubie;
+    return {
+      ...cubie,
+      currentPosition: rotatePositionAroundPivot(cubie.currentPosition, target.axis, angle, target.pivot),
+      orientation: rotateQuaternion(cubie.orientation, target.axis, angle),
+    };
+  });
+};
+
 export const createCubieMove = (
   cubie: Cubie,
   axis: Vector3Tuple,
@@ -89,3 +121,16 @@ export const createCubieMove = (
     timestamp: Date.now(),
   };
 };
+
+export const createExtensionMove = (
+  target: TurnTarget,
+  angle: TwistAngle,
+): Move => ({
+  frameId: '',
+  targetId: target.id,
+  targetKind: 'extension',
+  extensionTargetId: target.id,
+  angle,
+  notation: `${target.name}${angleToNotation(angle)}`,
+  timestamp: Date.now(),
+});

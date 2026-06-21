@@ -6,10 +6,13 @@ The current build focuses on validating the core interaction model:
 
 - orbitable 3D puzzle scene
 - selectable rotation frames
+- recursive extension rotation targets
 - animated quarter-turn and half-turn moves
 - move history, undo, redo, reset, and scramble
-- Level 1 through Level 4 puzzle generation
-- keyboard-first controls generated from the active level's rotation frames
+- Level 1 through Level 3 manual/assisted play
+- Level 4 and Level 5 research/evaluation summaries
+- keyboard-first controls generated from the active level's turn targets
+- Level 1 Solver Lab with state-based solving, replay modes, explanations, and benchmarks
 
 ## Requirements
 
@@ -36,6 +39,23 @@ Vite will print a local URL, usually `http://localhost:5173/`.
 npm run build
 ```
 
+## Solver Lab
+
+Level 1 includes a real state-based solver in `src/solver/level1Solver.ts`.
+
+The solver inspects the current `Cubie[]` state, projects the frame quotient into a 3x3x3 cubie model with centers ignored, maps the returned algorithm back to the app's legal frame moves, then normalizes edge extension rotations. It does not replay `moveHistory`.
+
+The control panel exposes:
+
+- `Instant`: solve and apply the returned move list immediately.
+- `Animated`: solve and replay each legal move with preview animation.
+- `Prepare`: compute a move list without applying it.
+- `Step`: apply a prepared move list one move at a time.
+
+Each run writes a benchmark record to localStorage key `menger.solver.benchmarks.v1`.
+
+Solver design, assumptions, complexity, and extension instructions are documented in `docs/level-1-solver.md`.
+
 ## Controls
 
 ### Mouse
@@ -45,17 +65,22 @@ npm run build
 | Orbit camera | Left drag |
 | Zoom | Scroll |
 | Select frame | Tap/click a cubie face or guide |
+| Select extension target | Switch to Extension mode, then tap an edge block |
 | Drag rotation preview | Drag highlighted cubies or a guide |
 
 ### Keyboard
 
 | Action | Key |
 | --- | --- |
+| Toggle Slice / Extension mode | `Tab` |
 | Select first nine frames | `1` to `9` |
 | Previous / next frame across all frames | `Q` / `E` |
+| Previous / next extension at current depth | `Q` / `E` in Extension mode |
+| Extension depth shallower / deeper | `-` / `=` in Extension mode |
 | Rotate selected frame -90 | `A` or `J` |
 | Rotate selected frame +90 | `D` or `L` |
 | Rotate selected frame 180 | `S` or `K` |
+| Rotate selected extension | Same `A/S/D` or `J/K/L` turn keys in Extension mode |
 | Quick-turn frame +90 | `Shift` + `1` to `9` |
 | Quick-turn frame -90 | `Alt` + `1` to `9` |
 | Scramble | `G` |
@@ -77,16 +102,19 @@ The file exposes:
 - `keyboardBindings`: declarative key bindings mapped to commands
 - `findKeyboardCommand`: a small resolver used by `App.tsx`
 
-Keyboard bindings are generated from the active level's frame list. Number keys target the first nine frames, while `Q/E` cycles through every generated frame for the current level.
+Keyboard bindings use a small grammar instead of one shortcut per target. Number keys target the first nine frames, while `Q/E` cycles through frames in Slice mode and extension targets at the current recursive depth in Extension mode.
 
 ## Level Scaling
 
 Puzzle generation is centralized in `src/engine/generateMenger.ts`.
 
-- `generateMenger(level)` creates the recursive Menger cell set. Levels 1-4 produce 20, 400, 8,000, and 160,000 cubies.
-- `generateRotationFrames(level)` in `src/engine/frameDefinitions.ts` creates one slice frame per coordinate for each axis. Levels 1-4 have 9, 27, 81, and 243 frames.
-- Move application receives the active frame map, so reducer, UI, scramble, undo, and redo work without hard-coded frame IDs.
-- Level 3 and Level 4 use instanced rendering for cubies so the higher cell counts can share the same interaction model without creating one React mesh per cubie.
+- `generateMenger(level)` creates the recursive Menger cell set. Levels 1-3 produce 20, 400, and 8,000 cubies for direct interaction.
+- `generateRotationFrames(level)` in `src/engine/frameDefinitions.ts` creates frame targets for every available slice scale.
+- `generateExtensionTurnTargets(level)` in `src/engine/turnTargets.ts` creates 12 extension targets for every recursive Menger parent block.
+- Level 1 and Level 2 are treated as competitive-manual surfaces.
+- Level 3 is treated as assisted-manual: still interactive, but the target count is large enough to need depth navigation.
+- Level 4 and Level 5 switch to research/evaluation UI. They show target counts and avoid full cubie generation/rendering.
+- The design context and target counts are documented in `docs/interaction-architecture.md`.
 
 ## Project Structure
 

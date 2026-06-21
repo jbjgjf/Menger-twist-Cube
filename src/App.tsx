@@ -1,12 +1,17 @@
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
-import { createMove, cubieNaturalAxis, getAffectedCubieIds } from './engine/moves';
+import SolverPanel from './components/SolverPanel';
+import { createMove, getAffectedCubieIds, getAffectedTurnTargetCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
-import { availableScalesForLevel } from './engine/levels';
+import { availableScalesForLevel, isPlayableLevel } from './engine/levels';
+import { turnTargetSummaryForLevel } from './engine/turnTargets';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
-import type { AxisName, FrameId, RotationFrame, TwistAngle } from './types/puzzle';
+import type { AxisName, DragPreview, FrameId, RotationFrame, TurnTarget, TwistAngle } from './types/puzzle';
+import { solveLevel1, warmLevel1Solver } from './solver/level1Solver';
+import { clearBenchmarkRecords, loadBenchmarkRecords, recordSolverRun } from './solver/benchmarkStore';
+import type { SolverMove, SolverRunResult } from './solver/types';
 
 // --- Frame navigation helpers ---
 
@@ -62,6 +67,25 @@ const findFrameAtScale = (
   ).id;
 };
 
+const extensionTargetsAtDepth = (targets: TurnTarget[], depth: number): TurnTarget[] =>
+  targets.filter((target) => target.kind === 'extension' && target.depth === depth);
+
+const cycleExtensionTarget = (
+  direction: 1 | -1,
+  targets: TurnTarget[],
+  currentTargetId: string | null,
+  depth: number,
+): string | null => {
+  const targetList = extensionTargetsAtDepth(targets, depth);
+  if (targetList.length === 0) return null;
+  const currentIndex = currentTargetId ? targetList.findIndex((target) => target.id === currentTargetId) : -1;
+  const nextIndex = (currentIndex + direction + targetList.length) % targetList.length;
+  return targetList[nextIndex]?.id ?? null;
+};
+
+const extensionDepthsForLevel = (level: number): number[] =>
+  Array.from({ length: level }, (_, index) => index + 1);
+
 const animationDurationMs = 380;
 
 const randomAngle = (): TwistAngle => {
@@ -69,10 +93,35 @@ const randomAngle = (): TwistAngle => {
   return values[Math.floor(Math.random() * values.length)]!;
 };
 
+const delay = (ms: number): Promise<void> => new Promise((resolve) => {
+  window.setTimeout(resolve, ms);
+});
+
+const previewForSolverMove = (move: SolverMove): DragPreview | null => {
+  if (move.targetKind === 'frame' && move.frameId) return { frameId: move.frameId, angle: move.angle };
+  if (move.targetKind === 'extension' && move.extensionTargetId) {
+    return { extensionTargetId: move.extensionTargetId, angle: move.angle };
+  }
+  return null;
+};
+
 export default function App() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
+  const [solverRun, setSolverRun] = useState<SolverRunResult | null>(null);
+  const [benchmarkRecords, setBenchmarkRecords] = useState(loadBenchmarkRecords);
+  const [stepMoves, setStepMoves] = useState<SolverMove[]>([]);
+  const [nextStepIndex, setNextStepIndex] = useState(0);
+  const stateRef = useRef(state);
+
+  useEffect(() => {
+    stateRef.current = state;
+  }, [state]);
+
+  useEffect(() => {
+    warmLevel1Solver(state.puzzle);
+  }, []);
 
   const requestCameraPreset = (preset: CameraPreset) => {
     setCameraPreset(preset);
@@ -109,9 +158,9 @@ export default function App() {
     requestAnimationFrame(animate);
   };
 
-  const runCubieRotation = (cubieId: string | null, angle: TwistAngle) => {
-    if (!cubieId) {
-      dispatch({ type: 'INVALID', message: 'Select a cubie before rotating.' });
+  const runExtensionRotation = (targetId: string | null, angle: TwistAngle) => {
+    if (!targetId) {
+      dispatch({ type: 'INVALID', message: 'Select an extension target before rotating.' });
       return;
     }
     if (state.puzzle.isAnimating) {
@@ -119,23 +168,22 @@ export default function App() {
       return;
     }
 
-    const cubie = state.puzzle.cubies.find((c) => c.id === cubieId);
-    if (!cubie) return;
-    const axis = cubieNaturalAxis(cubie.currentPosition);
+    const target = state.puzzle.turnTargetById.get(targetId);
+    if (!target || target.kind !== 'extension') return;
 
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
-    dispatch({ type: 'SET_DRAG_PREVIEW', preview: { cubieId, cubieAxis: axis, angle: 0 } });
+    dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: 0 } });
 
     const start = performance.now();
     const animate = (timestamp: number) => {
       const progress = Math.min(1, (timestamp - start) / animationDurationMs);
       const eased = 1 - Math.pow(1 - progress, 3);
-      dispatch({ type: 'SET_DRAG_PREVIEW', preview: { cubieId, cubieAxis: axis, angle: angle * eased } });
+      dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: angle * eased } });
 
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
-        dispatch({ type: 'COMMIT_CUBIE_MOVE', cubieId, axis, angle });
+        dispatch({ type: 'COMMIT_EXTENSION_MOVE', targetId, angle });
         dispatch({ type: 'SET_ANIMATING', isAnimating: false });
       }
     };
@@ -145,7 +193,7 @@ export default function App() {
 
   const onMove = (angle: TwistAngle) => {
     if (state.ui.interactionMode === 'cubie') {
-      runCubieRotation(state.puzzle.selectedCubie, angle);
+      runExtensionRotation(state.puzzle.selectedExtension, angle);
     } else {
       runMove(state.puzzle.selectedFrame, angle);
     }
@@ -180,6 +228,77 @@ export default function App() {
     dispatch({ type: 'SCRAMBLE', moves: scrambleMoves });
   };
 
+  const runSolver = async (): Promise<SolverRunResult> => {
+    const result = await solveLevel1(stateRef.current.puzzle);
+    setSolverRun(result);
+    setBenchmarkRecords(recordSolverRun(result));
+    setStepMoves([]);
+    setNextStepIndex(0);
+    if (!result.success) {
+      dispatch({ type: 'INVALID', message: result.notes });
+    }
+    return result;
+  };
+
+  const applySolverMoveWithPreview = async (move: SolverMove) => {
+    const preview = previewForSolverMove(move);
+    dispatch({ type: 'SET_ANIMATING', isAnimating: true });
+    if (preview) {
+      dispatch({ type: 'SET_DRAG_PREVIEW', preview: { ...preview, angle: 0 } });
+      await delay(50);
+      dispatch({ type: 'SET_DRAG_PREVIEW', preview });
+      await delay(120);
+    }
+    dispatch({ type: 'APPLY_SOLVER_MOVE', move });
+    dispatch({ type: 'SET_DRAG_PREVIEW', preview: null });
+    dispatch({ type: 'SET_ANIMATING', isAnimating: false });
+    await delay(40);
+  };
+
+  const solveInstant = () => {
+    if (state.puzzle.isAnimating) return;
+    void (async () => {
+      const result = await runSolver();
+      if (result.success) {
+        dispatch({ type: 'APPLY_SOLVER_MOVES', moves: result.output_moves });
+      }
+    })();
+  };
+
+  const solveAnimated = async () => {
+    if (state.puzzle.isAnimating) return;
+    const result = await runSolver();
+    if (result.success) {
+      for (const move of result.output_moves) {
+        await applySolverMoveWithPreview(move);
+      }
+    }
+  };
+
+  const prepareStepSolve = () => {
+    if (state.puzzle.isAnimating) return;
+    void (async () => {
+      const result = await runSolver();
+      if (result.success) {
+        setStepMoves(result.output_moves);
+        setNextStepIndex(0);
+      }
+    })();
+  };
+
+  const applyNextSolverStep = async () => {
+    if (state.puzzle.isAnimating) return;
+    const move = stepMoves[nextStepIndex];
+    if (!move) return;
+    await applySolverMoveWithPreview(move);
+    setNextStepIndex((index) => index + 1);
+  };
+
+  const clearBenchmarks = () => {
+    clearBenchmarkRecords();
+    setBenchmarkRecords([]);
+  };
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.repeat || ignoresKeyboardControls(event.target)) return;
@@ -194,6 +313,16 @@ export default function App() {
           dispatch({ type: 'SELECT_FRAME', frameId: command.frameId });
           return;
         case 'cycle-frame': {
+          if (state.ui.interactionMode === 'cubie') {
+            const targetId = cycleExtensionTarget(
+              command.direction,
+              state.puzzle.turnTargets,
+              state.puzzle.selectedExtension,
+              state.ui.extensionDepth,
+            );
+            if (targetId) dispatch({ type: 'SELECT_EXTENSION', targetId });
+            return;
+          }
           const selected = state.puzzle.selectedFrame;
           const keyboardFrameOrder = state.puzzle.frames.map((frame) => frame.id);
           const currentIndex = selected ? keyboardFrameOrder.indexOf(selected) : -1;
@@ -203,7 +332,7 @@ export default function App() {
         }
         case 'rotate-selected':
           if (state.ui.interactionMode === 'cubie') {
-            runCubieRotation(state.puzzle.selectedCubie, command.angle);
+            runExtensionRotation(state.puzzle.selectedExtension, command.angle);
           } else {
             runMove(state.puzzle.selectedFrame, command.angle);
           }
@@ -243,6 +372,13 @@ export default function App() {
           cycleLayer(command.direction);
           return;
         case 'change-scale': {
+          if (state.ui.interactionMode === 'cubie') {
+            const depths = extensionDepthsForLevel(state.puzzle.level);
+            const idx = depths.indexOf(state.ui.extensionDepth);
+            const newIdx = Math.max(0, Math.min(depths.length - 1, idx + command.direction));
+            if (newIdx !== idx) dispatch({ type: 'SET_EXTENSION_DEPTH', depth: depths[newIdx]! });
+            return;
+          }
           const available = availableScalesForLevel(state.puzzle.level);
           const idx = available.indexOf(state.ui.frameScale);
           const newIdx = Math.max(0, Math.min(available.length - 1, idx + command.direction));
@@ -254,13 +390,41 @@ export default function App() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [state.puzzle.frames, state.puzzle.frameById, state.puzzle.isAnimating, state.puzzle.selectedFrame, state.puzzle.selectedCubie, state.ui.interactionMode, state.ui.frameScale, state.puzzle.level]);
+  }, [
+    state.puzzle.frames,
+    state.puzzle.frameById,
+    state.puzzle.isAnimating,
+    state.puzzle.level,
+    state.puzzle.selectedExtension,
+    state.puzzle.selectedFrame,
+    state.puzzle.turnTargetById,
+    state.puzzle.turnTargets,
+    state.ui.extensionDepth,
+    state.ui.frameScale,
+    state.ui.interactionMode,
+  ]);
 
   const hoverPreviewCount = useMemo(() => {
+    if (state.ui.interactionMode === 'cubie') {
+      if (!state.puzzle.selectedExtension) return 0;
+      return getAffectedTurnTargetCubieIds(
+        state.puzzle.cubies,
+        state.puzzle.selectedExtension,
+        state.puzzle.turnTargetById,
+      ).size;
+    }
     const frame = state.ui.hoveredFrame ?? state.puzzle.selectedFrame;
     if (!frame) return 0;
     return getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById).size;
-  }, [state.puzzle.cubies, state.puzzle.frameById, state.puzzle.selectedFrame, state.ui.hoveredFrame]);
+  }, [
+    state.puzzle.cubies,
+    state.puzzle.frameById,
+    state.puzzle.selectedExtension,
+    state.puzzle.selectedFrame,
+    state.puzzle.turnTargetById,
+    state.ui.hoveredFrame,
+    state.ui.interactionMode,
+  ]);
 
   const onGuideDrag = (frameId: FrameId, angle: number | null) => {
     dispatch({ type: 'SELECT_FRAME', frameId });
@@ -281,44 +445,114 @@ export default function App() {
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId, angle } });
   };
 
+  const extensionTargets = useMemo(
+    () => state.puzzle.turnTargets.filter((target) => target.kind === 'extension'),
+    [state.puzzle.turnTargets],
+  );
+  const extensionTargetsAtCurrentDepth = useMemo(
+    () => extensionTargetsAtDepth(extensionTargets, state.ui.extensionDepth),
+    [extensionTargets, state.ui.extensionDepth],
+  );
+  const selectedExtensionTarget = state.puzzle.selectedExtension
+    ? state.puzzle.turnTargetById.get(state.puzzle.selectedExtension) ?? null
+    : null;
+  const targetSummary = turnTargetSummaryForLevel(state.puzzle.level);
+  const playableLevel = isPlayableLevel(state.puzzle.level);
+
   return (
     <div className="relative h-full w-full">
-      <Scene
-        cubies={state.puzzle.cubies}
-        level={state.puzzle.level}
-        frames={state.puzzle.frames}
-        frameById={state.puzzle.frameById}
-        frameScale={state.ui.frameScale}
-        selectedFrame={state.puzzle.selectedFrame}
-        selectedCubie={state.puzzle.selectedCubie}
-        interactionMode={state.ui.interactionMode}
-        hoveredFrame={state.ui.hoveredFrame}
-        transparentView={state.ui.transparentView}
-        showGuides={state.ui.showGuides}
-        dragPreview={state.ui.dragPreview}
-        cameraPreset={cameraPreset}
-        cameraPresetRequest={cameraPresetRequest}
-        onHoverFrame={(frame) => {
-          const affected = frame ? getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById) : new Set<string>();
-          dispatch({ type: 'SET_HOVER', frameId: frame, affectedIds: affected });
-        }}
-        onSelectFrame={(frameId) => dispatch({ type: 'SELECT_FRAME', frameId })}
-        onSelectCubie={(cubieId) => dispatch({ type: 'SELECT_CUBIE', cubieId })}
-        onDragPreview={onGuideDrag}
-      />
+      {playableLevel ? (
+        <Scene
+          cubies={state.puzzle.cubies}
+          level={state.puzzle.level}
+          frames={state.puzzle.frames}
+          frameById={state.puzzle.frameById}
+          extensionTargets={extensionTargets}
+          turnTargetById={state.puzzle.turnTargetById}
+          frameScale={state.ui.frameScale}
+          extensionDepth={state.ui.extensionDepth}
+          selectedFrame={state.puzzle.selectedFrame}
+          selectedCubie={state.puzzle.selectedCubie}
+          selectedExtension={state.puzzle.selectedExtension}
+          interactionMode={state.ui.interactionMode}
+          hoveredFrame={state.ui.hoveredFrame}
+          transparentView={state.ui.transparentView}
+          showGuides={state.ui.showGuides}
+          dragPreview={state.ui.dragPreview}
+          cameraPreset={cameraPreset}
+          cameraPresetRequest={cameraPresetRequest}
+          onHoverFrame={(frame) => {
+            const affected = frame ? getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById) : new Set<string>();
+            dispatch({ type: 'SET_HOVER', frameId: frame, affectedIds: affected });
+          }}
+          onSelectFrame={(frameId) => dispatch({ type: 'SELECT_FRAME', frameId })}
+          onSelectCubie={(cubieId) => dispatch({ type: 'SELECT_CUBIE', cubieId })}
+          onSelectExtension={(targetId) => dispatch({ type: 'SELECT_EXTENSION', targetId })}
+          onDragPreview={onGuideDrag}
+        />
+      ) : (
+        <div className="flex h-full w-full items-center justify-center bg-slate-950 px-4 text-slate-100 md:pl-[390px]">
+          <div className="w-full max-w-3xl rounded-lg border border-slate-700 bg-slate-900/80 p-5 shadow-2xl">
+            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Research / Evaluation UI</p>
+            <h1 className="mt-2 text-2xl font-bold">Level {state.puzzle.level} is outside direct human play.</h1>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              Full manual rendering is disabled for this level. The same generalized target model is retained for solver
+              planning, sequence replay, branching-factor measurement, and scoped visualization.
+            </p>
+            <div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
+              <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
+                <p className="text-slate-400">Frame targets</p>
+                <p className="mt-1 font-mono text-lg text-white">{targetSummary.frames.toLocaleString()}</p>
+              </div>
+              <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
+                <p className="text-slate-400">Extension targets</p>
+                <p className="mt-1 font-mono text-lg text-white">{targetSummary.extensions.toLocaleString()}</p>
+              </div>
+              <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
+                <p className="text-slate-400">Total turn targets</p>
+                <p className="mt-1 font-mono text-lg text-white">{targetSummary.total.toLocaleString()}</p>
+              </div>
+            </div>
+            <div className="mt-4 text-xs leading-5 text-slate-400">
+              Recommended next surface: solver-generated move list, scoped block inspector, replay controls, and
+              performance metrics instead of direct target picking.
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-2 sm:p-4">
         <ControlPanel
           selectedFrame={state.puzzle.selectedFrame}
+          selectedExtensionTarget={selectedExtensionTarget}
           level={state.puzzle.level}
+          interactionTier={state.puzzle.interactionTier}
           cubieCount={state.puzzle.cubies.length}
           frameCount={state.puzzle.frames.filter((f) => f.scale === state.ui.frameScale).length}
+          targetSummary={targetSummary}
           isAnimating={state.puzzle.isAnimating}
           invalidFeedback={state.ui.invalidFeedback}
           interactionMode={state.ui.interactionMode}
           frameScale={state.ui.frameScale}
+          extensionDepth={state.ui.extensionDepth}
+          extensionDepths={extensionDepthsForLevel(state.puzzle.level)}
+          extensionTargetsAtDepthCount={extensionTargetsAtCurrentDepth.length}
           availableScales={availableScalesForLevel(state.puzzle.level)}
           frameById={state.puzzle.frameById}
+          solverPanel={(
+            <SolverPanel
+              lastRun={solverRun}
+              benchmarkRecords={benchmarkRecords}
+              preparedStepCount={stepMoves.length}
+              nextStepIndex={nextStepIndex}
+              disabled={state.puzzle.level !== 1 || state.puzzle.isAnimating}
+              onSolveInstant={solveInstant}
+              onSolveAnimated={solveAnimated}
+              onPrepareStep={prepareStepSolve}
+              onApplyStep={applyNextSolverStep}
+              onClearBenchmarks={clearBenchmarks}
+            />
+          )}
           onMove={onMove}
           onScramble={scramble}
           onReset={() => dispatch({ type: 'RESET_PUZZLE' })}
@@ -329,20 +563,30 @@ export default function App() {
           onSetCameraPreset={requestCameraPreset}
           onSetLevel={(level) => dispatch({ type: 'SET_LEVEL', level })}
           onSetFrameScale={setFrameScale}
+          onSetExtensionDepth={(depth) => dispatch({ type: 'SET_EXTENSION_DEPTH', depth })}
+          onCycleExtension={(direction) => {
+            const targetId = cycleExtensionTarget(
+              direction,
+              state.puzzle.turnTargets,
+              state.puzzle.selectedExtension,
+              state.ui.extensionDepth,
+            );
+            if (targetId) dispatch({ type: 'SELECT_EXTENSION', targetId });
+          }}
           onSelectAxis={selectAxis}
           onCycleLayer={cycleLayer}
         />
 
-        <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">
+        {playableLevel && <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">
           <div className="rounded-lg border border-slate-700 bg-slate-900/70 p-3 text-xs text-slate-300">
             <p className="mb-1 font-semibold text-slate-100">
               Interaction hints
               <span className={`ml-2 rounded px-1.5 py-0.5 text-[10px] font-bold ${state.ui.interactionMode === 'cubie' ? 'bg-amber-500/30 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>
-                {state.ui.interactionMode === 'cubie' ? 'CUBIE MODE' : 'SLICE MODE'}
+                {state.ui.interactionMode === 'cubie' ? 'EXTENSION MODE' : 'SLICE MODE'}
               </span>
             </p>
             <ul className="space-y-1">
-              <li>• Tab: toggle Slice / Cubie mode</li>
+              <li>• Tab: toggle Slice / Extension mode</li>
               {state.ui.interactionMode === 'slice' ? (
                 <>
                   <li>• Tap cubie face: select frame (current scale ×{state.ui.frameScale})</li>
@@ -356,18 +600,18 @@ export default function App() {
                 </>
               ) : (
                 <>
-                  <li>• Tap non-corner cubie: select it (gold outline)</li>
-                  <li>• A/D: rotate selected cubie ±90°</li>
-                  <li>• S: rotate selected cubie 180°</li>
-                  <li>• Rotation axis: perpendicular to the edge</li>
+                  <li>• Tap an edge block: select extension target</li>
+                  <li>• -/=: shallower/deeper recursive depth</li>
+                  <li>• Q/E: previous/next extension target</li>
+                  <li>• A/D/S or J/L/K: rotate selected extension</li>
                 </>
               )}
               <li>• Drag empty space: orbit view</li>
-              <li>• Hover/drag guide rings ({hoverPreviewCount} affected)</li>
+              <li>• Current target affects {hoverPreviewCount} cubies</li>
             </ul>
           </div>
           <MoveHistory moves={state.puzzle.moveHistory} />
-        </div>
+        </div>}
       </div>
     </div>
   );

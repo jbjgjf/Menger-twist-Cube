@@ -2,7 +2,10 @@ import type { DragPreview, FrameId, InteractionMode, Move, PuzzleState, TwistAng
 import type { Vector3Tuple } from 'three';
 import { generateMenger } from './generateMenger';
 import { createFrameMap, generateRotationFrames } from './frameDefinitions';
-import { applyCubieRotation, applyTwistToCubies, createMove } from './moves';
+import { applyCubieRotation, applyExtensionRotation, applyTwistToCubies, createExtensionMove, createMove } from './moves';
+import { interactionTierForLevel, isPlayableLevel } from './levels';
+import { createTurnTargetMap, generateTurnTargets } from './turnTargets';
+import type { SolverMove } from '../solver/types';
 
 export interface PuzzleUiState {
   transparentView: boolean;
@@ -13,6 +16,7 @@ export interface PuzzleUiState {
   dragPreview: DragPreview | null;
   interactionMode: InteractionMode;
   frameScale: number;
+  extensionDepth: number;
 }
 
 export interface RootState {
@@ -24,13 +28,18 @@ export interface RootState {
 export type Action =
   | { type: 'SELECT_FRAME'; frameId: FrameId | null }
   | { type: 'SELECT_CUBIE'; cubieId: string | null }
+  | { type: 'SELECT_EXTENSION'; targetId: string | null }
   | { type: 'SET_HOVER'; frameId: FrameId | null; affectedIds: Set<string> }
   | { type: 'SET_ANIMATING'; isAnimating: boolean }
   | { type: 'SET_DRAG_PREVIEW'; preview: DragPreview | null }
   | { type: 'COMMIT_MOVE'; frameId: FrameId; angle: TwistAngle }
   | { type: 'COMMIT_CUBIE_MOVE'; cubieId: string; axis: Vector3Tuple; angle: TwistAngle }
+  | { type: 'COMMIT_EXTENSION_MOVE'; targetId: string; angle: TwistAngle }
+  | { type: 'APPLY_SOLVER_MOVE'; move: SolverMove }
+  | { type: 'APPLY_SOLVER_MOVES'; moves: SolverMove[] }
   | { type: 'SET_LEVEL'; level: number }
   | { type: 'SET_FRAME_SCALE'; scale: number }
+  | { type: 'SET_EXTENSION_DEPTH'; depth: number }
   | { type: 'UNDO' }
   | { type: 'REDO' }
   | { type: 'RESET_PUZZLE' }
@@ -42,20 +51,66 @@ export type Action =
 
 const cloneMove = (move: Move): Move => ({ ...move });
 
+const applySolverMove = (state: RootState, solverMove: SolverMove): RootState => {
+  if (solverMove.targetKind === 'frame' && solverMove.frameId) {
+    const move = createMove(solverMove.frameId, solverMove.angle, state.puzzle.frameById);
+    return {
+      ...state,
+      puzzle: {
+        ...state.puzzle,
+        cubies: applyTwistToCubies(state.puzzle.cubies, solverMove.frameId, solverMove.angle, state.puzzle.frameById),
+        moveHistory: [...state.puzzle.moveHistory, move],
+        redoStack: [],
+      },
+      ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
+    };
+  }
+
+  if (solverMove.targetKind === 'extension' && solverMove.extensionTargetId) {
+    const target = state.puzzle.turnTargetById.get(solverMove.extensionTargetId);
+    if (!target) return state;
+    const move = createExtensionMove(target, solverMove.angle);
+    return {
+      ...state,
+      puzzle: {
+        ...state.puzzle,
+        cubies: applyExtensionRotation(
+          state.puzzle.cubies,
+          solverMove.extensionTargetId,
+          solverMove.angle,
+          state.puzzle.turnTargetById,
+        ),
+        moveHistory: [...state.puzzle.moveHistory, move],
+        redoStack: [],
+      },
+      ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
+    };
+  }
+
+  return state;
+};
+
 const createPuzzle = (level: number): PuzzleState & { initialCubies: ReturnType<typeof generateMenger> } => {
-  const cubies = generateMenger(level);
+  const tier = interactionTierForLevel(level);
+  const cubies = isPlayableLevel(level) ? generateMenger(level) : [];
   const frames = generateRotationFrames(level);
   const frameById = createFrameMap(frames);
+  const turnTargets = generateTurnTargets(level, frames, isPlayableLevel(level));
+  const turnTargetById = createTurnTargetMap(turnTargets);
   return {
     initialCubies: cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
     level,
+    interactionTier: tier,
     frames,
     frameById,
+    turnTargets,
+    turnTargetById,
     cubies,
     moveHistory: [],
     redoStack: [],
     selectedFrame: null,
     selectedCubie: null,
+    selectedExtension: null,
     isAnimating: false,
   };
 };
@@ -66,13 +121,17 @@ export const createInitialState = (): RootState => {
     initialCubies: puzzle.initialCubies,
     puzzle: {
       level: puzzle.level,
+      interactionTier: puzzle.interactionTier,
       frames: puzzle.frames,
       frameById: puzzle.frameById,
+      turnTargets: puzzle.turnTargets,
+      turnTargetById: puzzle.turnTargetById,
       cubies: puzzle.cubies,
       moveHistory: puzzle.moveHistory,
       redoStack: puzzle.redoStack,
       selectedFrame: puzzle.selectedFrame,
       selectedCubie: puzzle.selectedCubie,
+      selectedExtension: puzzle.selectedExtension,
       isAnimating: puzzle.isAnimating,
     },
     ui: {
@@ -84,6 +143,7 @@ export const createInitialState = (): RootState => {
       dragPreview: null,
       interactionMode: 'slice',
       frameScale: 1,
+      extensionDepth: 1,
     },
   };
 };
@@ -102,10 +162,16 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         puzzle: { ...state.puzzle, selectedCubie: action.cubieId },
         ui: { ...state.ui, invalidFeedback: null },
       };
+    case 'SELECT_EXTENSION':
+      return {
+        ...state,
+        puzzle: { ...state.puzzle, selectedExtension: action.targetId },
+        ui: { ...state.ui, invalidFeedback: null },
+      };
     case 'TOGGLE_MODE':
       return {
         ...state,
-        puzzle: { ...state.puzzle, selectedFrame: null, selectedCubie: null },
+        puzzle: { ...state.puzzle, selectedFrame: null, selectedCubie: null, selectedExtension: null },
         ui: {
           ...state.ui,
           interactionMode: state.ui.interactionMode === 'slice' ? 'cubie' : 'slice',
@@ -163,14 +229,40 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
       };
     }
+    case 'COMMIT_EXTENSION_MOVE': {
+      const target = state.puzzle.turnTargetById.get(action.targetId);
+      if (!target) return state;
+      const move = createExtensionMove(target, action.angle);
+      return {
+        ...state,
+        puzzle: {
+          ...state.puzzle,
+          cubies: applyExtensionRotation(
+            state.puzzle.cubies,
+            action.targetId,
+            action.angle,
+            state.puzzle.turnTargetById,
+          ),
+          moveHistory: [...state.puzzle.moveHistory, move],
+          redoStack: [],
+        },
+        ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
+      };
+    }
+    case 'APPLY_SOLVER_MOVE':
+      return applySolverMove(state, action.move);
+    case 'APPLY_SOLVER_MOVES':
+      return action.moves.reduce((currentState, move) => applySolverMove(currentState, move), state);
     case 'UNDO': {
       const lastMove = state.puzzle.moveHistory[state.puzzle.moveHistory.length - 1];
       if (!lastMove) return state;
 
       const inverseAngle = (lastMove.angle === 180 ? 180 : -lastMove.angle) as TwistAngle;
-      const newCubies = lastMove.cubieId && lastMove.cubieAxis
-        ? applyCubieRotation(state.puzzle.cubies, lastMove.cubieId, lastMove.cubieAxis, inverseAngle)
-        : applyTwistToCubies(state.puzzle.cubies, lastMove.frameId, inverseAngle, state.puzzle.frameById);
+      const newCubies = lastMove.extensionTargetId
+        ? applyExtensionRotation(state.puzzle.cubies, lastMove.extensionTargetId, inverseAngle, state.puzzle.turnTargetById)
+        : lastMove.cubieId && lastMove.cubieAxis
+          ? applyCubieRotation(state.puzzle.cubies, lastMove.cubieId, lastMove.cubieAxis, inverseAngle)
+          : applyTwistToCubies(state.puzzle.cubies, lastMove.frameId, inverseAngle, state.puzzle.frameById);
       return {
         ...state,
         puzzle: {
@@ -184,9 +276,11 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
     case 'REDO': {
       const [nextMove, ...rest] = state.puzzle.redoStack;
       if (!nextMove) return state;
-      const newCubies = nextMove.cubieId && nextMove.cubieAxis
-        ? applyCubieRotation(state.puzzle.cubies, nextMove.cubieId, nextMove.cubieAxis, nextMove.angle)
-        : applyTwistToCubies(state.puzzle.cubies, nextMove.frameId, nextMove.angle, state.puzzle.frameById);
+      const newCubies = nextMove.extensionTargetId
+        ? applyExtensionRotation(state.puzzle.cubies, nextMove.extensionTargetId, nextMove.angle, state.puzzle.turnTargetById)
+        : nextMove.cubieId && nextMove.cubieAxis
+          ? applyCubieRotation(state.puzzle.cubies, nextMove.cubieId, nextMove.cubieAxis, nextMove.angle)
+          : applyTwistToCubies(state.puzzle.cubies, nextMove.frameId, nextMove.angle, state.puzzle.frameById);
       return {
         ...state,
         puzzle: {
@@ -221,6 +315,7 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
           moveHistory: [],
           redoStack: [],
           selectedCubie: null,
+          selectedExtension: null,
           isAnimating: false,
         },
         ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
@@ -232,13 +327,17 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         initialCubies: puzzle.initialCubies,
         puzzle: {
           level: puzzle.level,
+          interactionTier: puzzle.interactionTier,
           frames: puzzle.frames,
           frameById: puzzle.frameById,
+          turnTargets: puzzle.turnTargets,
+          turnTargetById: puzzle.turnTargetById,
           cubies: puzzle.cubies,
           moveHistory: puzzle.moveHistory,
           redoStack: puzzle.redoStack,
           selectedFrame: puzzle.selectedFrame,
           selectedCubie: null,
+          selectedExtension: null,
           isAnimating: false,
         },
         ui: {
@@ -249,11 +348,18 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
           dragPreview: null,
           interactionMode: 'slice',
           frameScale: 1,
+          extensionDepth: 1,
         },
       };
     }
     case 'SET_FRAME_SCALE':
       return { ...state, ui: { ...state.ui, frameScale: action.scale } };
+    case 'SET_EXTENSION_DEPTH':
+      return {
+        ...state,
+        puzzle: { ...state.puzzle, selectedExtension: null },
+        ui: { ...state.ui, extensionDepth: action.depth },
+      };
     case 'TOGGLE_TRANSPARENCY':
       return { ...state, ui: { ...state.ui, transparentView: !state.ui.transparentView } };
     case 'TOGGLE_GUIDES':

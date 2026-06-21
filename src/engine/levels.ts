@@ -1,4 +1,6 @@
-export const supportedLevels = [1, 2, 3, 4] as const;
+import type { InteractionTier } from '../types/puzzle';
+
+export const supportedLevels = [1, 2, 3, 4, 5] as const;
 
 export type SupportedLevel = (typeof supportedLevels)[number];
 
@@ -17,3 +19,21 @@ export const availableScalesForLevel = (level: number): number[] => {
   for (let s = 3; s <= gridSize / 3; s *= 3) scales.push(s);
   return scales;
 };
+
+export const interactionTierForLevel = (level: number): InteractionTier => {
+  if (level <= 2) return 'competitive-manual';
+  if (level === 3) return 'assisted-manual';
+  return 'research-evaluation';
+};
+
+export const isPlayableLevel = (level: number): boolean =>
+  interactionTierForLevel(level) !== 'research-evaluation';
+
+export const frameTargetCountForLevel = (level: number): number =>
+  availableScalesForLevel(level).reduce((total, scale) => total + 3 * ((3 ** level) / scale), 0);
+
+export const extensionTargetCountForLevel = (level: number): number =>
+  12 * ((20 ** level - 1) / 19);
+
+export const turnTargetCountForLevel = (level: number): number =>
+  frameTargetCountForLevel(level) + extensionTargetCountForLevel(level);

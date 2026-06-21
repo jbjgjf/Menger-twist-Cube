@@ -23,6 +23,22 @@ export const rotatePosition = (
   return [roundToGrid(vector.x), roundToGrid(vector.y), roundToGrid(vector.z)];
 };
 
+export const rotatePositionAroundPivot = (
+  position: Vector3Tuple,
+  axis: Vector3Tuple,
+  angleDeg: number,
+  pivot: Vector3Tuple,
+): Vector3Tuple => {
+  const vector = new Vector3(position[0] - pivot[0], position[1] - pivot[1], position[2] - pivot[2]);
+  const axisVector = new Vector3(axis[0], axis[1], axis[2]).normalize();
+  vector.applyAxisAngle(axisVector, (angleDeg * Math.PI) / 180);
+  return [
+    roundToGrid(vector.x + pivot[0]),
+    roundToGrid(vector.y + pivot[1]),
+    roundToGrid(vector.z + pivot[2]),
+  ];
+};
+
 export const rotateQuaternion = (quaternion: Quaternion, axis: Vector3Tuple, angleDeg: number): Quaternion => {
   const axisVector = new Vector3(axis[0], axis[1], axis[2]).normalize();
   const delta = new ThreeQuaternion().setFromAxisAngle(axisVector, (angleDeg * Math.PI) / 180);

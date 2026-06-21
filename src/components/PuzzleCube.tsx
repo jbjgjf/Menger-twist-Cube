@@ -1,9 +1,9 @@
 import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Vector2, Vector3 } from 'three';
-import type { AxisName, Cubie, DragPreview, FrameId, InteractionMode, RotationFrame } from '../types/puzzle';
+import type { AxisName, Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 
-import { getAffectedCubieIds, isSelectableInCubieMode } from '../engine/moves';
+import { getAffectedCubieIds, getAffectedTurnTargetCubieIds, isSelectableInCubieMode } from '../engine/moves';
 import CubieMesh from './CubieMesh';
 import InstancedCubieMeshes from './InstancedCubieMeshes';
 
@@ -12,15 +12,20 @@ interface Props {
   level: number;
   frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;
+  extensionTargets: TurnTarget[];
+  turnTargetById: Map<string, TurnTarget>;
   frameScale: number;
+  extensionDepth: number;
   selectedFrame: FrameId | null;
   selectedCubie: string | null;
+  selectedExtension: string | null;
   interactionMode: InteractionMode;
   hoveredFrame: FrameId | null;
   transparentView: boolean;
   dragPreview: DragPreview | null;
   onSelectFrame: (frame: FrameId) => void;
   onSelectCubie: (cubieId: string | null) => void;
+  onSelectExtension: (targetId: string | null) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
   onTwistActiveChange: (active: boolean) => void;
 }
@@ -81,6 +86,13 @@ const frameForCubieHit = (
   return candidateFrames[0]!;
 };
 
+const extensionTargetForCubieHit = (
+  cubie: Cubie,
+  extensionTargets: TurnTarget[],
+  extensionDepth: number,
+): string | null =>
+  extensionTargets.find((target) => target.depth === extensionDepth && target.selector(cubie.currentPosition))?.id ?? null;
+
 const screenPoint = (point: Vector3, event: ThreeEvent<PointerEvent>): Vector2 => {
   const projected = point.clone().project(event.camera);
   const rect = (event.nativeEvent.target as HTMLElement).getBoundingClientRect();
@@ -116,15 +128,20 @@ export default function PuzzleCube({
   level,
   frames,
   frameById,
+  extensionTargets,
+  turnTargetById,
   frameScale,
+  extensionDepth,
   selectedFrame,
   selectedCubie,
+  selectedExtension,
   interactionMode,
   hoveredFrame,
   transparentView,
   dragPreview,
   onSelectFrame,
   onSelectCubie,
+  onSelectExtension,
   onDragPreview,
   onTwistActiveChange,
 }: Props) {
@@ -135,10 +152,14 @@ export default function PuzzleCube({
   const gap = 0.24 / gridSize;
 
   const highlightedIds = useMemo(() => {
+    if (interactionMode === 'cubie') {
+      if (!selectedExtension) return new Set<string>();
+      return getAffectedTurnTargetCubieIds(cubies, selectedExtension, turnTargetById);
+    }
     const targetFrame = hoveredFrame ?? selectedFrame;
     if (!targetFrame) return new Set<string>();
     return getAffectedCubieIds(cubies, targetFrame, frameById);
-  }, [cubies, frameById, hoveredFrame, selectedFrame]);
+  }, [cubies, frameById, hoveredFrame, interactionMode, selectedExtension, selectedFrame, turnTargetById]);
 
   const highlightedCubies = useMemo(() => {
     if (cubies.length <= instancedRenderingThreshold || highlightedIds.size === 0) return [];
@@ -202,7 +223,10 @@ export default function PuzzleCube({
         event.stopPropagation();
         if (interactionMode === 'cubie') {
           if (!isSelectableInCubieMode(targetCubie.type)) return;
-          onSelectCubie(selectedCubie === targetCubie.id ? null : targetCubie.id);
+          const targetId = extensionTargetForCubieHit(targetCubie, extensionTargets, extensionDepth);
+          const nextTargetId = selectedExtension === targetId ? null : targetId;
+          onSelectCubie(nextTargetId ? targetCubie.id : null);
+          onSelectExtension(nextTargetId);
         } else {
           const frameId = frameForCubieHit(targetCubie, event, frames, frameById, selectedFrame, frameScale);
           if (frameId) onSelectFrame(frameId);
@@ -220,6 +244,7 @@ export default function PuzzleCube({
           dimmed={highlightedIds.size > 0}
           highlighted={false}
           frameById={frameById}
+          turnTargetById={turnTargetById}
           dragPreview={null}
           {...sharedHandlers}
         />
@@ -231,6 +256,7 @@ export default function PuzzleCube({
           dimmed={false}
           highlighted
           frameById={frameById}
+          turnTargetById={turnTargetById}
           dragPreview={dragPreview}
           {...sharedHandlers}
         />
@@ -254,6 +280,7 @@ export default function PuzzleCube({
             highlighted={highlighted}
             isCubieSelected={cubie.id === selectedCubie}
             frameById={frameById}
+            turnTargetById={turnTargetById}
             selectedFrame={selectedFrame}
             dragPreview={dragPreview}
             onPointerDown={(targetCubie, event) => {
@@ -294,7 +321,10 @@ export default function PuzzleCube({
               event.stopPropagation();
               if (interactionMode === 'cubie') {
                 if (!isSelectableInCubieMode(targetCubie.type)) return;
-                onSelectCubie(selectedCubie === targetCubie.id ? null : targetCubie.id);
+                const targetId = extensionTargetForCubieHit(targetCubie, extensionTargets, extensionDepth);
+                const nextTargetId = selectedExtension === targetId ? null : targetId;
+                onSelectCubie(nextTargetId ? targetCubie.id : null);
+                onSelectExtension(nextTargetId);
               } else {
                 const frameId = frameForCubieHit(targetCubie, event, frames, frameById, selectedFrame, frameScale);
                 if (frameId) onSelectFrame(frameId);

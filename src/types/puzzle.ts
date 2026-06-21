@@ -8,15 +8,20 @@ export type CubieType = 'outer' | 'hole' | 'corner' | 'edge' | 'innerWall';
 export type TwistAngle = 90 | -90 | 180;
 
 export type InteractionMode = 'slice' | 'cubie';
+export type InteractionTier = 'competitive-manual' | 'assisted-manual' | 'research-evaluation';
+export type TurnTargetKind = 'frame' | 'extension';
 
 export interface Move {
   frameId: FrameId;
   angle: TwistAngle;
   notation: string;
   timestamp: number;
+  targetId?: string;
+  targetKind?: TurnTargetKind;
   // cubie rotation fields — when cubieId is set, this is an in-place cubie rotation
   cubieId?: string;
   cubieAxis?: Vector3Tuple;
+  extensionTargetId?: string;
 }
 
 export interface Cubie {
@@ -29,13 +34,17 @@ export interface Cubie {
 
 export interface PuzzleState {
   level: number;
+  interactionTier: InteractionTier;
   frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;
+  turnTargets: TurnTarget[];
+  turnTargetById: Map<string, TurnTarget>;
   cubies: Cubie[];
   moveHistory: Move[];
   redoStack: Move[];
   selectedFrame: FrameId | null;
   selectedCubie: string | null;
+  selectedExtension: string | null;
   isAnimating: boolean;
 }
 
@@ -58,5 +67,19 @@ export interface DragPreview {
   frameId?: FrameId;
   cubieId?: string;
   cubieAxis?: Vector3Tuple;
+  extensionTargetId?: string;
   angle: number;
+}
+
+export interface TurnTarget {
+  id: string;
+  kind: TurnTargetKind;
+  name: string;
+  axisName: AxisName;
+  axis: Vector3Tuple;
+  scale: number;
+  depth: number;
+  pivot: Vector3Tuple;
+  selector: (position: Vector3Tuple) => boolean;
+  affectedCountEstimate: number;
 }
