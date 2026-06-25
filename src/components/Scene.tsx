@@ -141,6 +141,7 @@ export default function Scene(props: SceneProps) {
           onHover={props.onHoverFrame}
           onSelect={props.onSelectFrame}
           onDragPreview={props.onDragPreview}
+          onDragActiveChange={setTwistActive}
         />
       )}
 
