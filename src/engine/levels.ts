@@ -32,8 +32,14 @@ export const isPlayableLevel = (level: number): boolean =>
 export const frameTargetCountForLevel = (level: number): number =>
   availableScalesForLevel(level).reduce((total, scale) => total + 3 * ((3 ** level) / scale), 0);
 
-export const extensionTargetCountForLevel = (level: number): number =>
+const extensionBlockTargetCountForLevel = (level: number): number =>
   12 * ((20 ** level - 1) / 19);
+
+const extensionSlabTargetCountForLevel = (level: number): number =>
+  level <= 1 ? 0 : 36 * ((20 ** (level - 1) - 1) / 19);
+
+export const extensionTargetCountForLevel = (level: number): number =>
+  extensionBlockTargetCountForLevel(level) + extensionSlabTargetCountForLevel(level);
 
 export const turnTargetCountForLevel = (level: number): number =>
   frameTargetCountForLevel(level) + extensionTargetCountForLevel(level);

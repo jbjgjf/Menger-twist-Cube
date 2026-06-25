@@ -42,10 +42,29 @@ const selectorForIndexRange = (
     return true;
   };
 
+const selectorForIndexBox = (
+  minIndex: Vector3Tuple,
+  size: Vector3Tuple,
+  extent: number,
+): ((position: Vector3Tuple) => boolean) =>
+  (position) => {
+    for (let axis = 0; axis < 3; axis += 1) {
+      const index = position[axis]! + extent;
+      if (index < minIndex[axis]! || index >= minIndex[axis]! + size[axis]!) return false;
+    }
+    return true;
+  };
+
 const centerForIndexRange = (minIndex: Vector3Tuple, scale: number, extent: number): Vector3Tuple => [
   minIndex[0] + (scale - 1) / 2 - extent,
   minIndex[1] + (scale - 1) / 2 - extent,
   minIndex[2] + (scale - 1) / 2 - extent,
+];
+
+const centerForIndexBox = (minIndex: Vector3Tuple, size: Vector3Tuple, extent: number): Vector3Tuple => [
+  minIndex[0] + (size[0] - 1) / 2 - extent,
+  minIndex[1] + (size[1] - 1) / 2 - extent,
+  minIndex[2] + (size[2] - 1) / 2 - extent,
 ];
 
 const countCellsInBlock = (scale: number): number => {
@@ -53,9 +72,31 @@ const countCellsInBlock = (scale: number): number => {
   return 20 ** Math.round(Math.log(scale) / Math.log(3));
 };
 
+const countMengerCellsInIndexBox = (
+  minIndex: Vector3Tuple,
+  size: Vector3Tuple,
+  config: ReturnType<typeof createPuzzleConfig>,
+): number => {
+  let count = 0;
+
+  for (let x = minIndex[0]; x < minIndex[0] + size[0]; x += 1) {
+    for (let y = minIndex[1]; y < minIndex[1] + size[1]; y += 1) {
+      for (let z = minIndex[2]; z < minIndex[2] + size[2]; z += 1) {
+        const position = [x - config.extent, y - config.extent, z - config.extent] as Vector3Tuple;
+        if (isMengerCell(position, config)) count += 1;
+      }
+    }
+  }
+
+  return count;
+};
+
+const targetDepthId = (depth: number): string => `${depth}`.replace('.', '_');
+
 export const frameToTurnTarget = (frame: RotationFrame): TurnTarget => ({
   id: `frame:${frame.id}`,
   kind: 'frame',
+  family: 'block',
   name: frame.name,
   axisName: frame.axisName,
   axis: frame.axis,
@@ -88,6 +129,7 @@ export const generateExtensionTurnTargets = (level: number): TurnTarget[] => {
       targets.push({
         id: `extension:d${depth}:p${path.join('.') || 'root'}:s${slotKey}`,
         kind: 'extension',
+        family: 'block',
         name: `E${depth}:${slotKey}`,
         axisName: slot.axisName,
         axis: axisVectors[slot.axisName],
@@ -97,18 +139,45 @@ export const generateExtensionTurnTargets = (level: number): TurnTarget[] => {
         selector: selectorForIndexRange(childMin, childScale, config.extent),
         affectedCountEstimate: countCellsInBlock(childScale),
       });
+
+      if (childScale >= 3) {
+        const slabScale = childScale / 3;
+        const axisIndex = axisNames.indexOf(slot.axisName);
+        const slabDepth = depth + 0.5;
+
+        for (const slabIndex of [0, 1, 2]) {
+          const slabMin = [...childMin] as Vector3Tuple;
+          const slabSize = [childScale, childScale, childScale] as Vector3Tuple;
+          slabMin[axisIndex] = childMin[axisIndex]! + slabIndex * slabScale;
+          slabSize[axisIndex] = slabScale;
+
+          targets.push({
+            id: `extension-slab:d${targetDepthId(slabDepth)}:p${path.join('.') || 'root'}:s${slotKey}:l${slabIndex}`,
+            kind: 'extension',
+            family: 'slab',
+            name: `S${depth}.${slabIndex + 1}:${slotKey}`,
+            axisName: slot.axisName,
+            axis: axisVectors[slot.axisName],
+            scale: slabScale,
+            depth: slabDepth,
+            pivot: centerForIndexBox(slabMin, slabSize, config.extent),
+            selector: selectorForIndexBox(slabMin, slabSize, config.extent),
+            affectedCountEstimate: countMengerCellsInIndexBox(slabMin, slabSize, config),
+          });
+        }
+      }
     }
 
     for (const x of [0, 1, 2]) {
       for (const y of [0, 1, 2]) {
         for (const z of [0, 1, 2]) {
+          const middleCount = [x, y, z].filter((digit) => digit === 1).length;
+          if (middleCount >= 2) continue;
           const childMin = [
             parentMin[0] + x * childScale,
             parentMin[1] + y * childScale,
             parentMin[2] + z * childScale,
           ] as Vector3Tuple;
-          const childCenter = centerForIndexRange(childMin, childScale, config.extent);
-          if (!isMengerCell(childCenter, config)) continue;
           visitParent(childMin, childScale, [...path, `${x}${y}${z}`]);
         }
       }

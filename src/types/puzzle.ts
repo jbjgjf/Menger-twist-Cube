@@ -10,6 +10,7 @@ export type TwistAngle = 90 | -90 | 180;
 export type InteractionMode = 'slice' | 'cubie';
 export type InteractionTier = 'competitive-manual' | 'assisted-manual' | 'research-evaluation';
 export type TurnTargetKind = 'frame' | 'extension';
+export type ExtensionTargetFamily = 'block' | 'slab';
 
 export interface Move {
   frameId: FrameId;
@@ -74,6 +75,7 @@ export interface DragPreview {
 export interface TurnTarget {
   id: string;
   kind: TurnTargetKind;
+  family?: ExtensionTargetFamily;
   name: string;
   axisName: AxisName;
   axis: Vector3Tuple;

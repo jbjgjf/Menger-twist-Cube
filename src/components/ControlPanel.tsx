@@ -78,6 +78,7 @@ export default function ControlPanel({
   onSelectAxis,
   onCycleLayer,
 }: Props) {
+  const depthLabel = (depth: number) => Number.isInteger(depth) ? `D${depth}` : `D${Math.floor(depth)}.5`;
   const currentFrame = selectedFrame ? frameById.get(selectedFrame) : null;
   const currentAxis = currentFrame?.axisName ?? null;
   const currentFrameLabel = currentFrame?.name ?? 'None';
@@ -87,7 +88,7 @@ export default function ControlPanel({
       ? 'Assisted'
       : 'Research';
   const selectedExtensionLabel = selectedExtensionTarget
-    ? `${selectedExtensionTarget.name} / ${selectedExtensionTarget.axisName} / ${selectedExtensionTarget.affectedCountEstimate} cubies`
+    ? `${selectedExtensionTarget.name} / ${selectedExtensionTarget.family === 'slab' ? 'slab' : 'block'} / ${selectedExtensionTarget.axisName} / ${selectedExtensionTarget.affectedCountEstimate} cubies`
     : 'None';
 
   return (
@@ -199,7 +200,7 @@ export default function ControlPanel({
                 onClick={() => onSetExtensionDepth(depth)}
                 className={extensionDepth === depth ? 'border-amber-400 bg-amber-900/50 text-amber-100' : ''}
               >
-                D{depth}
+                {depthLabel(depth)}
               </button>
             ))}
           </div>
@@ -236,7 +237,8 @@ export default function ControlPanel({
         ) : (
           <>
             <p>Tap edge block or Q/E: select extension target</p>
-            <p>-/=: depth &nbsp; A/D: ±90° &nbsp; S: 180°</p>
+            <p>-/=: D block / D.5 slab / deeper target</p>
+            <p>A/D: ±90° &nbsp; S: 180°</p>
           </>
         )}
         <p className="mt-1 text-slate-500">Tab: toggle Slice / Extension mode</p>

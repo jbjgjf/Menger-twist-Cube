@@ -3,6 +3,7 @@ import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
 import SolverPanel from './components/SolverPanel';
+import KeyboardGuide from './KeyboardGuide';
 import { createMove, getAffectedCubieIds, getAffectedTurnTargetCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
 import { availableScalesForLevel, isPlayableLevel } from './engine/levels';
@@ -70,6 +71,13 @@ const findFrameAtScale = (
 const extensionTargetsAtDepth = (targets: TurnTarget[], depth: number): TurnTarget[] =>
   targets.filter((target) => target.kind === 'extension' && target.depth === depth);
 
+const extensionDepthsFromTargets = (targets: TurnTarget[]): number[] =>
+  Array.from(new Set(
+    targets
+      .filter((target) => target.kind === 'extension')
+      .map((target) => target.depth),
+  )).sort((a, b) => a - b);
+
 const cycleExtensionTarget = (
   direction: 1 | -1,
   targets: TurnTarget[],
@@ -82,9 +90,6 @@ const cycleExtensionTarget = (
   const nextIndex = (currentIndex + direction + targetList.length) % targetList.length;
   return targetList[nextIndex]?.id ?? null;
 };
-
-const extensionDepthsForLevel = (level: number): number[] =>
-  Array.from({ length: level }, (_, index) => index + 1);
 
 const animationDurationMs = 380;
 
@@ -105,7 +110,7 @@ const previewForSolverMove = (move: SolverMove): DragPreview | null => {
   return null;
 };
 
-export default function App() {
+function PlayApp() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
@@ -113,6 +118,8 @@ export default function App() {
   const [benchmarkRecords, setBenchmarkRecords] = useState(loadBenchmarkRecords);
   const [stepMoves, setStepMoves] = useState<SolverMove[]>([]);
   const [nextStepIndex, setNextStepIndex] = useState(0);
+  const [controlsOpen, setControlsOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   const stateRef = useRef(state);
 
   useEffect(() => {
@@ -373,7 +380,7 @@ export default function App() {
           return;
         case 'change-scale': {
           if (state.ui.interactionMode === 'cubie') {
-            const depths = extensionDepthsForLevel(state.puzzle.level);
+            const depths = extensionDepthsFromTargets(state.puzzle.turnTargets);
             const idx = depths.indexOf(state.ui.extensionDepth);
             const newIdx = Math.max(0, Math.min(depths.length - 1, idx + command.direction));
             if (newIdx !== idx) dispatch({ type: 'SET_EXTENSION_DEPTH', depth: depths[newIdx]! });
@@ -453,6 +460,10 @@ export default function App() {
     () => extensionTargetsAtDepth(extensionTargets, state.ui.extensionDepth),
     [extensionTargets, state.ui.extensionDepth],
   );
+  const extensionDepths = useMemo(
+    () => extensionDepthsFromTargets(state.puzzle.turnTargets),
+    [state.puzzle.turnTargets],
+  );
   const selectedExtensionTarget = state.puzzle.selectedExtension
     ? state.puzzle.turnTargetById.get(state.puzzle.selectedExtension) ?? null
     : null;
@@ -522,62 +533,81 @@ export default function App() {
       )}
 
       <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-2 sm:p-4">
-        <ControlPanel
-          selectedFrame={state.puzzle.selectedFrame}
-          selectedExtensionTarget={selectedExtensionTarget}
-          level={state.puzzle.level}
-          interactionTier={state.puzzle.interactionTier}
-          cubieCount={state.puzzle.cubies.length}
-          frameCount={state.puzzle.frames.filter((f) => f.scale === state.ui.frameScale).length}
-          targetSummary={targetSummary}
-          isAnimating={state.puzzle.isAnimating}
-          invalidFeedback={state.ui.invalidFeedback}
-          interactionMode={state.ui.interactionMode}
-          frameScale={state.ui.frameScale}
-          extensionDepth={state.ui.extensionDepth}
-          extensionDepths={extensionDepthsForLevel(state.puzzle.level)}
-          extensionTargetsAtDepthCount={extensionTargetsAtCurrentDepth.length}
-          availableScales={availableScalesForLevel(state.puzzle.level)}
-          frameById={state.puzzle.frameById}
-          solverPanel={(
-            <SolverPanel
-              lastRun={solverRun}
-              benchmarkRecords={benchmarkRecords}
-              preparedStepCount={stepMoves.length}
-              nextStepIndex={nextStepIndex}
-              disabled={state.puzzle.level !== 1 || state.puzzle.isAnimating}
-              onSolveInstant={solveInstant}
-              onSolveAnimated={solveAnimated}
-              onPrepareStep={prepareStepSolve}
-              onApplyStep={applyNextSolverStep}
-              onClearBenchmarks={clearBenchmarks}
+        <div className="pointer-events-auto flex flex-col items-start gap-2">
+          <div className="flex gap-2">
+            <button onClick={() => setControlsOpen((open) => !open)}>
+              {controlsOpen ? 'Close controls' : 'Controls'}
+            </button>
+            <a
+              href="/keyboard"
+              className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
+            >
+              Keyboard
+            </a>
+          </div>
+          {controlsOpen && (
+            <ControlPanel
+              selectedFrame={state.puzzle.selectedFrame}
+              selectedExtensionTarget={selectedExtensionTarget}
+              level={state.puzzle.level}
+              interactionTier={state.puzzle.interactionTier}
+              cubieCount={state.puzzle.cubies.length}
+              frameCount={state.puzzle.frames.filter((f) => f.scale === state.ui.frameScale).length}
+              targetSummary={targetSummary}
+              isAnimating={state.puzzle.isAnimating}
+              invalidFeedback={state.ui.invalidFeedback}
+              interactionMode={state.ui.interactionMode}
+              frameScale={state.ui.frameScale}
+              extensionDepth={state.ui.extensionDepth}
+              extensionDepths={extensionDepths}
+              extensionTargetsAtDepthCount={extensionTargetsAtCurrentDepth.length}
+              availableScales={availableScalesForLevel(state.puzzle.level)}
+              frameById={state.puzzle.frameById}
+              solverPanel={(
+                <SolverPanel
+                  lastRun={solverRun}
+                  benchmarkRecords={benchmarkRecords}
+                  preparedStepCount={stepMoves.length}
+                  nextStepIndex={nextStepIndex}
+                  disabled={state.puzzle.level !== 1 || state.puzzle.isAnimating}
+                  onSolveInstant={solveInstant}
+                  onSolveAnimated={solveAnimated}
+                  onPrepareStep={prepareStepSolve}
+                  onApplyStep={applyNextSolverStep}
+                  onClearBenchmarks={clearBenchmarks}
+                />
+              )}
+              onMove={onMove}
+              onScramble={scramble}
+              onReset={() => dispatch({ type: 'RESET_PUZZLE' })}
+              onUndo={() => dispatch({ type: 'UNDO' })}
+              onRedo={() => dispatch({ type: 'REDO' })}
+              onToggleTransparent={() => dispatch({ type: 'TOGGLE_TRANSPARENCY' })}
+              onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
+              onSetCameraPreset={requestCameraPreset}
+              onSetLevel={(level) => dispatch({ type: 'SET_LEVEL', level })}
+              onSetFrameScale={setFrameScale}
+              onSetExtensionDepth={(depth) => dispatch({ type: 'SET_EXTENSION_DEPTH', depth })}
+              onCycleExtension={(direction) => {
+                const targetId = cycleExtensionTarget(
+                  direction,
+                  state.puzzle.turnTargets,
+                  state.puzzle.selectedExtension,
+                  state.ui.extensionDepth,
+                );
+                if (targetId) dispatch({ type: 'SELECT_EXTENSION', targetId });
+              }}
+              onSelectAxis={selectAxis}
+              onCycleLayer={cycleLayer}
             />
           )}
-          onMove={onMove}
-          onScramble={scramble}
-          onReset={() => dispatch({ type: 'RESET_PUZZLE' })}
-          onUndo={() => dispatch({ type: 'UNDO' })}
-          onRedo={() => dispatch({ type: 'REDO' })}
-          onToggleTransparent={() => dispatch({ type: 'TOGGLE_TRANSPARENCY' })}
-          onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
-          onSetCameraPreset={requestCameraPreset}
-          onSetLevel={(level) => dispatch({ type: 'SET_LEVEL', level })}
-          onSetFrameScale={setFrameScale}
-          onSetExtensionDepth={(depth) => dispatch({ type: 'SET_EXTENSION_DEPTH', depth })}
-          onCycleExtension={(direction) => {
-            const targetId = cycleExtensionTarget(
-              direction,
-              state.puzzle.turnTargets,
-              state.puzzle.selectedExtension,
-              state.ui.extensionDepth,
-            );
-            if (targetId) dispatch({ type: 'SELECT_EXTENSION', targetId });
-          }}
-          onSelectAxis={selectAxis}
-          onCycleLayer={cycleLayer}
-        />
+        </div>
 
-        {playableLevel && <div className="pointer-events-auto hidden w-[280px] space-y-3 md:block">
+        {playableLevel && <div className="pointer-events-auto flex flex-col items-end gap-2">
+          <button onClick={() => setInfoOpen((open) => !open)}>
+            {infoOpen ? 'Close info' : 'Info'}
+          </button>
+          {infoOpen && <div className="w-[min(280px,calc(100vw-1rem))] space-y-3">
           <div className="rounded-lg border border-slate-700 bg-slate-900/70 p-3 text-xs text-slate-300">
             <p className="mb-1 font-semibold text-slate-100">
               Interaction hints
@@ -601,7 +631,7 @@ export default function App() {
               ) : (
                 <>
                   <li>• Tap an edge block: select extension target</li>
-                  <li>• -/=: shallower/deeper recursive depth</li>
+                  <li>• -/=: D block / D.5 slab / deeper target</li>
                   <li>• Q/E: previous/next extension target</li>
                   <li>• A/D/S or J/L/K: rotate selected extension</li>
                 </>
@@ -611,8 +641,14 @@ export default function App() {
             </ul>
           </div>
           <MoveHistory moves={state.puzzle.moveHistory} />
+          </div>}
         </div>}
       </div>
     </div>
   );
+}
+
+export default function App() {
+  const route = window.location.pathname.replace(/\/+$/, '') || '/';
+  return route === '/keyboard' ? <KeyboardGuide /> : <PlayApp />;
 }
