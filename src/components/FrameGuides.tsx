@@ -11,6 +11,7 @@ interface Props {
   onHover: (frame: FrameId | null) => void;
   onSelect: (frame: FrameId) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
+  onDragActiveChange: (active: boolean) => void;
 }
 
 const ringRotation = (frame: RotationFrame): [number, number, number] => {
@@ -33,6 +34,7 @@ export default function FrameGuides({
   onHover,
   onSelect,
   onDragPreview,
+  onDragActiveChange,
 }: Props) {
   const dragStart = useRef<{ x: number; frame: FrameId } | null>(null);
 
@@ -66,17 +68,23 @@ export default function FrameGuides({
             onPointerDown={(event: ThreeEvent<PointerEvent>) => {
               event.stopPropagation();
               dragStart.current = { x: event.clientX, frame: frame.id };
+              onDragActiveChange(true);
+              (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
             }}
             onPointerMove={(event: ThreeEvent<PointerEvent>) => {
               if (!dragStart.current || dragStart.current.frame !== frame.id) return;
+              event.stopPropagation();
               const deltaX = event.clientX - dragStart.current.x;
               const preview = Math.max(-90, Math.min(90, deltaX * 0.65));
               onDragPreview(frame.id, preview);
             }}
             onPointerUp={(event: ThreeEvent<PointerEvent>) => {
+              if (!dragStart.current || dragStart.current.frame !== frame.id) return;
               event.stopPropagation();
               dragStart.current = null;
+              onDragActiveChange(false);
               onDragPreview(frame.id, null);
+              (event.target as HTMLElement).releasePointerCapture?.(event.pointerId);
             }}
           >
             <meshStandardMaterial
