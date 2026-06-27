@@ -1,8 +1,16 @@
 {
-  "buildCommand": "npm run build --workspace=@menger/play",
+  "buildCommand": "npm run build && mkdir -p apps/play/dist/lab && cp -R apps/lab/dist/* apps/play/dist/lab/",
   "outputDirectory": "apps/play/dist",
   "installCommand": "npm install",
   "rewrites": [
+    {
+      "source": "/lab",
+      "destination": "/lab/index.html"
+    },
+    {
+      "source": "/lab/:path*",
+      "destination": "/lab/index.html"
+    },
     {
       "source": "/keyboard",
       "destination": "/index.html"
