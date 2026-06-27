@@ -1,4 +1,4 @@
-import type { AxisName, FrameId, RotationFrame } from '../types/puzzle';
+import type { AxisName, FrameId, RotationFrame } from './types';
 import type { Vector3Tuple } from 'three';
 import { createPuzzleConfig } from './generateMenger';
 import { availableScalesForLevel } from './levels';

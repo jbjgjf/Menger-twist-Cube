@@ -1,4 +1,4 @@
-import type { AxisName, RotationFrame, TurnTarget } from '../types/puzzle';
+import type { AxisName, RotationFrame, TurnTarget } from './types';
 import type { Vector3Tuple } from 'three';
 import { createPuzzleConfig, isMengerCell } from './generateMenger';
 import { frameTargetCountForLevel, extensionTargetCountForLevel } from './levels';

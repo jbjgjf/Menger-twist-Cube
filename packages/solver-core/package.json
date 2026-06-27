@@ -1,0 +1,19 @@
+{
+  "name": "@menger/solver-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "./src/index.ts",
+  "scripts": {
+    "bench": "tsx src/cli/bench.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@menger/engine": "*",
+    "cubing": "^0.63.3",
+    "three": "^0.176.0"
+  }
+}

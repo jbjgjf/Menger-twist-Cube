@@ -1,8 +1,7 @@
 import { Matrix4, Quaternion as ThreeQuaternion, Vector3 } from 'three';
-import type { Cubie } from '../types/puzzle';
-import type { SolverProgress } from './types';
-import { cubieNaturalAxis } from '../engine/moves';
-import { rotateQuaternion } from '../engine/geometry';
+import type { Cubie } from '@menger/engine';
+import { cubieNaturalAxis, rotateQuaternion } from '@menger/engine';
+import type { SolverProgress } from '../algorithm/types';
 
 const solvedOrientationKey = '100|010|001';
 const extensionAngles = [0, 90, 180, -90] as const;

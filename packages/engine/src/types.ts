@@ -7,7 +7,6 @@ export type CubieType = 'outer' | 'hole' | 'corner' | 'edge' | 'innerWall';
 
 export type TwistAngle = 90 | -90 | 180;
 
-export type InteractionMode = 'slice' | 'cubie';
 export type InteractionTier = 'competitive-manual' | 'assisted-manual' | 'research-evaluation';
 export type TurnTargetKind = 'frame' | 'extension';
 export type ExtensionTargetFamily = 'block' | 'slab';
@@ -33,22 +32,6 @@ export interface Cubie {
   type: CubieType;
 }
 
-export interface PuzzleState {
-  level: number;
-  interactionTier: InteractionTier;
-  frames: RotationFrame[];
-  frameById: Map<FrameId, RotationFrame>;
-  turnTargets: TurnTarget[];
-  turnTargetById: Map<string, TurnTarget>;
-  cubies: Cubie[];
-  moveHistory: Move[];
-  redoStack: Move[];
-  selectedFrame: FrameId | null;
-  selectedCubie: string | null;
-  selectedExtension: string | null;
-  isAnimating: boolean;
-}
-
 export interface RotationFrame {
   id: FrameId;
   name: string;
@@ -64,14 +47,6 @@ export interface RotationFrame {
   radius: number;
 }
 
-export interface DragPreview {
-  frameId?: FrameId;
-  cubieId?: string;
-  cubieAxis?: Vector3Tuple;
-  extensionTargetId?: string;
-  angle: number;
-}
-
 export interface TurnTarget {
   id: string;
   kind: TurnTargetKind;
@@ -84,4 +59,21 @@ export interface TurnTarget {
   pivot: Vector3Tuple;
   selector: (position: Vector3Tuple) => boolean;
   affectedCountEstimate: number;
+}
+
+/**
+ * The pure puzzle-mechanics state: positions, orientations, and the turn
+ * targets that can be applied to them. Deliberately excludes any
+ * interaction/UI concept (selection, history, animation) so it can be
+ * shared by the Play app, the solver, and the benchmark CLI without any of
+ * them depending on the others.
+ */
+export interface MengerPuzzleState {
+  level: number;
+  interactionTier: InteractionTier;
+  frames: RotationFrame[];
+  frameById: Map<FrameId, RotationFrame>;
+  turnTargets: TurnTarget[];
+  turnTargetById: Map<string, TurnTarget>;
+  cubies: Cubie[];
 }

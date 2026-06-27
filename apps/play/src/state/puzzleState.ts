@@ -1,11 +1,15 @@
 import type { DragPreview, FrameId, InteractionMode, Move, PuzzleState, TwistAngle } from '../types/puzzle';
+import type { Cubie } from '@menger/engine';
 import type { Vector3Tuple } from 'three';
-import { generateMenger } from './generateMenger';
-import { createFrameMap, generateRotationFrames } from './frameDefinitions';
-import { applyCubieRotation, applyExtensionRotation, applyTwistToCubies, createExtensionMove, createMove } from './moves';
-import { interactionTierForLevel, isPlayableLevel } from './levels';
-import { createTurnTargetMap, generateTurnTargets } from './turnTargets';
-import type { SolverMove } from '../solver/types';
+import {
+  applyCubieRotation,
+  applyExtensionRotation,
+  applyTwistToCubies,
+  createExtensionMove,
+  createMengerPuzzleState,
+  createMove,
+} from '@menger/engine';
+import type { SolverMove } from '@menger/solver-core';
 
 export interface PuzzleUiState {
   transparentView: boolean;
@@ -21,7 +25,7 @@ export interface PuzzleUiState {
 
 export interface RootState {
   puzzle: PuzzleState;
-  initialCubies: ReturnType<typeof generateMenger>;
+  initialCubies: Cubie[];
   ui: PuzzleUiState;
 }
 
@@ -90,22 +94,11 @@ const applySolverMove = (state: RootState, solverMove: SolverMove): RootState =>
   return state;
 };
 
-const createPuzzle = (level: number): PuzzleState & { initialCubies: ReturnType<typeof generateMenger> } => {
-  const tier = interactionTierForLevel(level);
-  const cubies = isPlayableLevel(level) ? generateMenger(level) : [];
-  const frames = generateRotationFrames(level);
-  const frameById = createFrameMap(frames);
-  const turnTargets = generateTurnTargets(level, frames, isPlayableLevel(level));
-  const turnTargetById = createTurnTargetMap(turnTargets);
+const createPuzzle = (level: number): PuzzleState & { initialCubies: Cubie[] } => {
+  const base = createMengerPuzzleState(level);
   return {
-    initialCubies: cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
-    level,
-    interactionTier: tier,
-    frames,
-    frameById,
-    turnTargets,
-    turnTargetById,
-    cubies,
+    ...base,
+    initialCubies: base.cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
     moveHistory: [],
     redoStack: [],
     selectedFrame: null,

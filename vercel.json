@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build --workspace=@menger/play",
+  "outputDirectory": "apps/play/dist",
+  "installCommand": "npm install"
+}

@@ -1,6 +1,6 @@
 import { Quaternion } from 'three';
 import type { Vector3Tuple } from 'three';
-import type { Cubie, CubieType } from '../types/puzzle';
+import type { Cubie, CubieType } from './types';
 import { normalizePuzzleLevel } from './levels';
 
 export interface PuzzleConfig {

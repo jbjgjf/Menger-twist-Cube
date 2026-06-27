@@ -1,4 +1,4 @@
-import type { Cubie, CubieType, FrameId, Move, RotationFrame, TurnTarget, TwistAngle } from '../types/puzzle';
+import type { Cubie, CubieType, FrameId, Move, RotationFrame, TurnTarget, TwistAngle } from './types';
 import type { Vector3Tuple } from 'three';
 import { angleToNotation, rotatePosition, rotatePositionAroundPivot, rotateQuaternion } from './geometry';
 
@@ -7,6 +7,9 @@ export const notationForMove = (frame: RotationFrame | undefined, frameId: Frame
 
   return `${base}${angleToNotation(angle)}`;
 };
+
+export const cloneCubies = (cubies: Cubie[]): Cubie[] =>
+  cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() }));
 
 export const getAffectedCubieIds = (
   cubies: Cubie[],

@@ -4,7 +4,7 @@ import { Color, Quaternion as ThreeQuaternion, Vector3 } from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Edges } from '@react-three/drei';
 import type { Cubie, DragPreview, FrameId, RotationFrame, TurnTarget } from '../types/puzzle';
-import { rotatePositionAroundPivot } from '../engine/geometry';
+import { rotatePositionAroundPivot } from '@menger/engine';
 
 interface Props {
   cubie: Cubie;

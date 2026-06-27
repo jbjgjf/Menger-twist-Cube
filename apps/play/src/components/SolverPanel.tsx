@@ -1,5 +1,4 @@
-import type { SolverBenchmarkRecord, SolverRunResult } from '../solver/types';
-import { summarizeBenchmarkRecords } from '../solver/benchmarkStore';
+import { summarizeBenchmarkRecords, type SolverBenchmarkRecord, type SolverRunResult } from '@menger/solver-core';
 
 interface Props {
   lastRun: SolverRunResult | null;

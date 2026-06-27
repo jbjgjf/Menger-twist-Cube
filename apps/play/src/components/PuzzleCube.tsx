@@ -3,7 +3,7 @@ import type { ThreeEvent } from '@react-three/fiber';
 import { Vector2, Vector3 } from 'three';
 import type { AxisName, Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 
-import { getAffectedCubieIds, getAffectedTurnTargetCubieIds, isSelectableInCubieMode } from '../engine/moves';
+import { getAffectedCubieIds, getAffectedTurnTargetCubieIds, isSelectableInCubieMode } from '@menger/engine';
 import CubieMesh from './CubieMesh';
 import InstancedCubieMeshes from './InstancedCubieMeshes';
 

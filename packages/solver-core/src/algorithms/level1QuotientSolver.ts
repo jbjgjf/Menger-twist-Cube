@@ -1,14 +1,16 @@
-import type { Cubie, PuzzleState, RotationFrame, TwistAngle } from '../types/puzzle';
-import type { SolverExplanationStep, SolverMove, SolverRunResult } from './types';
+import type { Cubie, MengerPuzzleState, TwistAngle } from '@menger/engine';
 import {
   applyExtensionRotation,
   applyTwistToCubies,
+  cloneCubies,
   createExtensionMove,
   createMove,
   cubieNaturalAxis,
-} from '../engine/moves';
-import { generateMenger } from '../engine/generateMenger';
-import { rotateQuaternion } from '../engine/geometry';
+  generateMenger,
+  rotateQuaternion,
+} from '@menger/engine';
+import type { SolverAlgorithm, SolverExplanationStep, SolverMove, SolverRunResult } from '../algorithm/types';
+import type { PuzzleModel } from '../model/puzzleModel';
 import {
   isExactlySolved,
   isFrameSolved,
@@ -24,6 +26,7 @@ import { cube3x3x3 } from 'cubing/puzzles';
 import { experimentalSolve3x3x3IgnoringCenters } from 'cubing/search';
 import { KPattern, type KPuzzle, type KPatternData } from 'cubing/kpuzzle';
 
+const solverId = 'level1-quotient';
 const solverName = 'level-1-state-normalizer';
 const solverVersion = '0.1.0';
 const frameSearchNodeBudget = 80000;
@@ -31,7 +34,6 @@ const frameSearchMaxDepth = 14;
 const frameSearchRuntimeBudgetMs = 420;
 const primaryComplexityEstimate =
   'O(20) state projection plus cubing frame solve over the 3x3x3 quotient, then O(12 * 4) extension normalization';
-const frameAngles: TwistAngle[] = [90, -90, 180];
 const extensionAngles: TwistAngle[] = [90, -90, 180];
 const cubingMoveNames = ['U', 'D', 'R', 'L', 'F', 'B', 'M', 'E', 'S'] as const;
 
@@ -70,7 +72,7 @@ interface CubingCalibration {
 let calibrationPromise: Promise<CubingCalibration> | null = null;
 
 interface QueueNode {
-  cubies: Cubie[];
+  state: MengerPuzzleState;
   moves: SolverMove[];
   key: string;
   depth: number;
@@ -78,12 +80,6 @@ interface QueueNode {
   priority: number;
   lastFrameId: string | null;
   lastAxisName: string | null;
-}
-
-interface CandidateFrameMove {
-  frame: RotationFrame;
-  angle: TwistAngle;
-  notation: string;
 }
 
 const orientationLookupKey = (slot: number, piece: number, orientation: string): string =>
@@ -101,10 +97,7 @@ const slotIndexForCubie = (cubie: Cubie): number | null => {
   return null;
 };
 
-const findFrameForCubingMove = (
-  puzzle: PuzzleState,
-  moveName: string,
-): RotationFrame | null => {
+const findFrameForCubingMove = (puzzle: MengerPuzzleState, moveName: string) => {
   const mapping = cubingMoveToFrame[moveName];
   if (!mapping) return null;
   return puzzle.frames.find((frame) =>
@@ -121,7 +114,7 @@ const parseCubingToken = (token: string): { moveName: string; angle: TwistAngle 
   return { moveName, angle: mapping.angle };
 };
 
-const solverMoveFromCubingToken = (token: string, puzzle: PuzzleState): SolverMove | null => {
+const solverMoveFromCubingToken = (token: string, puzzle: MengerPuzzleState): SolverMove | null => {
   const parsed = parseCubingToken(token);
   if (!parsed) return null;
   const frame = findFrameForCubingMove(puzzle, parsed.moveName);
@@ -137,7 +130,7 @@ const solverMoveFromCubingToken = (token: string, puzzle: PuzzleState): SolverMo
   };
 };
 
-const applyCubingTokenToCubies = (cubies: Cubie[], token: string, puzzle: PuzzleState): Cubie[] => {
+const applyCubingTokenToCubies = (cubies: Cubie[], token: string, puzzle: MengerPuzzleState): Cubie[] => {
   const move = solverMoveFromCubingToken(token, puzzle);
   if (!move?.frameId) return cubies;
   return applyTwistToCubies(cubies, move.frameId, move.angle, puzzle.frameById);
@@ -193,7 +186,7 @@ const addCalibrationEntry = (
   }
 };
 
-const ensureCubingCalibration = async (puzzle: PuzzleState): Promise<CubingCalibration> => {
+const ensureCubingCalibration = async (puzzle: MengerPuzzleState): Promise<CubingCalibration> => {
   if (calibrationPromise) return calibrationPromise;
 
   calibrationPromise = (async () => {
@@ -231,7 +224,7 @@ const edgeOrientationCandidates = (cubie: Cubie): string[] => {
     .map((angle) => orientationKey(rotateQuaternion(cubie.orientation, axis, angle)));
 };
 
-const cubiesToKPattern = async (cubies: Cubie[], puzzle: PuzzleState): Promise<KPattern> => {
+const cubiesToKPattern = async (cubies: Cubie[], puzzle: MengerPuzzleState): Promise<KPattern> => {
   const calibration = await ensureCubingCalibration(puzzle);
   const patternData: KPatternData = {
     EDGES: {
@@ -282,7 +275,7 @@ const cubiesToKPattern = async (cubies: Cubie[], puzzle: PuzzleState): Promise<K
 
 const solveFramePhaseWithCubing = async (
   inputCubies: Cubie[],
-  puzzle: PuzzleState,
+  puzzle: MengerPuzzleState,
   explanation: SolverExplanationStep[],
 ): Promise<{ cubies: Cubie[]; moves: SolverMove[]; success: boolean; notes: string; expanded: number }> => {
   if (isFrameSolved(inputCubies)) {
@@ -296,7 +289,7 @@ const solveFramePhaseWithCubing = async (
   }
 
   const basePattern = await cubiesToKPattern(inputCubies, puzzle);
-  
+
   let finalAlg = '';
   let usedM = false;
   let solved = false;
@@ -310,14 +303,14 @@ const solveFramePhaseWithCubing = async (
 
   for (const variant of variants) {
     let pData = JSON.parse(JSON.stringify(basePattern.patternData));
-    
+
     if (variant.m) {
       const pTemp = new KPattern(basePattern.kpuzzle, pData).applyAlg('M');
       pData = JSON.parse(JSON.stringify(pTemp.patternData));
       pData.CENTERS.pieces = [0, 1, 2, 3, 4, 5];
       pData.CENTERS.orientation = [0, 0, 0, 0, 0, 0];
     }
-    
+
     if (variant.flip) {
       pData.EDGES.orientation[0] = 1 - pData.EDGES.orientation[0];
     }
@@ -336,7 +329,7 @@ const solveFramePhaseWithCubing = async (
   }
 
   if (!solved) {
-     throw new Error('All parity variants failed to solve.');
+    throw new Error('All parity variants failed to solve.');
   }
 
   const tokens = algTokens(finalAlg);
@@ -427,9 +420,6 @@ class MinHeap<T> {
   }
 }
 
-const cloneCubies = (cubies: Cubie[]): Cubie[] =>
-  cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() }));
-
 const frameHeuristic = (cubies: Cubie[]): number => {
   const progress = progressForCubies(cubies);
   const misplaced = progress.totalCubies - progress.positionSolved;
@@ -450,45 +440,50 @@ const nodePriority = (depth: number, heuristic: number, cubies: Cubie[]): number
   return depth + heuristic * 1.7 + exactUnsolved * 0.025 + positionUnsolved * 0.04;
 };
 
-const buildFrameMoves = (puzzle: PuzzleState): CandidateFrameMove[] =>
-  puzzle.frames
-    .filter((frame) => frame.scale === 1)
-    .sort((a, b) => a.axisName.localeCompare(b.axisName) || a.layer - b.layer)
-    .flatMap((frame) =>
-      frameAngles.map((angle) => ({
-        frame,
-        angle,
-        notation: createMove(frame.id, angle, puzzle.frameById).notation,
-      })),
-    );
-
-const shouldSkipFrameMove = (node: QueueNode, move: CandidateFrameMove): boolean => {
-  if (node.lastFrameId === move.frame.id) return true;
-  if (node.lastAxisName !== move.frame.axisName) return false;
+// Skip frame moves that would either re-turn the same frame the previous move
+// just turned, or repeat a same-axis frame in a non-canonical order — both
+// only add depth without reaching states a different move order could not.
+const shouldSkipFrameMove = (
+  node: QueueNode,
+  move: SolverMove,
+  frameById: MengerPuzzleState['frameById'],
+): boolean => {
+  if (!move.frameId) return true;
+  if (node.lastFrameId === move.frameId) return true;
+  const axisName = frameById.get(move.frameId)?.axisName ?? null;
+  if (node.lastAxisName !== axisName) return false;
   if (!node.lastFrameId) return false;
-  return move.frame.id.localeCompare(node.lastFrameId) <= 0;
+  return move.frameId.localeCompare(node.lastFrameId) <= 0;
 };
 
+/**
+ * Bounded fallback search used when the cubing-backed frame solve fails.
+ * Unlike the cubing phase (which is Menger/3x3x3-quotient specific by
+ * nature), this is a generic best-first search over single moves — it is
+ * written entirely against `PuzzleModel.legalMoves` / `applyMove`, so the
+ * same search shape would run over a different puzzle model without
+ * modification. Only the priority heuristic below stays Level-1-specific.
+ */
 const solveFramePhase = (
-  inputCubies: Cubie[],
-  puzzle: PuzzleState,
+  model: PuzzleModel<MengerPuzzleState, SolverMove>,
+  inputState: MengerPuzzleState,
   explanation: SolverExplanationStep[],
 ): { cubies: Cubie[]; moves: SolverMove[]; success: boolean; notes: string; expanded: number } => {
-  if (isFrameSolved(inputCubies)) {
+  if (isFrameSolved(inputState.cubies)) {
     explanation.push({
       phase: 'frame quotient',
       objective: 'Place all cubies and solve corners while ignoring independent edge extension roll.',
       observation: 'The current state is already solved in the frame quotient.',
-      progress: progressForCubies(inputCubies),
+      progress: progressForCubies(inputState.cubies),
     });
-    return { cubies: cloneCubies(inputCubies), moves: [], success: true, notes: 'Frame quotient already solved.', expanded: 0 };
+    return { cubies: cloneCubies(inputState.cubies), moves: [], success: true, notes: 'Frame quotient already solved.', expanded: 0 };
   }
 
   const start = performance.now();
-  const frameMoves = buildFrameMoves(puzzle);
-  const startCubies = cloneCubies(inputCubies);
-  const startHeuristic = frameHeuristic(startCubies);
-  const startKey = stateKey(startCubies, true);
+  const frameMoves = model.legalMoves(inputState).filter((move) => move.targetKind === 'frame');
+  const startState = model.cloneState(inputState);
+  const startHeuristic = frameHeuristic(startState.cubies);
+  const startKey = stateKey(startState.cubies, true);
   const frontier = new MinHeap<QueueNode>((a, b) =>
     a.priority === b.priority
       ? a.key.localeCompare(b.key) < 0
@@ -498,12 +493,12 @@ const solveFramePhase = (
   let expanded = 0;
 
   frontier.push({
-    cubies: startCubies,
+    state: startState,
     moves: [],
     key: startKey,
     depth: 0,
     heuristic: startHeuristic,
-    priority: nodePriority(0, startHeuristic, startCubies),
+    priority: nodePriority(0, startHeuristic, startState.cubies),
     lastFrameId: null,
     lastAxisName: null,
   });
@@ -511,7 +506,7 @@ const solveFramePhase = (
   while (frontier.size > 0 && expanded < frameSearchNodeBudget) {
     if (performance.now() - start > frameSearchRuntimeBudgetMs) {
       return {
-        cubies: inputCubies,
+        cubies: inputState.cubies,
         moves: [],
         success: false,
         notes: `Frame search timed out after ${expanded.toLocaleString()} expanded states.`,
@@ -522,56 +517,52 @@ const solveFramePhase = (
     const node = frontier.pop()!;
     expanded += 1;
 
-    if (isFrameSolved(node.cubies)) {
+    if (isFrameSolved(node.state.cubies)) {
       explanation.push({
         phase: 'frame quotient',
         objective: 'Find legal frame moves that solve positions and corner orientations.',
         observation: `Solved the frame quotient after expanding ${expanded.toLocaleString()} states.`,
         selectedMove: node.moves[0]?.notation,
         reason: 'The selected sequence minimizes the deterministic search priority among explored candidates.',
-        progress: progressForCubies(node.cubies),
+        progress: progressForCubies(node.state.cubies),
       });
-      return { cubies: node.cubies, moves: node.moves, success: true, notes: 'Frame quotient solved.', expanded };
+      return { cubies: node.state.cubies, moves: node.moves, success: true, notes: 'Frame quotient solved.', expanded };
     }
 
     if (node.depth >= frameSearchMaxDepth) continue;
 
     for (const candidate of frameMoves) {
-      if (shouldSkipFrameMove(node, candidate)) continue;
+      if (shouldSkipFrameMove(node, candidate, inputState.frameById)) continue;
 
-      const childCubies = applyTwistToCubies(node.cubies, candidate.frame.id, candidate.angle, puzzle.frameById);
-      const childKey = stateKey(childCubies, true);
+      const childState = model.applyMove(node.state, candidate);
+      const childKey = stateKey(childState.cubies, true);
       const childDepth = node.depth + 1;
       const priorDepth = visited.get(childKey);
       if (priorDepth !== undefined && priorDepth <= childDepth) continue;
 
-      const heuristic = frameHeuristic(childCubies);
+      const heuristic = frameHeuristic(childState.cubies);
       visited.set(childKey, childDepth);
       frontier.push({
-        cubies: childCubies,
+        state: childState,
         moves: [
           ...node.moves,
           {
-            targetKind: 'frame',
-            targetId: `frame:${candidate.frame.id}`,
-            frameId: candidate.frame.id,
-            angle: candidate.angle,
-            notation: candidate.notation,
+            ...candidate,
             reason: `Frame search selected ${candidate.notation} to reduce the frame-quotient distance.`,
           },
         ],
         key: childKey,
         depth: childDepth,
         heuristic,
-        priority: nodePriority(childDepth, heuristic, childCubies),
-        lastFrameId: candidate.frame.id,
-        lastAxisName: candidate.frame.axisName,
+        priority: nodePriority(childDepth, heuristic, childState.cubies),
+        lastFrameId: candidate.frameId ?? null,
+        lastAxisName: candidate.frameId ? inputState.frameById.get(candidate.frameId)?.axisName ?? null : null,
       });
     }
   }
 
   return {
-    cubies: inputCubies,
+    cubies: inputState.cubies,
     moves: [],
     success: false,
     notes: `Frame search exhausted ${expanded.toLocaleString()} states without solving within depth ${frameSearchMaxDepth}.`,
@@ -581,7 +572,7 @@ const solveFramePhase = (
 
 const solveExtensionPhase = (
   inputCubies: Cubie[],
-  puzzle: PuzzleState,
+  puzzle: MengerPuzzleState,
   explanation: SolverExplanationStep[],
 ): { cubies: Cubie[]; moves: SolverMove[]; success: boolean; notes: string } => {
   let cubies = cloneCubies(inputCubies);
@@ -662,7 +653,10 @@ const solveExtensionPhase = (
   };
 };
 
-export const solveLevel1 = async (puzzle: PuzzleState): Promise<SolverRunResult> => {
+const solve = async (
+  model: PuzzleModel<MengerPuzzleState, SolverMove>,
+  puzzle: MengerPuzzleState,
+): Promise<SolverRunResult> => {
   const start = performance.now();
   const inputProgress = progressForCubies(puzzle.cubies);
   const explanation: SolverExplanationStep[] = [{
@@ -706,7 +700,7 @@ export const solveLevel1 = async (puzzle: PuzzleState): Promise<SolverRunResult>
       reason: 'Falling back to the in-house bounded deterministic frame search.',
       progress: progressForCubies(puzzle.cubies),
     });
-    frameResult = solveFramePhase(puzzle.cubies, puzzle, explanation);
+    frameResult = solveFramePhase(model, puzzle, explanation);
   }
   if (!frameResult.success) {
     return {
@@ -773,7 +767,15 @@ export const solveLevel1 = async (puzzle: PuzzleState): Promise<SolverRunResult>
   };
 };
 
-export const warmLevel1Solver = (puzzle: PuzzleState) => {
+export const level1QuotientAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  id: solverId,
+  name: solverName,
+  version: solverVersion,
+  levelsSupported: [1],
+  solve,
+};
+
+export const warmLevel1Solver = (puzzle: MengerPuzzleState) => {
   if (puzzle.level !== 1) return;
   void ensureCubingCalibration(puzzle);
 };

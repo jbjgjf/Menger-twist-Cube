@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // This package runs in both Node (the bench CLI) and the browser (Play's
+    // Solver Lab panel). `lib: DOM` is for typing `window` in the
+    // runtime-guarded localStorage adapter only — it does not pull in any
+    // DOM globals that would break the Node CLI at runtime.
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

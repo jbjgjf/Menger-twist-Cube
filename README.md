@@ -1,23 +1,17 @@
-# Menger Twist Cube
+# Menger Cube
 
-Menger Twist Cube is a React + Three.js prototype for a 3D rotational puzzle inspired by Menger cubes.
+Menger Cube is a research platform for generalized higher-order Menger-sponge twisty puzzles, built around three independent pieces:
 
-The current build focuses on validating the core interaction model:
+- **`apps/play`** — the React + Three.js game: orbitable 3D scene, frame/extension rotations, undo/redo, scramble, keyboard controls, and a "Solver Lab" panel for Level 1.
+- **`packages/solver-core`** + **`packages/engine`** — a headless solver engine: puzzle mechanics, a `PuzzleModel`/`SolverAlgorithm` interface pair, an algorithm registry, and a reproducible benchmark runner. Runs in the browser or in plain Node with no UI dependency.
+- **`apps/lab`** — a small dashboard that runs and visualizes algorithms from `solver-core` directly (no Three.js), and compares live runs against JSON results produced by the benchmark CLI.
 
-- orbitable 3D puzzle scene
-- selectable rotation frames
-- recursive extension rotation targets
-- animated quarter-turn and half-turn moves
-- move history, undo, redo, reset, and scramble
-- Level 1 through Level 3 manual/assisted play
-- Level 4 and Level 5 research/evaluation summaries
-- keyboard-first controls generated from the active level's turn targets
-- Level 1 Solver Lab with state-based solving, replay modes, explanations, and benchmarks
+See [`docs/architecture/overview.md`](docs/architecture/overview.md) for how these fit together and why they're split this way.
 
 ## Requirements
 
-- Node.js 20 or newer
-- npm
+- Node.js 22.3 or newer (required by the `cubing` dependency)
+- npm 10+ (for npm workspaces)
 
 ## Setup
 
@@ -25,38 +19,62 @@ The current build focuses on validating the core interaction model:
 npm install
 ```
 
+This installs all workspaces (`packages/*`, `apps/*`) in one pass.
+
 ## Development
 
 ```bash
-npm run dev
+npm run dev       # apps/play, the game — http://localhost:5173
+npm run dev:lab   # apps/lab, the solver dashboard — http://localhost:5175
 ```
-
-Vite will print a local URL, usually `http://localhost:5173/`.
 
 ## Build
 
 ```bash
-npm run build
+npm run build       # builds every workspace that defines a build script
+npm run typecheck    # type-checks every workspace
 ```
 
-## Solver Lab
+## Solver benchmarks
 
-Level 1 includes a real state-based solver in `src/solver/level1Solver.ts`.
+```bash
+npm run bench -- --algorithm=level1-quotient --level=1 --count=20 --length=20
+```
 
-The solver inspects the current `Cubie[]` state, projects the frame quotient into a 3x3x3 cubie model with centers ignored, maps the returned algorithm back to the app's legal frame moves, then normalizes edge extension rotations. It does not replay `moveHistory`.
+Runs the registered algorithm against `count` seeded scrambles and writes a JSON result to `research/results/` (override with `--out=<path>`). Same seed list always produces the same scrambles and the same move-count/success outcomes, so results are diffable across commits. Run `npm run bench -- --help` for all options.
 
-The control panel exposes:
+Load any of those JSON files into `apps/lab` ("Compare against a committed CLI result") to see them alongside a live run.
 
-- `Instant`: solve and apply the returned move list immediately.
-- `Animated`: solve and replay each legal move with preview animation.
-- `Prepare`: compute a move list without applying it.
-- `Step`: apply a prepared move list one move at a time.
+## Repository layout
 
-Each run writes a benchmark record to localStorage key `menger.solver.benchmarks.v1`.
+```text
+apps/
+  play/        the game (React + React Three Fiber)
+  lab/         solver dashboard (algorithm runner, visualizer, benchmark comparison)
+packages/
+  engine/      pure puzzle mechanics — positions, frames, turn targets, move application
+  solver-core/ PuzzleModel + SolverAlgorithm interfaces, registry, benchmark runner, CLI
+research/
+  results/     committed, reproducible benchmark JSON output
+docs/
+  architecture/  system overview, ADRs' supporting context
+  adr/           architecture decision records
+  algorithms/    one doc per solver algorithm
+  research/      benchmark methodology and how to add new experiments
+  play/          player-facing controls reference
+```
 
-Solver design, assumptions, complexity, and extension instructions are documented in `docs/level-1-solver.md`.
+`packages/engine` and `packages/solver-core` are consumed as TypeScript source directly (their `package.json` `exports` point at `./src/index.ts`) — there is no separate build step for them. Vite transforms them on the fly for the apps, and `tsx` runs the CLI directly under Node. This keeps the monorepo simple: add a file, export it from the package's `index.ts`, and every consumer sees it immediately.
 
-## Controls
+## Play app
+
+The control panel exposes Level 1 through Level 5:
+
+- Levels 1–2: competitive-manual play.
+- Level 3: assisted-manual play (target counts are large enough to need depth navigation).
+- Levels 4–5: research/evaluation UI only — target counts and solver/benchmark surfaces, no full cubie rendering.
+
+Puzzle generation, frame targets, and extension targets scale with level; see [`docs/architecture/interaction-architecture.md`](docs/architecture/interaction-architecture.md) for the generation rules and target-count formulas.
 
 ### Mouse
 
@@ -90,41 +108,21 @@ Solver design, assumptions, complexity, and extension instructions are documente
 | Toggle frame guides | `F` |
 | Camera reset / front / top / side | `C` / `V` / `B` / `N` |
 
-The left-hand `Q/E/A/S/D` layout is intended for game-like play. The right-hand `J/K/L` aliases are available for players who prefer to keep movement and rotation controls separated.
+Keyboard bindings are centralized in `apps/play/src/input/keyboardControls.ts` and generated from the active level's turn targets rather than hardcoded per target — see `findKeyboardCommand`.
 
-## Keyboard Extensibility
+## Solver Lab (in-game) vs. apps/lab
 
-Keyboard input is centralized in `src/input/keyboardControls.ts`.
+The Play app's "Solver Lab" panel (Level 1 only) is a thin UI over `@menger/solver-core` — see `apps/play/src/solver/solverController.ts`. It runs the registered algorithm, records a benchmark to `localStorage`, and replays the returned moves with the same animation channel as manual play.
 
-The file exposes:
+`apps/lab` is the standalone counterpart: it runs the same `solver-core` package with no Play-app/Three.js dependency at all, for algorithm comparison, visualization, and reviewing CLI-generated benchmark files.
 
-- `keyboardFrameOrder`: the frame order used by number keys and frame cycling
-- `keyboardBindings`: declarative key bindings mapped to commands
-- `findKeyboardCommand`: a small resolver used by `App.tsx`
+## Documentation
 
-Keyboard bindings use a small grammar instead of one shortcut per target. Number keys target the first nine frames, while `Q/E` cycles through frames in Slice mode and extension targets at the current recursive depth in Extension mode.
-
-## Level Scaling
-
-Puzzle generation is centralized in `src/engine/generateMenger.ts`.
-
-- `generateMenger(level)` creates the recursive Menger cell set. Levels 1-3 produce 20, 400, and 8,000 cubies for direct interaction.
-- `generateRotationFrames(level)` in `src/engine/frameDefinitions.ts` creates frame targets for every available slice scale.
-- `generateExtensionTurnTargets(level)` in `src/engine/turnTargets.ts` creates 12 extension targets for every recursive Menger parent block.
-- Level 1 and Level 2 are treated as competitive-manual surfaces.
-- Level 3 is treated as assisted-manual: still interactive, but the target count is large enough to need depth navigation.
-- Level 4 and Level 5 switch to research/evaluation UI. They show target counts and avoid full cubie generation/rendering.
-- The design context and target counts are documented in `docs/interaction-architecture.md`.
-
-## Project Structure
-
-```text
-src/
-  components/        React and React Three Fiber components
-  engine/            puzzle generation, frame definitions, move logic, reducer
-  input/             keyboard command registry
-  types/             shared puzzle types
-```
+- [`docs/architecture/overview.md`](docs/architecture/overview.md) — how the packages/apps fit together and why.
+- [`docs/architecture/interaction-architecture.md`](docs/architecture/interaction-architecture.md) — turn target generation, interaction tiers, keyboard grammar.
+- [`docs/algorithms/level1-quotient-solver.md`](docs/algorithms/level1-quotient-solver.md) — the Level 1 solver algorithm.
+- [`docs/research/benchmarking.md`](docs/research/benchmarking.md) — benchmark methodology and how to add new algorithms/experiments.
+- [`docs/adr/`](docs/adr/) — architecture decision records.
 
 ## License
 

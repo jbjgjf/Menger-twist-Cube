@@ -1,6 +1,8 @@
-# Level 1 state-based solver
+# Level 1 quotient solver (`level1-quotient`)
 
-This document defines the real Level 1 solver architecture used by the app. The solver must inspect the current cubie state and derive moves from that state. It must not replay `moveHistory`, reverse user actions, or use a fixed solution sequence.
+Implementation: [`packages/solver-core/src/algorithms/level1QuotientSolver.ts`](../../packages/solver-core/src/algorithms/level1QuotientSolver.ts). Registered under algorithm id `level1-quotient` (see [`packages/solver-core/src/algorithms/register.ts`](../../packages/solver-core/src/algorithms/register.ts)) and runs against the `mengerPuzzleModel` `PuzzleModel` from [`packages/solver-core/src/model/mengerPuzzleModel.ts`](../../packages/solver-core/src/model/mengerPuzzleModel.ts).
+
+This document defines the real Level 1 solver architecture used by the platform. The solver must inspect the current cubie state and derive moves from that state. It must not replay `moveHistory`, reverse user actions, or use a fixed solution sequence. It has no dependency on the Play app, React, or Three.js — it runs identically in the browser (`apps/play`, `apps/lab`) and in plain Node (the `npm run bench` CLI).
 
 ## Existing game state
 
@@ -42,19 +44,27 @@ Frame moves change both `currentPosition` and `orientation` for the affected cub
 
 ## Solver interface
 
-Every solver returns a structured run result:
+Every solver implements `SolverAlgorithm<TState, TMove>` (defined in [`packages/solver-core/src/algorithm/types.ts`](../../packages/solver-core/src/algorithm/types.ts)):
 
-- `name`
-- `version`
-- `level_supported`
+```ts
+interface SolverAlgorithm<TState, TMove> {
+  readonly id: string;
+  readonly name: string;
+  readonly version: string;
+  readonly levelsSupported: readonly number[];
+  solve(model: PuzzleModel<TState, TMove>, state: TState): Promise<SolverRunResult>;
+}
+```
+
+`solve` receives the `PuzzleModel` it should run against plus a concrete state — it never reaches into Play-app/React state directly. The returned `SolverRunResult` is structured:
+
+- `name`, `version`, `level_supported`
 - `input_state`
 - `output_moves`
-- `runtime_ms`
-- `move_count`
-- `success`
+- `runtime_ms`, `move_count`, `success`
 - `explanation`
 
-The framework is intentionally algorithm-neutral so later solvers can compete against this Level 1 baseline.
+This is intentionally algorithm-neutral: a second algorithm registers under its own `id` via `registerAlgorithm()` and is selectable from the same registry, the same `apps/lab` UI, and the same benchmark CLI as this Level 1 baseline, with no changes to any of those three. See [Architecture overview](../architecture/overview.md) and [ADR 0002](../adr/0002-puzzle-model-and-solver-algorithm-interfaces.md) for why the interface is shaped this way.
 
 ## Level 1 algorithm
 
@@ -114,12 +124,14 @@ This is direct state reasoning, not search.
 
 The solver uses two state representations.
 
-The app-native representation remains the source of truth:
+The shared mechanics representation (from `@menger/engine`, the `MengerPuzzleState` type) remains the source of truth:
 
 - `Cubie[]`
-- `PuzzleState.frames`
-- `PuzzleState.turnTargets`
-- reducer actions that apply real frame and extension moves
+- `MengerPuzzleState.frames`
+- `MengerPuzzleState.turnTargets`
+- pure functions (`applyTwistToCubies`, `applyExtensionRotation`, ...) that apply real frame and extension moves
+
+The bounded fallback search (used only if the primary cubing-backed solve fails) goes through the `PuzzleModel.legalMoves` / `applyMove` methods rather than calling those engine functions directly — see [ADR 0002](../adr/0002-puzzle-model-and-solver-algorithm-interfaces.md) for why that boundary exists and where it stops (the cubing-quotient phase below is irreducibly Menger-specific, so it is not routed through the generic interface).
 
 For frame solving, the solver projects Level 1 cubies into a 3x3x3 quotient:
 
@@ -181,9 +193,11 @@ Fallback worst-case frame search is bounded by `O(min(27^d, node_budget) * n)`.
 
 For the Level 1 interactive target, the implementation is tuned for one-click solve under 0.5 seconds for normal app states. A failed run is explicit and benchmarked.
 
-## Demo UI
+## UI surfaces
 
-`Solver Lab` is rendered in the main control panel for Level 1.
+Two independent UIs run this same algorithm through the same `solver-core` registry:
+
+`apps/play`'s `Solver Lab` panel (rendered in the main control panel for Level 1, via `apps/play/src/solver/solverController.ts`):
 
 It supports:
 
@@ -201,41 +215,35 @@ The panel displays:
 - Structured explanation phases.
 - Benchmark summary and recent benchmark rows.
 
+`apps/lab` (no Play app/Three.js dependency): an "Algorithm visualizer" that runs one seeded scramble and renders the same `explanation` timeline as a step list with progress bars, plus a "Run benchmark" control that runs `runBenchmark()` over N seeds in-browser and a file importer to load a CLI-produced JSON result for comparison.
+
 ## Benchmarking infrastructure
 
-Every solver run can be converted into a `SolverBenchmarkRecord` and stored in localStorage under `menger.solver.benchmarks.v1`.
+Every solver run can be converted into a `SolverBenchmarkRecord` (see [`packages/solver-core/src/benchmark/types.ts`](../../packages/solver-core/src/benchmark/types.ts)). `apps/play` persists these to `localStorage` under `menger.solver.benchmarks.v1` (via `createLocalStorageBenchmarkStore`); the CLI and `apps/lab`'s live benchmark instead get them back as plain in-memory records with no persistence step. Same shape either way.
 
 Each record stores:
 
-- `timestamp`
-- `level`
-- `algorithm`
-- `runtime_ms`
-- `move_count`
-- `success`
-- `complexity_estimate`
-- `notes`
-- `determinism`
-- `explainability`
-- `scalability`
+- `timestamp`, `level`
+- `algorithm`, `algorithm_id`, `model_id`, `scramble_seed`
+- `runtime_ms`, `move_count`, `success`
+- `complexity_estimate`, `notes`
+- `determinism`, `explainability`, `scalability`
 
-The UI summarizes:
-
-- Success rate.
-- Average runtime.
-- Average move count for successful runs.
+`summarizeBenchmarkRecords()` reduces a list of records to success rate, average runtime, and average move count for successful runs — used identically by the Play panel, `apps/lab`, and the CLI's console summary. See [`docs/research/benchmarking.md`](../research/benchmarking.md) for the full methodology (seeded scrambles, reproducibility, the CLI).
 
 ## Adding future algorithms
 
-Add a new solver by implementing the `SolverAlgorithm` shape in `src/solver/types.ts`.
+Implement the `SolverAlgorithm<TState, TMove>` shape from [`packages/solver-core/src/algorithm/types.ts`](../../packages/solver-core/src/algorithm/types.ts) and register it in [`packages/solver-core/src/algorithms/register.ts`](../../packages/solver-core/src/algorithms/register.ts).
 
 Minimum requirements:
 
-1. Read `PuzzleState` or a documented state projection derived from it.
+1. Take a `PuzzleModel<TState, TMove>` and a `TState` as input — never read ambient Play-app state.
 2. Return a `SolverRunResult`.
 3. Populate `input_state`, `output_moves`, `runtime_ms`, `move_count`, `success`, `explanation`, `final_strategy`, and `complexity_estimate`.
-4. Apply only legal `SolverMove` objects that the reducer can replay through `APPLY_SOLVER_MOVE` or `APPLY_SOLVER_MOVES`.
-5. Add a benchmark note that states determinism, explainability, and scalability expectations.
+4. Apply only legal moves the target `PuzzleModel` actually accepts (for the Menger model, moves the Play reducer can replay through `APPLY_SOLVER_MOVE` / `APPLY_SOLVER_MOVES`).
+5. Pick a stable `id` — that id is what selects the algorithm in `apps/lab`'s dropdown and the `--algorithm=` CLI flag.
+
+Once registered, the algorithm is automatically selectable everywhere: the Play app's Solver Lab panel, `apps/lab`, and `npm run bench -- --algorithm=<id>` — no changes needed to any of those three.
 
 Future candidates can include cubie-cycle solvers, LBL-style staged solvers, pattern databases, or Level N research evaluators. They should share the same benchmark store so results are comparable.
 

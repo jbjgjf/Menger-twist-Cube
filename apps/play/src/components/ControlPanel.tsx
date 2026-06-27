@@ -9,7 +9,7 @@ import type {
 } from '../types/puzzle';
 import type { ReactNode } from 'react';
 import type { CameraPreset } from './Scene';
-import { supportedLevels } from '../engine/levels';
+import { supportedLevels } from '@menger/engine';
 
 interface Props {
   selectedFrame: FrameId | null;

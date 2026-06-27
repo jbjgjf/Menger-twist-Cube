@@ -3,7 +3,7 @@ import type { InstancedMesh } from 'three';
 import { Color, DynamicDrawUsage, Object3D, Quaternion as ThreeQuaternion, Vector3 } from 'three';
 import type { ThreeEvent } from '@react-three/fiber';
 import type { Cubie, DragPreview, FrameId, RotationFrame, TurnTarget } from '../types/puzzle';
-import { rotatePositionAroundPivot } from '../engine/geometry';
+import { rotatePositionAroundPivot } from '@menger/engine';
 
 interface Props {
   cubies: Cubie[];

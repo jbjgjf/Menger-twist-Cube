@@ -4,15 +4,25 @@ import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
 import SolverPanel from './components/SolverPanel';
 import KeyboardGuide from './KeyboardGuide';
-import { createMove, getAffectedCubieIds, getAffectedTurnTargetCubieIds } from './engine/moves';
-import { createInitialState, puzzleReducer } from './engine/puzzleState';
-import { availableScalesForLevel, isPlayableLevel } from './engine/levels';
-import { turnTargetSummaryForLevel } from './engine/turnTargets';
+import {
+  createMove,
+  getAffectedCubieIds,
+  getAffectedTurnTargetCubieIds,
+  availableScalesForLevel,
+  isPlayableLevel,
+  turnTargetSummaryForLevel,
+} from '@menger/engine';
+import { createInitialState, puzzleReducer } from './state/puzzleState';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
 import type { AxisName, DragPreview, FrameId, RotationFrame, TurnTarget, TwistAngle } from './types/puzzle';
-import { solveLevel1, warmLevel1Solver } from './solver/level1Solver';
-import { clearBenchmarkRecords, loadBenchmarkRecords, recordSolverRun } from './solver/benchmarkStore';
-import type { SolverMove, SolverRunResult } from './solver/types';
+import {
+  clearBenchmarkRecords,
+  isSolverAvailableForLevel,
+  loadBenchmarkRecords,
+  runAndRecordSolve,
+  warmSolverForLevel,
+} from './solver/solverController';
+import type { SolverMove, SolverRunResult } from '@menger/solver-core';
 
 // --- Frame navigation helpers ---
 
@@ -127,7 +137,7 @@ function PlayApp() {
   }, [state]);
 
   useEffect(() => {
-    warmLevel1Solver(state.puzzle);
+    warmSolverForLevel(state.puzzle);
   }, []);
 
   const requestCameraPreset = (preset: CameraPreset) => {
@@ -236,9 +246,9 @@ function PlayApp() {
   };
 
   const runSolver = async (): Promise<SolverRunResult> => {
-    const result = await solveLevel1(stateRef.current.puzzle);
+    const result = await runAndRecordSolve(stateRef.current.puzzle);
     setSolverRun(result);
-    setBenchmarkRecords(recordSolverRun(result));
+    setBenchmarkRecords(loadBenchmarkRecords());
     setStepMoves([]);
     setNextStepIndex(0);
     if (!result.success) {
@@ -569,7 +579,7 @@ function PlayApp() {
                   benchmarkRecords={benchmarkRecords}
                   preparedStepCount={stepMoves.length}
                   nextStepIndex={nextStepIndex}
-                  disabled={state.puzzle.level !== 1 || state.puzzle.isAnimating}
+                  disabled={!isSolverAvailableForLevel(state.puzzle.level) || state.puzzle.isAnimating}
                   onSolveInstant={solveInstant}
                   onSolveAnimated={solveAnimated}
                   onPrepareStep={prepareStepSolve}

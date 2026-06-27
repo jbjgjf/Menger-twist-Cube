@@ -4,8 +4,15 @@
     {
       "name": "menger-cube-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": ["run", "dev", "--workspace=@menger/play"],
       "port": 5173,
+      "autoPort": false
+    },
+    {
+      "name": "menger-lab-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--workspace=@menger/lab"],
+      "port": 5175,
       "autoPort": false
     }
   ]

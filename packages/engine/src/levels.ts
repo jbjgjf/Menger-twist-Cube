@@ -1,4 +1,4 @@
-import type { InteractionTier } from '../types/puzzle';
+import type { InteractionTier } from './types';
 
 export const supportedLevels = [1, 2, 3, 4, 5] as const;
 
