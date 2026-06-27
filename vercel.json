@@ -1,5 +1,15 @@
 {
   "buildCommand": "npm run build --workspace=@menger/play",
   "outputDirectory": "apps/play/dist",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/keyboard",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/keyboard/:path*",
+      "destination": "/index.html"
+    }
+  ]
 }
