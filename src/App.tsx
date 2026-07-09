@@ -7,6 +7,7 @@ import { createMove, getAffectedCubieIds, getAffectedTurnTargetCubieIds } from '
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
 import { availableScalesForLevel, isPlayableLevel } from './engine/levels';
 import { turnTargetSummaryForLevel } from './engine/turnTargets';
+import { isFrameRotationBlocked, isExtensionRotationBlocked } from './engine/physicalConstraints';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
 import type { AxisName, DragPreview, FrameId, RotationFrame, TurnTarget, TwistAngle } from './types/puzzle';
 import { solveLevel1, warmLevel1Solver } from './solver/level1Solver';
@@ -138,6 +139,12 @@ export default function App() {
       return;
     }
 
+    const frameObj = state.puzzle.frameById.get(frame);
+    if (frameObj && isFrameRotationBlocked(state.puzzle.cubies, frameObj, angle)) {
+      dispatch({ type: 'INVALID', message: 'This rotation is physically blocked — pieces would collide.' });
+      return;
+    }
+
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId: frame, angle: 0 } });
 
@@ -170,6 +177,11 @@ export default function App() {
 
     const target = state.puzzle.turnTargetById.get(targetId);
     if (!target || target.kind !== 'extension') return;
+
+    if (isExtensionRotationBlocked(state.puzzle.cubies, target, angle)) {
+      dispatch({ type: 'INVALID', message: 'This rotation is physically blocked — pieces would collide.' });
+      return;
+    }
 
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: 0 } });
