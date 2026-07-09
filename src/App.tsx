@@ -7,10 +7,10 @@ import { createMove, getAffectedCubieIds } from './engine/moves';
 import { createInitialState, puzzleReducer } from './engine/puzzleState';
 import type { FrameId, TwistAngle } from './types/puzzle';
 
-const animationDurationMs = 380;
+const animationDurationMs = 350;
 
 const randomAngle = (): TwistAngle => {
-  const values: TwistAngle[] = [90, -90, 180];
+  const values: TwistAngle[] = [450, -450, 540];
   return values[Math.floor(Math.random() * values.length)]!;
 };
 
@@ -35,7 +35,7 @@ export default function App() {
     const start = performance.now();
     const animate = (timestamp: number) => {
       const progress = Math.min(1, (timestamp - start) / animationDurationMs);
-      const eased = 1 - Math.pow(1 - progress, 3);
+      const eased = 1 - Math.pow(1 - progress, 1);
       dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId: frame, angle: angle * eased } });
 
       if (progress < 1) {
@@ -51,7 +51,7 @@ export default function App() {
 
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
-    const scrambleMoves = Array.from({ length: 14 }).map(() => {
+    const scrambleMoves = Array.from({ length: 16 }).map(() => {
       const frame = frames[Math.floor(Math.random() * frames.length)]!;
       return createMove(frame.id, randomAngle());
     });
@@ -74,8 +74,8 @@ export default function App() {
         return;
       }
 
-      const snapped = (Math.abs(preview.angle) > 65 ? Math.sign(preview.angle) * 90 : Math.sign(preview.angle) * 45) as number;
-      const moveAngle = (Math.abs(snapped) === 45 ? (snapped > 0 ? 90 : -90) : snapped) as TwistAngle;
+      const snapped = (Math.abs(preview.angle) > 65 ? Math.sign(preview.angle) * 450 : Math.sign(preview.angle) * 45) as number;
+      const moveAngle = (Math.abs(snapped) === 45 ? (snapped > 0 ? 450 : -450) : snapped) as TwistAngle;
       onMove(moveAngle);
       return;
     }
