@@ -104,7 +104,7 @@ const cycleExtensionTarget = (
 const animationDurationMs = 350;
 
 const randomAngle = (): TwistAngle => {
-  const values: TwistAngle[] = [450, -450, 540];
+  const values: TwistAngle[] = [90, -90, 180];
   return values[Math.floor(Math.random() * values.length)]!;
 };
 
