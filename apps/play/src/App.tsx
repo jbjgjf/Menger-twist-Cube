@@ -140,6 +140,12 @@ function PlayApp() {
     warmSolverForLevel(state.puzzle);
   }, []);
 
+  const invalidateSolverState = () => {
+    setSolverRun(null);
+    setStepMoves([]);
+    setNextStepIndex(0);
+  };
+
   const requestCameraPreset = (preset: CameraPreset) => {
     setCameraPreset(preset);
     setCameraPresetRequest((request) => request + 1);
@@ -155,6 +161,7 @@ function PlayApp() {
       return;
     }
 
+    invalidateSolverState();
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId: frame, angle: 0 } });
 
@@ -188,6 +195,7 @@ function PlayApp() {
     const target = state.puzzle.turnTargetById.get(targetId);
     if (!target || target.kind !== 'extension') return;
 
+    invalidateSolverState();
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: 0 } });
 
@@ -238,6 +246,7 @@ function PlayApp() {
 
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
+    invalidateSolverState();
     const scrambleMoves = Array.from({ length: 14 }).map(() => {
       const frame = state.puzzle.frames[Math.floor(Math.random() * state.puzzle.frames.length)]!;
       return createMove(frame.id, randomAngle(), state.puzzle.frameById);
@@ -313,7 +322,28 @@ function PlayApp() {
 
   const clearBenchmarks = () => {
     clearBenchmarkRecords();
+    invalidateSolverState();
     setBenchmarkRecords([]);
+  };
+
+  const resetPuzzle = () => {
+    invalidateSolverState();
+    dispatch({ type: 'RESET_PUZZLE' });
+  };
+
+  const undoMove = () => {
+    invalidateSolverState();
+    dispatch({ type: 'UNDO' });
+  };
+
+  const redoMove = () => {
+    invalidateSolverState();
+    dispatch({ type: 'REDO' });
+  };
+
+  const setLevel = (level: number) => {
+    invalidateSolverState();
+    dispatch({ type: 'SET_LEVEL', level });
   };
 
   useEffect(() => {
@@ -359,13 +389,13 @@ function PlayApp() {
           runMove(command.frameId, command.angle);
           return;
         case 'undo':
-          dispatch({ type: 'UNDO' });
+          undoMove();
           return;
         case 'redo':
-          dispatch({ type: 'REDO' });
+          redoMove();
           return;
         case 'reset':
-          dispatch({ type: 'RESET_PUZZLE' });
+          resetPuzzle();
           return;
         case 'scramble':
           scramble();
@@ -589,13 +619,13 @@ function PlayApp() {
               )}
               onMove={onMove}
               onScramble={scramble}
-              onReset={() => dispatch({ type: 'RESET_PUZZLE' })}
-              onUndo={() => dispatch({ type: 'UNDO' })}
-              onRedo={() => dispatch({ type: 'REDO' })}
+              onReset={resetPuzzle}
+              onUndo={undoMove}
+              onRedo={redoMove}
               onToggleTransparent={() => dispatch({ type: 'TOGGLE_TRANSPARENCY' })}
               onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
               onSetCameraPreset={requestCameraPreset}
-              onSetLevel={(level) => dispatch({ type: 'SET_LEVEL', level })}
+              onSetLevel={setLevel}
               onSetFrameScale={setFrameScale}
               onSetExtensionDepth={(depth) => dispatch({ type: 'SET_EXTENSION_DEPTH', depth })}
               onCycleExtension={(direction) => {
