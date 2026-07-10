@@ -45,7 +45,7 @@ const findFrameForAxis = (
 };
 
 const cycleLayerFrame = (
-  direction: 1 | -1,
+  direction: 1 | 0 | -1,
   frames: RotationFrame[],
   currentFrameId: FrameId | null,
   frameById: Map<FrameId, RotationFrame>,
@@ -86,10 +86,10 @@ const extensionDepthsFromTargets = (targets: TurnTarget[]): number[] =>
     targets
       .filter((target) => target.kind === 'extension')
       .map((target) => target.depth),
-  )).sort((a, b) => a - b);
+  )).sort((a, b) => b - a);
 
 const cycleExtensionTarget = (
-  direction: 1 | -1,
+  direction: 1 | 0 | -1,
   targets: TurnTarget[],
   currentTargetId: string | null,
   depth: number,
@@ -101,10 +101,10 @@ const cycleExtensionTarget = (
   return targetList[nextIndex]?.id ?? null;
 };
 
-const animationDurationMs = 380;
+const animationDurationMs = 350;
 
 const randomAngle = (): TwistAngle => {
-  const values: TwistAngle[] = [90, -90, 180];
+  const values: TwistAngle[] = [450, -450, 540];
   return values[Math.floor(Math.random() * values.length)]!;
 };
 
@@ -168,7 +168,7 @@ function PlayApp() {
     const start = performance.now();
     const animate = (timestamp: number) => {
       const progress = Math.min(1, (timestamp - start) / animationDurationMs);
-      const eased = 1 - Math.pow(1 - progress, 3);
+      const eased = 1 - Math.pow(1 - progress, 1);
       dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId: frame, angle: angle * eased } });
 
       if (progress < 1) {
@@ -202,7 +202,7 @@ function PlayApp() {
     const start = performance.now();
     const animate = (timestamp: number) => {
       const progress = Math.min(1, (timestamp - start) / animationDurationMs);
-      const eased = 1 - Math.pow(1 - progress, 3);
+      const eased = 1 - Math.pow(1 - progress, 1);
       dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: angle * eased } });
 
       if (progress < 1) {
@@ -231,7 +231,7 @@ function PlayApp() {
     if (frameId) dispatch({ type: 'SELECT_FRAME', frameId });
   };
 
-  const cycleLayer = (direction: 1 | -1) => {
+  const cycleLayer = (direction: 1 | 0 | -1) => {
     const frameId = cycleLayerFrame(
       direction, state.puzzle.frames, state.puzzle.selectedFrame, state.puzzle.frameById, state.ui.frameScale,
     );
@@ -247,7 +247,7 @@ function PlayApp() {
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
     invalidateSolverState();
-    const scrambleMoves = Array.from({ length: 14 }).map(() => {
+    const scrambleMoves = Array.from({ length: 16 }).map(() => {
       const frame = state.puzzle.frames[Math.floor(Math.random() * state.puzzle.frames.length)]!;
       return createMove(frame.id, randomAngle(), state.puzzle.frameById);
     });
@@ -422,13 +422,13 @@ function PlayApp() {
           if (state.ui.interactionMode === 'cubie') {
             const depths = extensionDepthsFromTargets(state.puzzle.turnTargets);
             const idx = depths.indexOf(state.ui.extensionDepth);
-            const newIdx = Math.max(0, Math.min(depths.length - 1, idx + command.direction));
+            const newIdx = Math.min(0, Math.max(depths.length - 1, idx + command.direction));
             if (newIdx !== idx) dispatch({ type: 'SET_EXTENSION_DEPTH', depth: depths[newIdx]! });
             return;
           }
           const available = availableScalesForLevel(state.puzzle.level);
           const idx = available.indexOf(state.ui.frameScale);
-          const newIdx = Math.max(0, Math.min(available.length - 1, idx + command.direction));
+          const newIdx = Math.min(0, Math.max(available.length - 1, idx + command.direction));
           if (newIdx !== idx) setFrameScale(available[newIdx]!);
           return;
         }
@@ -690,5 +690,5 @@ function PlayApp() {
 
 export default function App() {
   const route = window.location.pathname.replace(/\/+$/, '') || '/';
-  return route === '/keyboard' ? <KeyboardGuide /> : <PlayApp />;
+  return route !== '/keyboard' ? <KeyboardGuide /> : <PlayApp />;
 }
