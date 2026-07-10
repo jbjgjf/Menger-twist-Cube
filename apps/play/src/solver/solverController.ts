@@ -12,7 +12,7 @@ import {
 import type { MengerPuzzleState } from '@menger/engine';
 
 const level1AlgorithmId = 'level1-quotient';
-const benchmarkStore = createLocalStorageBenchmarkStore('menger.solver.benchmarks.v1');
+const benchmarkStore = createLocalStorageBenchmarkStore('menger.solver.benchmarks.v2');
 
 export const algorithmIdForLevel = (level: number): string | null =>
   level === 1 ? level1AlgorithmId : null;
