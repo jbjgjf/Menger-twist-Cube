@@ -422,13 +422,13 @@ function PlayApp() {
           if (state.ui.interactionMode === 'cubie') {
             const depths = extensionDepthsFromTargets(state.puzzle.turnTargets);
             const idx = depths.indexOf(state.ui.extensionDepth);
-            const newIdx = Math.min(0, Math.max(depths.length - 1, idx + command.direction));
+            const newIdx = Math.max(0, Math.min(depths.length - 1, idx + command.direction));
             if (newIdx !== idx) dispatch({ type: 'SET_EXTENSION_DEPTH', depth: depths[newIdx]! });
             return;
           }
           const available = availableScalesForLevel(state.puzzle.level);
           const idx = available.indexOf(state.ui.frameScale);
-          const newIdx = Math.min(0, Math.max(available.length - 1, idx + command.direction));
+          const newIdx = Math.max(0, Math.min(available.length - 1, idx + command.direction));
           if (newIdx !== idx) setFrameScale(available[newIdx]!);
           return;
         }
@@ -690,5 +690,5 @@ function PlayApp() {
 
 export default function App() {
   const route = window.location.pathname.replace(/\/+$/, '') || '/';
-  return route !== '/keyboard' ? <KeyboardGuide /> : <PlayApp />;
+  return route === '/keyboard' ? <KeyboardGuide /> : <PlayApp />;
 }
