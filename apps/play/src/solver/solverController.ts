@@ -7,15 +7,19 @@ import {
   getAlgorithm,
   mengerPuzzleModel,
   warmLevel1Solver,
+  warmLevel2Solver,
   type SolverRunResult,
 } from '@menger/solver-core';
 import type { MengerPuzzleState } from '@menger/engine';
 
-const level1AlgorithmId = 'level1-quotient';
+const algorithmIdByLevel: Record<number, string> = {
+  1: 'level1-quotient',
+  2: 'level2-block-quotient',
+};
 const benchmarkStore = createLocalStorageBenchmarkStore('menger.solver.benchmarks.v2');
 
 export const algorithmIdForLevel = (level: number): string | null =>
-  level === 1 ? level1AlgorithmId : null;
+  algorithmIdByLevel[level] ?? null;
 
 export const isSolverAvailableForLevel = (level: number): boolean => {
   const algorithmId = algorithmIdForLevel(level);
@@ -37,6 +41,7 @@ export const runAndRecordSolve = async (state: MengerPuzzleState): Promise<Solve
 
 export const warmSolverForLevel = (state: MengerPuzzleState): void => {
   if (state.level === 1) warmLevel1Solver(state);
+  if (state.level === 2) warmLevel2Solver(state);
 };
 
 export const loadBenchmarkRecords = benchmarkStore.load;

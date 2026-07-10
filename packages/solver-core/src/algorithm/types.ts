@@ -70,4 +70,13 @@ export interface SolverAlgorithm<TState = unknown, TMove = unknown> {
   readonly version: string;
   readonly levelsSupported: readonly number[];
   solve(model: PuzzleModel<TState, TMove>, state: TState): Promise<SolverRunResult>;
+  /**
+   * Optional: the move generator set this algorithm is designed to invert.
+   * When present, the benchmark runner scrambles with these moves instead of
+   * the model's full legal move set, so benchmark results measure the
+   * algorithm against its declared scope. Entries may repeat to weight the
+   * uniform scramble sampler. Algorithms without a pool are benchmarked
+   * against fully general scrambles.
+   */
+  scrambleMovePool?(model: PuzzleModel<TState, TMove>, state: TState): TMove[];
 }

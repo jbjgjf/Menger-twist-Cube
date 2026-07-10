@@ -38,11 +38,16 @@ export const runBenchmark = async <TState, TMove>(
 ): Promise<BenchmarkRunResult> => {
   const scrambleLength = spec.scrambleLength ?? defaultScrambleLength;
   const records: SolverBenchmarkRecord[] = [];
+  // Scramble within the algorithm's declared generator set when it has one,
+  // so benchmark success measures the algorithm against its documented scope.
+  const movePool = algorithm.scrambleMovePool
+    ? (state: TState) => algorithm.scrambleMovePool!(model, state)
+    : undefined;
 
   for (const seed of spec.scrambleSeeds) {
     const rng = createSeededRng(seed);
     const solvedState = model.createState(spec.level);
-    const { state: scrambledState } = scrambleState(model, solvedState, rng, scrambleLength);
+    const { state: scrambledState } = scrambleState(model, solvedState, rng, scrambleLength, movePool);
     const result = await algorithm.solve(model, scrambledState);
     records.push(
       benchmarkRecordFromRun(result, {

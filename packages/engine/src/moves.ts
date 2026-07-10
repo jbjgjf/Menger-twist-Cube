@@ -69,10 +69,15 @@ export const createMove = (
   timestamp: Date.now(),
 });
 
-// Returns the axis perpendicular to both exposed faces for an edge cubie
+// Returns the axis perpendicular to both exposed faces for an edge cubie.
+// At any level the edge axis is the component with the smallest magnitude:
+// the other two coordinates are pinned to the outer faces (|value| = extent).
 export const cubieNaturalAxis = (position: Vector3Tuple): Vector3Tuple => {
-  if (position[0] === 0) return [1, 0, 0];
-  if (position[1] === 0) return [0, 1, 0];
+  const absX = Math.abs(position[0]);
+  const absY = Math.abs(position[1]);
+  const absZ = Math.abs(position[2]);
+  if (absX <= absY && absX <= absZ) return [1, 0, 0];
+  if (absY <= absZ) return [0, 1, 0];
   return [0, 0, 1];
 };
 

@@ -15,7 +15,6 @@ const allAngles: TwistAngle[] = [90, -90, 180];
 
 const frameLegalMoves = (state: MengerPuzzleState): SolverMove[] =>
   state.frames
-    .filter((frame) => frame.scale === 1)
     .flatMap((frame) =>
       allAngles.map((angle) => {
         const move = createMove(frame.id, angle, state.frameById);

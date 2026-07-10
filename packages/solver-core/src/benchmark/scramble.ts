@@ -14,18 +14,24 @@ export const createSeededRng = (seed: number): (() => number) => {
  * model interface. Written generically over `PuzzleModel`, so it works for
  * any future model/algorithm pair without modification — the same property
  * the rest of the benchmark harness depends on.
+ *
+ * `movePool` optionally restricts (and weights, via repeated entries) the
+ * moves sampled at each step — used to scramble within an algorithm's
+ * declared generator set (`SolverAlgorithm.scrambleMovePool`). It defaults
+ * to the model's full legal move set.
  */
 export const scrambleState = <TState, TMove>(
   model: PuzzleModel<TState, TMove>,
   state: TState,
   rng: () => number,
   length: number,
+  movePool?: (state: TState) => TMove[],
 ): { state: TState; moves: TMove[] } => {
   let current = state;
   const moves: TMove[] = [];
 
   for (let step = 0; step < length; step += 1) {
-    const legal = model.legalMoves(current);
+    const legal = movePool ? movePool(current) : model.legalMoves(current);
     if (legal.length === 0) break;
     const move = legal[Math.floor(rng() * legal.length)]!;
     current = model.applyMove(current, move);

@@ -6,6 +6,8 @@ interface Props {
   preparedStepCount: number;
   nextStepIndex: number;
   disabled: boolean;
+  solveMoveDurationMs: number;
+  onChangeSolveMoveDuration: (durationMs: number) => void;
   onSolveInstant: () => void;
   onSolveAnimated: () => void;
   onPrepareStep: () => void;
@@ -21,6 +23,8 @@ export default function SolverPanel({
   preparedStepCount,
   nextStepIndex,
   disabled,
+  solveMoveDurationMs,
+  onChangeSolveMoveDuration,
   onSolveInstant,
   onSolveAnimated,
   onPrepareStep,
@@ -46,6 +50,22 @@ export default function SolverPanel({
         <button disabled={disabled} onClick={onSolveInstant}>Instant</button>
         <button disabled={disabled} onClick={onSolveAnimated}>Animated</button>
         <button disabled={disabled} onClick={onPrepareStep}>Prepare</button>
+      </div>
+
+      <div className="mt-1 flex items-center gap-2">
+        <span className="whitespace-nowrap text-slate-400">
+          Animate {(solveMoveDurationMs / 1000).toFixed(1)}s/move
+        </span>
+        <input
+          type="range"
+          min={100}
+          max={1000}
+          step={50}
+          value={solveMoveDurationMs}
+          onChange={(event) => onChangeSolveMoveDuration(Number(event.target.value))}
+          className="w-full accent-cyan-400"
+          aria-label="Animated solve duration per move"
+        />
       </div>
 
       <div className="mt-1 grid grid-cols-[1fr_auto] gap-1">

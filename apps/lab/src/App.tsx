@@ -58,7 +58,12 @@ export default function App() {
     try {
       const rng = createSeededRng(singleSeed);
       const solvedState = mengerPuzzleModel.createState(level);
-      const { state: scrambledState } = scrambleState(mengerPuzzleModel, solvedState, rng, scrambleLength);
+      // Match the benchmark runner: scramble within the algorithm's declared
+      // generator set when it has one.
+      const movePool = algorithm.scrambleMovePool
+        ? (state: typeof solvedState) => algorithm.scrambleMovePool!(mengerPuzzleModel, state)
+        : undefined;
+      const { state: scrambledState } = scrambleState(mengerPuzzleModel, solvedState, rng, scrambleLength, movePool);
       const result = await algorithm.solve(mengerPuzzleModel, scrambledState);
       setSingleResult(result);
     } catch (cause) {

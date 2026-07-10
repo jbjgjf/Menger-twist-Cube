@@ -286,7 +286,9 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
     }
     case 'SCRAMBLE': {
       const cubies = action.moves.reduce(
-        (acc, move) => applyTwistToCubies(acc, move.frameId, move.angle, state.puzzle.frameById),
+        (acc, move) => move.extensionTargetId
+          ? applyExtensionRotation(acc, move.extensionTargetId, move.angle, state.puzzle.turnTargetById)
+          : applyTwistToCubies(acc, move.frameId, move.angle, state.puzzle.frameById),
         state.initialCubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
       );
       return {

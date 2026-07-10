@@ -1,5 +1,5 @@
-// Registers built-in algorithms (currently just `level1-quotient`) as a
-// side effect of importing this package's entry point.
+// Registers built-in algorithms (`level1-quotient`, `level2-block-quotient`)
+// as a side effect of importing this package's entry point.
 import './algorithms/register';
 
 export type { PuzzleModel } from './model/puzzleModel';
@@ -16,6 +16,7 @@ export type {
 export { registerAlgorithm, getAlgorithm, listAlgorithms } from './algorithm/registry';
 
 export { level1QuotientAlgorithm, warmLevel1Solver } from './algorithms/level1QuotientSolver';
+export { level2BlockQuotientAlgorithm, warmLevel2Solver } from './algorithms/level2BlockQuotientSolver';
 
 export type { BenchmarkRunContext } from './benchmark/recordFromRun';
 export type { BenchmarkRunResult, BenchmarkRunSpec } from './benchmark/runner';
