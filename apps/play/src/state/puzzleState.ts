@@ -9,7 +9,6 @@ import {
   createMengerPuzzleState,
   createMove,
 } from '@menger/engine';
-import type { SolverMove } from '@menger/solver-core';
 
 export interface PuzzleUiState {
   transparentView: boolean;
@@ -39,8 +38,6 @@ export type Action =
   | { type: 'COMMIT_MOVE'; frameId: FrameId; angle: TwistAngle }
   | { type: 'COMMIT_CUBIE_MOVE'; cubieId: string; axis: Vector3Tuple; angle: TwistAngle }
   | { type: 'COMMIT_EXTENSION_MOVE'; targetId: string; angle: TwistAngle }
-  | { type: 'APPLY_SOLVER_MOVE'; move: SolverMove }
-  | { type: 'APPLY_SOLVER_MOVES'; moves: SolverMove[] }
   | { type: 'SET_LEVEL'; level: number }
   | { type: 'SET_FRAME_SCALE'; scale: number }
   | { type: 'SET_EXTENSION_DEPTH'; depth: number }
@@ -54,45 +51,6 @@ export type Action =
   | { type: 'INVALID'; message: string | null };
 
 const cloneMove = (move: Move): Move => ({ ...move });
-
-const applySolverMove = (state: RootState, solverMove: SolverMove): RootState => {
-  if (solverMove.targetKind === 'frame' && solverMove.frameId) {
-    const move = createMove(solverMove.frameId, solverMove.angle, state.puzzle.frameById);
-    return {
-      ...state,
-      puzzle: {
-        ...state.puzzle,
-        cubies: applyTwistToCubies(state.puzzle.cubies, solverMove.frameId, solverMove.angle, state.puzzle.frameById),
-        moveHistory: [...state.puzzle.moveHistory, move],
-        redoStack: [],
-      },
-      ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
-    };
-  }
-
-  if (solverMove.targetKind === 'extension' && solverMove.extensionTargetId) {
-    const target = state.puzzle.turnTargetById.get(solverMove.extensionTargetId);
-    if (!target) return state;
-    const move = createExtensionMove(target, solverMove.angle);
-    return {
-      ...state,
-      puzzle: {
-        ...state.puzzle,
-        cubies: applyExtensionRotation(
-          state.puzzle.cubies,
-          solverMove.extensionTargetId,
-          solverMove.angle,
-          state.puzzle.turnTargetById,
-        ),
-        moveHistory: [...state.puzzle.moveHistory, move],
-        redoStack: [],
-      },
-      ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
-    };
-  }
-
-  return state;
-};
 
 const createPuzzle = (level: number): PuzzleState & { initialCubies: Cubie[] } => {
   const base = createMengerPuzzleState(level);
@@ -242,10 +200,6 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
       };
     }
-    case 'APPLY_SOLVER_MOVE':
-      return applySolverMove(state, action.move);
-    case 'APPLY_SOLVER_MOVES':
-      return action.moves.reduce((currentState, move) => applySolverMove(currentState, move), state);
     case 'UNDO': {
       const lastMove = state.puzzle.moveHistory[state.puzzle.moveHistory.length - 1];
       if (!lastMove) return state;

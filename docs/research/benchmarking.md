@@ -18,7 +18,7 @@ npm run bench -- --help
 - `--length=N` is scramble moves per seed (default 20).
 - Output defaults to `research/results/<model>_<algorithm>_L<level>_<timestamp>.json`; `--out`/`--out-dir` override.
 
-The same `runBenchmark()` call also backs `apps/lab`'s "Run benchmark" button (in-browser, no file output) and `apps/play`'s Solver Lab panel runs a single solve through the same algorithm/model pair without going through the seeded scrambler (it benchmarks whatever state the player actually produced).
+The same `runBenchmark()` call also backs `apps/lab`'s "Run benchmark" button (in-browser, no file output). The lab's single-solve flow runs the same algorithm/model pair against its seeded scramble and persists each run's record to `localStorage`, so interactive runs stay comparable with CLI output.
 
 ## Comparing results
 

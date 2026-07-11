@@ -7,7 +7,6 @@ import type {
   TurnTarget,
   TwistAngle,
 } from '../types/puzzle';
-import type { ReactNode } from 'react';
 import type { CameraPreset } from './Scene';
 import { supportedLevels } from '@menger/engine';
 
@@ -28,7 +27,6 @@ interface Props {
   extensionTargetsAtDepthCount: number;
   availableScales: number[];
   frameById: Map<FrameId, RotationFrame>;
-  solverPanel: ReactNode;
   onMove: (angle: TwistAngle) => void;
   onScramble: () => void;
   onReset: () => void;
@@ -62,7 +60,6 @@ export default function ControlPanel({
   extensionTargetsAtDepthCount,
   availableScales,
   frameById,
-  solverPanel,
   onMove,
   onScramble,
   onReset,
@@ -244,7 +241,6 @@ export default function ControlPanel({
         <p className="mt-1 text-slate-500">Tab: toggle Slice / Extension mode</p>
       </div>}
 
-      {solverPanel}
 
       {invalidFeedback && <div className="rounded-md border border-rose-700 bg-rose-900/40 p-2 text-xs">{invalidFeedback}</div>}
 

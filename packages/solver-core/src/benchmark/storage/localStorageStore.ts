@@ -33,7 +33,12 @@ export const createLocalStorageBenchmarkStore = (storageKey: string, maxRecords 
 
   const save = (records: SolverBenchmarkRecord[]) => {
     if (!canUseLocalStorage()) return;
-    window.localStorage.setItem(storageKey, JSON.stringify(records.slice(0, maxRecords)));
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(records.slice(0, maxRecords)));
+    } catch {
+      // Quota exceeded or storage blocked (e.g. private browsing). Persisting
+      // a benchmark record must never fail the solve that produced it.
+    }
   };
 
   return {

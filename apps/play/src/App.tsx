@@ -1,11 +1,9 @@
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useEffect, useMemo, useReducer, useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
-import SolverPanel from './components/SolverPanel';
 import KeyboardGuide from './KeyboardGuide';
 import {
-  createExtensionMove,
   createMove,
   getAffectedCubieIds,
   getAffectedTurnTargetCubieIds,
@@ -15,15 +13,7 @@ import {
 } from '@menger/engine';
 import { createInitialState, puzzleReducer } from './state/puzzleState';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
-import type { AxisName, DragPreview, FrameId, RotationFrame, TurnTarget, TwistAngle } from './types/puzzle';
-import {
-  clearBenchmarkRecords,
-  isSolverAvailableForLevel,
-  loadBenchmarkRecords,
-  runAndRecordSolve,
-  warmSolverForLevel,
-} from './solver/solverController';
-import type { SolverMove, SolverRunResult } from '@menger/solver-core';
+import type { AxisName, FrameId, RotationFrame, TurnTarget, TwistAngle } from './types/puzzle';
 
 // --- Frame navigation helpers ---
 
@@ -109,51 +99,12 @@ const randomAngle = (): TwistAngle => {
   return values[Math.floor(Math.random() * values.length)]!;
 };
 
-const delay = (ms: number): Promise<void> => new Promise((resolve) => {
-  window.setTimeout(resolve, ms);
-});
-
-const previewForSolverMove = (move: SolverMove): DragPreview | null => {
-  if (move.targetKind === 'frame' && move.frameId) return { frameId: move.frameId, angle: move.angle };
-  if (move.targetKind === 'extension' && move.extensionTargetId) {
-    return { extensionTargetId: move.extensionTargetId, angle: move.angle };
-  }
-  return null;
-};
-
 function PlayApp() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
-  const [solverRun, setSolverRun] = useState<SolverRunResult | null>(null);
-  const [benchmarkRecords, setBenchmarkRecords] = useState(loadBenchmarkRecords);
-  const [stepMoves, setStepMoves] = useState<SolverMove[]>([]);
-  const [nextStepIndex, setNextStepIndex] = useState(0);
   const [controlsOpen, setControlsOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
-  const [solveMoveDurationMs, setSolveMoveDurationMs] = useState(400);
-  const stateRef = useRef(state);
-  // Read through a ref inside long animated solves so dragging the duration
-  // slider mid-run takes effect on the next move instead of a stale closure.
-  const solveMoveDurationRef = useRef(solveMoveDurationMs);
-
-  useEffect(() => {
-    stateRef.current = state;
-  }, [state]);
-
-  useEffect(() => {
-    solveMoveDurationRef.current = solveMoveDurationMs;
-  }, [solveMoveDurationMs]);
-
-  useEffect(() => {
-    warmSolverForLevel(state.puzzle);
-  }, [state.puzzle.level]);
-
-  const invalidateSolverState = () => {
-    setSolverRun(null);
-    setStepMoves([]);
-    setNextStepIndex(0);
-  };
 
   const requestCameraPreset = (preset: CameraPreset) => {
     setCameraPreset(preset);
@@ -170,7 +121,6 @@ function PlayApp() {
       return;
     }
 
-    invalidateSolverState();
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId: frame, angle: 0 } });
 
@@ -204,7 +154,6 @@ function PlayApp() {
     const target = state.puzzle.turnTargetById.get(targetId);
     if (!target || target.kind !== 'extension') return;
 
-    invalidateSolverState();
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: 0 } });
 
@@ -253,151 +202,28 @@ function PlayApp() {
     if (frameId) dispatch({ type: 'SELECT_FRAME', frameId });
   };
 
-  // Level 2 scrambles stay inside the block-quotient generator set the
-  // registered Level 2 solver inverts (scale-3 block layers, whole-block
-  // extensions, single-cell rolls), so Scramble -> Solve works end to end.
-  // Single-layer moves remain available for manual play, but a solver for
-  // states they produce is future work (see docs/algorithms).
-  const level2ScrambleMoves = () => {
-    const blockFrames = state.puzzle.frames.filter((frame) => frame.scale === 3);
-    const blockTargets = state.puzzle.turnTargets.filter(
-      (target) => target.kind === 'extension' && target.family === 'block' && target.depth === 1,
-    );
-    const cellTargets = state.puzzle.turnTargets.filter(
-      (target) => target.kind === 'extension' && target.depth === 2,
-    );
-    return Array.from({ length: 14 }).map(() => {
-      const roll = Math.random();
-      if (roll < 0.55 || blockTargets.length === 0) {
-        const frame = blockFrames[Math.floor(Math.random() * blockFrames.length)]!;
-        return createMove(frame.id, randomAngle(), state.puzzle.frameById);
-      }
-      const pool = roll < 0.85 ? blockTargets : cellTargets;
-      const target = pool[Math.floor(Math.random() * pool.length)]!;
-      return createExtensionMove(target, randomAngle());
-    });
-  };
-
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
-    invalidateSolverState();
-    const scrambleMoves = state.puzzle.level === 2
-      ? level2ScrambleMoves()
-      : Array.from({ length: 14 }).map(() => {
-          const frame = state.puzzle.frames[Math.floor(Math.random() * state.puzzle.frames.length)]!;
-          return createMove(frame.id, randomAngle(), state.puzzle.frameById);
-        });
+    const scrambleMoves = Array.from({ length: 14 }).map(() => {
+      const frame = state.puzzle.frames[Math.floor(Math.random() * state.puzzle.frames.length)]!;
+      return createMove(frame.id, randomAngle(), state.puzzle.frameById);
+    });
     dispatch({ type: 'SCRAMBLE', moves: scrambleMoves });
   };
 
-  const runSolver = async (): Promise<SolverRunResult> => {
-    const result = await runAndRecordSolve(stateRef.current.puzzle);
-    setSolverRun(result);
-    setBenchmarkRecords(loadBenchmarkRecords());
-    setStepMoves([]);
-    setNextStepIndex(0);
-    if (!result.success) {
-      dispatch({ type: 'INVALID', message: result.notes });
-    }
-    return result;
-  };
-
-  const applySolverMoveWithPreview = async (move: SolverMove) => {
-    const preview = previewForSolverMove(move);
-    dispatch({ type: 'SET_ANIMATING', isAnimating: true });
-    if (preview) {
-      const durationMs = solveMoveDurationRef.current;
-      await new Promise<void>((resolve) => {
-        let done = false;
-        const finish = () => {
-          if (done) return;
-          done = true;
-          resolve();
-        };
-        const start = performance.now();
-        const animate = (timestamp: number) => {
-          if (done) return;
-          const progress = Math.min(1, (timestamp - start) / durationMs);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          dispatch({ type: 'SET_DRAG_PREVIEW', preview: { ...preview, angle: move.angle * eased } });
-          if (progress < 1) requestAnimationFrame(animate);
-          else finish();
-        };
-        requestAnimationFrame(animate);
-        // Hidden tabs never fire requestAnimationFrame; without this fallback
-        // an animated solve would stall mid-run (isAnimating stuck true) when
-        // the user switches tabs. The timeout snaps the move to completion.
-        window.setTimeout(finish, durationMs + 200);
-      });
-    }
-    dispatch({ type: 'APPLY_SOLVER_MOVE', move });
-    dispatch({ type: 'SET_DRAG_PREVIEW', preview: null });
-    dispatch({ type: 'SET_ANIMATING', isAnimating: false });
-    await delay(40);
-  };
-
-  const solveInstant = () => {
-    if (state.puzzle.isAnimating) return;
-    void (async () => {
-      const result = await runSolver();
-      if (result.success) {
-        dispatch({ type: 'APPLY_SOLVER_MOVES', moves: result.output_moves });
-      }
-    })();
-  };
-
-  const solveAnimated = async () => {
-    if (state.puzzle.isAnimating) return;
-    const result = await runSolver();
-    if (result.success) {
-      for (const move of result.output_moves) {
-        await applySolverMoveWithPreview(move);
-      }
-    }
-  };
-
-  const prepareStepSolve = () => {
-    if (state.puzzle.isAnimating) return;
-    void (async () => {
-      const result = await runSolver();
-      if (result.success) {
-        setStepMoves(result.output_moves);
-        setNextStepIndex(0);
-      }
-    })();
-  };
-
-  const applyNextSolverStep = async () => {
-    if (state.puzzle.isAnimating) return;
-    const move = stepMoves[nextStepIndex];
-    if (!move) return;
-    await applySolverMoveWithPreview(move);
-    setNextStepIndex((index) => index + 1);
-  };
-
-  const clearBenchmarks = () => {
-    clearBenchmarkRecords();
-    invalidateSolverState();
-    setBenchmarkRecords([]);
-  };
-
   const resetPuzzle = () => {
-    invalidateSolverState();
     dispatch({ type: 'RESET_PUZZLE' });
   };
 
   const undoMove = () => {
-    invalidateSolverState();
     dispatch({ type: 'UNDO' });
   };
 
   const redoMove = () => {
-    invalidateSolverState();
     dispatch({ type: 'REDO' });
   };
 
   const setLevel = (level: number) => {
-    invalidateSolverState();
     dispatch({ type: 'SET_LEVEL', level });
   };
 
@@ -658,22 +484,6 @@ function PlayApp() {
               extensionTargetsAtDepthCount={extensionTargetsAtCurrentDepth.length}
               availableScales={availableScalesForLevel(state.puzzle.level)}
               frameById={state.puzzle.frameById}
-              solverPanel={(
-                <SolverPanel
-                  lastRun={solverRun}
-                  benchmarkRecords={benchmarkRecords}
-                  preparedStepCount={stepMoves.length}
-                  nextStepIndex={nextStepIndex}
-                  disabled={!isSolverAvailableForLevel(state.puzzle.level) || state.puzzle.isAnimating}
-                  solveMoveDurationMs={solveMoveDurationMs}
-                  onChangeSolveMoveDuration={setSolveMoveDurationMs}
-                  onSolveInstant={solveInstant}
-                  onSolveAnimated={solveAnimated}
-                  onPrepareStep={prepareStepSolve}
-                  onApplyStep={applyNextSolverStep}
-                  onClearBenchmarks={clearBenchmarks}
-                />
-              )}
               onMove={onMove}
               onScramble={scramble}
               onReset={resetPuzzle}

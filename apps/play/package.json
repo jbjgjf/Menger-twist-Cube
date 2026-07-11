@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@menger/engine": "*",
-    "@menger/solver-core": "*",
     "@react-three/drei": "^10.0.8",
     "@react-three/fiber": "^9.1.2",
     "react": "^19.1.0",

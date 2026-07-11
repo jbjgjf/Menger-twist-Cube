@@ -25,6 +25,7 @@ import {
 import { cube3x3x3 } from 'cubing/puzzles';
 import { experimentalSolve3x3x3IgnoringCenters } from 'cubing/search';
 import { KPattern, type KPuzzle, type KPatternData } from 'cubing/kpuzzle';
+import { emitSolverDebug, withTimeout } from '../debug';
 
 const solverId = 'level1-quotient';
 const solverName = 'level-1-state-normalizer';
@@ -32,6 +33,11 @@ const solverVersion = '0.1.0';
 const frameSearchNodeBudget = 80000;
 const frameSearchMaxDepth = 14;
 const frameSearchRuntimeBudgetMs = 420;
+// The cubing search has no internal time limit and can search unboundedly on
+// a pattern it cannot solve. Every call is bounded so solve() provably
+// terminates: worst case is 4 variants x this budget, then the in-house
+// bounded fallback search, then an honest failure.
+const cubingSolveTimeoutMs = 5000;
 const primaryComplexityEstimate =
   'O(20) state projection plus cubing frame solve over the 3x3x3 quotient, then O(12 * 4) extension normalization';
 const extensionAngles: TwistAngle[] = [90, -90, 180];
@@ -190,6 +196,8 @@ const ensureCubingCalibration = async (puzzle: MengerPuzzleState): Promise<Cubin
   if (calibrationPromise) return calibrationPromise;
 
   calibrationPromise = (async () => {
+    const start = performance.now();
+    emitSolverDebug(solverId, 'calibration: loading 3x3x3 kpuzzle definition');
     const kpuzzle = await cube3x3x3.kpuzzle();
     const calibration: CubingCalibration = {
       kpuzzle,
@@ -212,6 +220,7 @@ const ensureCubingCalibration = async (puzzle: MengerPuzzleState): Promise<Cubin
       }
     }
 
+    emitSolverDebug(solverId, `calibration: ready in ${Math.round(performance.now() - start)}ms`);
     return calibration;
   })();
 
@@ -316,14 +325,26 @@ const solveFramePhaseWithCubing = async (
     }
 
     const pTest = new KPattern(basePattern.kpuzzle, pData);
+    const variantLabel = `cubing solve (m=${variant.m}, flip=${variant.flip})`;
+    const attemptStart = performance.now();
 
     try {
-      const alg = await experimentalSolve3x3x3IgnoringCenters(pTest);
+      const alg = await withTimeout(
+        experimentalSolve3x3x3IgnoringCenters(pTest),
+        cubingSolveTimeoutMs,
+        variantLabel,
+      );
+      emitSolverDebug(solverId, `${variantLabel}: solved in ${Math.round(performance.now() - attemptStart)}ms`);
       finalAlg = alg.toString();
       usedM = variant.m;
       solved = true;
       break;
-    } catch {
+    } catch (cause) {
+      emitSolverDebug(
+        solverId,
+        `${variantLabel}: failed after ${Math.round(performance.now() - attemptStart)}ms — ` +
+          `${cause instanceof Error ? cause.message : String(cause)}`,
+      );
       // Continue to next variant
     }
   }
@@ -689,10 +710,12 @@ const solve = async (
   }
 
   let frameResult: { cubies: Cubie[]; moves: SolverMove[]; success: boolean; notes: string; expanded: number };
+  emitSolverDebug(solverId, 'solve: frame quotient phase starting');
   try {
     frameResult = await solveFramePhaseWithCubing(puzzle.cubies, puzzle, explanation);
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown cubing frame solver error.';
+    emitSolverDebug(solverId, `solve: cubing path failed (${message}); entering bounded fallback search`);
     explanation.push({
       phase: 'frame quotient',
       objective: 'Use the browser-native cubing solver after mapping local cubies into a KPattern.',
@@ -736,6 +759,10 @@ const solve = async (
   const outputMoves = [...frameResult.moves, ...extensionResult.moves];
   const runtime = performance.now() - start;
   const finalProgress = progressForCubies(extensionResult.cubies);
+  emitSolverDebug(
+    solverId,
+    `solve: finished in ${Math.round(runtime)}ms — success=${extensionResult.success}, moves=${outputMoves.length}`,
+  );
 
   explanation.push({
     phase: 'final verification',

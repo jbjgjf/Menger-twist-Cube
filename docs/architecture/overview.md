@@ -3,15 +3,14 @@
 This repo is an npm-workspaces monorepo with two independent halves that share one package:
 
 ```
-apps/play  ───┐
-              ├──> @menger/solver-core ──> @menger/engine
-apps/lab   ───┘
+apps/play  ───> @menger/engine
+apps/lab   ───> @menger/solver-core ──> @menger/engine
 ```
 
 - **`@menger/engine`** — pure puzzle mechanics. Cubie/frame/turn-target types, Menger-cell generation, geometry, and the functions that apply a move to a `Cubie[]`. No React, no Three.js, no solver concepts, no `localStorage`. Anything that needs to know what a Menger cube *is* depends on this and nothing else.
-- **`@menger/solver-core`** — the `PuzzleModel`/`SolverAlgorithm` interfaces, the algorithm registry, the benchmark runner, and the Level 1 algorithm itself. Depends on `@menger/engine` (one direction only — engine has zero awareness of solver-core). Runs in the browser or in plain Node.
-- **`apps/play`** — the React Three Fiber game. Depends on both packages: `@menger/engine` for rendering/interaction, `@menger/solver-core` for the Solver Lab panel.
-- **`apps/lab`** — a plain React dashboard with no Three.js. Depends on `@menger/solver-core` (and transitively `@menger/engine` for types) to run, visualize, and benchmark algorithms with zero game UI in the loop.
+- **`@menger/solver-core`** — the `PuzzleModel`/`SolverAlgorithm` interfaces, the algorithm registry, the benchmark runner, the solver debug channel, and the algorithms themselves. Depends on `@menger/engine` (one direction only — engine has zero awareness of solver-core). Runs in the browser or in plain Node.
+- **`apps/play`** — the React Three Fiber game, manual play only. Depends on `@menger/engine`; it has no solver dependency at all.
+- **`apps/lab`** — the algorithm visualization space: a React app with its own lightweight Three.js cube view that scrambles, solves, and replays solver output move by move, plus benchmarking. Depends on `@menger/solver-core` (and `@menger/engine` for state types).
 
 ## Why this split
 

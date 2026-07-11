@@ -169,7 +169,7 @@ The algorithm preserves:
 
 ## Termination
 
-The primary frame phase terminates because the `cubing` search returns a finite algorithm for valid Level 1 quotient states. The implementation then verifies the returned moves against the app's real move functions before reporting success.
+The primary frame phase terminates because the `cubing` search returns a finite algorithm for valid Level 1 quotient states, and every `cubing` call is additionally wrapped in a hard timeout (the search has no internal time limit and can otherwise run unboundedly on a pattern it cannot solve) — on timeout the solver falls through to the bounded fallback search. The implementation verifies the returned moves against the app's real move functions before reporting success.
 
 The fallback frame phase terminates because it uses fixed depth, node, and time budgets. It returns failure with explanation if no frame-quotient solution is found within those bounds.
 
@@ -197,29 +197,19 @@ For the Level 1 interactive target, the implementation is tuned for one-click so
 
 Two independent UIs run this same algorithm through the same `solver-core` registry:
 
-`apps/play`'s `Solver Lab` panel (rendered in the main control panel; `apps/play/src/solver/solverController.ts` selects the registered algorithm for the current level — this solver at Level 1, `level2-block-quotient` at Level 2):
+`apps/lab` is the single interactive surface for running solvers (the Play app is manual play only — its former "Solver Lab" panel moved here). The lab provides:
 
-It supports:
+- A centered 3D Menger cube that replays a solution move by move, with play / pause / stop / step forward / step back / jump-to-move transport controls and a per-move duration slider (0.1s–1.0s).
+- Seeded scrambles (reproducible; drawn from the algorithm's declared `scrambleMovePool` when it has one).
+- The structured `explanation` timeline rendered as a step list with progress bars.
+- A debug log fed by the solver debug channel (`onSolverDebug`), showing phase timings — calibration, each cubing attempt, fallback entry — so a slow or failed solve shows exactly where it stopped.
+- Persisted solve records (`localStorage`), a "Run benchmark" control that runs `runBenchmark()` over N seeds in-browser, and a file importer to load a CLI-produced JSON result for comparison.
 
-- `Instant`: solve once, store a benchmark record, and apply all returned legal moves immediately.
-- `Animated`: solve once, store a benchmark record, and replay moves with the same preview channel as manual interaction. A slider sets the per-move animation duration (0.1s–1.0s).
-- `Prepare`: solve once and load the returned move list for manual stepping.
-- `Step`: apply the prepared move list one move at a time.
-
-The panel displays:
-
-- Algorithm name and version.
-- Runtime.
-- Move count.
-- Current progress metric.
-- Structured explanation phases.
-- Benchmark summary and recent benchmark rows.
-
-`apps/lab` (no Play app/Three.js dependency): an "Algorithm visualizer" that runs one seeded scramble and renders the same `explanation` timeline as a step list with progress bars, plus a "Run benchmark" control that runs `runBenchmark()` over N seeds in-browser and a file importer to load a CLI-produced JSON result for comparison.
+Playback is wall-clock driven (an interval plus the render loop, both advancing the same clock), so a hidden or throttled tab delays rendering but can never stall a replay.
 
 ## Benchmarking infrastructure
 
-Every solver run can be converted into a `SolverBenchmarkRecord` (see [`packages/solver-core/src/benchmark/types.ts`](../../packages/solver-core/src/benchmark/types.ts)). `apps/play` persists these to `localStorage` under `menger.solver.benchmarks.v1` (via `createLocalStorageBenchmarkStore`); the CLI and `apps/lab`'s live benchmark instead get them back as plain in-memory records with no persistence step. Same shape either way.
+Every solver run can be converted into a `SolverBenchmarkRecord` (see [`packages/solver-core/src/benchmark/types.ts`](../../packages/solver-core/src/benchmark/types.ts)). `apps/lab` persists single-solve records to `localStorage` under `menger.solver.benchmarks.v2` (via `createLocalStorageBenchmarkStore`); the CLI and `apps/lab`'s live benchmark instead get them back as plain in-memory records with no persistence step. Same shape either way.
 
 Each record stores:
 
@@ -243,7 +233,7 @@ Minimum requirements:
 4. Apply only legal moves the target `PuzzleModel` actually accepts (for the Menger model, moves the Play reducer can replay through `APPLY_SOLVER_MOVE` / `APPLY_SOLVER_MOVES`).
 5. Pick a stable `id` — that id is what selects the algorithm in `apps/lab`'s dropdown and the `--algorithm=` CLI flag.
 
-Once registered, the algorithm is automatically selectable everywhere: the Play app's Solver Lab panel, `apps/lab`, and `npm run bench -- --algorithm=<id>` — no changes needed to any of those three.
+Once registered, the algorithm is automatically selectable everywhere: `apps/lab`'s algorithm dropdown and `npm run bench -- --algorithm=<id>` — no changes needed to either.
 
 Future candidates can include cubie-cycle solvers, LBL-style staged solvers, pattern databases, or Level N research evaluators. They should share the same benchmark store so results are comparable.
 

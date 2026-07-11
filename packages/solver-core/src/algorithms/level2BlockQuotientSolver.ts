@@ -21,6 +21,7 @@ import {
   vectorKey,
 } from './level1State';
 import { level1QuotientAlgorithm, warmLevel1Solver } from './level1QuotientSolver';
+import { emitSolverDebug } from '../debug';
 
 const solverId = 'level2-block-quotient';
 const solverName = 'level-2-block-quotient-reducer';
@@ -386,8 +387,10 @@ const solve = async (
     return failure('Level 2 only.', 'This solver currently supports Level 2 only.');
   }
 
+  emitSolverDebug(solverId, 'solve: block rigidity analysis starting');
   const analysis = analyzeMacroState(puzzle.cubies);
   if (!analysis.ok) {
+    emitSolverDebug(solverId, `solve: rigidity analysis rejected the state — ${analysis.reason}`);
     explanation.push({
       phase: 'block rigidity analysis',
       objective: 'Verify every 3x3x3 block region is a rigid copy of exactly one home block.',
@@ -406,9 +409,14 @@ const solve = async (
     progress: inputProgress,
   });
 
+  emitSolverDebug(solverId, 'solve: macro Level 1 solve starting');
   const macroPuzzle = createMengerPuzzleState(1);
   const macroState: MengerPuzzleState = { ...macroPuzzle, cubies: analysis.macroCubies };
   const macroResult = await level1QuotientAlgorithm.solve(model, macroState);
+  emitSolverDebug(
+    solverId,
+    `solve: macro Level 1 solve finished — success=${macroResult.success}, moves=${macroResult.move_count}`,
+  );
 
   for (const step of macroResult.explanation) {
     if (step.phase === 'state inspection') continue;
@@ -448,6 +456,10 @@ const solve = async (
   const cellResult = solveCellRollPhase(cubies, puzzle, explanation);
   const outputMoves = [...macroMoves, ...cellResult.moves];
   const finalProgress = progressForCubies(cellResult.cubies);
+  emitSolverDebug(
+    solverId,
+    `solve: finished in ${Math.round(performance.now() - start)}ms — success=${cellResult.success}, moves=${outputMoves.length}`,
+  );
 
   explanation.push({
     phase: 'final verification',

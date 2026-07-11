@@ -2,9 +2,9 @@
 
 Menger Cube is a research platform for generalized higher-order Menger-sponge twisty puzzles, built around three independent pieces:
 
-- **`apps/play`** — the React + Three.js game: orbitable 3D scene, frame/extension rotations, undo/redo, scramble, keyboard controls, and a "Solver Lab" panel for Level 1.
-- **`packages/solver-core`** + **`packages/engine`** — a headless solver engine: puzzle mechanics, a `PuzzleModel`/`SolverAlgorithm` interface pair, an algorithm registry, and a reproducible benchmark runner. Runs in the browser or in plain Node with no UI dependency.
-- **`apps/lab`** — a small dashboard that runs and visualizes algorithms from `solver-core` directly (no Three.js), and compares live runs against JSON results produced by the benchmark CLI.
+- **`apps/play`** — the React + Three.js game, manual play only: orbitable 3D scene, frame/extension rotations, undo/redo, scramble, keyboard controls.
+- **`packages/solver-core`** + **`packages/engine`** — a headless solver engine: puzzle mechanics, a `PuzzleModel`/`SolverAlgorithm` interface pair, an algorithm registry, a solver debug channel, and a reproducible benchmark runner. Runs in the browser or in plain Node with no UI dependency.
+- **`apps/lab`** — the algorithm visualization space: scrambles and solves on a centered 3D cube, replays solutions move by move (play/pause/step/speed controls), streams solver debug logs, and compares live runs against JSON results produced by the benchmark CLI.
 
 See [`docs/architecture/overview.md`](docs/architecture/overview.md) for how these fit together and why they're split this way.
 
@@ -50,7 +50,7 @@ Load any of those JSON files into `apps/lab` ("Compare against a committed CLI r
 ```text
 apps/
   play/        the game (React + React Three Fiber)
-  lab/         solver dashboard (algorithm runner, visualizer, benchmark comparison)
+  lab/         algorithm lab (3D solve replay, scramble/solve controls, benchmarks)
 packages/
   engine/      pure puzzle mechanics — positions, frames, turn targets, move application
   solver-core/ PuzzleModel + SolverAlgorithm interfaces, registry, benchmark runner, CLI
@@ -110,17 +110,16 @@ Puzzle generation, frame targets, and extension targets scale with level; see [`
 
 Keyboard bindings are centralized in `apps/play/src/input/keyboardControls.ts` and generated from the active level's turn targets rather than hardcoded per target — see `findKeyboardCommand`.
 
-## Solver Lab (in-game) vs. apps/lab
+## apps/lab — the algorithm lab
 
-The Play app's "Solver Lab" panel (Level 1 only) is a thin UI over `@menger/solver-core` — see `apps/play/src/solver/solverController.ts`. It runs the registered algorithm, records a benchmark to `localStorage`, and replays the returned moves with the same animation channel as manual play.
-
-`apps/lab` is the standalone counterpart: it runs the same `solver-core` package with no Play-app/Three.js dependency at all, for algorithm comparison, visualization, and reviewing CLI-generated benchmark files.
+All solver interaction lives in `apps/lab` (the Play app is manual play only). The lab scrambles a cube with a seeded, reproducible scramble, runs any registered algorithm, and replays the solution move by move on a centered 3D cube with play / pause / stop / step / jump controls and a 0.1–1.0s per-move speed slider. A debug log streams the solver's phase events (calibration, cubing attempts, fallbacks) live via `onSolverDebug`, solve records persist to `localStorage`, and CLI-generated benchmark JSON files can be imported for comparison.
 
 ## Documentation
 
 - [`docs/architecture/overview.md`](docs/architecture/overview.md) — how the packages/apps fit together and why.
 - [`docs/architecture/interaction-architecture.md`](docs/architecture/interaction-architecture.md) — turn target generation, interaction tiers, keyboard grammar.
 - [`docs/algorithms/level1-quotient-solver.md`](docs/algorithms/level1-quotient-solver.md) — the Level 1 solver algorithm.
+- [`docs/algorithms/level2-block-quotient-solver.md`](docs/algorithms/level2-block-quotient-solver.md) — the Level 2 block-quotient solver.
 - [`docs/research/benchmarking.md`](docs/research/benchmarking.md) — benchmark methodology and how to add new algorithms/experiments.
 - [`docs/adr/`](docs/adr/) — architecture decision records.
 
