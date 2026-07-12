@@ -12,6 +12,14 @@
       "destination": "/lab/index.html"
     },
     {
+      "source": "/solver",
+      "destination": "/lab/index.html"
+    },
+    {
+      "source": "/solver/:path*",
+      "destination": "/lab/index.html"
+    },
+    {
       "source": "/keyboard",
       "destination": "/index.html"
     },
