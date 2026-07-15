@@ -17,6 +17,7 @@ export { registerAlgorithm, getAlgorithm, listAlgorithms } from './algorithm/reg
 
 export { level1QuotientAlgorithm, warmLevel1Solver } from './algorithms/level1QuotientSolver';
 export { level2BlockQuotientAlgorithm, warmLevel2Solver } from './algorithms/level2BlockQuotientSolver';
+export { level2SliceReductionAlgorithm, warmLevel2SliceReductionSolver } from './algorithms/level2SliceReductionSolver';
 export { onSolverDebug, emitSolverDebug } from './debug';
 export type { SolverDebugEvent } from './debug';
 
