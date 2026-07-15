@@ -125,4 +125,8 @@ All solver interaction lives in `apps/lab` (the Play app is manual play only). T
 
 ## License
 
-See `LICENSE`.
+Copyright (c) 2026 qianyun. All rights reserved. This is a public,
+source-available research repository, not open-source software: viewing is
+permitted, but use, copying, modification, distribution, deployment, and
+derivative works require prior written permission. No patent license is
+granted. See [`LICENSE`](LICENSE).
