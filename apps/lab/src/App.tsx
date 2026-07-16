@@ -375,26 +375,28 @@ export default function App() {
                 ⏭
               </button>
               <label className="ml-2 flex items-center gap-2 text-xs text-slate-400">
-                <span className="whitespace-nowrap font-mono">{(playback.durationMs / 1000).toFixed(1)}s/move</span>
+                <span className="whitespace-nowrap font-mono">{(playback.durationMs / 1000).toFixed(3)}s/move</span>
                 <input
                   type="range"
-                  min={100}
+                  min={1}
                   max={1000}
-                  step={50}
+                  step={1}
                   value={playback.durationMs}
                   onChange={(event) => playback.setDurationMs(Number(event.target.value))}
                   className="w-40 accent-cyan-400"
                   aria-label="Playback duration per move"
                 />
               </label>
-              <div className="ml-auto h-1.5 w-40 overflow-hidden rounded bg-slate-800">
-                <div
-                  className="h-full bg-cyan-500 transition-[width]"
-                  style={{
-                    width: `${playback.moves.length === 0 ? 0 : Math.round((playback.index / playback.moves.length) * 100)}%`,
-                  }}
-                />
-              </div>
+              <input
+                type="range"
+                min={0}
+                max={playback.moves.length}
+                value={playback.index}
+                onChange={(event) => playback.jumpTo(Number(event.target.value))}
+                disabled={playback.moves.length === 0}
+                className="ml-auto h-1.5 w-40 accent-cyan-400 bg-slate-850 rounded-lg appearance-none cursor-pointer disabled:cursor-not-allowed"
+                aria-label="Playback progress"
+              />
             </div>
           </section>
 

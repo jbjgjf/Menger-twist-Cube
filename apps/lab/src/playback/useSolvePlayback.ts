@@ -74,7 +74,7 @@ export const useSolvePlayback = (onEvent?: (message: string) => void): PlaybackA
   const tick = useCallback(() => {
     if (!playingRef.current) return;
     const total = movesRef.current.length;
-    const duration = Math.max(50, durationRef.current);
+    const duration = Math.max(1, durationRef.current);
     const now = performance.now();
     let currentIndex = indexRef.current;
     let elapsed = now - moveStartRef.current;
