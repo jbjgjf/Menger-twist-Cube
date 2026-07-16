@@ -46,7 +46,7 @@ export const rotateQuaternion = (quaternion: Quaternion, axis: Vector3Tuple, ang
 };
 
 export const angleToNotation = (angle: number): string => {
-  if (angle === 180) return '2';
+  if (angle === 180) return '²';
   if (angle === -90) return "'";
   return '';
 };

@@ -39,12 +39,18 @@ export default function ExplanationTimeline({ result }: Props) {
           const pct = Math.round((step.progress.solvedCubies / total) * 100);
           return (
             <li key={`${step.phase}-${index}`} className="rounded border border-slate-700 bg-slate-950/50 p-2 text-xs">
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-semibold text-slate-100">
-                  {index + 1}. {step.phase}
-                </p>
-                <p className="font-mono text-slate-400">
-                  {step.progress.solvedCubies}/{step.progress.totalCubies} solved ({pct}%)
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-semibold text-slate-100">
+                    {index + 1}. {step.phase}
+                  </p>
+                  <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 font-mono text-[10px] text-slate-400">
+                    <span>Position: {step.progress.positionSolved}/{step.progress.totalCubies} home</span>
+                    <span>Fully Solved: {step.progress.solvedCubies}/{step.progress.totalCubies}</span>
+                  </div>
+                </div>
+                <p className="font-mono text-slate-400 whitespace-nowrap">
+                  {pct}% fully solved
                 </p>
               </div>
               <p className="mt-1 text-slate-300">{step.objective}</p>
