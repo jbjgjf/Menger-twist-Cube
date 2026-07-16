@@ -74,11 +74,26 @@ export const stateKey = (cubies: Cubie[], ignoreEdgeExtensionRoll: boolean): str
     })
     .join(';');
 
+export const getLevel2Class = (p: readonly [number, number, number]): 'CC' | 'CE' | 'EC' | 'EEa' | 'EEo' | null => {
+  const b = [
+    Math.floor((p[0] + 4) / 3) - 1,
+    Math.floor((p[1] + 4) / 3) - 1,
+    Math.floor((p[2] + 4) / 3) - 1,
+  ];
+  const o = [p[0] - 3 * b[0]!, p[1] - 3 * b[1]!, p[2] - 3 * b[2]!];
+  const bZeros = b.filter((v) => v === 0).length;
+  const oZeros = o.filter((v) => v === 0).length;
+  if (bZeros === 0 && oZeros === 0) return 'CC';
+  if (bZeros === 0) return 'CE';
+  if (oZeros === 0) return 'EC';
+  return b.findIndex((v) => v === 0) === o.findIndex((v) => v === 0) ? 'EEa' : 'EEo';
+};
+
 export const progressForCubies = (cubies: Cubie[]): SolverProgress => {
   const corners = cubies.filter((cubie) => cubie.type === 'corner');
   const edges = cubies.filter((cubie) => cubie.type === 'edge');
 
-  return {
+  const progress: SolverProgress = {
     solvedCubies: cubies.filter(isExactlySolvedCubie).length,
     positionSolved: cubies.filter((cubie) => samePosition(cubie.currentPosition, cubie.homePosition)).length,
     cornerOrientationSolved: corners.filter(isOrientationSolved).length,
@@ -88,9 +103,60 @@ export const progressForCubies = (cubies: Cubie[]): SolverProgress => {
     totalCorners: corners.length,
     totalEdges: edges.length,
   };
+
+  if (cubies.length === 400) {
+    let ccHome = 0, ccSolved = 0;
+    let ceHome = 0, ceSolved = 0;
+    let ecHome = 0, ecSolved = 0;
+    let eeaHome = 0, eeaSolved = 0;
+    let eeoHome = 0, eeoSolved = 0;
+
+    for (const c of cubies) {
+      const cls = getLevel2Class(c.homePosition);
+      const isHome = samePosition(c.currentPosition, c.homePosition);
+      const isSolved = isHome && isOrientationSolved(c);
+
+      if (cls === 'CC') {
+        if (isHome) ccHome++;
+        if (isSolved) ccSolved++;
+      } else if (cls === 'CE') {
+        if (isHome) ceHome++;
+        if (isSolved) ceSolved++;
+      } else if (cls === 'EC') {
+        if (isHome) ecHome++;
+        if (isSolved) ecSolved++;
+      } else if (cls === 'EEa') {
+        if (isHome) eeaHome++;
+        if (isSolved) eeaSolved++;
+      } else if (cls === 'EEo') {
+        if (isHome) eeoHome++;
+        if (isSolved) eeoSolved++;
+      }
+    }
+
+    progress.ccHome = ccHome;
+    progress.ccSolved = ccSolved;
+    progress.ceHome = ceHome;
+    progress.ceSolved = ceSolved;
+    progress.ecHome = ecHome;
+    progress.ecSolved = ecSolved;
+    progress.eeaHome = eeaHome;
+    progress.eeaSolved = eeaSolved;
+    progress.eeoHome = eeoHome;
+    progress.eeoSolved = eeoSolved;
+  }
+
+  return progress;
 };
 
-export const progressSummary = (progress: SolverProgress): string =>
-  `${progress.solvedCubies}/${progress.totalCubies} cubies solved, ` +
-  `${progress.positionSolved}/${progress.totalCubies} positions home, ` +
-  `${progress.edgeFrameSolved}/${progress.totalEdges} edge frame targets aligned`;
+export const progressSummary = (progress: SolverProgress): string => {
+  if (progress.totalCubies === 400) {
+    const orientationDefects = progress.positionSolved - progress.solvedCubies;
+    return `${progress.positionSolved}/${progress.totalCubies} positions home, ` +
+      `${progress.solvedCubies}/${progress.totalCubies} fully solved, ` +
+      `${orientationDefects} orientation defects remain`;
+  }
+  return `${progress.solvedCubies}/${progress.totalCubies} cubies solved, ` +
+    `${progress.positionSolved}/${progress.totalCubies} positions home, ` +
+    `${progress.edgeFrameSolved}/${progress.totalEdges} edge frame targets aligned`;
+};

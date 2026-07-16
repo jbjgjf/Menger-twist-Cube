@@ -20,6 +20,16 @@ export interface SolverProgress {
   totalCubies: number;
   totalCorners: number;
   totalEdges: number;
+  ccHome?: number;
+  ccSolved?: number;
+  ceHome?: number;
+  ceSolved?: number;
+  ecHome?: number;
+  ecSolved?: number;
+  eeaHome?: number;
+  eeaSolved?: number;
+  eeoHome?: number;
+  eeoSolved?: number;
 }
 
 export interface SolverInputState {
