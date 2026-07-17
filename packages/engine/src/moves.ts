@@ -1,6 +1,7 @@
 import type { Cubie, CubieType, FrameId, Move, RotationFrame, TurnTarget, TwistAngle } from './types';
 import type { Vector3Tuple } from 'three';
 import { angleToNotation, rotatePosition, rotatePositionAroundPivot, rotateQuaternion } from './geometry';
+import { validateCubieRotation, validateFrameRotation, validateTurnTargetRotation } from './rotationLegality';
 
 export const notationForMove = (frame: RotationFrame | undefined, frameId: FrameId, angle: TwistAngle): string => {
   const base = frame?.name ?? frameId;
@@ -42,6 +43,7 @@ export const applyTwistToCubies = (
 ): Cubie[] => {
   const frame = frameById.get(frameId);
   if (!frame) return cubies;
+  if (!validateFrameRotation(cubies, frame, angle).legal) return cubies;
 
   return cubies.map((cubie) => {
     if (!frame.selector(cubie.currentPosition)) {
@@ -89,11 +91,13 @@ export const applyCubieRotation = (
   cubieId: string,
   axis: Vector3Tuple,
   angle: TwistAngle,
-): Cubie[] =>
-  cubies.map((cubie) => {
+): Cubie[] => {
+  if (!validateCubieRotation(cubies, cubieId, axis, angle).legal) return cubies;
+  return cubies.map((cubie) => {
     if (cubie.id !== cubieId) return cubie;
     return { ...cubie, orientation: rotateQuaternion(cubie.orientation, axis, angle) };
   });
+};
 
 export const applyExtensionRotation = (
   cubies: Cubie[],
@@ -103,6 +107,7 @@ export const applyExtensionRotation = (
 ): Cubie[] => {
   const target = targetById.get(targetId);
   if (!target || target.kind !== 'extension') return cubies;
+  if (!validateTurnTargetRotation(cubies, target, angle).legal) return cubies;
 
   return cubies.map((cubie) => {
     if (!target.selector(cubie.currentPosition)) return cubie;
