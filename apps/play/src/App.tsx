@@ -10,6 +10,8 @@ import {
   availableScalesForLevel,
   isPlayableLevel,
   turnTargetSummaryForLevel,
+  validateFrameRotation,
+  validateTurnTargetRotation,
 } from '@menger/engine';
 import { createInitialState, puzzleReducer } from './state/puzzleState';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
@@ -120,6 +122,13 @@ function PlayApp() {
       dispatch({ type: 'INVALID', message: 'Animation in progress. Please wait.' });
       return;
     }
+    const selectedFrame = state.puzzle.frameById.get(frame);
+    if (!selectedFrame) return;
+    const legality = validateFrameRotation(state.puzzle.cubies, selectedFrame, angle);
+    if (!legality.legal) {
+      dispatch({ type: 'INVALID', message: legality.message });
+      return;
+    }
 
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { frameId: frame, angle: 0 } });
@@ -153,6 +162,11 @@ function PlayApp() {
 
     const target = state.puzzle.turnTargetById.get(targetId);
     if (!target || target.kind !== 'extension') return;
+    const legality = validateTurnTargetRotation(state.puzzle.cubies, target, angle);
+    if (!legality.legal) {
+      dispatch({ type: 'INVALID', message: legality.message });
+      return;
+    }
 
     dispatch({ type: 'SET_ANIMATING', isAnimating: true });
     dispatch({ type: 'SET_DRAG_PREVIEW', preview: { extensionTargetId: targetId, angle: 0 } });

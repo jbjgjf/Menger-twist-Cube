@@ -8,6 +8,9 @@ import {
   createExtensionMove,
   createMengerPuzzleState,
   createMove,
+  validateCubieRotation,
+  validateFrameRotation,
+  validateTurnTargetRotation,
 } from '@menger/engine';
 
 export interface PuzzleUiState {
@@ -144,6 +147,12 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
     case 'SET_DRAG_PREVIEW':
       return { ...state, ui: { ...state.ui, dragPreview: action.preview } };
     case 'COMMIT_MOVE': {
+      const frame = state.puzzle.frameById.get(action.frameId);
+      if (!frame) return state;
+      const legality = validateFrameRotation(state.puzzle.cubies, frame, action.angle);
+      if (!legality.legal) {
+        return { ...state, ui: { ...state.ui, invalidFeedback: legality.message, dragPreview: null } };
+      }
       const move = createMove(action.frameId, action.angle, state.puzzle.frameById);
       return {
         ...state,
@@ -159,6 +168,10 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
     case 'COMMIT_CUBIE_MOVE': {
       const cubie = state.puzzle.cubies.find((c) => c.id === action.cubieId);
       if (!cubie) return state;
+      const legality = validateCubieRotation(state.puzzle.cubies, action.cubieId, action.axis, action.angle);
+      if (!legality.legal) {
+        return { ...state, ui: { ...state.ui, invalidFeedback: legality.message, dragPreview: null } };
+      }
       const axisLabel = action.axis[0] ? 'X' : action.axis[1] ? 'Y' : 'Z';
       const notation = `C(${cubie.currentPosition.join(',')})${axisLabel}${action.angle > 0 ? '+' : ''}${action.angle}`;
       const move: Move = {
@@ -183,6 +196,10 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
     case 'COMMIT_EXTENSION_MOVE': {
       const target = state.puzzle.turnTargetById.get(action.targetId);
       if (!target) return state;
+      const legality = validateTurnTargetRotation(state.puzzle.cubies, target, action.angle);
+      if (!legality.legal) {
+        return { ...state, ui: { ...state.ui, invalidFeedback: legality.message, dragPreview: null } };
+      }
       const move = createExtensionMove(target, action.angle);
       return {
         ...state,
