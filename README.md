@@ -118,6 +118,7 @@ All solver interaction lives in `apps/lab` (the Play app is manual play only). T
 
 - [`docs/architecture/overview.md`](docs/architecture/overview.md) — how the packages/apps fit together and why.
 - [`docs/architecture/interaction-architecture.md`](docs/architecture/interaction-architecture.md) — turn target generation, interaction tiers, keyboard grammar.
+- [`docs/architecture/rotation-legality-design-log.md`](docs/architecture/rotation-legality-design-log.md) — rigid-body endpoint and swept-collision legality rules.
 - [`docs/algorithms/level1-quotient-solver.md`](docs/algorithms/level1-quotient-solver.md) — the Level 1 solver algorithm.
 - [`docs/algorithms/level2-block-quotient-solver.md`](docs/algorithms/level2-block-quotient-solver.md) — the Level 2 block-quotient solver.
 - [`docs/research/benchmarking.md`](docs/research/benchmarking.md) — benchmark methodology and how to add new algorithms/experiments.

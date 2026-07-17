@@ -14,9 +14,11 @@ At Level 1, these 12 extension targets are the 12 edge unit cubies. Rotating one
 
 Frame targets include every available slice scale: `1, 3, 9, ... 3^(N-1)`.
 
-Extension targets are generated as `12` edge child blocks per recursive Menger parent block:
+Extension targets are generated as `12` **structural candidates** per recursive Menger parent block:
 
 `extensionTargets(N) = 12 * (20^N - 1) / 19`
+
+These formulas count candidates, not physically legal rotations. A generated candidate is legal only when it passes the endpoint-closure and swept-volume checks documented in [the rotation-legality design log](rotation-legality-design-log.md).
 
 | Level | Frame targets | Extension targets | Total turn targets |
 | ---: | ---: | ---: | ---: |
@@ -74,9 +76,10 @@ Touch targets should be at least 44px high for actual turn buttons.
 
 ## Implementation notes
 
-- Use generated `TurnTarget` objects for both frame and extension targets.
+- Use generated `TurnTarget` objects for both frame and extension candidates, then pass the selected target and angle through the shared engine legality check.
 - Do not hardcode Level 1 target IDs.
 - Extension targets are generated from recursive parent block path, child slot, block scale, pivot, axis, and selector.
 - Frame rotations move cubie positions around the puzzle origin.
 - Extension rotations move cubie positions around the selected target pivot.
+- Candidate generation alone never authorizes a move: Play, solver move enumeration, and engine application share the endpoint/sweep legality result.
 - For Level 4+, do not enumerate extension targets for direct UI selection; use formula-based counts until the solver/evaluation UI needs scoped generation.
