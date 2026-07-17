@@ -16,6 +16,7 @@ export interface PuzzleModel<TState, TMove> {
   createState(level: number): TState;
   cloneState(state: TState): TState;
   legalMoves(state: TState): TMove[];
+  isMoveLegal(state: TState, move: TMove): boolean;
   applyMove(state: TState, move: TMove): TState;
   isSolved(state: TState): boolean;
   describeMove(move: TMove): string;

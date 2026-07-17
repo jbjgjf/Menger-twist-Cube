@@ -6,6 +6,8 @@ import {
   createExtensionMove,
   createMengerPuzzleState,
   createMove,
+  validateFrameRotation,
+  validateTurnTargetRotation,
 } from '@menger/engine';
 import type { PuzzleModel } from './puzzleModel';
 import type { SolverMove } from '../algorithm/types';
@@ -16,16 +18,17 @@ const allAngles: TwistAngle[] = [90, -90, 180];
 const frameLegalMoves = (state: MengerPuzzleState): SolverMove[] =>
   state.frames
     .flatMap((frame) =>
-      allAngles.map((angle) => {
+      allAngles.flatMap((angle) => {
+        if (!validateFrameRotation(state.cubies, frame, angle).legal) return [];
         const move = createMove(frame.id, angle, state.frameById);
-        return {
+        return [{
           targetKind: 'frame' as const,
           targetId: move.targetId ?? `frame:${frame.id}`,
           frameId: frame.id,
           angle,
           notation: move.notation,
           reason: '',
-        };
+        }];
       }),
     );
 
@@ -33,16 +36,17 @@ const extensionLegalMoves = (state: MengerPuzzleState): SolverMove[] =>
   state.turnTargets
     .filter((target) => target.kind === 'extension')
     .flatMap((target) =>
-      allAngles.map((angle) => {
+      allAngles.flatMap((angle) => {
+        if (!validateTurnTargetRotation(state.cubies, target, angle).legal) return [];
         const move = createExtensionMove(target, angle);
-        return {
+        return [{
           targetKind: 'extension' as const,
           targetId: target.id,
           extensionTargetId: target.id,
           angle,
           notation: move.notation,
           reason: '',
-        };
+        }];
       }),
     );
 
@@ -59,6 +63,18 @@ const applyMove = (state: MengerPuzzleState, move: SolverMove): MengerPuzzleStat
   return state;
 };
 
+const isMoveLegal = (state: MengerPuzzleState, move: SolverMove): boolean => {
+  if (move.targetKind === 'frame' && move.frameId) {
+    const frame = state.frameById.get(move.frameId);
+    return frame !== undefined && validateFrameRotation(state.cubies, frame, move.angle).legal;
+  }
+  if (move.targetKind === 'extension' && move.extensionTargetId) {
+    const target = state.turnTargetById.get(move.extensionTargetId);
+    return target !== undefined && validateTurnTargetRotation(state.cubies, target, move.angle).legal;
+  }
+  return false;
+};
+
 /**
  * The `PuzzleModel` adapter for the Menger cube: it is the only module that
  * translates between `@menger/engine`'s mechanics and the generic shape the
@@ -73,6 +89,7 @@ export const mengerPuzzleModel: PuzzleModel<MengerPuzzleState, SolverMove> = {
   createState: createMengerPuzzleState,
   cloneState: (state) => ({ ...state, cubies: cloneCubies(state.cubies) }),
   legalMoves: (state) => [...frameLegalMoves(state), ...extensionLegalMoves(state)],
+  isMoveLegal,
   applyMove,
   isSolved: (state) => isExactlySolved(state.cubies),
   describeMove: (move) => move.notation,

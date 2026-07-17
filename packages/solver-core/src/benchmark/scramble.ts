@@ -31,7 +31,8 @@ export const scrambleState = <TState, TMove>(
   const moves: TMove[] = [];
 
   for (let step = 0; step < length; step += 1) {
-    const legal = movePool ? movePool(current) : model.legalMoves(current);
+    const candidates = movePool ? movePool(current) : model.legalMoves(current);
+    const legal = candidates.filter((move) => model.isMoveLegal(current, move));
     if (legal.length === 0) break;
     const move = legal[Math.floor(rng() * legal.length)]!;
     current = model.applyMove(current, move);
