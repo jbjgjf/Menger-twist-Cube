@@ -99,4 +99,4 @@ npm run bench -- --algorithm=level2-block-quotient --level=2 --count=20 --length
 ## Future work
 
 - ~~**Reduction/pairing phase** for single-layer-scrambled states~~ — done: the [slice-reduction solver](level2-slice-reduction-solver.md) solves the full Level 2 generator set (slices, slabs included) with commutator 3-cycles and delegates block-rigid states back to this pipeline.
-- **Level 3+**: the same self-similar projection applies one more fractal step up (blocks of 27), suggesting a recursive tower of quotient solves; interaction is `assisted-manual` there, so this is solver-research territory.
+- ~~**Level 3+**: the same self-similar projection applies one more fractal step up~~ — done: the [Level 3 block-quotient solver](level3-block-quotient-solver.md) quotients Level 3 by its 400 mid-blocks onto a full Level 2 puzzle, making the tower three deep (Level 3 → Level 2 → Level 1) on block-rigid inputs.

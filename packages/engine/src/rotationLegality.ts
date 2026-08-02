@@ -186,11 +186,33 @@ const squaresHaveInteriorOverlap = (movingCenter: Point2, stationaryCenter: Poin
   );
 };
 
+/** Distance range from the rotation axis to the points of an axis-aligned unit square. */
+const radialBounds = (center: Point2): { min: number; max: number } => {
+  const dx = Math.max(0, Math.abs(center[0]) - halfUnit);
+  const dy = Math.max(0, Math.abs(center[1]) - halfUnit);
+  return {
+    min: Math.hypot(dx, dy),
+    max: Math.hypot(Math.abs(center[0]) + halfUnit, Math.abs(center[1]) + halfUnit),
+  };
+};
+
 const collisionAngleForPair = (
   movingCenter: Point2,
   stationaryCenter: Point2,
   endAngle: number,
 ): number | null => {
+  // Rotation preserves distance to the axis, so the moving square's sweep never
+  // leaves its own radial annulus. When the stationary square lies wholly
+  // outside that annulus no angle can produce interior overlap, and the
+  // interval search below can be skipped entirely. This is what makes diagonal
+  // neighbours cheap: they touch the annulus boundary exactly, so the angle
+  // bounds keep overlapping and the subdivision would otherwise recurse to full
+  // depth before concluding "no collision".
+  const movingRadial = radialBounds(movingCenter);
+  const stationaryRadial = radialBounds(stationaryCenter);
+  if (stationaryRadial.min >= movingRadial.max - geometryEpsilon) return null;
+  if (movingRadial.min >= stationaryRadial.max - geometryEpsilon) return null;
+
   const stack: Array<{ start: number; end: number; depth: number }> = [{ start: 0, end: endAngle, depth: 0 }];
   while (stack.length > 0) {
     const interval = stack.pop()!;
@@ -246,13 +268,24 @@ const validateRigidRotationUncached = (
     };
   }
 
-  const movingIds = new Set(moving.map((cubie) => cubie.id));
   const pivotProjection = project(candidate.pivot, basis);
   const effectiveAngle = (angle * basis.sign * Math.PI) / 180;
+
+  // Only the axial planes the moving body actually occupies can be collided
+  // with, so stationary cubies outside them never need bucketing. At Level 3 a
+  // single-cell roll occupies one of 27 planes out of 8000 cubies, which is the
+  // difference between a usable puzzle and a minute of validation per state.
+  const movingAxisCoordinates = new Set<number>();
+  for (const cubie of moving) movingAxisCoordinates.add(dot(cubie.currentPosition, basis.axis));
+
   const stationaryByAxisCoordinate = new Map<number, Cubie[]>();
   for (const cubie of cubies) {
-    if (movingIds.has(cubie.id)) continue;
     const coordinate = dot(cubie.currentPosition, basis.axis);
+    if (!movingAxisCoordinates.has(coordinate)) continue;
+    // Membership by selector rather than by an id set: identical by
+    // construction (`moving` is exactly the selector's preimage) and free of
+    // per-cubie string hashing.
+    if (candidate.selector(cubie.currentPosition)) continue;
     const list = stationaryByAxisCoordinate.get(coordinate) ?? [];
     list.push(cubie);
     stationaryByAxisCoordinate.set(coordinate, list);

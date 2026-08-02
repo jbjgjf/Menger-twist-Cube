@@ -61,6 +61,17 @@ All supported axes are unit X/Y/Z axes, so a cube pair with overlapping axial in
 
 The check is deterministic. It permits boundary contact through strict-interior comparisons and uses a `1e-9` geometry tolerance. Results are cached by generated target/frame and angle because every accepted move preserves the same occupied lattice support. If future mechanics introduce missing cells, non-cubic unit solids, or state-dependent geometry, this cache invariant must be revised.
 
+### Pruning (2026-08-02)
+
+Two conservative prunings were added when Level 3 made the original cost prohibitive — validating its 4800 depth-3 candidates took ~45 s, paid again for every fresh puzzle state, which put a minute of validation in front of any Level 3 solve, scramble, or UI interaction.
+
+1. **Axial-plane bucketing.** Only the axial planes the moving body occupies can be collided with, so stationary cubies outside them are never bucketed. A single-cell roll occupies 1 of 27 planes.
+2. **Radial annulus early-out.** Rotation preserves distance to the axis, so the sweep never leaves the moving square's radial annulus `[r_min, r_max]`. If the stationary square lies wholly outside that annulus, no angle can produce interior overlap and the interval search is skipped entirely.
+
+The second is what mattered. A *diagonal* neighbour touches the annulus boundary exactly — legal by the boundary-contact rule — but its angle bounds keep overlapping at every subdivision, so the search previously recursed to full depth (`2^16` intervals) before concluding "no collision". Diagonal neighbours are common, which is where the 45 s went.
+
+Both prunings only skip work that provably cannot yield an interior overlap, so the decision is unchanged. Measured: depth-3 validation `45.2 s → 0.48 s`, depth-2 `2.6 s → 37 ms`, a cold Level 3 move-pool build `48 s → 0.56 s`. As a differential check the full legality census was recomputed over all 6,249 candidates at Levels 2 and 3 and matched the pre-pruning counts exactly; that census is now a regression test (`legality census is stable across levels 2 and 3` in `packages/engine/test/rotationLegality.test.ts`).
+
 ## Integration boundaries
 
 - `applyTwistToCubies`, `applyExtensionRotation`, and the legacy `applyCubieRotation` return the original state for a rejected rotation.
@@ -79,17 +90,28 @@ The engine tests cover:
 - rejection in both the extension apply path and the legacy one-cubie apply path;
 - a legal Level 2 depth-1 block extension.
 
-A one-angle Level 2 candidate audit on the solved occupancy produced:
+A one-angle candidate audit on the solved occupancy produced:
 
-| Candidate family | Legal / total |
-| --- | ---: |
-| Depth-1 block extensions | 12 / 12 |
-| Depth-1.5 slabs | 36 / 36 |
-| Depth-2 unit extensions | 72 / 240 |
+| Candidate family | Level 2 | Level 3 |
+| --- | ---: | ---: |
+| Scale-1 frames | 27 / 27 | 81 / 81 |
+| Scale-3 frames | 9 / 9 | 27 / 27 |
+| Scale-9 frames | — | 9 / 9 |
+| Depth-1 block extensions | 12 / 12 | 12 / 12 |
+| Depth-1.5 slabs | 36 / 36 | 36 / 36 |
+| Depth-2 extensions | 72 / 240 | 72 / 240 |
+| Depth-2.5 slabs | — | 216 / 720 |
+| Depth-3 unit extensions | — | 744 / 4800 |
+
+Frames are legal at every scale and level; the restriction bites only on the in-place extensions, and hardest at the finest one. This census is asserted by the engine test suite, so the prunings above cannot silently change a verdict.
 
 ## Solver impact deliberately deferred
 
 The Level 2 slice-reduction solver was designed against the former generator set, including all depth-2 unit rolls. Restricting those moves can split orbits, reduce orientation freedom, change parity reachability, and invalidate E2-based cleanup tools.
 
 No solver correctness run, solver benchmark, orbit recomputation, or completeness claim was performed as part of this change. The engine now prevents illegal moves, but solver research must be revalidated separately before the existing Level 2 coverage claim is reused.
+
+**Partial update (2026-08-02).** Benchmarks were re-run for all three pre-existing algorithms under the legality gate — `level1-quotient`, `level2-block-quotient` and `level2-slice-reduction`, 5 seeds × 20 scramble moves each — and all reported 100% success with every emitted move legal in the state it was applied to. A direct audit of `level2-slice-reduction` output found 0 illegal moves across its ~4,000-move solutions; it reaches for a depth-2 roll rarely (one distinct target per solve in the sampled runs) and the ones it picked were legal.
+
+That is a smoke test, not the revalidation this section asks for. The orbit recomputation, the per-class orientation-freedom automata, and the parity reachability tables in [`level2-slice-reduction-solver.md`](../algorithms/level2-slice-reduction-solver.md) were all computed against the unrestricted generator set and are **still unverified** under the restriction. In particular the solver's commutator library is built from all 240 depth-2 atoms including the 168 blocked ones, so a state that forces one of those tools would fail at the final replay gate rather than being solved — honest, but a coverage gap. The Level 3 solver does not inherit this gap: its own use of depth-3 rolls is legality-checked per move, and the roll-orbit theorem shows the check can never fail on a reachable state.
 

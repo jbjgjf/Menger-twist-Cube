@@ -1,5 +1,6 @@
-// Registers built-in algorithms (`level1-quotient`, `level2-block-quotient`)
-// as a side effect of importing this package's entry point.
+// Registers built-in algorithms (`level1-quotient`, `level2-block-quotient`,
+// `level2-slice-reduction`, `level3-block-quotient`) as a side effect of
+// importing this package's entry point.
 import './algorithms/register';
 
 export type { PuzzleModel } from './model/puzzleModel';
@@ -18,6 +19,7 @@ export { registerAlgorithm, getAlgorithm, listAlgorithms } from './algorithm/reg
 export { level1QuotientAlgorithm, warmLevel1Solver } from './algorithms/level1QuotientSolver';
 export { level2BlockQuotientAlgorithm, warmLevel2Solver } from './algorithms/level2BlockQuotientSolver';
 export { level2SliceReductionAlgorithm, warmLevel2SliceReductionSolver } from './algorithms/level2SliceReductionSolver';
+export { level3BlockQuotientAlgorithm, warmLevel3BlockQuotientSolver } from './algorithms/level3BlockQuotientSolver';
 export { onSolverDebug, emitSolverDebug } from './debug';
 export type { SolverDebugEvent } from './debug';
 
