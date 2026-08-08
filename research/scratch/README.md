@@ -33,6 +33,11 @@ Solution-length work (v0.2.0):
   3-cycles. Together they rule out pure 3-cycles at word lengths 4 and 6 over
   ~1M commutator candidates, and find 8-atom ones only on `EEa`. This is why
   the edge phases still use the 16-atom interchange.
+- `l2-longer-cycles.ts` — the other direction: keep the word length and widen
+  the tool. Classifies every pure shape the interchange construction throws off
+  (5-cycles, double 3-cycles, 7-cycles, 4+4) and their atoms-per-cell, and
+  asserts the parity facts — no odd permutation and no lone 4-cycle can appear,
+  because every commutator is even. This is the evidence behind v0.3.0.
 
 - `sim.ts` — shared harness: integer simulator of the Level 2 puzzle (400 sites,
   24 exact rotation matrices, every legal move as a permutation + rotation),

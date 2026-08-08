@@ -106,13 +106,13 @@ Measured (M-series laptop, 10 seeded scrambles each, the algorithm's declared ge
 
 | Scramble length | Success | Avg runtime | Avg solution length |
 | --- | --- | --- | --- |
-| 20 | 100% | ~1.8 s | ~2,948 moves |
-| 50 | 100% | ~1.9 s | ~3,063 moves |
-| 100 | 100% | ~1.9 s | ~3,065 moves |
+| 20 | 100% | ~2.5 s | ~2,307 moves |
+| 50 | 100% | ~2.8 s | ~2,597 moves |
+| 100 | 100% | ~3.1 s | ~2,723 moves |
 
 Additionally validated by [`research/scratch/l3-validate.ts`](../../research/scratch/l3-validate.ts) — 23/23 scenarios, covering scramble lengths 10–200, roll-heavy scrambles up to 600 moves (which drive ~370 residual twists through phase 4), and honest rejection of scale-1-slice and depth-2.5-slab scrambles. Each scenario re-checks legality move by move and replays independently of the solver's own reporting.
 
-Solution length is inherited almost entirely from the macro solver: the ~3,000 moves are ~3,000 lifted Level 2 commutator moves plus one turn per residual cell roll. Any improvement to the Level 2 slice-reduction word length carries over one-for-one — which is exactly what happened when that solver went to 0.2.0 (two cells per 3-cycle): Level 3 dropped from ~4,300 to ~3,000 moves with no change to this file.
+Solution length is inherited almost entirely from the macro solver: the ~2,600 moves are ~2,600 lifted Level 2 commutator moves plus one turn per residual cell roll. Any improvement to the Level 2 slice-reduction word length carries over one-for-one, which is exactly what has happened twice with no change to this file: ~4,300 moves at Level 2 v0.1.0, ~3,000 at v0.2.0 (two cells per 3-cycle), ~2,600 at v0.3.0 (longer pure permutations).
 
 Reproduce from the CLI:
 

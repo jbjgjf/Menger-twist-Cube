@@ -84,9 +84,21 @@ Each phase has one goal and uses only tools that cannot undo previous phases:
 
 Details that make the phases robust:
 
-- **Two cells per tool.** A 3-cycle moves three cells, so aiming only the first wastes two thirds of the tool. The third site is not free to choose outright, but it can be *asked for*: send the cell currently sitting on the target to its own home. The pair-BFS looks that specific third site up directly (`byPair` is indexed by ordered pair and then by third site), and falls back to any admissible third site when no such template exists. Measured yield: **2.00–2.14 cells per tool** across all five classes.
+- **Score tools by cells landed, not by cells aimed.** A 3-cycle moves three cells, so aiming only the first wastes two thirds of the tool. Templates are therefore stored as general permutations of their support, `byPair` files each under every "content at *p* → *q*" it offers, and the placement search scores a candidate by simulating it: every cell it carries home counts. Ranking is orientation-of-the-target first, then cells landed, then how many of those land already oriented, then word length.
 
-  This is close to the ceiling for any 3-cycle method. Solving a permutation of `n` unsolved cells in `c` cycles needs `(n − c)/2` 3-cycles, and a random permutation of ~96 cells has `c ≈ ln 96 ≈ 4.6` cycles, so the bound is ≈ 2.13 cells per tool. Phase-by-phase the solver lands 2.00 (EC), 2.00 (EEa), 1.98 (EEo), 2.07 (CE), 2.14 (CC) — within a few percent of it. Further gains have to come from shorter tools or a different paradigm, not from better cycle choice.
+  **Longer cycles come free.** The same 16-atom interchange words that yield 3-cycles also yield 5-cycles, double 3-cycles, 7-cycles and 4+4s — and those land 4 or 6 cells for the same word length instead of 2:
+
+  | Shape | Atoms | Cells landed | Atoms/cell |
+  | --- | ---: | ---: | ---: |
+  | 7, 4+4 | 16 | 6 | **2.67** |
+  | 5, 3+3, 2+2+2+2 | 16 | 4 | **4.00** |
+  | 3, 2+2 | 16 | 2 | 8.00 |
+
+  v0.1.0 discarded every one of them (`addTemplateIfPure` returned early unless the support was exactly 3), and the edge construction filtered seed pairs to `shared === 1`, which is precisely the condition that produces 3-cycles. Removing both restrictions roughly doubles the library (143,640 pure templates, 71,568 of them 3-cycles) and lifts the edge classes from 2.00 to **2.3–2.9 cells per tool**.
+
+  **There is no 4-cycle tool, at any length.** A *k*-cycle is an odd permutation when *k* is even, and every commutator `ABA⁻¹B⁻¹` is even — so a bare 4-cycle cannot be built this way, while 4+4 (two 4-cycles, even overall) can. `research/scratch/l2-longer-cycles.ts` asserts this: over 162,150 interchange words it finds 0 odd-permutation shapes and 0 lone even-length cycles. The parity invariant phase 1 establishes therefore survives every tool, exactly as before.
+
+  **How far this can go.** Solving a permutation of `n` unsolved cells in `c` cycles costs `(n − c)/(k − 1)` tools when each lands `k − 1` cells, so 3-cycles alone are capped at ≈ 2.13 cells per tool for `n ≈ 96`, `c ≈ ln 96 ≈ 4.6`. Wider tools raise that ceiling, but only pay when the state's permutation happens to agree with the tool on all of its support, which gets less likely the wider the tool is — hence 2.3–2.9 rather than 4. Closing that gap needs the search to *choose* which chain of the state's permutation to attack, instead of taking the first unsolved cell and asking what fits.
 
 - **Orientation-first placement.** When placing a cell, the pair-BFS prefers a template variant that lands the cell *exactly oriented*, so phase 7 starts with only a handful of residues. Ranking is strictly orientation-first, then cell count, then the second cell's orientation, then word length — so the two-cell preference never trades away the orientation property that keeps phase 7 cheap. Because a tool costs ~20 atoms and one extra BFS level costs 2, the search spends up to two extra levels looking for a two-cell placement before settling for a one-cell one.
 - **Aux-cell discipline.** A 3-cycle placing cell `x → s` also disturbs a third cell `z`; the search only accepts candidates whose `z` is not yet solved. If the last few cells form a configuration with no matching template triple, the solver deterministically *sacrifices* one solved cell of the class to reshape the configuration and retries (bounded).
@@ -101,20 +113,22 @@ Details that make the phases robust:
 
 ## Complexity and measured results
 
-- One-time library build: ~2.5–3 s (interchange search over ~2.8k seed commutators + 5.2k conjugate pairs; cached per process, pre-warmable via `warmLevel2SliceReductionSolver()`).
-- Per solve: parity `O(400)` + F₂ solve over ≤ ~20 generator vectors; ~180 placements, each a pair-BFS over ≤ 9120 states; twist descent with single/pair BFS. Adjacent same-target turns are peephole-merged before output (worth ~2.6%).
+- One-time library build: ~5 s (interchange search over ~1.8k seed commutators, now keeping every pure shape rather than only 3-cycles; cached per process, pre-warmable via `warmLevel2SliceReductionSolver()`).
+- Per solve: parity `O(400)` + F₂ solve over ≤ ~20 generator vectors; ~160 placements, each a pair-BFS over ≤ 9120 states scoring ≤ 24 templates per visited pair; twist descent with single/pair BFS. Adjacent same-target turns are peephole-merged before output (worth ~2.6%).
 
-Measured (M-series laptop, 10 seeded scrambles each, full generator set via the algorithm's `scrambleMovePool`), excluding the one-time library build:
+Measured (M-series laptop, 10 seeded scrambles each, full generator set via the algorithm's `scrambleMovePool`), including the amortized one-time library build:
 
-| Scramble length | Success | Avg runtime | Avg solution length | v0.1.0 length |
-| --- | --- | --- | --- | --- |
-| 20 | 100% | ~0.45 s | ~2,698 moves | ~4,200 |
-| 50 | 100% | ~0.49 s | ~3,031 moves | ~4,500 |
-| 100 | 100% | ~0.51 s | ~3,057 moves | ~4,600 |
-| 200 | 100% | ~0.57 s | ~3,067 moves | — |
-| 300 | 100% | ~0.64 s | ~3,082 moves | — |
+| Scramble length | Success | Avg runtime | v0.3.0 length | v0.2.0 | v0.1.0 |
+| --- | --- | --- | --- | --- | --- |
+| 20 | 100% | ~1.5 s | **~2,230** | ~2,698 | ~4,200 |
+| 50 | 100% | ~1.7 s | **~2,611** | ~3,031 | ~4,500 |
+| 100 | 100% | ~1.9 s | **~2,697** | ~3,057 | ~4,600 |
+| 200 | 100% | ~2.0 s | **~2,807** | ~3,067 | — |
+| 300 | 100% | ~2.2 s | **~2,789** | ~3,081 | — |
 
-The last column is v0.1.0, which aimed one cell per 3-cycle; v0.2.0's two-cell placement cut solution length by ~33% and runtime by roughly half. Solution length saturates around 3,050 because past ~50 scramble moves essentially every cell needs placing, and the cost is then just (cells / 2) tools.
+Two changes account for the drop from v0.1.0's ~4,500. v0.2.0 aimed each 3-cycle to land two cells rather than one (−33%); v0.3.0 admitted the longer pure permutations the same words already contained (−14% further), for **−42% overall**. Solution length saturates past ~50 scramble moves because essentially every cell then needs placing, so the cost is just (cells / cells-per-tool) tools.
+
+The runtime trade is real and deliberate: v0.2.0 solved in ~0.5 s because it could stop searching the moment it found a two-cell placement, while v0.3.0 keeps scanning for a wider one. Steady-state solve time is ~1.2 s, which no current consumer (the lab UI, the CLI, the Level 3 solver's macro phase) is sensitive to.
 
 Block-rigid scrambles (the old generator set) take the fast path and return the block-quotient's ~25-move solutions unchanged.
 
@@ -123,14 +137,14 @@ Where the moves go, per phase, averaged over 9 runs at lengths 20/50/100 (`resea
 | Phase | Atoms | Cells | Atoms/cell |
 | --- | ---: | ---: | ---: |
 | orbit parity normalization | 2 | — | — |
-| CC placement | 239 | 64 | 3.7 |
-| CE placement | 374 | 96 | 3.9 |
-| CC orientation | 54 | — | — |
-| EC placement | 852 | 96 | 8.9 |
-| EEa placement | 389 | 48 | 8.1 |
-| EEo placement | 854 | 96 | 8.9 |
-| orientation normalization | 195 | — | — |
-| **total** | **2,959** | | |
+| CC placement | 230 | 64 | 3.6 |
+| CE placement | 365 | 96 | 3.8 |
+| CC orientation | 41 | — | — |
+| EC placement | 723 | 96 | 7.5 |
+| EEa placement | 322 | 48 | 6.7 |
+| EEo placement | 730 | 96 | 7.6 |
+| orientation normalization | 184 | — | — |
+| **total** | **2,598** | | |
 
 The edge classes cost twice what the corner classes do for one structural reason: corner tools only have to be pure *on the corner classes* — they run first and may scramble edge regions freely — which the `[slice, conjugated-slice]` construction achieves in 8 atoms. Edge tools run last and must be pure on all 400 cells, which needs the 16-atom interchange. Reversing the phase order does not help: the 4-atom `[frame, E1/slab]` seeds are already corner-safe, so edge tools gain nothing from being allowed to disturb corners.
 
@@ -142,12 +156,14 @@ npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --lengt
 
 ## Limitations and future work
 
-- **Solution length.** Now ~3,050 moves for deep scrambles, and the easy levers are spent. What was measured and ruled out:
-  - *Better cycle choice* — at 2.00–2.14 cells per tool the solver is within a few percent of the `(n − c)/2` bound for 3-cycle methods (above). No room left.
+- **Solution length.** Now ~2,700 moves for deep scrambles. The next lever, in order of expected value:
+  - *Cycle-aware target selection* — the placement loop takes the first unsolved cell and asks what fits it. Wide tools land 4–6 cells only when the state's permutation agrees with them across their whole support, which is luck under the current order. Choosing the target to match an available wide tool — following the state's cycle structure rather than site order — is what would push 2.3–2.9 cells per tool toward the 4–6 the tools are capable of.
+  - *Non-isolating openings* — 3-cycles exist to protect already-solved cells, but at the start of a phase almost nothing is solved, so far more powerful tools (a single slice permutes ~44 cells) could do the bulk of the work before commutators finish the job: the twisty-puzzle analogue of block-building before last-layer algorithms.
+
+  What was measured and ruled out:
   - *Shorter edge templates* — `research/scratch/l2-short-tools.ts` and `l2-short-tools2.ts` swept commutator shapes `[A,B]` with `|A|+|B| ≤ 3` (word lengths 4 and 6) over ~1M candidates and found **no** pure 3-cycles at all, and 8-atom seed products only on `EEa`. Wiring those `EEa` tools in cut that phase by 8% while tripling the library build, so they are deliberately left out.
+  - *4-cycle tools* — impossible, by parity (see above).
   - *Macro pre-alignment* — a majority-vote block assignment recovers only ~99/400 cells at scramble length 50 and ~87/400 at 100 (`l2-cost-profile.ts`), so there is little coherent block structure left to exploit. It would help short scrambles only.
   - *Peephole* — adjacent same-target merging is worth 2.6%; a commutation-aware rewriter would add a few percent more at most.
-
-  The remaining paradigm-level idea is to stop insisting on isolation early: 3-cycles exist to protect already-solved cells, but at the start of a phase almost nothing is solved, so far more powerful non-isolating tools (a single slice permutes ~44 cells) could do the bulk of the work before commutators finish the job — the twisty-puzzle analogue of block-building before last-layer algorithms.
 - **`CC`/`CE` orbit-pair fixers** are chosen greedily from the F₂ solution; choosing fixers that also reduce placement distance would shave moves.
 - **Level 3+**: the same class/orbit analysis applies one fractal step up; the corner-safety lemma generalizes (depth-1 extensions never touch corner-block regions at any level), suggesting a recursive reduction tower. The first rung exists: the [Level 3 block-quotient solver](level3-block-quotient-solver.md) quotients Level 3 by its mid-blocks onto a Level 2 puzzle and delegates the macro solve to *this* solver, so any improvement here carries to Level 3 one-for-one. What is still missing at Level 3 is the cell-level reduction that repairs scale-1 slices and depth-2.5 slabs — the direct analogue of this document.

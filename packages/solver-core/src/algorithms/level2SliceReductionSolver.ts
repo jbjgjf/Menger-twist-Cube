@@ -17,11 +17,11 @@ import { emitSolverDebug } from '../debug';
 
 const solverId = 'level2-slice-reduction';
 const solverName = 'level-2-slice-reduction-commutator';
-const solverVersion = '0.2.0';
+const solverVersion = '0.3.0';
 const primaryComplexityEstimate =
-  'One-time commutator tool-library construction (~3s), then per solve: O(orbits) parity normalization, ' +
-  '~180 conjugated 3-cycle placements found by pair-BFS over <=9120 states each (each landing two cells), ' +
-  'and a potential-descent twist cleanup';
+  'One-time commutator tool-library construction (~5s), then per solve: O(orbits) parity normalization, ' +
+  '~160 conjugated pure-permutation placements found by pair-BFS over <=9120 states each (3-, 5- and double ' +
+  '3-cycles, each landing 2 to 6 cells), and a potential-descent twist cleanup';
 
 /*
  * Level 2 slice-reduction solver.
@@ -32,8 +32,9 @@ const primaryComplexityEstimate =
  *
  *   0. fast path: block-rigid states are delegated to the block-quotient solver
  *   1. orbit parity normalization (F2 linear system over quarter-turn parity vectors)
- *   2. corner-block cell placement: CC then CE, via conjugated pure 3-cycle commutators
- *      (each 3-cycle is aimed to land two cells at once — see `findPlacement`)
+ *   2. corner-block cell placement: CC then CE, via conjugated pure commutators
+ *      (3-cycles, 5-cycles and double 3-cycles, scored by how many cells each
+ *      actually lands rather than by aiming a single one — see `findPlacement`)
  *   3. corner-block corner-cell orientation (CC twist commutators; may disturb edge regions)
  *   4. edge-block cell placement: EC, EEa, EEo (EC orientation is position-determined)
  *   5. edge-cell orientation normalization: E2 rolls + twist commutators, potential descent
@@ -129,7 +130,30 @@ interface Atom {
   moved: number[];
 }
 
+/**
+ * A pure tool: it permutes `src` onto `dst` inside one piece class and leaves
+ * every other cell — position *and* orientation — untouched.
+ *
+ * The same 16-atom interchange words that yield 3-cycles also yield 5-cycles,
+ * double 3-cycles, 7-cycles and 4+4s (see `research/scratch/l2-longer-cycles.ts`),
+ * and those land 4 or 6 cells for the same word length instead of 2. So a
+ * template is stored as a general permutation of its support rather than as a
+ * 3-cycle, and the placement search scores candidates by how many cells they
+ * actually land.
+ *
+ * No odd permutation can appear here: every commutator is even, which is also
+ * why a bare 4-cycle tool does not exist at any length.
+ */
 interface Template {
+  word: Atom[];
+  src: number[]; // sites whose content moves
+  dst: number[]; // dst[k] = where the content at src[k] ends up
+  rots: number[]; // rotation applied to the content coming from src[k]
+  cls: PieceClass;
+}
+
+/** The support-3 special case, kept separately because twister construction needs it. */
+interface CycleTemplate {
   word: Atom[];
   cycle: [number, number, number]; // content at cycle[0] -> cycle[1] -> cycle[2] -> cycle[0]
   rots: [number, number, number];
@@ -150,7 +174,7 @@ interface Library {
   frameAtoms: Atom[];
   posAtoms: Atom[];
   e2Atoms: Atom[];
-  byPair: Map<number, Map<number, Template[]>>;
+  byPair: Map<number, Template[]>;
   twisterBySiteRot: Map<number, Twister[]>;
   twisterByPair: Map<number, Array<{ wa: number; wb: number; tw: Twister }>>;
   orbitIndexOfSite: Int16Array;
@@ -291,29 +315,45 @@ const buildLibrary = (): Library => {
   const inverseWord = (word: Atom[]): Atom[] => [...word].reverse().map(inverseAtom);
   const commutatorWord = (a: Atom[], b: Atom[]): Atom[] => [...a, ...b, ...inverseWord(a), ...inverseWord(b)];
 
-  // --- 3-cycle templates ---
+  // --- pure templates: 3-cycles and the longer even permutations alongside them ---
+  const maxTemplateSupport = 8;
   const templates: Template[] = [];
+  const cycleTemplates: CycleTemplate[] = [];
   const addTemplateIfPure = (word: Atom[], scope: 'edge' | 'corner') => {
     const action = actionOfWord(word);
     const pos: number[] = [];
     for (let i = 0; i < N; i += 1) {
       if (action.perm[i] !== i && (scope === 'edge' || isCorner(i))) pos.push(i);
-      if (pos.length > 3) return;
+      if (pos.length > maxTemplateSupport) return;
     }
-    if (pos.length !== 3) return;
-    const [a] = pos as [number, number, number];
-    const cls = siteClasses[a]!;
+    if (pos.length < 3) return;
+    const cls = siteClasses[pos[0]!]!;
     if (pos.some((s) => siteClasses[s] !== cls)) return;
-    if (action.perm[action.perm[a]!] === a) return;
     if (scope === 'edge') {
       for (let i = 0; i < N; i += 1) if (action.perm[i] === i && action.rot[i] !== ROT_ID) return;
     } else {
       for (let i = 0; i < N; i += 1) if (isCorner(i) && action.perm[i] === i && action.rot[i] !== ROT_ID) return;
     }
-    const t1 = a;
-    const t2 = action.perm[t1]!;
-    const t3 = action.perm[t2]!;
-    templates.push({ word, cycle: [t1, t2, t3], rots: [action.rot[t1]!, action.rot[t2]!, action.rot[t3]!], cls });
+    templates.push({
+      word,
+      src: pos,
+      dst: pos.map((s) => action.perm[s]!),
+      rots: pos.map((s) => action.rot[s]!),
+      cls,
+    });
+    if (pos.length === 3) {
+      const t1 = pos[0]!;
+      const t2 = action.perm[t1]!;
+      const t3 = action.perm[t2]!;
+      if (t3 !== t1 && action.perm[t3] === t1) {
+        cycleTemplates.push({
+          word,
+          cycle: [t1, t2, t3],
+          rots: [action.rot[t1]!, action.rot[t2]!, action.rot[t3]!],
+          cls,
+        });
+      }
+    }
   };
 
   // edge classes: interchange pairs of small-support [frame, E1/slab] commutators
@@ -356,12 +396,12 @@ const buildLibrary = (): Library => {
       const w1 = seeds[i1]!;
       const partners = new Set<number>();
       for (const s of w1.support) for (const j of siteToSeeds.get(s) ?? []) if (j > i1) partners.add(j);
+      // Seeds sharing exactly one site interchange into a 3-cycle; other
+      // overlaps give 5-cycles, double 3-cycles and 4+4s from the same 16-atom
+      // word, landing twice or three times as many cells. `addTemplateIfPure`
+      // keeps whichever shape comes out, so no overlap count is filtered here.
       for (const j of partners) {
-        const w2 = seeds[j]!;
-        let shared = 0;
-        for (const s of w1.support) if (w2.support.includes(s)) shared += 1;
-        if (shared !== 1) continue;
-        addTemplateIfPure(commutatorWord(w1.atoms, w2.atoms), 'edge');
+        addTemplateIfPure(commutatorWord(w1.atoms, seeds[j]!.atoms), 'edge');
       }
     }
   }
@@ -401,33 +441,28 @@ const buildLibrary = (): Library => {
     }
   }
 
-  // ordered-pair index (t1 -> t2), nested by t3 for aux-site diversity
-  const byPair = new Map<number, Map<number, Template[]>>();
-  for (const t of templates) {
-    const [a, b, c] = t.cycle;
-    const [ra, rb, rc] = t.rots;
-    const inv = inverseWord(t.word);
-    const variants: Template[] = [
-      { word: t.word, cls: t.cls, cycle: [a, b, c], rots: [ra, rb, rc] },
-      { word: t.word, cls: t.cls, cycle: [b, c, a], rots: [rb, rc, ra] },
-      { word: t.word, cls: t.cls, cycle: [c, a, b], rots: [rc, ra, rb] },
-      { word: inv, cls: t.cls, cycle: [a, c, b], rots: [rotInv[ra]!, rotInv[rc]!, rotInv[rb]!] },
-      { word: inv, cls: t.cls, cycle: [c, b, a], rots: [rotInv[rc]!, rotInv[rb]!, rotInv[ra]!] },
-      { word: inv, cls: t.cls, cycle: [b, a, c], rots: [rotInv[rb]!, rotInv[ra]!, rotInv[rc]!] },
-    ];
-    for (const v of variants) {
-      const key = pairKey(v.cycle[0], v.cycle[1]);
-      let byT3 = byPair.get(key);
-      if (!byT3) {
-        byT3 = new Map();
-        byPair.set(key, byT3);
-      }
-      const list = byT3.get(v.cycle[2]) ?? [];
-      if (list.length < 6) {
-        list.push(v);
-        byT3.set(v.cycle[2], list);
-      }
+  // Ordered-pair index: a template is filed under every "content at p -> q" it
+  // offers, in both directions. Wide tools are filed first so they win the
+  // per-pair cap — a 5-cycle lands twice what a 3-cycle does for the same word.
+  const templatesPerPair = 24;
+  const byPair = new Map<number, Template[]>();
+  const fileTemplate = (t: Template) => {
+    for (let k = 0; k < t.src.length; k += 1) {
+      const key = pairKey(t.src[k]!, t.dst[k]!);
+      const list = byPair.get(key);
+      if (!list) byPair.set(key, [t]);
+      else if (list.length < templatesPerPair) list.push(t);
     }
+  };
+  for (const t of [...templates].sort((a, b) => b.src.length - a.src.length)) {
+    fileTemplate(t);
+    fileTemplate({
+      word: inverseWord(t.word),
+      src: t.dst,
+      dst: t.src,
+      rots: t.rots.map((r) => rotInv[r]!),
+      cls: t.cls,
+    });
   }
 
   // --- twisters (position-identity words with small rotation support) ---
@@ -469,8 +504,8 @@ const buildLibrary = (): Library => {
   };
   {
     // same-ordered-cycle variant pairs: T_i · T_j^-1 is position-identity, rot inv(rj_k)·ri_k at cycle[k]
-    const byCycle = new Map<string, Template[]>();
-    for (const t of templates) {
+    const byCycle = new Map<string, CycleTemplate[]>();
+    for (const t of cycleTemplates) {
       const key = t.cycle.join(',');
       const l = byCycle.get(key) ?? [];
       if (l.length < 10) l.push(t);
@@ -488,7 +523,7 @@ const buildLibrary = (): Library => {
       }
     }
     // [E2, T]: roll at the E2 cell, inverse-conjugated roll at its cycle predecessor
-    for (const t of templates) {
+    for (const t of cycleTemplates) {
       if (t.cls !== 'EEa' && t.cls !== 'EEo') continue;
       for (const e2 of e2Atoms) {
         const a = e2.moved[0]!;
@@ -585,7 +620,7 @@ const buildLibrary = (): Library => {
     parityGenerators,
     buildMs: performance.now() - start,
   };
-  emitSolverDebug(solverId, `tool library built in ${Math.round(libraryCache.buildMs)}ms: ${templates.length} 3-cycle templates, ${seenTwisterProfiles.size} twisters, ${parityGenerators.length} parity generators`);
+  emitSolverDebug(solverId, `tool library built in ${Math.round(libraryCache.buildMs)}ms: ${templates.length} pure templates (${cycleTemplates.length} of them 3-cycles), ${seenTwisterProfiles.size} twisters, ${parityGenerators.length} parity generators`);
   return libraryCache;
 };
 
@@ -698,16 +733,14 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
   const pairPlacementExtraDepth = 2;
 
   // Exact orientation of the primary cell outranks everything (it is what keeps
-  // the twist phase cheap), then cell count, then the second cell's orientation.
-  interface Placement { word: Atom[]; perfect: boolean; solved: number; secondPerfect: boolean }
+  // the twist phase cheap), then the number of cells the tool lands, then how
+  // many of those land already oriented.
+  interface Placement { word: Atom[]; perfect: boolean; solved: number; landedOriented: number }
   const placementRank = (p: Placement): number =>
-    (p.perfect ? 8 : 0) + p.solved * 2 + (p.secondPerfect ? 1 : 0);
+    (p.perfect ? 1000 : 0) + p.solved * 10 + p.landedOriented;
 
-  const imageUnder = (word: Atom[], site: number): number => {
-    let s = site;
-    for (const a of word) if (a.affected[s]) s = a.perm[s]!;
-    return s;
-  };
+  /** A tool this wide is worth taking immediately rather than searching on. */
+  const excellentPlacement = 3;
 
   const findPlacement = (
     x: number,
@@ -715,7 +748,6 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
     pieceRot: number,
     setupAlphabet: Atom[],
     maxDepth: number,
-    preferredZ: number,
   ): Placement | null => {
     const startKey = pairKey(x, s);
     const visited = new Map<number, { parent: number; atom: Atom | null }>();
@@ -737,28 +769,45 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
     };
     for (let depth = 0; depth <= maxDepth && depth <= deadline; depth += 1) {
       for (const key of frontier) {
-        const byT3 = byPair.get(key);
-        if (!byT3) continue;
+        const list = byPair.get(key);
+        if (!list) continue;
         const setup = reconstructSetup(key);
         const invSetup = inverseWord(setup);
 
+        // Score a template by what it actually does to the current state: every
+        // cell it carries home counts, not just the one being aimed at. This is
+        // what lets a 5-cycle or a double 3-cycle earn its keep over a 3-cycle
+        // of the same length.
         const consider = (t: Template): Placement | null => {
-          const z = preimageUnder(setup, t.cycle[2]);
-          if (posProtected[z] || z === x || z === s) return null;
+          let solved = 0;
+          let aimed = false;
+          for (let k = 0; k < t.src.length; k += 1) {
+            const from = preimageUnder(setup, t.src[k]!);
+            const to = preimageUnder(setup, t.dst[k]!);
+            if (posProtected[from] && to !== from) return null;
+            if (from === x && to === s) aimed = true;
+            if (st.pieceAtSite[from] === to) solved += 1;
+          }
+          if (!aimed) return null;
           const word = [...setup, ...t.word, ...invSetup];
           const [endSite, endRot] = tracePiece(x, pieceRot, word);
           if (endSite !== s) return null;
-          if (z !== preferredZ) return { word, perfect: endRot === ROT_ID, solved: 1, secondPerfect: false };
-          // The cell riding along from the target to its own home: landing it
-          // already oriented saves the twist phase a tool later on.
-          const rider = st.pieceAtSite[s]!;
-          const [riderSite, riderRot] = tracePiece(s, st.rotOfPiece[rider]!, word);
-          return {
-            word,
-            perfect: endRot === ROT_ID,
-            solved: st.pieceAtSite[z] === x ? 3 : 2,
-            secondPerfect: riderSite === rider && riderRot === ROT_ID,
-          };
+          const perfect = endRot === ROT_ID;
+          // Orientation bookkeeping costs a trace per moved cell, so skip it
+          // for candidates that cannot win even with a perfect one.
+          const incumbent = found.best;
+          const ceiling = (perfect ? 1000 : 0) + solved * 10 + t.src.length;
+          if (incumbent && ceiling < placementRank(incumbent)) return null;
+          let landedOriented = 0;
+          if (solved > 1) {
+            for (let k = 0; k < t.src.length; k += 1) {
+              const from = preimageUnder(setup, t.src[k]!);
+              const piece = st.pieceAtSite[from]!;
+              const [site, rot] = tracePiece(from, st.rotOfPiece[piece]!, word);
+              if (site === piece && rot === ROT_ID) landedOriented += 1;
+            }
+          }
+          return { word, perfect, solved, landedOriented };
         };
         const offer = (candidate: Placement | null): boolean => {
           if (!candidate) return false;
@@ -768,25 +817,15 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
             placementRank(candidate) > placementRank(incumbent) ||
             (placementRank(candidate) === placementRank(incumbent) && candidate.word.length < incumbent.word.length);
           if (beats) found.best = candidate;
-          return candidate.perfect && candidate.solved > 1;
+          return candidate.perfect && candidate.solved >= excellentPlacement;
         };
 
-        // The two-cell placement needs one specific third site, so it is a
-        // direct lookup rather than a scan of every template on this pair.
-        if (preferredZ >= 0) {
-          for (const t of byT3.get(imageUnder(setup, preferredZ)) ?? []) {
-            if (offer(consider(t))) return found.best;
-          }
-        }
-        for (const [, list] of byT3) {
-          for (const t of list) {
-            if (offer(consider(t))) return found.best;
-          }
+        for (const t of list) {
+          if (offer(consider(t))) return found.best;
         }
       }
-      // Once a one-cell placement exists, spend only a couple more levels
-      // looking for a two-cell one — beyond that the setup costs more than the
-      // tool it would save.
+      // Once some placement exists, spend only a couple more levels looking for
+      // a wider one — beyond that the setup costs more than the tool it saves.
       if (found.best?.perfect && deadline === maxDepth) deadline = Math.min(maxDepth, depth + pairPlacementExtraDepth);
       if (depth === maxDepth) break;
       const next: number[] = [];
@@ -997,11 +1036,7 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
     let cellsLanded = 0;
     const trySolveSite = (s: number): boolean => {
       const x = st.siteOfPiece[s]!;
-      // The cell currently occupying the target has a home of its own; asking
-      // the 3-cycle to drop it there turns one tool into two placements.
-      const occupant = st.pieceAtSite[s]!;
-      const preferredZ = occupant !== s && occupant !== x && !posProtected[occupant] ? occupant : -1;
-      const placement = findPlacement(x, s, st.rotOfPiece[s]!, setupAlphabet, maxDepth, preferredZ);
+      const placement = findPlacement(x, s, st.rotOfPiece[s]!, setupAlphabet, maxDepth);
       if (!placement) return false;
       if (!protectedOk(placement.word)) return false;
       emit(placement.word);
