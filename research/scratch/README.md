@@ -24,6 +24,16 @@ Behind [`docs/algorithms/level3-block-quotient-solver.md`](../../docs/algorithms
 
 Behind [`docs/algorithms/level2-slice-reduction-solver.md`](../../docs/algorithms/level2-slice-reduction-solver.md).
 
+Solution-length work (v0.2.0):
+
+- `l2-cost-profile.ts` — where a solve's moves actually go: per-phase atom
+  counts, plus how much block structure survives a scramble (the input to
+  judging whether a macro pre-alignment pass would pay for itself).
+- `l2-short-tools.ts`, `l2-short-tools2.ts` — the search for shorter edge-class
+  3-cycles. Together they rule out pure 3-cycles at word lengths 4 and 6 over
+  ~1M commutator candidates, and find 8-atom ones only on `EEa`. This is why
+  the edge phases still use the 16-atom interchange.
+
 - `sim.ts` — shared harness: integer simulator of the Level 2 puzzle (400 sites,
   24 exact rotation matrices, every legal move as a permutation + rotation),
   validated move-for-move against `@menger/engine`.

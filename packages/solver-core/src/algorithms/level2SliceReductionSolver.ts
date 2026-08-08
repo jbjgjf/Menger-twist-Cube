@@ -17,10 +17,11 @@ import { emitSolverDebug } from '../debug';
 
 const solverId = 'level2-slice-reduction';
 const solverName = 'level-2-slice-reduction-commutator';
-const solverVersion = '0.1.0';
+const solverVersion = '0.2.0';
 const primaryComplexityEstimate =
   'One-time commutator tool-library construction (~3s), then per solve: O(orbits) parity normalization, ' +
-  '~360 conjugated 3-cycle placements found by pair-BFS over <=9120 states each, and a potential-descent twist cleanup';
+  '~180 conjugated 3-cycle placements found by pair-BFS over <=9120 states each (each landing two cells), ' +
+  'and a potential-descent twist cleanup';
 
 /*
  * Level 2 slice-reduction solver.
@@ -32,6 +33,7 @@ const primaryComplexityEstimate =
  *   0. fast path: block-rigid states are delegated to the block-quotient solver
  *   1. orbit parity normalization (F2 linear system over quarter-turn parity vectors)
  *   2. corner-block cell placement: CC then CE, via conjugated pure 3-cycle commutators
+ *      (each 3-cycle is aimed to land two cells at once — see `findPlacement`)
  *   3. corner-block corner-cell orientation (CC twist commutators; may disturb edge regions)
  *   4. edge-block cell placement: EC, EEa, EEo (EC orientation is position-determined)
  *   5. edge-cell orientation normalization: E2 rolls + twist commutators, potential descent
@@ -346,6 +348,10 @@ const buildLibrary = (): Library => {
         siteToSeeds.set(s, l);
       }
     });
+    // Plain products of two overlapping seeds are occasionally pure 3-cycles at
+    // half the interchange length (8 atoms against 16), but only ever on EEa,
+    // and threading them through cut EEa by just 8% while tripling the library
+    // build. Not worth it — see docs/algorithms/level2-slice-reduction-solver.md.
     for (let i1 = 0; i1 < seeds.length; i1 += 1) {
       const w1 = seeds[i1]!;
       const partners = new Set<number>();
@@ -634,7 +640,11 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
     pieceAtSite: state.pieceAtSite.slice(),
     rotOfPiece: state.rotOfPiece.slice(),
   });
-  const markPhase = (phase: string, observation: string) => phaseBreaks.push({ phase, observation, moveIndex: moves.length });
+  const markPhase = (phase: string, observation: string) => {
+    const previous = phaseBreaks[phaseBreaks.length - 1]?.moveIndex ?? 0;
+    emitSolverDebug(solverId, `phase "${phase}": ${moves.length - previous} atoms (running total ${moves.length})`);
+    phaseBreaks.push({ phase, observation, moveIndex: moves.length });
+  };
 
   const tracePiece = (site: number, rot: number, w: Atom[]): [number, number] => {
     let s = site;
@@ -674,18 +684,46 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
   };
 
   // --- conjugated 3-cycle placement: BFS over ordered pairs of class sites ---
+  //
+  // A 3-cycle moves three cells, so a placement that only aims the first of
+  // them wastes two thirds of the tool. The third site is not free to choose
+  // outright, but it can be *asked for*: send the cell now sitting on the
+  // target to its own home, and one tool lands two cells (three when the
+  // permutation's cycle happens to close). Since a tool costs ~22 atoms and one
+  // extra BFS level costs 2, it pays to look a few levels deeper for a
+  // two-cell placement before settling for a one-cell one.
+  //
+  // Ranking keeps exact orientation ahead of cell count, so this never trades
+  // away the orientation-first property that keeps the twist phase cheap.
+  const pairPlacementExtraDepth = 2;
+
+  // Exact orientation of the primary cell outranks everything (it is what keeps
+  // the twist phase cheap), then cell count, then the second cell's orientation.
+  interface Placement { word: Atom[]; perfect: boolean; solved: number; secondPerfect: boolean }
+  const placementRank = (p: Placement): number =>
+    (p.perfect ? 8 : 0) + p.solved * 2 + (p.secondPerfect ? 1 : 0);
+
+  const imageUnder = (word: Atom[], site: number): number => {
+    let s = site;
+    for (const a of word) if (a.affected[s]) s = a.perm[s]!;
+    return s;
+  };
+
   const findPlacement = (
     x: number,
     s: number,
     pieceRot: number,
     setupAlphabet: Atom[],
     maxDepth: number,
-  ): { word: Atom[]; perfect: boolean } | null => {
+    preferredZ: number,
+  ): Placement | null => {
     const startKey = pairKey(x, s);
     const visited = new Map<number, { parent: number; atom: Atom | null }>();
     visited.set(startKey, { parent: -1, atom: null });
     let frontier: number[] = [startKey];
-    let fallback: { word: Atom[]; perfect: boolean } | null = null;
+    // Held in an object so the `offer` closure below can update it.
+    const found: { best: Placement | null } = { best: null };
+    let deadline = maxDepth;
     const reconstructSetup = (key: number): Atom[] => {
       const out: Atom[] = [];
       let k = key;
@@ -697,24 +735,59 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
       }
       return out.reverse();
     };
-    for (let depth = 0; depth <= maxDepth; depth += 1) {
+    for (let depth = 0; depth <= maxDepth && depth <= deadline; depth += 1) {
       for (const key of frontier) {
         const byT3 = byPair.get(key);
         if (!byT3) continue;
         const setup = reconstructSetup(key);
         const invSetup = inverseWord(setup);
+
+        const consider = (t: Template): Placement | null => {
+          const z = preimageUnder(setup, t.cycle[2]);
+          if (posProtected[z] || z === x || z === s) return null;
+          const word = [...setup, ...t.word, ...invSetup];
+          const [endSite, endRot] = tracePiece(x, pieceRot, word);
+          if (endSite !== s) return null;
+          if (z !== preferredZ) return { word, perfect: endRot === ROT_ID, solved: 1, secondPerfect: false };
+          // The cell riding along from the target to its own home: landing it
+          // already oriented saves the twist phase a tool later on.
+          const rider = st.pieceAtSite[s]!;
+          const [riderSite, riderRot] = tracePiece(s, st.rotOfPiece[rider]!, word);
+          return {
+            word,
+            perfect: endRot === ROT_ID,
+            solved: st.pieceAtSite[z] === x ? 3 : 2,
+            secondPerfect: riderSite === rider && riderRot === ROT_ID,
+          };
+        };
+        const offer = (candidate: Placement | null): boolean => {
+          if (!candidate) return false;
+          const incumbent = found.best;
+          const beats =
+            !incumbent ||
+            placementRank(candidate) > placementRank(incumbent) ||
+            (placementRank(candidate) === placementRank(incumbent) && candidate.word.length < incumbent.word.length);
+          if (beats) found.best = candidate;
+          return candidate.perfect && candidate.solved > 1;
+        };
+
+        // The two-cell placement needs one specific third site, so it is a
+        // direct lookup rather than a scan of every template on this pair.
+        if (preferredZ >= 0) {
+          for (const t of byT3.get(imageUnder(setup, preferredZ)) ?? []) {
+            if (offer(consider(t))) return found.best;
+          }
+        }
         for (const [, list] of byT3) {
           for (const t of list) {
-            const z = preimageUnder(setup, t.cycle[2]);
-            if (posProtected[z] || z === x || z === s) continue;
-            const word = [...setup, ...t.word, ...invSetup];
-            const [endSite, endRot] = tracePiece(x, pieceRot, word);
-            if (endSite !== s) continue;
-            if (endRot === ROT_ID) return { word, perfect: true };
-            if (!fallback) fallback = { word, perfect: false };
+            if (offer(consider(t))) return found.best;
           }
         }
       }
+      // Once a one-cell placement exists, spend only a couple more levels
+      // looking for a two-cell one — beyond that the setup costs more than the
+      // tool it would save.
+      if (found.best?.perfect && deadline === maxDepth) deadline = Math.min(maxDepth, depth + pairPlacementExtraDepth);
       if (depth === maxDepth) break;
       const next: number[] = [];
       for (const key of frontier) {
@@ -733,7 +806,7 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
       frontier = next;
       if (frontier.length === 0) break;
     }
-    return fallback;
+    return found.best;
   };
 
   // --- conjugated twist application: BFS over (site, accumulated rotation) ---
@@ -920,13 +993,21 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
 
   const positionPhase = (cls: PieceClass, setupAlphabet: Atom[], maxDepth: number): boolean => {
     const sites = classSites.get(cls)!;
+    let tools = 0;
+    let cellsLanded = 0;
     const trySolveSite = (s: number): boolean => {
       const x = st.siteOfPiece[s]!;
-      const placement = findPlacement(x, s, st.rotOfPiece[s]!, setupAlphabet, maxDepth);
+      // The cell currently occupying the target has a home of its own; asking
+      // the 3-cycle to drop it there turns one tool into two placements.
+      const occupant = st.pieceAtSite[s]!;
+      const preferredZ = occupant !== s && occupant !== x && !posProtected[occupant] ? occupant : -1;
+      const placement = findPlacement(x, s, st.rotOfPiece[s]!, setupAlphabet, maxDepth, preferredZ);
       if (!placement) return false;
       if (!protectedOk(placement.word)) return false;
       emit(placement.word);
       posProtected[s] = 1;
+      tools += 1;
+      cellsLanded += placement.solved;
       return true;
     };
     let attempts = 0;
@@ -961,6 +1042,10 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
       }
     }
     for (const s of sites) posProtected[s] = 1;
+    emitSolverDebug(
+      solverId,
+      `${cls}: ${tools} tool(s) landed ${cellsLanded} cell(s) (${(cellsLanded / Math.max(1, tools)).toFixed(2)} per tool)`,
+    );
     return true;
   };
 

@@ -84,7 +84,11 @@ Each phase has one goal and uses only tools that cannot undo previous phases:
 
 Details that make the phases robust:
 
-- **Orientation-first placement.** When placing a cell, the pair-BFS prefers a template variant that lands the cell *exactly oriented*, so phase 7 starts with only a handful of residues.
+- **Two cells per tool.** A 3-cycle moves three cells, so aiming only the first wastes two thirds of the tool. The third site is not free to choose outright, but it can be *asked for*: send the cell currently sitting on the target to its own home. The pair-BFS looks that specific third site up directly (`byPair` is indexed by ordered pair and then by third site), and falls back to any admissible third site when no such template exists. Measured yield: **2.00–2.14 cells per tool** across all five classes.
+
+  This is close to the ceiling for any 3-cycle method. Solving a permutation of `n` unsolved cells in `c` cycles needs `(n − c)/2` 3-cycles, and a random permutation of ~96 cells has `c ≈ ln 96 ≈ 4.6` cycles, so the bound is ≈ 2.13 cells per tool. Phase-by-phase the solver lands 2.00 (EC), 2.00 (EEa), 1.98 (EEo), 2.07 (CE), 2.14 (CC) — within a few percent of it. Further gains have to come from shorter tools or a different paradigm, not from better cycle choice.
+
+- **Orientation-first placement.** When placing a cell, the pair-BFS prefers a template variant that lands the cell *exactly oriented*, so phase 7 starts with only a handful of residues. Ranking is strictly orientation-first, then cell count, then the second cell's orientation, then word length — so the two-cell preference never trades away the orientation property that keeps phase 7 cheap. Because a tool costs ~20 atoms and one extra BFS level costs 2, the search spends up to two extra levels looking for a two-cell placement before settling for a one-cell one.
 - **Aux-cell discipline.** A 3-cycle placing cell `x → s` also disturbs a third cell `z`; the search only accepts candidates whose `z` is not yet solved. If the last few cells form a configuration with no matching template triple, the solver deterministically *sacrifices* one solved cell of the class to reshape the configuration and retries (bounded).
 - **Potential-descent twisting.** Phase 7 assigns each cell a potential (0 solved / 1 removable by one `E2` roll / 2 otherwise) and only applies twist tools that strictly decrease the total. This handles `EEa`'s hard case — two diagonal-flip residues, which no single tool can fix — by a joint pair application (`[E2-180, T]` carries face-180 twists at both cells: 2+2 → 1+1), then `E2` rolls finish. Strict descent guarantees termination.
 
@@ -98,17 +102,37 @@ Details that make the phases robust:
 ## Complexity and measured results
 
 - One-time library build: ~2.5–3 s (interchange search over ~2.8k seed commutators + 5.2k conjugate pairs; cached per process, pre-warmable via `warmLevel2SliceReductionSolver()`).
-- Per solve: parity `O(400)` + F₂ solve over ≤ ~20 generator vectors; ~200–360 placements, each a pair-BFS over ≤ 9120 states; twist descent with single/pair BFS. Adjacent same-target turns are peephole-merged before output.
+- Per solve: parity `O(400)` + F₂ solve over ≤ ~20 generator vectors; ~180 placements, each a pair-BFS over ≤ 9120 states; twist descent with single/pair BFS. Adjacent same-target turns are peephole-merged before output (worth ~2.6%).
 
-Measured (M-series laptop, 10 seeded scrambles each, full generator set via the algorithm's `scrambleMovePool`):
+Measured (M-series laptop, 10 seeded scrambles each, full generator set via the algorithm's `scrambleMovePool`), excluding the one-time library build:
 
-| Scramble length | Success | Avg runtime | Avg solution length |
-| --- | --- | --- | --- |
-| 20 | 100% | ~0.55 s | ~4,200 moves |
-| 50 | 100% | ~0.94 s | ~4,500 moves |
-| 100 | 100% | ~1.6 s | ~4,600 moves |
+| Scramble length | Success | Avg runtime | Avg solution length | v0.1.0 length |
+| --- | --- | --- | --- | --- |
+| 20 | 100% | ~0.45 s | ~2,698 moves | ~4,200 |
+| 50 | 100% | ~0.49 s | ~3,031 moves | ~4,500 |
+| 100 | 100% | ~0.51 s | ~3,057 moves | ~4,600 |
+| 200 | 100% | ~0.57 s | ~3,067 moves | — |
+| 300 | 100% | ~0.64 s | ~3,082 moves | — |
 
-Block-rigid scrambles (the old generator set) take the fast path and return the block-quotient's ~25-move solutions unchanged. The prototype was additionally validated at scramble lengths up to 300 (10/10).
+The last column is v0.1.0, which aimed one cell per 3-cycle; v0.2.0's two-cell placement cut solution length by ~33% and runtime by roughly half. Solution length saturates around 3,050 because past ~50 scramble moves essentially every cell needs placing, and the cost is then just (cells / 2) tools.
+
+Block-rigid scrambles (the old generator set) take the fast path and return the block-quotient's ~25-move solutions unchanged.
+
+Where the moves go, per phase, averaged over 9 runs at lengths 20/50/100 (`research/scratch/l2-cost-profile.ts`):
+
+| Phase | Atoms | Cells | Atoms/cell |
+| --- | ---: | ---: | ---: |
+| orbit parity normalization | 2 | — | — |
+| CC placement | 239 | 64 | 3.7 |
+| CE placement | 374 | 96 | 3.9 |
+| CC orientation | 54 | — | — |
+| EC placement | 852 | 96 | 8.9 |
+| EEa placement | 389 | 48 | 8.1 |
+| EEo placement | 854 | 96 | 8.9 |
+| orientation normalization | 195 | — | — |
+| **total** | **2,959** | | |
+
+The edge classes cost twice what the corner classes do for one structural reason: corner tools only have to be pure *on the corner classes* — they run first and may scramble edge regions freely — which the `[slice, conjugated-slice]` construction achieves in 8 atoms. Edge tools run last and must be pure on all 400 cells, which needs the 16-atom interchange. Reversing the phase order does not help: the 4-atom `[frame, E1/slab]` seeds are already corner-safe, so edge tools gain nothing from being allowed to disturb corners.
 
 Reproduce from the CLI:
 
@@ -118,6 +142,12 @@ npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --lengt
 
 ## Limitations and future work
 
-- **Solution length.** Commutator reduction pays ~20–30 atoms per cell placed; deep scrambles cost ~4–5k moves. Known reductions: solve the *block-rigid quotient* first with a macro pre-alignment (majority-vote block assignment + lifted macro solve) so most cells arrive near home cheaply; batch multiple cycles per setup; stronger peephole/rewriting on the output word.
+- **Solution length.** Now ~3,050 moves for deep scrambles, and the easy levers are spent. What was measured and ruled out:
+  - *Better cycle choice* — at 2.00–2.14 cells per tool the solver is within a few percent of the `(n − c)/2` bound for 3-cycle methods (above). No room left.
+  - *Shorter edge templates* — `research/scratch/l2-short-tools.ts` and `l2-short-tools2.ts` swept commutator shapes `[A,B]` with `|A|+|B| ≤ 3` (word lengths 4 and 6) over ~1M candidates and found **no** pure 3-cycles at all, and 8-atom seed products only on `EEa`. Wiring those `EEa` tools in cut that phase by 8% while tripling the library build, so they are deliberately left out.
+  - *Macro pre-alignment* — a majority-vote block assignment recovers only ~99/400 cells at scramble length 50 and ~87/400 at 100 (`l2-cost-profile.ts`), so there is little coherent block structure left to exploit. It would help short scrambles only.
+  - *Peephole* — adjacent same-target merging is worth 2.6%; a commutation-aware rewriter would add a few percent more at most.
+
+  The remaining paradigm-level idea is to stop insisting on isolation early: 3-cycles exist to protect already-solved cells, but at the start of a phase almost nothing is solved, so far more powerful non-isolating tools (a single slice permutes ~44 cells) could do the bulk of the work before commutators finish the job — the twisty-puzzle analogue of block-building before last-layer algorithms.
 - **`CC`/`CE` orbit-pair fixers** are chosen greedily from the F₂ solution; choosing fixers that also reduce placement distance would shave moves.
 - **Level 3+**: the same class/orbit analysis applies one fractal step up; the corner-safety lemma generalizes (depth-1 extensions never touch corner-block regions at any level), suggesting a recursive reduction tower. The first rung exists: the [Level 3 block-quotient solver](level3-block-quotient-solver.md) quotients Level 3 by its mid-blocks onto a Level 2 puzzle and delegates the macro solve to *this* solver, so any improvement here carries to Level 3 one-for-one. What is still missing at Level 3 is the cell-level reduction that repairs scale-1 slices and depth-2.5 slabs — the direct analogue of this document.
