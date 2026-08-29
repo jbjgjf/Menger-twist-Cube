@@ -3,10 +3,127 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menger Twist Cube</title>
+    <title>Menger Twist Cube — Free Interactive 3D Puzzle</title>
+    <meta
+      name="description"
+      content="Play Menger Twist Cube, a free interactive 3D twisty puzzle inspired by the Menger sponge. Scramble, rotate recursive cube layers, and explore Levels 1–5 in your browser."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="qianyun" />
+    <meta name="msvalidate.01" content="9D0464A234A880DC97A688DBECA4251F" />
+    <meta name="theme-color" content="#090b14" />
+    <meta name="application-name" content="Menger Twist Cube" />
+    <meta name="apple-mobile-web-app-title" content="Menger Cube" />
+    <link rel="canonical" href="https://menger-cube.vercel.app/" />
+    <link rel="alternate" hreflang="en" href="https://menger-cube.vercel.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://menger-cube.vercel.app/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Menger Twist Cube" />
+    <meta property="og:title" content="Menger Twist Cube — Free Interactive 3D Puzzle" />
+    <meta
+      property="og:description"
+      content="Play a recursive Menger-sponge twisty puzzle in 3D. Rotate layers, scramble the cube, and explore five levels directly in your browser."
+    />
+    <meta property="og:url" content="https://menger-cube.vercel.app/" />
+    <meta property="og:image" content="https://menger-cube.vercel.app/og-menger-cube.png" />
+    <meta property="og:image:secure_url" content="https://menger-cube.vercel.app/og-menger-cube.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A colorful recursive Menger-sponge twisty cube floating on a dark background" />
+    <meta property="og:locale" content="en_US" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Menger Twist Cube — Free Interactive 3D Puzzle" />
+    <meta name="twitter:description" content="Scramble and rotate a recursive Menger-sponge twisty puzzle in your browser." />
+    <meta name="twitter:image" content="https://menger-cube.vercel.app/og-menger-cube.png" />
+    <meta name="twitter:image:alt" content="A colorful recursive Menger-sponge twisty cube" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://menger-cube.vercel.app/#website",
+            "url": "https://menger-cube.vercel.app/",
+            "name": "Menger Twist Cube",
+            "description": "A free interactive 3D twisty puzzle inspired by the Menger sponge.",
+            "inLanguage": "en"
+          },
+          {
+            "@type": ["VideoGame", "WebApplication"],
+            "@id": "https://menger-cube.vercel.app/#game",
+            "url": "https://menger-cube.vercel.app/",
+            "name": "Menger Twist Cube",
+            "alternateName": "Menger Cube",
+            "description": "A browser-based 3D puzzle game that generalizes twisty-cube mechanics across recursive Menger-sponge levels.",
+            "image": "https://menger-cube.vercel.app/og-menger-cube.png",
+            "applicationCategory": "GameApplication",
+            "gamePlatform": "Web browser",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires a modern browser with WebGL and JavaScript enabled.",
+            "playMode": "SinglePlayer",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "author": {
+              "@type": "Person",
+              "name": "qianyun"
+            },
+            "inLanguage": "en"
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://menger-cube.vercel.app/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is Menger Twist Cube free?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. The interactive puzzle and solver lab are free to use in a browser, with no sign-up required."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is a Menger sponge?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "A Menger sponge is a three-dimensional fractal created by recursively removing central sub-cubes. This puzzle adds legal twisty-puzzle rotations to that recursive structure."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can the puzzle be solved automatically?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "The Solver Lab runs registered algorithms, replays their moves in 3D, and compares seeded benchmark results."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main style="min-height:100vh;display:grid;place-items:center;padding:2rem;background:#090b14;color:#e5e7eb;font-family:system-ui,sans-serif">
+        <article style="max-width:48rem">
+          <p style="color:#67e8f9;font-weight:700;letter-spacing:.12em;text-transform:uppercase">Interactive 3D puzzle</p>
+          <h1>Menger Twist Cube</h1>
+          <p>Play a free browser-based twisty puzzle inspired by the recursive geometry of the Menger sponge. Rotate layers, scramble the cube, undo moves, and explore puzzle levels from a compact cube to research-scale structures.</p>
+          <p><a href="/keyboard" style="color:#67e8f9">View keyboard controls</a> · <a href="/lab" style="color:#67e8f9">Open the solver lab</a></p>
+        </article>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

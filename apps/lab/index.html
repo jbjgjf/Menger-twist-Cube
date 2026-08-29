@@ -3,10 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menger Solver Lab</title>
+    <title>Menger Cube Solver Lab — Algorithms & Benchmarks</title>
+    <meta name="description" content="Explore Menger Cube solving algorithms, replay solutions move by move, run seeded benchmarks, and compare reproducible results in an interactive 3D research lab." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#020617" />
+    <link rel="canonical" href="https://menger-cube.vercel.app/lab" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Menger Twist Cube" />
+    <meta property="og:title" content="Menger Cube Solver Lab — Algorithms & Benchmarks" />
+    <meta property="og:description" content="Replay solving algorithms in 3D and compare reproducible Menger Cube benchmark results." />
+    <meta property="og:url" content="https://menger-cube.vercel.app/lab" />
+    <meta property="og:image" content="https://menger-cube.vercel.app/og-menger-cube.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://menger-cube.vercel.app/og-menger-cube.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Menger Cube Solver Lab",
+        "url": "https://menger-cube.vercel.app/lab",
+        "description": "An interactive 3D laboratory for Menger Cube solving algorithms, solution playback, and reproducible benchmarks.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Any",
+        "isAccessibleForFree": true,
+        "inLanguage": "en"
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <main style="min-height:100vh;padding:2rem;background:#020617;color:#e2e8f0;font-family:system-ui,sans-serif">
+        <h1>Menger Cube Solver Lab</h1>
+        <p>Run seeded solver benchmarks, inspect algorithm results, and replay Menger Cube solutions move by move in 3D.</p>
+        <p><a href="/" style="color:#67e8f9">Play Menger Twist Cube</a></p>
+      </main>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

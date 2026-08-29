@@ -2,6 +2,18 @@
   "buildCommand": "npm run build && mkdir -p apps/play/dist/lab && cp -R apps/lab/dist/* apps/play/dist/lab/",
   "outputDirectory": "apps/play/dist",
   "installCommand": "npm install",
+  "redirects": [
+    {
+      "source": "/solver",
+      "destination": "/lab",
+      "permanent": true
+    },
+    {
+      "source": "/solver/:path*",
+      "destination": "/lab",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/lab",
@@ -12,20 +24,27 @@
       "destination": "/lab/index.html"
     },
     {
-      "source": "/solver",
-      "destination": "/lab/index.html"
-    },
-    {
-      "source": "/solver/:path*",
-      "destination": "/lab/index.html"
-    },
-    {
       "source": "/keyboard",
-      "destination": "/index.html"
+      "destination": "/keyboard.html"
     },
     {
       "source": "/keyboard/:path*",
-      "destination": "/index.html"
+      "destination": "/keyboard.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/og-menger-cube.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     }
   ]
 }

@@ -1,0 +1,66 @@
+name: Notify search engines
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/play/**'
+      - 'apps/lab/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vercel.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: search-indexing-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Wait for this commit to reach production
+        env:
+          SITE_URL: https://menger-cube.vercel.app
+        run: |
+          for attempt in {1..40}; do
+            deployed_version=$(curl --fail --silent --show-error "$SITE_URL/deployment-version.txt" || true)
+            if [ "$deployed_version" = "$GITHUB_SHA" ]; then
+              echo "Production is running $GITHUB_SHA"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Timed out waiting for Vercel production deployment" >&2
+          exit 1
+
+      - name: Submit updated pages to IndexNow
+        env:
+          INDEXNOW_KEY: eccb9fa8191b518ac67098a0c449a13a
+          SITE_HOST: menger-cube.vercel.app
+        run: |
+          payload=$(jq -n \
+            --arg host "$SITE_HOST" \
+            --arg key "$INDEXNOW_KEY" \
+            --arg keyLocation "https://$SITE_HOST/$INDEXNOW_KEY.txt" \
+            '{
+              host: $host,
+              key: $key,
+              keyLocation: $keyLocation,
+              urlList: [
+                "https://menger-cube.vercel.app/",
+                "https://menger-cube.vercel.app/keyboard",
+                "https://menger-cube.vercel.app/lab"
+              ]
+            }')
+
+          curl --fail-with-body \
+            --request POST \
+            --header 'Content-Type: application/json; charset=utf-8' \
+            --data "$payload" \
+            https://api.indexnow.org/indexnow

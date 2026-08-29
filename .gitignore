@@ -6,3 +6,4 @@ dist/
 *.local
 verification-*.png
 .vercel
+apps/play/public/deployment-version.txt

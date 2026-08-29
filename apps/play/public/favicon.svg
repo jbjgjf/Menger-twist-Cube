@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Menger Cube">
+  <rect width="64" height="64" rx="13" fill="#090b14"/>
+  <path fill="#22d3ee" fill-rule="evenodd" d="M10 10h44v44H10zm12 12v20h20V22zm7 7h6v6h-6z"/>
+  <path fill="#facc15" d="M22 10h20v12H22z"/>
+  <path fill="#ef4444" d="M42 22h12v20H42z"/>
+</svg>

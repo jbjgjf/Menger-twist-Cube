@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://menger-cube.vercel.app/sitemap.xml
