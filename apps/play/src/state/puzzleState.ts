@@ -260,14 +260,14 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         (acc, move) => move.extensionTargetId
           ? applyExtensionRotation(acc, move.extensionTargetId, move.angle, state.puzzle.turnTargetById)
           : applyTwistToCubies(acc, move.frameId, move.angle, state.puzzle.frameById),
-        state.initialCubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
+        state.puzzle.cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
       );
       return {
         ...state,
         puzzle: {
           ...state.puzzle,
           cubies,
-          moveHistory: action.moves,
+          moveHistory: [...state.puzzle.moveHistory, ...action.moves],
           redoStack: [],
         },
       };

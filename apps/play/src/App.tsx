@@ -2,7 +2,6 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
-import KeyboardGuide from './KeyboardGuide';
 import {
   createMove,
   getAffectedCubieIds,
@@ -101,7 +100,7 @@ const randomAngle = (): TwistAngle => {
   return values[Math.floor(Math.random() * values.length)]!;
 };
 
-function PlayApp() {
+export default function PlayApp() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
@@ -218,7 +217,8 @@ function PlayApp() {
 
   const scramble = () => {
     if (state.puzzle.isAnimating) return;
-    const scrambleMoves = Array.from({ length: 14 }).map(() => {
+    const scrambleLength = [0, 20, 40, 60, 100, 150][state.puzzle.level] || 20 * state.puzzle.level;
+    const scrambleMoves = Array.from({ length: scrambleLength }).map(() => {
       const frame = state.puzzle.frames[Math.floor(Math.random() * state.puzzle.frames.length)]!;
       return createMove(frame.id, randomAngle(), state.puzzle.frameById);
     });
@@ -406,7 +406,8 @@ function PlayApp() {
   const playableLevel = isPlayableLevel(state.puzzle.level);
 
   return (
-    <div className="relative h-full w-full">
+    <main className="min-h-full bg-slate-950 text-slate-100">
+    <section className="relative h-screen w-full" aria-labelledby="game-title">
       {playableLevel ? (
         <Scene
           cubies={state.puzzle.cubies}
@@ -467,6 +468,15 @@ function PlayApp() {
         </div>
       )}
 
+      <header className="pointer-events-none absolute left-1/2 top-2 z-10 w-[min(44rem,calc(100vw-12rem))] -translate-x-1/2 text-center sm:top-3">
+        <p className="hidden text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-300/80 sm:block">
+          Interactive recursive 3D puzzle
+        </p>
+        <h1 id="game-title" className="truncate text-sm font-bold tracking-wide text-white drop-shadow-lg sm:text-lg">
+          Menger Twist Cube
+        </h1>
+      </header>
+
       <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-2 sm:p-4">
         <div className="pointer-events-auto flex flex-col items-start gap-2">
           <div className="flex gap-2">
@@ -478,6 +488,12 @@ function PlayApp() {
               className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
             >
               Keyboard
+            </a>
+            <a
+              href="/lab"
+              className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
+            >
+              Solver Lab
             </a>
           </div>
           {controlsOpen && (
@@ -565,11 +581,76 @@ function PlayApp() {
           </div>}
         </div>}
       </div>
-    </div>
-  );
-}
+    </section>
 
-export default function App() {
-  const route = window.location.pathname.replace(/\/+$/, '') || '/';
-  return route === '/keyboard' ? <KeyboardGuide /> : <PlayApp />;
+    <article id="about" className="border-t border-slate-800 bg-slate-950 px-5 py-14 sm:px-8">
+      <div className="mx-auto max-w-5xl">
+        <div className="grid gap-10 lg:grid-cols-[1.35fr_.65fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">About the puzzle</p>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">A twisty cube built from recursive geometry</h2>
+            <p className="mt-5 text-base leading-7 text-slate-300">
+              Menger Twist Cube is a free interactive 3D puzzle inspired by the Menger sponge, a classic fractal formed by
+              repeatedly dividing a cube and removing its central sections. This browser game turns that mathematical idea
+              into a playable twisty puzzle: select a slice or extension block, rotate it by 90 or 180 degrees, and discover
+              how the structure changes across increasingly deep levels.
+            </p>
+            <p className="mt-4 text-base leading-7 text-slate-300">
+              Start with Level 1 to learn the movement system, then move through Levels 2 and 3 for denser recursive targets.
+              Levels 4 and 5 expose research and evaluation data for structures too large for direct manual rendering. Every
+              move follows the same geometry and collision rules used by the project&apos;s solver engine.
+            </p>
+          </div>
+          <nav aria-label="Explore Menger Cube" className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-200">Explore</h2>
+            <ul className="mt-4 space-y-3 text-sm">
+              <li><a className="text-cyan-300 hover:text-cyan-200" href="#game-title">Play the 3D puzzle</a></li>
+              <li><a className="text-cyan-300 hover:text-cyan-200" href="/keyboard">Read the keyboard guide</a></li>
+              <li><a className="text-cyan-300 hover:text-cyan-200" href="/lab">Open the solver algorithm lab</a></li>
+            </ul>
+            <p className="mt-5 border-t border-slate-800 pt-5 text-xs leading-5 text-slate-400">
+              Runs locally in a modern WebGL browser. No account, download, or installation is required.
+            </p>
+          </nav>
+        </div>
+
+        <section className="mt-14" aria-labelledby="how-to-play">
+          <h2 id="how-to-play" className="text-2xl font-bold text-white">How to play Menger Twist Cube</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
+              <p className="text-sm font-bold text-cyan-300">1. Choose a target</p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">Click a cubie face in Slice mode, or switch to Extension mode and select an edge block.</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
+              <p className="text-sm font-bold text-cyan-300">2. Rotate the structure</p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">Drag the highlighted target, or use A, S, and D for −90°, 180°, and +90° turns.</p>
+            </div>
+            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
+              <p className="text-sm font-bold text-cyan-300">3. Experiment freely</p>
+              <p className="mt-2 text-sm leading-6 text-slate-300">Scramble with G, undo with U, reset with Backspace, and orbit the camera by dragging empty space.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-14 max-w-3xl" aria-labelledby="faq-title">
+          <h2 id="faq-title" className="text-2xl font-bold text-white">Frequently asked questions</h2>
+          <div className="mt-6 space-y-6">
+            <div>
+              <h3 className="font-semibold text-slate-100">Is Menger Twist Cube free?</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-300">Yes. The interactive puzzle and solver lab are free to use in your browser, with no sign-up required.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-100">What is a Menger sponge?</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-300">A Menger sponge is a three-dimensional fractal created by recursively removing central sub-cubes. This puzzle borrows that recursive structure and adds legal twisty-puzzle rotations.</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-100">Can the puzzle be solved automatically?</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-300">The separate <a className="text-cyan-300 hover:text-cyan-200" href="/lab">Solver Lab</a> runs registered algorithms, replays their moves in 3D, and compares seeded benchmark results.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </article>
+    </main>
+  );
 }
