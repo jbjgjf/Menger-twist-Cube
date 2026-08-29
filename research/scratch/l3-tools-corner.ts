@@ -1,7 +1,7 @@
 /**
  * Tools for the b = C classes, using Level 2's actual corner construction.
  *
- * Run: `npx tsx research/scratch/l3-tools-frames2.ts` from the repo root.
+ * Run: `npx tsx research/scratch/l3-tools-corner.ts` from the repo root.
  *
  * The previous probe asked the wrong question. Level 2 does not look for
  * commutators with *small* support on the corner classes; it looks for two
