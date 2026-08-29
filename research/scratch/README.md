@@ -23,9 +23,9 @@ Behind [`docs/algorithms/level3-block-quotient-solver.md`](../../docs/algorithms
 ## Level 3 full solver (in progress)
 
 Groundwork for a Level 3 solver that handles *every* legal move, not just the
-block-rigid set. Status: steps 1 and 2 are done — the group structure is settled
-and every orbit has a tool. The pipeline (orientation, parity, placement, port)
-remains.
+block-rigid set. Status: steps 1-3 are done — the group structure is settled,
+every orbit has a tool, and orientation is characterised. Parity, the placement
+pipeline and the port remain.
 
 - `l3sim.ts` — integer simulator of the Level 3 puzzle (8000 sites, 3,591 legal
   atoms). Atoms are **sparse**: dense per-atom permutations would need 284 MB.
@@ -62,6 +62,16 @@ remains.
 - `l3-orbit-tools.ts` — the earlier orbit-local pass, kept for its per-orbit
   ordered-pair coverage figures (90-95% direct on the 24-cell orbits, i.e. no
   setup conjugation needed there at all).
+- `l3tools.ts` — the shared tool search both the inventory and the twist search
+  call. It exists because reproducing the search twice already produced one
+  silently wrong result: a quick reimplementation dropped the conjugate pool and
+  reported zero tools where the inventory had found hundreds.
+- `l3-orient-freedom.ts` — **step 3a:** the exact (site x rotation) single-piece
+  automaton per orbit, giving each orbit's orientation freedom as a subgroup of
+  the 24 rotations.
+- `l3-twist-tools.ts` — **step 3b:** twist tools for the orbits whose orientation
+  is not determined, built Level 2 style from two globally pure 3-cycles on the
+  same ordered cycle with different rotation profiles.
 - `l3-full-estimate.ts` — projected solution length, calibrated on Level 2.
 
 ### Where this stands
@@ -109,11 +119,32 @@ is how Level 2's pair-BFS covers a class from a template library.
 tools, so the finished solver should land well under the 60-70k moves projected
 from Level 2's cost model.
 
-Remaining: (3) per-class orientation freedom and twist tools; (4) orbit-parity
-normalization, an F₂ system over 164 orbits against Level 2's 11; (5) the
-placement pipeline, whose phase order must put the 40 orbit-local-only orbits
-before the 124 pure ones; (6) the port to `packages/solver-core` with
-exact-replay verification.
+**Step 3 essentially complete: orientation is nearly free at Level 3.** The
+single-piece automaton (`l3-orient-freedom.ts`) shows **7,224 of 8,000 cells have
+their orientation determined by position** — the Level 2 `EC` theorem, but
+covering 90% of the puzzle instead of 24%. Only 16 orbits, 776 cells, can be
+twisted at all:
+
+| orbits | cells | freedom | legal in-place roll | how it is handled |
+| ---: | ---: | --- | --- | --- |
+| 11 | 552 | 4 (C₄) | yes | one depth-3 turn realizes the whole group — no commutator needed |
+| 4 | 32 | 3 (C₃) | **no** | **674 twisters each**, twisting 2-3 cells (`l3-twist-tools.ts`) |
+| 1 | 192 | 8 (D₄) | yes | rolls give the C₄ half; the flips still need tools |
+
+The `CCC` orbits were the dangerous case — corner-style C₃ twists with no legal
+roll to fall back on, so tools were the only route. They have them.
+
+The one loose end is the 192-cell `EEE/Bbo` orbit, whose D₄ freedom is exactly
+the shape of Level 2's `EEa`: rolls reach half of it and the diagonal flips need
+a twist tool. Level 2 solves this with a joint `[E2, T]` pair application under
+strict potential descent, and that orbit does have globally pure tools (from the
+class-level family), so the same construction should transfer — it just has not
+been run yet.
+
+Remaining: (4) orbit-parity normalization, an F₂ system over 164 orbits against
+Level 2's 11; (5) the placement pipeline, whose phase order must put the 40
+orbit-local-only orbits before the 124 pure ones; (6) the port to
+`packages/solver-core` with exact-replay verification.
 
 ## Level 2 slice reduction
 
