@@ -1,25 +1,26 @@
 /**
- * Step 2 deliverable: the per-orbit tool inventory.
+ * Step 2 deliverable: a pure 3-cycle tool for every orbit.
  *
  * Run: `npx tsx research/scratch/l3-tool-inventory.ts` from the repo root.
  *
- * Three constructions produce pure 3-cycles, and they cover different orbits:
+ * Step 1 proved Alt(orbit) <= G on all 164 orbits, so the tools exist; this
+ * finds them. Two grades are needed, because a tool may only run while the
+ * orbits it disturbs are still unsolved:
  *
- *   orbit-local  [atom, atom] judged pure *on one orbit* — 4 atoms, but it
- *                disturbs ~50-80 cells elsewhere, so it is only usable while
- *                those other orbits are still unsolved;
- *   interchange  two orbit-local tools meeting in exactly one cell overall —
- *                16 atoms and globally pure, usable at any point;
- *   class-level  the [frame, depth-2/2.5] family from l3-tools-probe.ts, also
- *                globally pure and reaching the large orbits the orbit-local
- *                interchange cannot.
+ *   orbit-local   a 3-cycle on the target orbit, disturbing others — usable
+ *                 early. Built from bare atoms, so only 4 atoms long, against
+ *                 the 16 Level 2 needs.
+ *   globally pure a 3-cycle and nothing else anywhere — usable at any point,
+ *                 and required by the last phases. Built by interchanging two
+ *                 orbit-local tools that meet in exactly one cell overall.
  *
- * A solver needs, for every orbit, at least one tool it may use at that orbit's
- * turn in the phase order. This counts what is in hand.
+ * The interchange criterion |supp(A) ∩ supp(B)| = 1 is *sufficient* for a
+ * 3-cycle, not necessary, so it is used only to rank candidate pairs; the
+ * verdict always comes from the computed action.
  */
 import {
-  ROT_ID, actionOver, atoms, commutatorCandidates, commutatorWord, N,
-  siteClasses, supportCandidates, atomsOfFamily, type Atom,
+  ROT_ID, actionOver, atoms, atomsOfFamily, commutatorCandidates, commutatorWord,
+  inverseAtom, N, siteClasses, type Atom,
 } from './l3sim';
 
 // ---------- orbits ----------
@@ -38,13 +39,20 @@ const orbitSites: number[][] = [];
   }
 }
 const O = orbitSites.length;
-const orbitLocal = new Uint8Array(O);
-const globallyPure = new Uint8Array(O);
+const frames = atomsOfFamily('frame-s1', 'frame-s3', 'frame-s9');
 
-const pure3 = (word: Atom[], cands: Set<number>) => {
-  const action = actionOver(word, cands);
-  const src: number[] = []; const dst: number[] = [];
+interface Cand { word: Atom[]; sup: number[] }          // sup = orbit-restricted support
+interface Local { word: Atom[]; cycle: number[]; gsup: number[] } // gsup = global support
+
+const mask = new Uint8Array(N);
+
+/** Action of [A,B]; returns the orbit 3-cycle and the global support, or null. */
+const evaluate = (A: Atom[], B: Atom[]): { cycle: number[]; gsup: number[] } | null => {
+  const action = actionOver(commutatorWord(A, B), commutatorCandidates(A, B));
+  const src: number[] = []; const dst: number[] = []; const gsup: number[] = [];
   for (const [s, [to, rot]] of action.moves) {
+    if (to !== s || rot !== ROT_ID) gsup.push(s);
+    if (!mask[s]) continue;
     if (to === s) { if (rot !== ROT_ID) return null; continue; }
     src.push(s); dst.push(to);
     if (src.length > 3) return null;
@@ -53,139 +61,144 @@ const pure3 = (word: Atom[], cands: Set<number>) => {
   const perm = new Map(src.map((s, k) => [s, dst[k]!]));
   let cur = src[0]!;
   for (let k = 0; k < 3; k += 1) cur = perm.get(cur)!;
-  return cur === src[0]! ? src : null;
-};
-const markPure = (src: number[]) => {
-  const o = orbitOfSite[src[0]!]!;
-  if (src.every((s) => orbitOfSite[s] === o)) globallyPure[o] = 1;
+  return cur === src[0]! ? { cycle: src, gsup } : null;
 };
 
-// ---------- construction 1+2: orbit-local, and their interchange ----------
+const localOf = new Array<Local[]>(O);
+const pureOf = new Array<number>(O).fill(0);
+const pairsPure = new Array<Set<number>>(O);
+
 const t0 = performance.now();
-const mask = new Uint8Array(N);
 for (let o = 0; o < O; o += 1) {
   const sites = orbitSites[o]!;
   mask.fill(0);
   for (const s of sites) mask[s] = 1;
 
-  interface C { a: Atom[]; b: Atom[]; word: Atom[]; sup: number[] }
-  const local: C[] = [];
-  const cands: Array<{ atom: Atom; sup: number[] }> = [];
-  for (const a of atoms) {
-    const sup: number[] = [];
-    for (const [from, to] of a.map) if (from !== to && mask[from]) sup.push(from);
-    if (sup.length >= 1 && sup.length <= 24) cands.push({ atom: a, sup });
-  }
-  const bySite = new Map<number, number[]>();
-  cands.forEach((c, i) => { for (const s of c.sup) { const l = bySite.get(s) ?? []; l.push(i); bySite.set(s, l); } });
-  const seen = new Set<string>();
-  for (const site of sites) {
-    const list = bySite.get(site) ?? [];
-    for (let x = 0; x < list.length && local.length < 400; x += 1) {
-      for (let y = x + 1; y < list.length && local.length < 400; y += 1) {
-        const A = cands[list[x]!]!; const B = cands[list[y]!]!;
-        let sh = 0;
-        for (const s of A.sup) { if (B.sup.includes(s)) { sh += 1; if (sh > 1) break; } }
-        if (sh !== 1) continue;
-        const small = A.atom.map.size <= B.atom.map.size;
-        const [P, Q] = small ? [[B.atom], [A.atom]] : [[A.atom], [B.atom]];
-        const word = commutatorWord(P, Q);
-        const action = actionOver(word, commutatorCandidates(P, Q));
-        const src: number[] = []; const dst: number[] = []; const sup: number[] = [];
-        let ok = true;
-        for (const [s, [to, rot]] of action.moves) {
-          if (to !== s || rot !== ROT_ID) sup.push(s);
-          if (!mask[s]) continue;
-          if (to === s) { if (rot !== ROT_ID) { ok = false; break; } continue; }
-          src.push(s); dst.push(to);
-          if (src.length > 3) { ok = false; break; }
+  // ---- candidate pool: bare atoms, widened with conjugates when needed ----
+  const buildPool = (withConjugates: boolean): Cand[] => {
+    const pool: Cand[] = [];
+    for (const a of atoms) {
+      const sup: number[] = [];
+      for (const [from, to] of a.map) if (from !== to && mask[from]) sup.push(from);
+      if (sup.length >= 1 && sup.length <= 24) pool.push({ word: [a], sup });
+    }
+    if (!withConjugates) return pool;
+    const touching = atoms.filter((h) => { for (const [from, to] of h.map) if (from !== to && mask[from]) return true; return false; });
+    const conj: Cand[] = [];
+    for (const g of frames) {
+      const gInv = inverseAtom(g);
+      for (const h of touching) {
+        if (g.refId === h.refId) continue;
+        const sup: number[] = [];
+        for (const s of sites) {
+          const gs = g.map.get(s) ?? s;
+          const hgs = h.map.get(gs);
+          if (hgs !== undefined && hgs !== gs) sup.push(s);
         }
-        if (!ok || src.length !== 3) continue;
-        const perm = new Map(src.map((s, k) => [s, dst[k]!]));
-        let cur = src[0]!;
-        for (let k = 0; k < 3; k += 1) cur = perm.get(cur)!;
-        if (cur !== src[0]!) continue;
-        const key = src.slice().sort((a, b) => a - b).join(',');
-        if (seen.has(key)) continue;
-        seen.add(key);
-        orbitLocal[o] = 1;
-        if (sup.length === 3) globallyPure[o] = 1;
-        local.push({ a: P, b: Q, word, sup });
+        if (sup.length >= 1 && sup.length <= 8) conj.push({ word: [g, h, gInv], sup });
       }
     }
-  }
-  // interchange the globally tightest of them
-  local.sort((x, y) => x.sup.length - y.sup.length);
-  const seeds = local.slice(0, 200);
+    conj.sort((a, b) => a.sup.length - b.sup.length);
+    pool.push(...conj.slice(0, 4000));
+    return pool;
+  };
+
+  // ---- orbit-local search ----
+  // `shared` is a ranking heuristic, not a gate: 1 guarantees a 3-cycle, but 2
+  // and 3 produce them often enough to be worth the action computation.
+  const search = (pool: Cand[], limit: number): Local[] => {
+    const found: Local[] = [];
+    const seen = new Set<string>();
+    const bySite = new Map<number, number[]>();
+    pool.forEach((c, i) => { for (const s of c.sup) { const l = bySite.get(s) ?? []; l.push(i); bySite.set(s, l); } });
+    for (const maxShared of [1, 3]) {
+      for (const site of sites) {
+        const list = bySite.get(site) ?? [];
+        for (let x = 0; x < list.length; x += 1) {
+          for (let y = x + 1; y < list.length; y += 1) {
+            const A = pool[list[x]!]!; const B = pool[list[y]!]!;
+            let sh = 0;
+            for (const s of A.sup) { if (B.sup.includes(s)) { sh += 1; if (sh > maxShared) break; } }
+            if (sh < 1 || sh > maxShared) continue;
+            if (maxShared === 3 && sh === 1) continue; // already covered by the first sweep
+            const r = evaluate(A.word, B.word);
+            if (!r) continue;
+            const key = r.cycle.slice().sort((p, q) => p - q).join(',');
+            if (seen.has(key)) continue;
+            seen.add(key);
+            found.push({ word: commutatorWord(A.word, B.word), cycle: r.cycle, gsup: r.gsup });
+            if (found.length >= limit) return found;
+          }
+        }
+      }
+      if (found.length > 0) break; // the cheap sweep sufficed
+    }
+    return found;
+  };
+
+  let local = search(buildPool(false), 600);
+  if (local.length === 0) local = search(buildPool(true), 600);
+  localOf[o] = local;
+
+  // ---- interchange the globally tightest, for a globally pure tool ----
+  mask.fill(0);
+  for (const s of sites) mask[s] = 1;
+  local.sort((a, b) => a.gsup.length - b.gsup.length);
+  const seeds = local.slice(0, 400);
+  const pure = new Set<number>();
+  let pureCount = 0;
   outer:
   for (let i = 0; i < seeds.length; i += 1) {
     for (let j = i + 1; j < seeds.length; j += 1) {
+      // The interchange 3-cycles the orbit of the single shared cell, so that
+      // cell has to lie in the target orbit — otherwise the tool is perfectly
+      // good but belongs to a different orbit entirely.
       let sh = 0;
-      for (const s of seeds[i]!.sup) { if (seeds[j]!.sup.includes(s)) { sh += 1; if (sh > 1) break; } }
-      if (sh !== 1) continue;
-      const word = commutatorWord(seeds[i]!.word, seeds[j]!.word);
-      const src = pure3(word, supportCandidates(word));
-      if (src) { markPure(src); break outer; }
+      let shared = -1;
+      for (const s of seeds[i]!.gsup) { if (seeds[j]!.gsup.includes(s)) { sh += 1; shared = s; if (sh > 1) break; } }
+      if (sh !== 1 || !mask[shared]) continue;
+      const r = evaluate(seeds[i]!.word, seeds[j]!.word);
+      if (!r || r.gsup.length !== 3) continue;
+      pureCount += 1;
+      const perm = new Map(r.cycle.map((s, k) => [s, r.cycle[(k + 1) % 3]!]));
+      for (const s of r.cycle) { pure.add(s * N + perm.get(s)!); pure.add(perm.get(s)! * N + s); }
+      if (pureCount >= 400) break outer;
     }
   }
-}
-console.log(`orbit-local + interchange: ${((performance.now() - t0) / 1000).toFixed(0)}s`);
-
-// ---------- construction 3: the class-level [frame, depth-2/2.5] family ----------
-{
-  const t1 = performance.now();
-  const frameAtoms = atomsOfFamily('frame-s1', 'frame-s3', 'frame-s9');
-  const localAtoms = atomsOfFamily('ext-d2', 'ext-d2.5');
-  interface Seed { word: Atom[]; sup: number[] }
-  const seeds: Seed[] = [];
-  const seen = new Set<string>();
-  for (const f of frameAtoms) for (const e of localAtoms) {
-    let touches = false;
-    for (const s of e.map.keys()) if (f.map.has(s)) { touches = true; break; }
-    if (!touches) continue;
-    const word = commutatorWord([f], [e]);
-    const action = actionOver(word, commutatorCandidates([f], [e]));
-    if (action.moves.size === 0 || action.moves.size > 9) continue;
-    const sup = [...action.moves.keys()].sort((a, b) => a - b);
-    const key = sup.map((i) => `${i}>${action.moves.get(i)![0]}#${action.moves.get(i)![1]}`).join(';');
-    if (seen.has(key)) continue;
-    seen.add(key);
-    seeds.push({ word, sup });
-  }
-  const bySite = new Map<number, number[]>();
-  seeds.forEach((s, i) => { for (const x of s.sup) { const l = bySite.get(x) ?? []; l.push(i); bySite.set(x, l); } });
-  for (let i = 0; i < seeds.length; i += 1) {
-    const w1 = seeds[i]!;
-    const partners = new Set<number>();
-    for (const s of w1.sup) for (const j of bySite.get(s) ?? []) if (j > i) partners.add(j);
-    for (const j of partners) {
-      const src = pure3(commutatorWord(w1.word, seeds[j]!.word), commutatorCandidates(w1.word, seeds[j]!.word));
-      if (src) markPure(src);
-    }
-  }
-  console.log(`class-level [frame, depth-2/2.5]: ${((performance.now() - t1) / 1000).toFixed(0)}s`);
+  pureOf[o] = pureCount;
+  pairsPure[o] = pure;
 }
 
 // ---------- report ----------
-console.log('\nsize  class          orbits  orbit-local  globally pure');
-const rows = new Map<string, { n: number; loc: number; pure: number }>();
+console.log(`search time ${((performance.now() - t0) / 1000).toFixed(0)}s\n`);
+console.log('size  class          orbits  orbit-local  globally pure  pure pair cov  tool atoms');
+const rows = new Map<string, { n: number; loc: number; pure: number; cov: number[]; atoms: Set<number> }>();
 for (let o = 0; o < O; o += 1) {
   const key = `${String(orbitSites[o]!.length).padStart(4)}  ${siteClasses[orbitSites[o]![0]!]!.padEnd(12)}`;
-  const r = rows.get(key) ?? { n: 0, loc: 0, pure: 0 };
-  r.n += 1; r.loc += orbitLocal[o]!; r.pure += globallyPure[o]!;
+  const r = rows.get(key) ?? { n: 0, loc: 0, pure: 0, cov: [], atoms: new Set<number>() };
+  r.n += 1;
+  if (localOf[o]!.length > 0) { r.loc += 1; r.atoms.add(localOf[o]![0]!.word.length); }
+  if (pureOf[o]! > 0) r.pure += 1;
+  const size = orbitSites[o]!.length;
+  r.cov.push(pairsPure[o]!.size / (size * (size - 1)));
   rows.set(key, r);
 }
+const median = (xs: number[]) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor(s.length / 2)]!; };
 for (const [key, r] of [...rows].sort()) {
-  console.log(`${key} ${String(r.n).padStart(6)} ${String(r.loc).padStart(12)} ${String(r.pure).padStart(14)}`);
+  console.log(
+    `${key} ${String(r.n).padStart(6)} ${String(r.loc).padStart(12)} ${String(r.pure).padStart(14)}  ` +
+      `${(100 * median(r.cov)).toFixed(1).padStart(12)}%  ${[...r.atoms].sort((a, b) => a - b).join('/') || '-'}`,
+  );
 }
-const cellsOf = (m: Uint8Array) => orbitSites.reduce((n, s, o) => n + (m[o] ? s.length : 0), 0);
-const anyTool = orbitSites.map((_, o) => (orbitLocal[o] || globallyPure[o] ? 1 : 0));
-console.log(`\norbit-local tool:   ${orbitLocal.reduce((a, b) => a + b, 0)}/164 orbits, ${cellsOf(orbitLocal)}/${N} cells`);
-console.log(`globally pure tool: ${globallyPure.reduce((a, b) => a + b, 0)}/164 orbits, ${cellsOf(globallyPure)}/${N} cells`);
-console.log(`any tool at all:    ${anyTool.reduce((a, b) => a + b, 0)}/164 orbits, ${cellsOf(Uint8Array.from(anyTool))}/${N} cells`);
-const none = orbitSites.map((s, o) => (anyTool[o] ? null : `${siteClasses[s[0]!]!}(${s.length})`)).filter(Boolean) as string[];
-if (none.length) {
+const cells = (pred: (o: number) => boolean) => orbitSites.reduce((n, s, o) => n + (pred(o) ? s.length : 0), 0);
+const nLoc = localOf.filter((l) => l.length > 0).length;
+const nPure = pureOf.filter((p) => p > 0).length;
+console.log(`\norbit-local tool:   ${nLoc}/${O} orbits, ${cells((o) => localOf[o]!.length > 0)}/${N} cells`);
+console.log(`globally pure tool: ${nPure}/${O} orbits, ${cells((o) => pureOf[o]! > 0)}/${N} cells`);
+const missing: string[] = [];
+for (let o = 0; o < O; o += 1) if (localOf[o]!.length === 0) missing.push(`${siteClasses[orbitSites[o]![0]!]!}(${orbitSites[o]!.length})`);
+if (missing.length) {
   const c = new Map<string, number>();
-  for (const k of none) c.set(k, (c.get(k) ?? 0) + 1);
-  console.log(`no tool yet: ${[...c].map(([k, v]) => `${k}x${v}`).join(' ')}`);
+  for (const k of missing) c.set(k, (c.get(k) ?? 0) + 1);
+  console.log(`no tool at all: ${[...c].map(([k, v]) => `${k}x${v}`).join(' ')}`);
 }

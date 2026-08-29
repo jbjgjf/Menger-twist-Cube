@@ -21,13 +21,16 @@ interface Props {
   onClick: (cubie: Cubie, event: ThreeEvent<MouseEvent>) => void;
 }
 
+// WCA-standard sticker colors (matches CubieMesh.tsx) — chosen so red and
+// orange stay clearly distinguishable instead of the previous pale orange
+// sitting too close to red/yellow.
 const faceColors = [
-  new Color('#dc2626'), // deeper red (tailwind red-600)
-  new Color('#fb923c'), // lighter orange (tailwind orange-400)
-  new Color('#ffffff'),
-  new Color('#facc15'),
-  new Color('#22c55e'),
-  new Color('#3b82f6'),
+  new Color('#c41e3a'), // Right (Red)
+  new Color('#ff5800'), // Left (Orange)
+  new Color('#ffffff'), // Top (White)
+  new Color('#ffd500'), // Bottom (Yellow)
+  new Color('#009e60'), // Front (Green)
+  new Color('#0051ba'), // Back (Blue)
 ];
 
 const dummy = new Object3D();

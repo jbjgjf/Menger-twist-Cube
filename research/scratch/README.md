@@ -23,8 +23,9 @@ Behind [`docs/algorithms/level3-block-quotient-solver.md`](../../docs/algorithms
 ## Level 3 full solver (in progress)
 
 Groundwork for a Level 3 solver that handles *every* legal move, not just the
-block-rigid set. Status: the group structure is settled; tool discovery and the
-pipeline remain.
+block-rigid set. Status: steps 1 and 2 are done — the group structure is settled
+and every orbit has a tool. The pipeline (orientation, parity, placement, port)
+remains.
 
 - `l3sim.ts` — integer simulator of the Level 3 puzzle (8000 sites, 3,591 legal
   atoms). Atoms are **sparse**: dense per-atom permutations would need 284 MB.
@@ -50,19 +51,22 @@ pipeline remain.
 - `l3-tools-corner.ts` — tools for the `b = C` classes, which no extension move
   can reach, using Level 2's criterion: two words whose class-restricted supports
   meet in **exactly one cell**. 112,872 tools over 4 of the 5 classes.
-- `l3-orbit-tools.ts` — **step 2:** tools found per orbit rather than per class.
-  Restricted to an orbit the same words have tiny supports, so the interchange
-  criterion `|supp_O(A) ∩ supp_O(B)| = 1` fires between *bare atoms* — giving
-  **4-atom tools** where Level 2 needs 16, and 90-95% direct ordered-pair
-  coverage on the 24-cell orbits (no setup conjugation needed at all).
-- `l3-tool-inventory.ts` — the merged inventory across all three constructions
-  (orbit-local, their interchange, and the class-level `[frame, depth-2/2.5]`
-  family), which cover different orbits.
+- `l3-tool-inventory.ts` — **step 2:** tools found per orbit rather than per
+  class. Restricted to an orbit the same words have tiny supports, so the
+  interchange criterion `|supp_O(A) ∩ supp_O(B)| = 1` fires between *bare
+  atoms* — giving **4-atom tools** where Level 2 needs 16. Settles every orbit
+  of size 8 and 24 with globally pure tools.
+- `l3-tools-classlevel.ts` — the complementary half: the class-level
+  `[frame, depth-2/2.5]` family, 16 atoms and globally pure by construction,
+  which reaches the large orbits the orbit-local interchange cannot.
+- `l3-orbit-tools.ts` — the earlier orbit-local pass, kept for its per-orbit
+  ordered-pair coverage figures (90-95% direct on the 24-cell orbits, i.e. no
+  setup conjugation needed there at all).
 - `l3-full-estimate.ts` — projected solution length, calibrated on Level 2.
 
 ### Where this stands
 
-**Step 1 is complete: there is no structural obstruction anywhere.** Every one of
+**Step 1 complete: there is no structural obstruction anywhere.** Every one of
 the 164 orbits is primitive and carries at least `Alt(orbit)`, so a pure 3-cycle
 exists on every orbit and the reduction method applies to all 8000 cells. Two
 earlier readings of the data said otherwise and were wrong: `CCC` looked blocked
@@ -70,34 +74,46 @@ because its supports were measured at class level (512 cells) rather than orbit
 level (8 or 24), and coverage was computed against 64M class-level ordered pairs
 when only 803,264 within-orbit pairs can ever be needed.
 
-**Step 2 is partly done** (`l3-tool-inventory.ts`):
+**Step 2 complete: every orbit has a tool.** The two constructions turn out to be
+exactly complementary — orbit-local settles the small orbits, class-level the
+large ones:
 
-| | orbits | cells |
-| --- | ---: | ---: |
-| at least one tool | 135/164 | 6,936/8,000 |
-| of those, a *globally pure* tool | 60/164 | 2,688/8,000 |
-| no tool yet | 29/164 | 1,064/8,000 |
+| | orbits | cells | tool length |
+| --- | ---: | ---: | --- |
+| globally pure, orbit-local | 116/164 | 2,720 | 4-8 atoms |
+| globally pure, class-level | 8/164 | 1,440 | 16 atoms |
+| **globally pure, either** | **124/164** | **4,160** | |
+| orbit-local only | 40/164 | 3,840 | 4-8 atoms |
+| **any tool at all** | **164/164** | **8,000** | |
 
-Two things still needed. First, the 29 uncovered orbits — mostly `CCC` and the
-96-cell `ECC`/`ECE` orbits. Second, global purity for the 96-cell orbits: a
-4-atom orbit-local tool disturbs 50-80 cells elsewhere, so it can only run while
-those orbits are still unsolved, and the last phases need tools that disturb
-nothing. Level 2 gets those by interchanging two small-support seeds; here the
-orbit-local tools are too globally wide (minimum 21-79 cells) for that to fire
-above size 24.
+The 40 orbits with no globally pure tool are all of size 96 (`ECC`, `ECE/*`,
+`EEC/B|b`, `EEE/Bo|b`, `EEE/B|bo`, `EEE/B|b|o`). Their orbit-local tools disturb
+~50 cells elsewhere, so those orbits have to be solved **first**, while the rest
+is still scrambled — structurally the same arrangement Level 2 uses, where
+corner classes get scope-pure tools and run first and edge classes get globally
+pure tools and run last.
 
-These are search-budget limits, not impossibility results — step 1 proved the
-tools exist. Both searches are capped (400 tools per orbit, 200 interchange
-seeds, first hit wins), so the table is a floor.
+Why the interchange cannot make those 40 globally pure: it needs two words whose
+supports meet in *exactly one* cell. Level 2's seeds have support ≤ 9, so that
+happens readily. The orbit-local tools here are ~50 cells wide, and two 50-cell
+supports in 8000 sites either miss each other entirely or meet in several cells —
+almost never in exactly one. The class-level family has tight (≤ 9) seeds and so
+does produce globally pure tools, but only for the `b = E` classes its seeds can
+reach.
 
-The 4-atom tool length is a large and unexpected win: it is a quarter of Level
-2's edge tools, which would put the finished solver well below the 60-70k moves
-projected from Level 2's cost model.
+Note only *one* globally pure tool per orbit is needed: purity is preserved under
+conjugation, and setup conjugation moves a tool anywhere within its orbit, which
+is how Level 2's pair-BFS covers a class from a template library.
 
-Remaining after step 2: orbit-parity normalization (an F₂ system over 164 orbits
-against Level 2's 11); per-class orientation freedom and twist tools; the
-placement pipeline with a phase order consistent with each tool's disturbance
-set; then the port to `packages/solver-core` with exact-replay verification.
+**The 4-atom tool length is the headline win.** It is a quarter of Level 2's edge
+tools, so the finished solver should land well under the 60-70k moves projected
+from Level 2's cost model.
+
+Remaining: (3) per-class orientation freedom and twist tools; (4) orbit-parity
+normalization, an F₂ system over 164 orbits against Level 2's 11; (5) the
+placement pipeline, whose phase order must put the 40 orbit-local-only orbits
+before the 124 pure ones; (6) the port to `packages/solver-core` with
+exact-replay verification.
 
 ## Level 2 slice reduction
 

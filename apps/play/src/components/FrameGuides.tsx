@@ -54,6 +54,12 @@ export default function FrameGuides({
             position={ringPosition(frame, cellStride)}
             rotation={ringRotation(frame)}
             onPointerOver={(event: ThreeEvent<PointerEvent>) => {
+              // Ignore hover-in while a button is held (e.g. orbiting the camera).
+              // Otherwise, as the view rotates under a stationary cursor, the
+              // ring sweeping underneath keeps re-triggering hover, which
+              // flashes the ring's glow and flickers the highlighted layer —
+              // looking like stray light reflections or a spurious twist.
+              if (event.buttons !== 0) return;
               event.stopPropagation();
               onHover(frame.id);
             }}
@@ -90,9 +96,13 @@ export default function FrameGuides({
             <meshStandardMaterial
               color={color}
               emissive={color}
-              emissiveIntensity={isActive ? 0.65 : isHover ? 0.3 : 0.12}
+              // Idle rings sit flush with the cube's own layer boundaries and
+              // are visible through the sponge's open tunnels; keeping them
+              // near-invisible until hovered/selected avoids a constant glow
+              // that reads as a stray light reflection.
+              emissiveIntensity={isActive ? 0.65 : isHover ? 0.3 : 0}
               transparent
-              opacity={isActive ? 0.7 : 0.35}
+              opacity={isActive ? 0.7 : isHover ? 0.35 : 0.08}
               depthWrite={false}
             />
           </Torus>

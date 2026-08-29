@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
-import { Vector3 } from 'three';
+import { Quaternion, Vector3 } from 'three';
 import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
 import FrameGuides from './FrameGuides';
@@ -47,21 +47,44 @@ const targetMap: Record<CameraPreset, Vector3> = {
 function CameraRig({ cameraPreset, cameraPresetRequest }: { cameraPreset: CameraPreset; cameraPresetRequest: number }) {
   const { camera } = useThree();
   const goal = useMemo(() => targetMap[cameraPreset].clone(), [cameraPreset]);
-  const activeGoal = useRef(goal.clone());
-  const isMoving = useRef(true);
+  // Camera presets are interpolated along an arc (constant-ish distance from the
+  // origin) rather than a straight line, so opposite presets (e.g. Up <-> Down)
+  // never sweep the camera through the cube's center — that used to put the
+  // camera inside the geometry mid-transition and made the view appear to
+  // "catch" or glitch partway through the move.
+  const startDirection = useRef(new Vector3(0, 0, 1));
+  const startRadius = useRef(1);
+  const goalRadius = useRef(1);
+  const rotationToGoal = useRef(new Quaternion());
+  const progress = useRef(1);
+  const isMoving = useRef(false);
 
   useEffect(() => {
-    activeGoal.current = goal.clone();
+    const currentRadius = camera.position.length();
+    const hasValidStart = currentRadius > 1e-4;
+    startRadius.current = hasValidStart ? currentRadius : goal.length();
+    startDirection.current = (hasValidStart ? camera.position : goal).clone().normalize();
+    goalRadius.current = goal.length();
+    rotationToGoal.current = new Quaternion().setFromUnitVectors(
+      startDirection.current,
+      goal.clone().normalize(),
+    );
+    progress.current = 0;
     isMoving.current = true;
   }, [goal, cameraPresetRequest]);
 
   useFrame(() => {
     if (!isMoving.current) return;
 
-    camera.position.lerp(activeGoal.current, 0.12);
+    progress.current += (1 - progress.current) * 0.12;
+    const t = progress.current;
+    const rotation = new Quaternion().slerp(rotationToGoal.current, t);
+    const radius = startRadius.current + (goalRadius.current - startRadius.current) * t;
+    camera.position.copy(startDirection.current).applyQuaternion(rotation).multiplyScalar(radius);
     camera.lookAt(0, 0, 0);
-    if (camera.position.distanceTo(activeGoal.current) < 0.02) {
-      camera.position.copy(activeGoal.current);
+
+    if (1 - t < 0.0015) {
+      camera.position.copy(goal);
       camera.lookAt(0, 0, 0);
       isMoving.current = false;
     }
