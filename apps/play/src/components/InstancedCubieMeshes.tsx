@@ -142,8 +142,8 @@ export default function InstancedCubieMeshes({
           color={color}
           transparent={transparent || dimmed}
           opacity={materialOpacity}
-          metalness={0.1}
-          roughness={0.2}
+          metalness={0}
+          roughness={1}
           emissive={color}
           emissiveIntensity={emissiveIntensity}
         />

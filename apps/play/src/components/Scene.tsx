@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
+import { GizmoHelper, GizmoViewport, TrackballControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
 import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
@@ -173,20 +173,14 @@ export default function Scene(props: SceneProps) {
         <shadowMaterial opacity={0.2} />
       </mesh>
 
-      <OrbitControls
-        ref={controlsRef}
+      <TrackballControls
+        ref={controlsRef as any}
         makeDefault
         enabled={!twistActive}
-        enableDamping
-        dampingFactor={0.08}
-        enablePan={true}
-        mouseButtons={{ LEFT: 0, MIDDLE: 1, RIGHT: 2 }}
-        touches={{ ONE: 0, TWO: 2 }}
-        rotateSpeed={0.8}
+        rotateSpeed={2.5}
         panSpeed={0.8}
-        zoomSpeed={0.9}
-        minDistance={2}
-        maxDistance={50}
+        zoomSpeed={1.2}
+        noPan={false}
       />
       <CameraRig cameraPreset={props.cameraPreset} cameraPresetRequest={props.cameraPresetRequest} />
 

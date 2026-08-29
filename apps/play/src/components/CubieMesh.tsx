@@ -133,8 +133,8 @@ export default function CubieMesh({
           color={color}
           transparent={transparent || dimmed}
           opacity={dimmed ? 0.18 : transparent ? 0.52 : 0.96}
-          metalness={0.25}
-          roughness={0.35}
+          metalness={0}
+          roughness={1}
           emissive={color}
           emissiveIntensity={emissiveIntensity}
         />
