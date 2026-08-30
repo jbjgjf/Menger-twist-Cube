@@ -123,7 +123,9 @@ All solver interaction lives in `apps/lab` (the Play app is manual play only). T
 - [`docs/algorithms/level2-block-quotient-solver.md`](docs/algorithms/level2-block-quotient-solver.md) — the Level 2 block-quotient solver.
 - [`docs/algorithms/level2-slice-reduction-solver.md`](docs/algorithms/level2-slice-reduction-solver.md) — the Level 2 slice-reduction solver (full generator set).
 - [`docs/algorithms/level3-block-quotient-solver.md`](docs/algorithms/level3-block-quotient-solver.md) — the Level 3 block-quotient solver.
+- [`docs/algorithms/level3-slice-reduction-solver.md`](docs/algorithms/level3-slice-reduction-solver.md) — the Level 3 slice-reduction solver (full generator set).
 - [`docs/research/benchmarking.md`](docs/research/benchmarking.md) — benchmark methodology and how to add new algorithms/experiments.
+- [`docs/research/level3-solver-completion-audit.md`](docs/research/level3-solver-completion-audit.md) — Level 3 completion audit, browser execution policy, and current God's-number bounds.
 - [`docs/adr/`](docs/adr/) — architecture decision records.
 
 ## License

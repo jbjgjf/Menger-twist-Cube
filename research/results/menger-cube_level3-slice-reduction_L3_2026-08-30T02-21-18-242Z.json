@@ -1,0 +1,32 @@
+{
+  "modelId": "menger-cube",
+  "algorithmId": "level3-slice-reduction",
+  "level": 3,
+  "scrambleLength": 5,
+  "generatedAt": "2026-08-30T02:21:18.242Z",
+  "records": [
+    {
+      "id": "1788056478242-level-3-slice-reduction-commutator-256171-6gwq37",
+      "timestamp": "2026-08-30T02:21:18.242Z",
+      "level": 3,
+      "algorithm": "level-3-slice-reduction-commutator@0.1.0",
+      "algorithm_id": "level3-slice-reduction",
+      "model_id": "menger-cube",
+      "scramble_seed": "1",
+      "runtime_ms": 138139.946041,
+      "move_count": 256171,
+      "success": true,
+      "complexity_estimate": "One-time library build (~5s: 3,591 sparse atoms, 164 orbits, 164 pure templates, GF(2) parity basis), then per solve: parity normalization over 164 orbit bits, ~1,300 conjugated pure-tool placements found by ordered-pair BFS, and an orientation potential descent",
+      "notes": "Level 3 solved by orbit-by-orbit commutator reduction over the full generator set.",
+      "determinism": "deterministic",
+      "explainability": "structured",
+      "scalability": "Supports level(s): 3."
+    }
+  ],
+  "summary": {
+    "runs": 1,
+    "successRate": 1,
+    "averageRuntime": 138139.946041,
+    "averageMoveCount": 256171
+  }
+}

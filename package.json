@@ -12,6 +12,7 @@
     "dev:lab": "npm run dev --workspace=@menger/lab",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
+    "verify:l3": "tsx research/scratch/l3-audit-tooldata.ts && tsx research/scratch/l3-sim-vs-engine.ts && tsx research/scratch/l3-orbit-groups.ts",
     "bench": "npm run bench --workspace=@menger/solver-core --"
   },
   "devDependencies": {
