@@ -20,6 +20,12 @@ import {
 export interface OrbitLocalTool { word: Atom[]; cycle: number[]; gsup: number[] }
 export interface PureTool { word: Atom[]; src: number[]; dst: number[]; rots: number[] }
 
+interface TightTool {
+  word: Atom[];
+  action: ReturnType<typeof actionOver>;
+  support: number[];
+}
+
 const frames = atomsOfFamily('frame-s1', 'frame-s3', 'frame-s9');
 const scratchMask = new Uint8Array(N);
 
@@ -154,4 +160,190 @@ export const findPureTools = (sites: number[], local: OrbitLocalTool[], limit: n
     }
   }
   return out;
+};
+
+/**
+ * Isolate a globally pure tool by repeatedly commuting a target-local tool with
+ * a raw-atom conjugate of itself: `[T, g T g^-1]`.
+ *
+ * The first orbit-local inventory stopped after interchanging two candidates.
+ * On the 40 blocking Level 3 orbits that leaves structured side effects on one
+ * or more other orbits.  A raw atom generally moves the target support and the
+ * side-effect support differently, so the self-conjugate commutator cancels the
+ * latter while retaining an even permutation on the target.  A small beam keeps
+ * only strict support improvements between rungs.
+ *
+ * The result is deliberately a general even permutation, not only a 3-cycle:
+ * double transpositions and wider tools are equally usable by placement.
+ */
+export const findConjugateIsolatedTools = (
+  sites: number[],
+  local: OrbitLocalTool[],
+  limit: number,
+  maxRungs = 3,
+  beamWidth = 96,
+): PureTool[] => {
+  const mask = scratchMask;
+  mask.fill(0);
+  for (const site of sites) mask[site] = 1;
+
+  const supportOf = (action: ReturnType<typeof actionOver>): number[] =>
+    [...action.moves]
+      .filter(([site, [to, rot]]) => site !== to || rot !== ROT_ID)
+      .map(([site]) => site);
+  const profileOf = (action: ReturnType<typeof actionOver>): string =>
+    [...action.moves]
+      .map(([site, [to, rot]]) => `${site}>${to}#${rot}`)
+      .sort()
+      .join(';');
+  const asPure = (tool: TightTool): PureTool | null => {
+    const src: number[] = [];
+    const dst: number[] = [];
+    const rots: number[] = [];
+    for (const [site, [to, rot]] of tool.action.moves) {
+      if (to === site) {
+        if (rot !== ROT_ID) return null;
+        continue;
+      }
+      if (!mask[site]) return null;
+      src.push(site);
+      dst.push(to);
+      rots.push(rot);
+    }
+    return src.length >= 3 ? { word: tool.word, src, dst, rots } : null;
+  };
+
+  const initial: TightTool[] = [];
+  const seenInitial = new Set<string>();
+  for (const candidate of [...local].sort((a, b) => a.gsup.length - b.gsup.length)) {
+    const action = actionOver(candidate.word, candidate.gsup);
+    const key = profileOf(action);
+    if (seenInitial.has(key)) continue;
+    seenInitial.add(key);
+    initial.push({ word: candidate.word, action, support: supportOf(action) });
+    if (initial.length >= beamWidth) break;
+  }
+
+  const out: PureTool[] = [];
+  const outSeen = new Set<string>();
+  let beam = initial;
+  for (let rung = 0; rung < maxRungs && beam.length > 0; rung += 1) {
+    const nextByProfile = new Map<string, TightTool>();
+    for (const tool of beam) {
+      const targetSupport = tool.support.filter((site) => mask[site]);
+      const inverseDestination = new Map<number, number>();
+      for (const [from, [to]] of tool.action.moves) inverseDestination.set(to, from);
+
+      for (const setup of atoms) {
+        const setupInv = inverseAtom(setup);
+        const preimage = (site: number) => setupInv.map.get(site) ?? site;
+        const conjugateSupport = tool.support.map(preimage);
+        const conjugateTarget = targetSupport.map(preimage);
+        const overlap = targetSupport.filter((site) => conjugateTarget.includes(site)).length;
+        if (overlap === 0 || overlap === targetSupport.length) continue;
+
+        const candidates = new Set<number>(conjugateSupport);
+        for (const site of conjugateSupport) candidates.add(inverseDestination.get(site) ?? site);
+        const conjugate = [setup, ...tool.word, inverseAtom(setup)];
+        const word = commutatorWord(tool.word, conjugate);
+        const action = actionOver(word, candidates);
+        const support = supportOf(action);
+        if (support.length === 0 || support.length >= tool.support.length) continue;
+        let targetMoves = 0;
+        for (const [site, [to]] of action.moves) if (mask[site] && to !== site) targetMoves += 1;
+        if (targetMoves < 3) continue;
+
+        const tightened: TightTool = { word, action, support };
+        const pure = asPure(tightened);
+        if (pure) {
+          const key = profileOf(action);
+          if (!outSeen.has(key)) {
+            outSeen.add(key);
+            out.push(pure);
+            if (pure.src.length === 3) return [pure];
+          }
+        }
+
+        const key = profileOf(action);
+        const previous = nextByProfile.get(key);
+        if (!previous || word.length < previous.word.length) nextByProfile.set(key, tightened);
+      }
+    }
+    beam = [...nextByProfile.values()]
+      .sort((a, b) => a.support.length - b.support.length || a.word.length - b.word.length)
+      .slice(0, beamWidth);
+  }
+  return out.sort((a, b) => a.src.length - b.src.length || a.word.length - b.word.length).slice(0, limit);
+};
+
+/**
+ * The complementary Level-2-style class-level family.  Interchanging tight
+ * `[frame, depth-2/2.5]` seeds yields globally pure 3-cycles on a handful of
+ * large orbits for which the orbit-local conjugation beam is not economical.
+ */
+export const findClassLevelPureTools = (
+  orbitOfSite: Int16Array | Int32Array,
+  wantedOrbits: Set<number>,
+): Map<number, PureTool> => {
+  const result = new Map<number, PureTool>();
+  const frameAtoms = atomsOfFamily('frame-s1', 'frame-s3', 'frame-s9');
+  const localAtoms = atomsOfFamily('ext-d2', 'ext-d2.5');
+  interface Seed { word: Atom[]; support: number[] }
+  const seeds: Seed[] = [];
+  const seenSeed = new Set<string>();
+  for (const frame of frameAtoms) {
+    for (const local of localAtoms) {
+      let touches = false;
+      for (const site of local.map.keys()) {
+        if (frame.map.has(site)) { touches = true; break; }
+      }
+      if (!touches) continue;
+      const word = commutatorWord([frame], [local]);
+      const action = actionOver(word, commutatorCandidates([frame], [local]));
+      if (action.moves.size === 0 || action.moves.size > 9) continue;
+      const support = [...action.moves.keys()].sort((a, b) => a - b);
+      const key = support.map((site) => `${site}>${action.moves.get(site)![0]}#${action.moves.get(site)![1]}`).join(';');
+      if (seenSeed.has(key)) continue;
+      seenSeed.add(key);
+      seeds.push({ word, support });
+    }
+  }
+
+  const bySite = new Map<number, number[]>();
+  seeds.forEach((seed, index) => {
+    for (const site of seed.support) {
+      const list = bySite.get(site) ?? [];
+      list.push(index);
+      bySite.set(site, list);
+    }
+  });
+  for (let i = 0; i < seeds.length && result.size < wantedOrbits.size; i += 1) {
+    const partners = new Set<number>();
+    for (const site of seeds[i]!.support) {
+      for (const j of bySite.get(site) ?? []) if (j > i) partners.add(j);
+    }
+    for (const j of partners) {
+      const word = commutatorWord(seeds[i]!.word, seeds[j]!.word);
+      const action = actionOver(word, commutatorCandidates(seeds[i]!.word, seeds[j]!.word));
+      const src: number[] = [];
+      const dst: number[] = [];
+      const rots: number[] = [];
+      let clean = true;
+      for (const [site, [to, rot]] of action.moves) {
+        if (to === site) {
+          if (rot !== ROT_ID) { clean = false; break; }
+          continue;
+        }
+        src.push(site); dst.push(to); rots.push(rot);
+        if (src.length > 3) { clean = false; break; }
+      }
+      if (!clean || src.length !== 3) continue;
+      const orbit = orbitOfSite[src[0]!]!;
+      if (!wantedOrbits.has(orbit) || result.has(orbit)) continue;
+      if (src.some((site) => orbitOfSite[site] !== orbit)) continue;
+      result.set(orbit, { word, src, dst, rots });
+      if (result.size === wantedOrbits.size) break;
+    }
+  }
+  return result;
 };

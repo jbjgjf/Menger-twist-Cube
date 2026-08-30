@@ -195,6 +195,6 @@ if (open.length === 0) {
   for (const v of verdicts) logPositions += log10Factorial(v.size) - Math.log10(2);
   const branching = Math.log10(atoms.length);
   console.log(`\nreachable cell arrangements >= 10^${logPositions.toFixed(0)} (product of |Alt(orbit)|)`);
-  console.log(`legal move atoms: ${atoms.length}, so God's number >= ${Math.round(logPositions / branching)} moves`);
+  console.log(`legal move atoms: ${atoms.length}, so God's number >= ${Math.ceil(logPositions / branching)} moves`);
   console.log('(positions only — cell orientations multiply this further)');
 }

@@ -7,3 +7,6 @@ dist/
 verification-*.png
 .vercel
 apps/play/public/deployment-version.txt
+research/scratch/l3-phase-order.cache.json
+research/scratch/l3-global-tool-inventory.cache.json
+research/scratch/l3-orientation-tools.cache.json

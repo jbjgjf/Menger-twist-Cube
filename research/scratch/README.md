@@ -20,12 +20,13 @@ Behind [`docs/algorithms/level3-block-quotient-solver.md`](../../docs/algorithms
   legality and every solution replayed independently of the solver's own
   reporting.
 
-## Level 3 full solver (in progress)
+## Level 3 full solver
 
-Groundwork for a Level 3 solver that handles *every* legal move, not just the
-block-rigid set. Status: steps 1-3 are done — the group structure is settled,
-every orbit has a tool, and orientation is characterised. Parity, the placement
-pipeline and the port remain.
+The research behind
+[`docs/algorithms/level3-slice-reduction-solver.md`](../../docs/algorithms/level3-slice-reduction-solver.md),
+which handles *every* legal move, not just the block-rigid set. Complete: the
+group structure is settled, all 164 orbits have a globally pure tool, orientation
+and parity are solved, and the production solver ships.
 
 - `l3sim.ts` — integer simulator of the Level 3 puzzle (8000 sites, 3,591 legal
   atoms). Atoms are **sparse**: dense per-atom permutations would need 284 MB.
@@ -72,79 +73,86 @@ pipeline and the port remain.
 - `l3-twist-tools.ts` — **step 3b:** twist tools for the orbits whose orientation
   is not determined, built Level 2 style from two globally pure 3-cycles on the
   same ordered cycle with different rotation profiles.
+- `l3-twist-d4.ts` — the last twistable orbit, the 192-cell `EEE/Bbo` whose
+  freedom is D₄. Builds twisters both ways and checks the criterion that actually
+  matters: not whether a tool *applies* a missing rotation, but whether every
+  hard residue has a twist that drops it to roll-fixable.
+- `l3-parity.ts` — **step 4:** the orbit-parity space. Tools are commutators and
+  orbits are invariant, so every tool is even on every orbit and parity has to be
+  fixed once, up front, by raw turns.
+- `l3-phase-order.ts` — **step 5a:** is there a phase order in which every
+  orbit's tool disturbs only orbits solved later? Caches the expensive tool and
+  disturbance computation in `l3-phase-order.cache.json`.
+- `l3-ladder.ts` — **step 5b diagnostic:** how far the tightening ladder
+  descends. Level 2 goes atoms(44) → seeds(≤9) → tools(3) in two rungs; this
+  measures the rung-2 support distribution at Level 3 instead of guessing at
+  another seed family.
+- `l3-wide-tools.ts` — pure tools of *any* cycle shape (not just 3-cycles) for
+  the blocking orbits.
+- `l3-why-impure.ts` — why the tight rung-2 words are not pure tools, split into
+  the two possible causes. This is what found the orbit coupling.
+- `l3-tight-seeds.ts` — the `[frame, depth-1/1.5]` family, ruled out: seeds
+  sharing any cell always share more than four.
+- `l3-global-tool-inventory.ts`, `l3-conjugate-isolation.ts` — the construction
+  that finished the job: a globally pure tool for all 164 orbits, 47 of them via
+  conjugate isolation.
+- `l3-export-solver-data.ts` — emits the verified words as the static
+  `packages/solver-core/src/algorithms/level3SliceReductionToolData.ts`, so the
+  shipped solver reads no filesystem and runs in the browser.
+- `l3-placement-prototype.ts` — the end-to-end research prototype the production
+  solver was ported from.
+- `l3-audit-tooldata.ts` — re-derives the orbits and audits every exported word
+  independently of the generator that produced it.
+- `l3-sim-vs-engine.ts` — applies random legal words in both the sparse simulator
+  and `@menger/engine` and compares all 8000 cells. Without this, every result
+  computed in the simulator would be unverified.
+- `l3-coupled-pairs.ts`, `l3-orbit-coupling.ts`, `l3-pair-isolation.ts` — the
+  coupling investigation that disproved the orbit-pair hypothesis.
 - `l3-full-estimate.ts` — projected solution length, calibrated on Level 2.
 
-### Where this stands
+### What this established
 
-**Step 1 complete: there is no structural obstruction anywhere.** Every one of
-the 164 orbits is primitive and carries at least `Alt(orbit)`, so a pure 3-cycle
-exists on every orbit and the reduction method applies to all 8000 cells. Two
-earlier readings of the data said otherwise and were wrong: `CCC` looked blocked
-because its supports were measured at class level (512 cells) rather than orbit
-level (8 or 24), and coverage was computed against 64M class-level ordered pairs
-when only 803,264 within-orbit pairs can ever be needed.
+**No structural obstruction anywhere.** All 164 orbits are primitive and each
+carries at least `Alt(orbit)`, so pure tools exist on every one and the reduction
+method reaches all 8000 cells. State space ≥ 10^11395; God's number ≥ 3,206 moves
+from positions alone.
 
-**Step 2 complete: every orbit has a tool.** The two constructions turn out to be
-exactly complementary — orbit-local settles the small orbits, class-level the
-large ones:
+**One globally pure tool per orbit, 164/164.** 117 from interchanging small-support
+commutators, 47 from **conjugate isolation** — the commutator of a tool `T` with
+its own setup conjugate `gTg⁻¹`, which cancels the part of `T` reaching outside
+the orbit. Support widths 3 (×133), 4 (×17), 6 (×14); no spill, no stationary
+twist. Because pure tools disturb nothing, orbits solve in any order and the
+solver needs no phase ordering at all.
 
-| | orbits | cells | tool length |
-| --- | ---: | ---: | --- |
-| globally pure, orbit-local | 116/164 | 2,720 | 4-8 atoms |
-| globally pure, class-level | 8/164 | 1,440 | 16 atoms |
-| **globally pure, either** | **124/164** | **4,160** | |
-| orbit-local only | 40/164 | 3,840 | 4-8 atoms |
-| **any tool at all** | **164/164** | **8,000** | |
+**Orientation is nearly free.** 7,224 of 8,000 cells have their orientation
+determined by position. Only 16 orbits (776 cells) can twist: 11 with C₄ freedom
+that one depth-3 roll clears, 4 `CCC` orbits with C₃ and no legal roll that need
+twist commutators, and the 192-cell D₄ orbit where two of seven residues need a
+descending twist rather than a direct fix.
 
-The 40 orbits with no globally pure tool are all of size 96 (`ECC`, `ECE/*`,
-`EEC/B|b`, `EEE/Bo|b`, `EEE/B|bo`, `EEE/B|b|o`). Their orbit-local tools disturb
-~50 cells elsewhere, so those orbits have to be solved **first**, while the rest
-is still scrambled — structurally the same arrangement Level 2 uses, where
-corner classes get scope-pure tools and run first and edge classes get globally
-pure tools and run last.
+**Parity is rank 15**, not 164 — the orbits' parities are strongly correlated —
+and the GF(2) system is never inconsistent for a reachable state.
 
-Why the interchange cannot make those 40 globally pure: it needs two words whose
-supports meet in *exactly one* cell. Level 2's seeds have support ≤ 9, so that
-happens readily. The orbit-local tools here are ~50 cells wide, and two 50-cell
-supports in 8000 sites either miss each other entirely or meet in several cells —
-almost never in exactly one. The class-level family has tight (≤ 9) seeds and so
-does produce globally pure tools, but only for the `b = E` classes its seeds can
-reach.
+### Three wrong turns, recorded because they cost real time
 
-Note only *one* globally pure tool per orbit is needed: purity is preserved under
-conjugation, and setup conjugation moves a tool anywhere within its orbit, which
-is how Level 2's pair-BFS covers a class from a template library.
+1. **Measuring at class level instead of orbit level.** Supports and coverage
+   computed over a 512–768 cell class produced a confident but false "`CCC` is
+   structurally blocked" conclusion. The orbit (8–96 cells) is the meaningful
+   unit.
+2. **Requiring tools to be exactly 3-cycles.** Level 2 v0.1.0 made this mistake
+   and v0.3.0 fixed it; it was then repeated at Level 3. Wider shapes are usable
+   and land more cells per tool.
+3. **Concluding the solving unit is a coupled orbit *pair*.** `l3-why-impure.ts`
+   found that on the 96-cell `EEE/B|b|o` orbit every one of 4,392 tight words
+   spans exactly two orbits, and that was generalized into a claim about the
+   whole puzzle. It is false: exhaustive diagonal coupling over all legal atoms
+   is zero, and conjugate isolation produces single-orbit tools for every one of
+   the 40 orbits that looked blocked. `l3-coupled-pairs.ts`, `l3-orbit-coupling.ts`
+   and `l3-pair-isolation.ts` are the scripts that disproved it.
 
-**The 4-atom tool length is the headline win.** It is a quarter of Level 2's edge
-tools, so the finished solver should land well under the 60-70k moves projected
-from Level 2's cost model.
-
-**Step 3 essentially complete: orientation is nearly free at Level 3.** The
-single-piece automaton (`l3-orient-freedom.ts`) shows **7,224 of 8,000 cells have
-their orientation determined by position** — the Level 2 `EC` theorem, but
-covering 90% of the puzzle instead of 24%. Only 16 orbits, 776 cells, can be
-twisted at all:
-
-| orbits | cells | freedom | legal in-place roll | how it is handled |
-| ---: | ---: | --- | --- | --- |
-| 11 | 552 | 4 (C₄) | yes | one depth-3 turn realizes the whole group — no commutator needed |
-| 4 | 32 | 3 (C₃) | **no** | **674 twisters each**, twisting 2-3 cells (`l3-twist-tools.ts`) |
-| 1 | 192 | 8 (D₄) | yes | rolls give the C₄ half; the flips still need tools |
-
-The `CCC` orbits were the dangerous case — corner-style C₃ twists with no legal
-roll to fall back on, so tools were the only route. They have them.
-
-The one loose end is the 192-cell `EEE/Bbo` orbit, whose D₄ freedom is exactly
-the shape of Level 2's `EEa`: rolls reach half of it and the diagonal flips need
-a twist tool. Level 2 solves this with a joint `[E2, T]` pair application under
-strict potential descent, and that orbit does have globally pure tools (from the
-class-level family), so the same construction should transfer — it just has not
-been run yet.
-
-Remaining: (4) orbit-parity normalization, an F₂ system over 164 orbits against
-Level 2's 11; (5) the placement pipeline, whose phase order must put the 40
-orbit-local-only orbits before the 124 pure ones; (6) the port to
-`packages/solver-core` with exact-replay verification.
+`l3-phase-order.ts`, `l3-ladder.ts`, `l3-wide-tools.ts`, `l3-why-impure.ts` and
+`l3-tight-seeds.ts` are kept as the record of that dead end — they document what
+was measured, not a design the solver uses.
 
 ## Level 2 slice reduction
 
