@@ -1,5 +1,5 @@
 // Registers built-in algorithms (`level1-quotient`, `level2-block-quotient`,
-// `level2-slice-reduction`, `level3-block-quotient`) as a side effect of
+// `level2-slice-reduction`, `level3-block-quotient`, `level3-slice-reduction`) as a side effect of
 // importing this package's entry point.
 import './algorithms/register';
 
@@ -20,6 +20,7 @@ export { level1QuotientAlgorithm, warmLevel1Solver } from './algorithms/level1Qu
 export { level2BlockQuotientAlgorithm, warmLevel2Solver } from './algorithms/level2BlockQuotientSolver';
 export { level2SliceReductionAlgorithm, warmLevel2SliceReductionSolver } from './algorithms/level2SliceReductionSolver';
 export { level3BlockQuotientAlgorithm, warmLevel3BlockQuotientSolver } from './algorithms/level3BlockQuotientSolver';
+export { level3SliceReductionAlgorithm, warmLevel3SliceReductionSolver } from './algorithms/level3SliceReductionSolver';
 export { onSolverDebug, emitSolverDebug } from './debug';
 export type { SolverDebugEvent } from './debug';
 
