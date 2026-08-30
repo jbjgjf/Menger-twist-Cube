@@ -17,11 +17,13 @@ import CubeView from './components/CubeView';
 import ExplanationTimeline from './components/ExplanationTimeline';
 import ResultsTable from './components/ResultsTable';
 import { useSolvePlayback } from './playback/useSolvePlayback';
+import { benchmarkInWorker, solveInWorker } from './runSolverWorker';
 
 const numberInputClass =
   'w-full rounded border border-slate-700 bg-slate-950/60 px-2 py-1 text-sm text-slate-100 outline-none focus:border-cyan-500';
 const buttonClass =
   'rounded border border-slate-600 bg-slate-800/80 px-3 py-1.5 text-xs font-medium text-slate-100 transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-40';
+const maxMaterializedPlaybackMoves = 10_000;
 
 interface LogEntry {
   timestamp: number;
@@ -114,7 +116,9 @@ export default function App() {
     const inputCubies = scrambledCubies ?? basePuzzle.cubies;
     log(`solve: running ${algorithm.id} on level ${level}`);
     try {
-      const result = await algorithm.solve(mengerPuzzleModel, { ...basePuzzle, cubies: inputCubies });
+      const result = algorithm.id === 'level3-slice-reduction'
+        ? await solveInWorker(algorithm.id, level, inputCubies, log)
+        : await algorithm.solve(mengerPuzzleModel, { ...basePuzzle, cubies: inputCubies });
       setSolveResult(result);
       setSolveRecords(
         benchmarkStore.record(result, {
@@ -124,14 +128,28 @@ export default function App() {
         }),
       );
       if (result.success) {
-        let current = { ...basePuzzle, cubies: inputCubies };
-        const states: Cubie[][] = [inputCubies];
-        for (const move of result.output_moves) {
-          current = mengerPuzzleModel.applyMove(current, move);
-          states.push(current.cubies);
+        if (result.move_count > maxMaterializedPlaybackMoves) {
+          // A Level 3 solution can contain hundreds of thousands of moves.
+          // Materializing Cubie[8000] after every move would require billions
+          // of references, and rendering one DOM row per move would freeze or
+          // crash the tab. The solver has already replay-verified every move in
+          // its worker; show the exact solved endpoint without duplicating that
+          // enormous state history on the UI thread.
+          loadPlayback([basePuzzle.cubies], []);
+          log(
+            `solve: success — ${result.move_count} moves in ${result.runtime_ms.toFixed(1)}ms; ` +
+            `full playback omitted above the ${maxMaterializedPlaybackMoves}-move safety limit`,
+          );
+        } else {
+          let current = { ...basePuzzle, cubies: inputCubies };
+          const states: Cubie[][] = [inputCubies];
+          for (const move of result.output_moves) {
+            current = mengerPuzzleModel.applyMove(current, move);
+            states.push(current.cubies);
+          }
+          loadPlayback(states, result.output_moves, { autoPlay: true });
+          log(`solve: success — ${result.move_count} moves in ${result.runtime_ms.toFixed(1)}ms; replay started`);
         }
-        loadPlayback(states, result.output_moves, { autoPlay: true });
-        log(`solve: success — ${result.move_count} moves in ${result.runtime_ms.toFixed(1)}ms; replay started`);
       } else {
         loadPlayback([inputCubies], []);
         log(`solve: FAILED — ${result.notes}`);
@@ -159,11 +177,14 @@ export default function App() {
     log(`benchmark: ${algorithm.id}, level ${level}, ${seedCount} seeds, length ${scrambleLength}`);
     try {
       const seeds = Array.from({ length: Math.max(1, seedCount) }, (_, index) => index + 1);
-      const result = await runBenchmark(mengerPuzzleModel, algorithm, {
+      const spec = {
         level,
         scrambleSeeds: seeds,
         scrambleLength,
-      });
+      };
+      const result = algorithm.id === 'level3-slice-reduction'
+        ? await benchmarkInWorker(algorithm.id, spec, log)
+        : await runBenchmark(mengerPuzzleModel, algorithm, spec);
       setBenchmarkResult(result);
       log(`benchmark: done — ${(result.summary.successRate * 100).toFixed(1)}% success`);
     } catch (cause) {
@@ -453,6 +474,13 @@ export default function App() {
         </div>
 
         {solveResult && <ExplanationTimeline result={solveResult} />}
+        {solveResult?.success && solveResult.move_count > maxMaterializedPlaybackMoves && (
+          <p className="rounded border border-amber-700/60 bg-amber-950/30 px-3 py-2 text-xs text-amber-200">
+            This solution contains {solveResult.move_count.toLocaleString()} moves. It was solved and legality-checked
+            in a worker, but move-by-move playback is intentionally omitted above the{' '}
+            {maxMaterializedPlaybackMoves.toLocaleString()}-move browser safety limit.
+          </p>
+        )}
 
         <ResultsTable
           title="Recent solve records (persisted locally)"
