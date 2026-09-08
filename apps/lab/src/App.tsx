@@ -15,6 +15,7 @@ import {
 } from '@menger/solver-core';
 import CubeView from './components/CubeView';
 import ExplanationTimeline from './components/ExplanationTimeline';
+import { useIsDesktop } from './useIsDesktop';
 import ResultsTable from './components/ResultsTable';
 import { useSolvePlayback } from './playback/useSolvePlayback';
 import { benchmarkInWorker, solveInWorker } from './runSolverWorker';
@@ -47,7 +48,16 @@ export default function App() {
     [algorithms],
   );
 
+  const isDesktop = useIsDesktop();
+
   const [level, setLevel] = useState(solverLevels[0] ?? 1);
+
+  // A Level 3 run scrambles 8,000 cells, solves for minutes, and replays
+  // hundreds of thousands of moves on a 3D scene. That is a desktop-only
+  // workload — on a phone it does not just run slowly, it stalls the tab — so
+  // the run controls are blocked rather than left to fail silently.
+  const levelNeedsDesktop = level >= 3;
+  const blockedOnThisDevice = levelNeedsDesktop && !isDesktop;
   const [algorithmId, setAlgorithmId] = useState(algorithms[0]?.id ?? '');
   const algorithm = algorithms.find((candidate) => candidate.id === algorithmId);
 
@@ -110,7 +120,7 @@ export default function App() {
   };
 
   const solve = async () => {
-    if (!algorithm) return;
+    if (!algorithm || blockedOnThisDevice) return;
     setError(null);
     setIsSolving(true);
     const inputCubies = scrambledCubies ?? basePuzzle.cubies;
@@ -171,7 +181,7 @@ export default function App() {
   };
 
   const runLiveBenchmark = async () => {
-    if (!algorithm) return;
+    if (!algorithm || blockedOnThisDevice) return;
     setError(null);
     setIsRunning(true);
     log(`benchmark: ${algorithm.id}, level ${level}, ${seedCount} seeds, length ${scrambleLength}`);
@@ -307,13 +317,17 @@ export default function App() {
               />
             </label>
             <div className="col-span-2 flex items-end gap-2">
-              <button className={buttonClass} onClick={scramble} disabled={!algorithm || isSolving}>
+              <button
+                className={buttonClass}
+                onClick={scramble}
+                disabled={!algorithm || isSolving || blockedOnThisDevice}
+              >
                 Scramble
               </button>
               <button
                 className={`${buttonClass} border-cyan-500/60 bg-cyan-900/40 hover:bg-cyan-800/50`}
                 onClick={() => void solve()}
-                disabled={!algorithm || isSolving || !algorithm.levelsSupported.includes(level)}
+                disabled={!algorithm || isSolving || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)}
               >
                 {isSolving ? 'Solving…' : 'Solve'}
               </button>
@@ -322,6 +336,14 @@ export default function App() {
               </button>
             </div>
           </div>
+          {blockedOnThisDevice && (
+            <p className="mt-2 rounded border border-amber-500/50 bg-amber-950/30 px-3 py-2 text-xs leading-5 text-amber-200">
+              Level {level} runs on desktop only. A solve scrambles 8,000 cells, runs for minutes, and replays
+              hundreds of thousands of moves — a phone stalls on it rather than finishing it. Open the lab on a
+              computer (precise pointer, window at least 1024px wide) to scramble, solve, and watch the phase
+              breakdown. Committed CLI results below can still be imported and read on this device.
+            </p>
+          )}
           {algorithm && (
             <p className="mt-2 text-xs text-slate-500">
               {algorithm.name}@{algorithm.version} — supports level(s) {algorithm.levelsSupported.join(', ')}
@@ -514,7 +536,11 @@ export default function App() {
                   onChange={(event) => setSeedCount(Number(event.target.value))}
                 />
               </label>
-              <button className={buttonClass} onClick={() => void runLiveBenchmark()} disabled={!algorithm || isRunning}>
+              <button
+                className={buttonClass}
+                onClick={() => void runLiveBenchmark()}
+                disabled={!algorithm || isRunning || blockedOnThisDevice}
+              >
                 {isRunning ? 'Running…' : `Run benchmark (${seedCount} seeds)`}
               </button>
               <button className={buttonClass} onClick={() => fileInputRef.current?.click()}>

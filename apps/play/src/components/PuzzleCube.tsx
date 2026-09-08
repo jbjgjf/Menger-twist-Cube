@@ -4,6 +4,7 @@ import { Vector2, Vector3 } from 'three';
 import type { AxisName, Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 
 import { getAffectedCubieIds, getAffectedTurnTargetCubieIds, isSelectableInCubieMode } from '@menger/engine';
+import { twistCommitAngle, twistDragSlopPx } from '../input/twistGesture';
 import CubieMesh from './CubieMesh';
 import InstancedCubieMeshes from './InstancedCubieMeshes';
 
@@ -207,11 +208,15 @@ export default function PuzzleCube({
 
         event.stopPropagation();
         const delta = new Vector2(event.clientX - gesture.startX, event.clientY - gesture.startY);
-        const travel = delta.length();
-        if (travel > 6) gesture.hasMoved = true;
-
         const signedTravel = delta.dot(gesture.screenTangent);
         const preview = Math.max(-105, Math.min(105, signedTravel * 0.95));
+        // A gesture only counts as a drag once it is far enough to actually
+        // turn the frame. Anything shorter is released as a tap, which cycles
+        // the selected axis — so a finger's few pixels of wobble no longer
+        // swallow the tap.
+        if (Math.abs(preview) >= twistCommitAngle || delta.length() >= twistDragSlopPx) {
+          gesture.hasMoved = true;
+        }
         onDragPreview(gesture.frameId, preview);
       },
       onPointerUp: endTwist,
@@ -305,11 +310,13 @@ export default function PuzzleCube({
 
               event.stopPropagation();
               const delta = new Vector2(event.clientX - gesture.startX, event.clientY - gesture.startY);
-              const travel = delta.length();
-              if (travel > 6) gesture.hasMoved = true;
-
               const signedTravel = delta.dot(gesture.screenTangent);
               const preview = Math.max(-105, Math.min(105, signedTravel * 0.95));
+              // See the instanced branch above: the drag/tap split has to use
+              // the same threshold that commits a rotation.
+              if (Math.abs(preview) >= twistCommitAngle || delta.length() >= twistDragSlopPx) {
+          gesture.hasMoved = true;
+        }
               onDragPreview(gesture.frameId, preview);
             }}
             onPointerUp={endTwist}

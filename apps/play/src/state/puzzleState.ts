@@ -41,7 +41,7 @@ export type Action =
   | { type: 'COMMIT_MOVE'; frameId: FrameId; angle: TwistAngle }
   | { type: 'COMMIT_CUBIE_MOVE'; cubieId: string; axis: Vector3Tuple; angle: TwistAngle }
   | { type: 'COMMIT_EXTENSION_MOVE'; targetId: string; angle: TwistAngle }
-  | { type: 'SET_LEVEL'; level: number }
+  | { type: 'SET_LEVEL'; level: number; allowHeavyRendering?: boolean }
   | { type: 'SET_FRAME_SCALE'; scale: number }
   | { type: 'SET_EXTENSION_DEPTH'; depth: number }
   | { type: 'UNDO' }
@@ -55,8 +55,11 @@ export type Action =
 
 const cloneMove = (move: Move): Move => ({ ...move });
 
-const createPuzzle = (level: number): PuzzleState & { initialCubies: Cubie[] } => {
-  const base = createMengerPuzzleState(level);
+const createPuzzle = (
+  level: number,
+  allowHeavyRendering = false,
+): PuzzleState & { initialCubies: Cubie[] } => {
+  const base = createMengerPuzzleState(level, { allowHeavyRendering });
   return {
     ...base,
     initialCubies: base.cubies.map((cubie) => ({ ...cubie, orientation: cubie.orientation.clone() })),
@@ -287,7 +290,7 @@ export const puzzleReducer = (state: RootState, action: Action): RootState => {
         ui: { ...state.ui, invalidFeedback: null, dragPreview: null },
       };
     case 'SET_LEVEL': {
-      const puzzle = createPuzzle(action.level);
+      const puzzle = createPuzzle(action.level, action.allowHeavyRendering ?? false);
       return {
         ...state,
         initialCubies: puzzle.initialCubies,

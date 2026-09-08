@@ -1,7 +1,7 @@
 import type { MengerPuzzleState } from './types';
 import { generateMenger } from './generateMenger';
 import { createFrameMap, generateRotationFrames } from './frameDefinitions';
-import { interactionTierForLevel, isPlayableLevel } from './levels';
+import { interactionTierForLevel, isPlayableLevel, type LevelRenderOptions } from './levels';
 import { createTurnTargetMap, generateTurnTargets } from './turnTargets';
 
 /**
@@ -11,12 +11,16 @@ import { createTurnTargetMap, generateTurnTargets } from './turnTargets';
  * their starting state through this function instead of each re-deriving
  * frames/turn targets/cubies independently.
  */
-export const createMengerPuzzleState = (level: number): MengerPuzzleState => {
-  const interactionTier = interactionTierForLevel(level);
-  const cubies = isPlayableLevel(level) ? generateMenger(level) : [];
+export const createMengerPuzzleState = (
+  level: number,
+  options: LevelRenderOptions = {},
+): MengerPuzzleState => {
+  const interactionTier = interactionTierForLevel(level, options);
+  const playable = isPlayableLevel(level, options);
+  const cubies = playable ? generateMenger(level) : [];
   const frames = generateRotationFrames(level);
   const frameById = createFrameMap(frames);
-  const turnTargets = generateTurnTargets(level, frames, isPlayableLevel(level));
+  const turnTargets = generateTurnTargets(level, frames, playable);
   const turnTargetById = createTurnTargetMap(turnTargets);
 
   return {

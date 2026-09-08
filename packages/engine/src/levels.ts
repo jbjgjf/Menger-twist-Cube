@@ -20,14 +20,33 @@ export const availableScalesForLevel = (level: number): number[] => {
   return scales;
 };
 
-export const interactionTierForLevel = (level: number): InteractionTier => {
+/**
+ * Rendering options for a level. `allowHeavyRendering` is the desktop-only
+ * escape hatch: Level 4 is 160,000 cubies, which an instanced renderer on a
+ * desktop GPU handles but a phone does not, so the caller (which is the only
+ * thing that knows what device it is on) opts in explicitly. Level 5 is
+ * 3,200,000 cubies and stays research-only on every device.
+ */
+export interface LevelRenderOptions {
+  allowHeavyRendering?: boolean;
+}
+
+export const heavyRenderLevels = [4] as const;
+
+export const interactionTierForLevel = (
+  level: number,
+  options: LevelRenderOptions = {},
+): InteractionTier => {
   if (level <= 2) return 'competitive-manual';
   if (level === 3) return 'assisted-manual';
+  if (options.allowHeavyRendering && (heavyRenderLevels as readonly number[]).includes(level)) {
+    return 'assisted-manual';
+  }
   return 'research-evaluation';
 };
 
-export const isPlayableLevel = (level: number): boolean =>
-  interactionTierForLevel(level) !== 'research-evaluation';
+export const isPlayableLevel = (level: number, options: LevelRenderOptions = {}): boolean =>
+  interactionTierForLevel(level, options) !== 'research-evaluation';
 
 export const frameTargetCountForLevel = (level: number): number =>
   availableScalesForLevel(level).reduce((total, scale) => total + 3 * ((3 ** level) / scale), 0);

@@ -72,7 +72,11 @@ The control panel exposes Level 1 through Level 5:
 
 - Levels 1–2: competitive-manual play.
 - Level 3: assisted-manual play (target counts are large enough to need depth navigation).
-- Levels 4–5: research/evaluation UI only — target counts and solver/benchmark surfaces, no full cubie rendering.
+- Level 4: full 160,000-cubie rendering **on desktop only** — a precise pointer on a viewport at least
+  1024px wide. On a phone it falls back to the research/evaluation UI, and the level rebuilds itself if
+  the window crosses that threshold mid-session.
+- Level 5: research/evaluation UI only on every device — target counts and solver/benchmark surfaces,
+  no full cubie rendering.
 
 Puzzle generation, frame targets, and extension targets scale with level; see [`docs/architecture/interaction-architecture.md`](docs/architecture/interaction-architecture.md) for the generation rules and target-count formulas.
 
@@ -84,7 +88,14 @@ Puzzle generation, frame targets, and extension targets scale with level; see [`
 | Zoom | Scroll |
 | Select frame | Tap/click a cubie face or guide |
 | Select extension target | Switch to Extension mode, then tap an edge block |
+| Cycle the selected frame's axis | Tap the same cubie again (three taps walk the two deep axes and the face axis) |
 | Drag rotation preview | Drag highlighted cubies or a guide |
+
+A press on a highlighted cubie is a tap or a drag depending on how far it travels: below the commit
+threshold in `apps/play/src/input/twistGesture.ts` it releases as a tap and cycles the axis, at or above it
+the frame turns. Both ends of the gesture read that one constant — when they disagreed, touches that landed
+between the two thresholds neither turned the frame nor cycled the axis, which made tap-to-cycle look absent
+on phones while working on a mouse.
 
 ### Keyboard
 
@@ -112,7 +123,10 @@ Keyboard bindings are centralized in `apps/play/src/input/keyboardControls.ts` a
 
 ## apps/lab — the algorithm lab
 
-All solver interaction lives in `apps/lab` (the Play app is manual play only). The lab scrambles a cube with a seeded, reproducible scramble, runs any registered algorithm, and replays the solution move by move on a centered 3D cube with play / pause / stop / step / jump controls and a 0.1–1.0s per-move speed slider. A debug log streams the solver's phase events (calibration, cubing attempts, fallbacks) live via `onSolverDebug`, solve records persist to `localStorage`, and CLI-generated benchmark JSON files can be imported for comparison.
+All solver interaction lives in `apps/lab` (the Play app is manual play only). **Level 3 runs on desktop
+only**: a solve scrambles 8,000 cells, runs for minutes, and replays hundreds of thousands of moves, so on a
+phone the scramble/solve/benchmark controls are disabled rather than left to stall the tab. Levels 1–2 and
+importing committed CLI results work on every device. The lab scrambles a cube with a seeded, reproducible scramble, runs any registered algorithm, and replays the solution move by move on a centered 3D cube with play / pause / stop / step / jump controls and a 0.1–1.0s per-move speed slider. A debug log streams the solver's phase events (calibration, cubing attempts, fallbacks) live via `onSolverDebug`, solve records persist to `localStorage`, and CLI-generated benchmark JSON files can be imported for comparison.
 
 ## Documentation
 

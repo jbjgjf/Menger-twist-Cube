@@ -37,9 +37,12 @@ The UI should not pretend that all levels are equally human-playable.
 | 1 | competitive-manual | Direct manual play, fast keyboard and mobile controls |
 | 2 | competitive-manual | Upper bound for competitive manual play |
 | 3 | assisted-manual | Human-guided exploration with target depth, recents, pins, and future solver hints |
-| 4+ | research-evaluation | Solver, replay, scoped visualization, and performance evaluation |
+| 4 | assisted-manual on desktop, research-evaluation elsewhere | Full structure when the device can draw it; counts and solver surfaces when it cannot |
+| 5 | research-evaluation | Solver, replay, scoped visualization, and performance evaluation |
 
-Level 4 and Level 5 should not generate or render the full cubie set in the main manual scene. They should keep the generalized target model and show counts, solver controls, and evaluation metrics instead.
+The tier at Level 4 is decided by the device, not by the level alone. `interactionTierForLevel(level, { allowHeavyRendering })` takes the caller's answer to "can this device draw 160,000 cubies?" — the engine has no way to know, and only the app holds a viewport and a pointer type. The Play app answers it with `useIsDesktop()` (`(pointer: fine) and (min-width: 1024px)`), and rebuilds the level whenever that answer changes, because the cubie set is generated once at `SET_LEVEL` time.
+
+Level 5 (3,200,000 cubies) stays research-evaluation on every device: it keeps the generalized target model and shows counts, solver controls, and evaluation metrics instead.
 
 ## Keyboard model
 

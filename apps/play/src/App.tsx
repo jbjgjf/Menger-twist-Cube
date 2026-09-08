@@ -7,6 +7,7 @@ import {
   getAffectedCubieIds,
   getAffectedTurnTargetCubieIds,
   availableScalesForLevel,
+  heavyRenderLevels,
   isPlayableLevel,
   turnTargetSummaryForLevel,
   validateFrameRotation,
@@ -14,6 +15,8 @@ import {
 } from '@menger/engine';
 import { createInitialState, puzzleReducer } from './state/puzzleState';
 import { findKeyboardCommand, ignoresKeyboardControls } from './input/keyboardControls';
+import { twistCommitAngle } from './input/twistGesture';
+import { useIsDesktop } from './useIsDesktop';
 import type { AxisName, FrameId, RotationFrame, TurnTarget, TwistAngle } from './types/puzzle';
 
 // --- Frame navigation helpers ---
@@ -102,6 +105,7 @@ const randomAngle = (): TwistAngle => {
 
 export default function PlayApp() {
   const [state, dispatch] = useReducer(puzzleReducer, undefined, createInitialState);
+  const isDesktop = useIsDesktop();
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
   const [controlsOpen, setControlsOpen] = useState(false);
@@ -238,8 +242,22 @@ export default function PlayApp() {
   };
 
   const setLevel = (level: number) => {
-    dispatch({ type: 'SET_LEVEL', level });
+    dispatch({ type: 'SET_LEVEL', level, allowHeavyRendering: isDesktop });
   };
+
+  // The puzzle's cubies are generated once, at SET_LEVEL time, from whatever
+  // `isDesktop` was then. Crossing the desktop threshold mid-session (a window
+  // resize, or a trackpad attached to a tablet) has to rebuild the level that
+  // depends on it, or Level 4 would either render an empty scene or keep
+  // 160,000 cubies alive on a viewport that can no longer afford them.
+  useEffect(() => {
+    if (heavyRenderLevels.includes(state.puzzle.level as (typeof heavyRenderLevels)[number])) {
+      dispatch({ type: 'SET_LEVEL', level: state.puzzle.level, allowHeavyRendering: isDesktop });
+    }
+    // Only the desktop flag should retrigger this; a level change already
+    // dispatches SET_LEVEL with the current flag.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDesktop]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -372,7 +390,7 @@ export default function PlayApp() {
     dispatch({ type: 'SELECT_FRAME', frameId });
     if (angle === null) {
       const preview = state.ui.dragPreview;
-      if (!preview || Math.abs(preview.angle) < 25) {
+      if (!preview || Math.abs(preview.angle) < twistCommitAngle) {
         dispatch({ type: 'SET_DRAG_PREVIEW', preview: null });
         return;
       }
@@ -403,7 +421,7 @@ export default function PlayApp() {
     ? state.puzzle.turnTargetById.get(state.puzzle.selectedExtension) ?? null
     : null;
   const targetSummary = turnTargetSummaryForLevel(state.puzzle.level);
-  const playableLevel = isPlayableLevel(state.puzzle.level);
+  const playableLevel = isPlayableLevel(state.puzzle.level, { allowHeavyRendering: isDesktop });
 
   return (
     <main className="min-h-full bg-slate-950 text-slate-100">
@@ -442,10 +460,18 @@ export default function PlayApp() {
           <div className="w-full max-w-3xl rounded-lg border border-slate-700 bg-slate-900/80 p-5 shadow-2xl">
             <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Research / Evaluation UI</p>
             <h1 className="mt-2 text-2xl font-bold">Level {state.puzzle.level} is outside direct human play.</h1>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
-              Full manual rendering is disabled for this level. The same generalized target model is retained for solver
-              planning, sequence replay, branching-factor measurement, and scoped visualization.
-            </p>
+            {heavyRenderLevels.includes(state.puzzle.level as (typeof heavyRenderLevels)[number]) && !isDesktop ? (
+              <p className="mt-3 text-sm leading-6 text-amber-200">
+                Level {state.puzzle.level} renders {(20 ** state.puzzle.level).toLocaleString()} cubies. That is a
+                desktop-only view — open this page on a computer (precise pointer, window at least 1024px wide) to see
+                the structure itself. The target model below is available on every device.
+              </p>
+            ) : (
+              <p className="mt-3 text-sm leading-6 text-slate-300">
+                Full manual rendering is disabled for this level. The same generalized target model is retained for solver
+                planning, sequence replay, branching-factor measurement, and scoped visualization.
+              </p>
+            )}
             <div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
               <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
                 <p className="text-slate-400">Frame targets</p>
@@ -597,7 +623,8 @@ export default function PlayApp() {
             </p>
             <p className="mt-4 text-base leading-7 text-slate-300">
               Start with Level 1 to learn the movement system, then move through Levels 2 and 3 for denser recursive targets.
-              Levels 4 and 5 expose research and evaluation data for structures too large for direct manual rendering. Every
+              Level 4 renders its full 160,000-cubie structure on desktop; Level 5 exposes research and evaluation data
+              for a structure too large to draw on any device. Every
               move follows the same geometry and collision rules used by the project&apos;s solver engine.
             </p>
           </div>

@@ -48,6 +48,25 @@ const getPhaseProgress = (phase: string, progress: any): PhaseProgress => {
     const pct = Math.round((current / total) * 100);
     return { label: `EEo placement: ${current}/${total} home`, pct };
   }
+  // Level 3 (8,000 cells) reports the same three phases the slice-reduction
+  // pipeline runs. Placement is measured by cells *home* rather than fully
+  // solved, because orientation is deliberately left for the phase after it.
+  if (progress.totalCubies === 8000) {
+    const total = progress.totalCubies;
+    if (normalized.includes('parity')) {
+      const pct = Math.round((progress.positionSolved / total) * 100);
+      return { label: `Orbit parity: 164 orbit parities even, ${progress.positionSolved}/${total} home`, pct };
+    }
+    if (normalized.includes('placement')) {
+      const pct = Math.round((progress.positionSolved / total) * 100);
+      return { label: `Orbit placement: ${progress.positionSolved}/${total} home`, pct };
+    }
+    if (normalized.includes('orientation')) {
+      const pct = Math.round((progress.solvedCubies / total) * 100);
+      return { label: `Orientation: ${progress.solvedCubies}/${total} fully solved`, pct };
+    }
+  }
+
   if (normalized.includes('orientation normalization') && progress.solvedCubies !== undefined) {
     const current = progress.solvedCubies;
     const total = progress.totalCubies || 400;
