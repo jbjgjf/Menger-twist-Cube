@@ -110,6 +110,9 @@ export default function PlayApp() {
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
   const [controlsOpen, setControlsOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [demoSelectedCubies, setDemoSelectedCubies] = useState<Set<string>>(new Set());
+
+  const isDemo = window.location.pathname === '/demo';
 
   const requestCameraPreset = (preset: CameraPreset) => {
     setCameraPreset(preset);
@@ -446,6 +449,16 @@ export default function PlayApp() {
           dragPreview={state.ui.dragPreview}
           cameraPreset={cameraPreset}
           cameraPresetRequest={cameraPresetRequest}
+          isDemo={isDemo}
+          demoSelectedCubies={demoSelectedCubies}
+          onToggleDemoCubie={(cubieId) => {
+            setDemoSelectedCubies((prev) => {
+              const next = new Set(prev);
+              if (next.has(cubieId)) next.delete(cubieId);
+              else next.add(cubieId);
+              return next;
+            });
+          }}
           onHoverFrame={(frame) => {
             const affected = frame ? getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById) : new Set<string>();
             dispatch({ type: 'SET_HOVER', frameId: frame, affectedIds: affected });
@@ -454,6 +467,12 @@ export default function PlayApp() {
           onSelectCubie={(cubieId) => dispatch({ type: 'SELECT_CUBIE', cubieId })}
           onSelectExtension={(targetId) => dispatch({ type: 'SELECT_EXTENSION', targetId })}
           onDragPreview={onGuideDrag}
+          onClearSelection={() => {
+            dispatch({ type: 'SELECT_FRAME', frameId: null });
+            dispatch({ type: 'SELECT_EXTENSION', targetId: null });
+            dispatch({ type: 'SELECT_CUBIE', cubieId: null });
+            setDemoSelectedCubies(new Set());
+          }}
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-slate-950 px-4 text-slate-100 md:pl-[390px]">

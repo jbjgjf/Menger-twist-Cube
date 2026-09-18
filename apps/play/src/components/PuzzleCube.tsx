@@ -24,11 +24,15 @@ interface Props {
   hoveredFrame: FrameId | null;
   transparentView: boolean;
   dragPreview: DragPreview | null;
+  isDemo?: boolean;
+  demoSelectedCubies?: Set<string>;
   onSelectFrame: (frame: FrameId) => void;
   onSelectCubie: (cubieId: string | null) => void;
   onSelectExtension: (targetId: string | null) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
   onTwistActiveChange: (active: boolean) => void;
+  onClearSelection?: () => void;
+  onToggleDemoCubie?: (cubieId: string) => void;
 }
 
 type TwistGesture = {
@@ -140,11 +144,14 @@ export default function PuzzleCube({
   hoveredFrame,
   transparentView,
   dragPreview,
+  isDemo,
   onSelectFrame,
   onSelectCubie,
   onSelectExtension,
   onDragPreview,
   onTwistActiveChange,
+  onClearSelection,
+  onToggleDemoCubie,
 }: Props) {
   const twistGesture = useRef<TwistGesture | null>(null);
   const suppressNextClick = useRef(false);
@@ -153,6 +160,9 @@ export default function PuzzleCube({
   const gap = 0.24 / gridSize;
 
   const highlightedIds = useMemo(() => {
+    if (isDemo) {
+      return demoSelectedCubies || new Set<string>();
+    }
     if (interactionMode === 'cubie') {
       if (!selectedExtension) return new Set<string>();
       return getAffectedTurnTargetCubieIds(cubies, selectedExtension, turnTargetById);
@@ -160,7 +170,7 @@ export default function PuzzleCube({
     const targetFrame = hoveredFrame ?? selectedFrame;
     if (!targetFrame) return new Set<string>();
     return getAffectedCubieIds(cubies, targetFrame, frameById);
-  }, [cubies, frameById, hoveredFrame, interactionMode, selectedExtension, selectedFrame, turnTargetById]);
+  }, [cubies, frameById, hoveredFrame, interactionMode, selectedExtension, selectedFrame, turnTargetById, isDemo, demoSelectedCubies]);
 
   const highlightedCubies = useMemo(() => {
     if (cubies.length <= instancedRenderingThreshold || highlightedIds.size === 0) return [];
@@ -235,7 +245,12 @@ export default function PuzzleCube({
         } else {
           const frameId = frameForCubieHit(targetCubie, event, frames, frameById, selectedFrame, frameScale);
           if (frameId) onSelectFrame(frameId);
+          if (isDemo && onToggleDemoCubie) onToggleDemoCubie(targetCubie.id);
         }
+      },
+      onDoubleClick: (targetCubie: Cubie, event: ThreeEvent<MouseEvent>) => {
+        event.stopPropagation();
+        if (onClearSelection) onClearSelection();
       },
     };
 
@@ -251,6 +266,7 @@ export default function PuzzleCube({
           frameById={frameById}
           turnTargetById={turnTargetById}
           dragPreview={null}
+          isDemo={isDemo}
           {...sharedHandlers}
         />
         <InstancedCubieMeshes
@@ -263,6 +279,7 @@ export default function PuzzleCube({
           frameById={frameById}
           turnTargetById={turnTargetById}
           dragPreview={dragPreview}
+          isDemo={isDemo}
           {...sharedHandlers}
         />
       </group>
@@ -288,6 +305,7 @@ export default function PuzzleCube({
             turnTargetById={turnTargetById}
             selectedFrame={selectedFrame}
             dragPreview={dragPreview}
+            isDemo={isDemo}
             onPointerDown={(targetCubie, event) => {
               if (!selectedFrame || !highlightedIds.has(targetCubie.id)) return;
 
@@ -335,7 +353,12 @@ export default function PuzzleCube({
               } else {
                 const frameId = frameForCubieHit(targetCubie, event, frames, frameById, selectedFrame, frameScale);
                 if (frameId) onSelectFrame(frameId);
+                if (isDemo && onToggleDemoCubie) onToggleDemoCubie(targetCubie.id);
               }
+            }}
+            onDoubleClick={(targetCubie, event) => {
+              event.stopPropagation();
+              if (onClearSelection) onClearSelection();
             }}
           />
         );

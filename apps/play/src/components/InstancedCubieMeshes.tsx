@@ -15,10 +15,12 @@ interface Props {
   frameById: Map<FrameId, RotationFrame>;
   turnTargetById: Map<string, TurnTarget>;
   dragPreview: DragPreview | null;
+  isDemo?: boolean;
   onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void;
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void;
   onClick: (cubie: Cubie, event: ThreeEvent<MouseEvent>) => void;
+  onDoubleClick?: (cubie: Cubie, event: ThreeEvent<MouseEvent>) => void;
 }
 
 // WCA-standard sticker colors (matches CubieMesh.tsx) — chosen so red and
@@ -32,6 +34,7 @@ const faceColors = [
   new Color('#009e60'), // Front (Green)
   new Color('#0051ba'), // Back (Blue)
 ];
+const grayColor = new Color('#6b7280');
 
 const dummy = new Object3D();
 
@@ -85,10 +88,12 @@ export default function InstancedCubieMeshes({
   frameById,
   turnTargetById,
   dragPreview,
+  isDemo,
   onPointerDown,
   onPointerMove,
   onPointerUp,
   onClick,
+  onDoubleClick,
 }: Props) {
   const meshRef = useRef<InstancedMesh>(null);
 
@@ -107,8 +112,11 @@ export default function InstancedCubieMeshes({
 
   if (cubies.length === 0) return null;
 
-  const materialOpacity = dimmed ? 0.16 : transparent ? 0.52 : 0.96;
-  const emissiveIntensity = highlighted ? 0.18 : dimmed ? 0.01 : 0.02;
+  const isDemoGray = isDemo && !highlighted;
+  const isDemoTransparent = isDemoGray || transparent;
+
+  const materialOpacity = isDemoGray ? 0.45 : dimmed ? 0.16 : transparent ? 0.52 : 0.96;
+  const emissiveIntensity = isDemoGray ? 0.1 : highlighted ? 0.18 : dimmed ? 0.01 : 0.02;
   const castsShadow = cubies.length <= 10000;
 
   const cubieFromEvent = (event: ThreeEvent<MouseEvent | PointerEvent>): Cubie | null => {
@@ -133,18 +141,24 @@ export default function InstancedCubieMeshes({
         const cubie = cubieFromEvent(event);
         if (cubie) onClick(cubie, event);
       }}
+      onDoubleClick={(event) => {
+        if (onDoubleClick) {
+          const cubie = cubieFromEvent(event);
+          if (cubie) onDoubleClick(cubie, event);
+        }
+      }}
     >
       <boxGeometry args={[size, size, size]} />
       {faceColors.map((color, index) => (
         <meshStandardMaterial
           key={index}
           attach={`material-${index}`}
-          color={color}
-          transparent={transparent || dimmed}
+          color={isDemoGray ? grayColor : color}
+          transparent={isDemoTransparent || dimmed}
           opacity={materialOpacity}
           metalness={0}
           roughness={1}
-          emissive={color}
+          emissive={isDemoGray ? grayColor : color}
           emissiveIntensity={emissiveIntensity}
         />
       ))}

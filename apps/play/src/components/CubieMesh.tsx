@@ -18,10 +18,12 @@ interface Props {
   turnTargetById: Map<string, TurnTarget>;
   selectedFrame: FrameId | null;
   dragPreview: DragPreview | null;
+  isDemo?: boolean;
   onPointerDown: (cubie: Cubie, event: ThreeEvent<PointerEvent>) => void;
   onPointerMove: (event: ThreeEvent<PointerEvent>) => void;
   onPointerUp: (event: ThreeEvent<PointerEvent>) => void;
   onClick: (cubie: Cubie, event: ThreeEvent<MouseEvent>) => void;
+  onDoubleClick?: (cubie: Cubie, event: ThreeEvent<MouseEvent>) => void;
 }
 
 const faceColors = [
@@ -32,6 +34,7 @@ const faceColors = [
   new Color('#009e60'), // Front (Green)
   new Color('#0051ba'), // Back (Blue)
 ];
+const grayColor = new Color('#6b7280');
 
 export default function CubieMesh({
   cubie,
@@ -45,10 +48,12 @@ export default function CubieMesh({
   turnTargetById,
   selectedFrame,
   dragPreview,
+  isDemo,
   onPointerDown,
   onPointerMove,
   onPointerUp,
   onClick,
+  onDoubleClick,
 }: Props) {
   const previewQuaternion = useMemo(() => {
     if (!dragPreview) return null;
@@ -111,7 +116,9 @@ export default function CubieMesh({
     return [rotated.x * (size + gap), rotated.y * (size + gap), rotated.z * (size + gap)];
   }, [cubie.currentPosition, dragPreview, frameById, gap, size, turnTargetById]);
 
-  const emissiveIntensity = highlighted ? 0.18 : isCubieSelected ? 0.22 : selectedFrame ? 0.04 : 0.02;
+  const isDemoGray = isDemo && !highlighted;
+  const isDemoTransparent = isDemoGray || transparent;
+  const emissiveIntensity = isDemoGray ? 0.1 : highlighted ? 0.18 : isCubieSelected ? 0.22 : selectedFrame ? 0.04 : 0.02;
 
   return (
     <mesh
@@ -124,18 +131,19 @@ export default function CubieMesh({
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
       onClick={(event) => onClick(cubie, event)}
+      onDoubleClick={(event) => onDoubleClick?.(cubie, event)}
     >
       <boxGeometry args={[size, size, size]} />
       {faceColors.map((color, index) => (
         <meshStandardMaterial
           key={index}
           attach={`material-${index}`}
-          color={color}
-          transparent={transparent || dimmed}
-          opacity={dimmed ? 0.18 : transparent ? 0.52 : 0.96}
+          color={isDemoGray ? grayColor : color}
+          transparent={isDemoTransparent || dimmed}
+          opacity={isDemoGray ? 0.45 : dimmed ? 0.18 : transparent ? 0.52 : 0.96}
           metalness={0}
           roughness={1}
-          emissive={color}
+          emissive={isDemoGray ? grayColor : color}
           emissiveIntensity={emissiveIntensity}
         />
       ))}

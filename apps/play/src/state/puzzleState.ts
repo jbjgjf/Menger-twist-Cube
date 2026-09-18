@@ -93,7 +93,7 @@ export const createInitialState = (): RootState => {
     },
     ui: {
       transparentView: false,
-      showGuides: true,
+      showGuides: false,
       hoveredFrame: null,
       hoverAffectedIds: new Set(),
       invalidFeedback: null,

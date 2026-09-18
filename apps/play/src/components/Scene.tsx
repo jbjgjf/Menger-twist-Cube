@@ -27,11 +27,15 @@ interface SceneProps {
   dragPreview: DragPreview | null;
   cameraPreset: CameraPreset;
   cameraPresetRequest: number;
+  isDemo?: boolean;
+  demoSelectedCubies?: Set<string>;
+  onToggleDemoCubie?: (cubieId: string) => void;
   onHoverFrame: (frame: FrameId | null) => void;
   onSelectFrame: (frame: FrameId) => void;
   onSelectCubie: (cubieId: string | null) => void;
   onSelectExtension: (targetId: string | null) => void;
   onDragPreview: (frame: FrameId, angle: number | null) => void;
+  onClearSelection?: () => void;
 }
 
 const targetMap: Record<CameraPreset, Vector3> = {
@@ -148,11 +152,15 @@ export default function Scene(props: SceneProps) {
         hoveredFrame={props.hoveredFrame}
         transparentView={props.transparentView}
         dragPreview={props.dragPreview}
+        isDemo={props.isDemo}
+        demoSelectedCubies={props.demoSelectedCubies}
+        onToggleDemoCubie={props.onToggleDemoCubie}
         onSelectFrame={props.onSelectFrame}
         onSelectCubie={props.onSelectCubie}
         onSelectExtension={props.onSelectExtension}
         onDragPreview={props.onDragPreview}
         onTwistActiveChange={setTwistActive}
+        onClearSelection={props.onClearSelection}
       />
 
       {props.showGuides && (
