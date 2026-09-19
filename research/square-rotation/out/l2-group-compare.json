@@ -1,0 +1,2522 @@
+{
+  "level": 2,
+  "generatedAt": "2026-09-18T20:05:02.169Z",
+  "runtimeMs": 5126,
+  "atoms": {
+    "existing": 468,
+    "additional": 54,
+    "additionalTargets": 18,
+    "total": 522
+  },
+  "simulatorVsEngine": {
+    "existingAtomDataFidelity": {
+      "atomsChecked": 468,
+      "atomsMismatched": 0
+    },
+    "randomWordTrials": [
+      {
+        "seed": 1,
+        "length": 40,
+        "additionalUsed": 13,
+        "mismatches": 0
+      },
+      {
+        "seed": 2,
+        "length": 40,
+        "additionalUsed": 12,
+        "mismatches": 0
+      },
+      {
+        "seed": 3,
+        "length": 40,
+        "additionalUsed": 17,
+        "mismatches": 0
+      },
+      {
+        "seed": 4,
+        "length": 40,
+        "additionalUsed": 20,
+        "mismatches": 0
+      },
+      {
+        "seed": 5,
+        "length": 40,
+        "additionalUsed": 15,
+        "mismatches": 0
+      },
+      {
+        "seed": 6,
+        "length": 40,
+        "additionalUsed": 13,
+        "mismatches": 0
+      }
+    ],
+    "verdict": "identical on all 400 positions and orientations"
+  },
+  "orbits": {
+    "G": {
+      "count": 11,
+      "histogram": "8x2, 24x6, 48x1, 96x2",
+      "table": [
+        {
+          "orbit": 0,
+          "size": 8,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -4,
+            -4,
+            -4
+          ]
+        },
+        {
+          "orbit": 1,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -4,
+            -4,
+            -3
+          ]
+        },
+        {
+          "orbit": 2,
+          "size": 24,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -4,
+            -4,
+            -2
+          ]
+        },
+        {
+          "orbit": 3,
+          "size": 96,
+          "classes": [
+            "EC"
+          ],
+          "classLabel": "EC",
+          "representative": [
+            -4,
+            -4,
+            -1
+          ]
+        },
+        {
+          "orbit": 4,
+          "size": 48,
+          "classes": [
+            "EEa"
+          ],
+          "classLabel": "EEa",
+          "representative": [
+            -4,
+            -4,
+            0
+          ]
+        },
+        {
+          "orbit": 5,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -4,
+            -3,
+            -2
+          ]
+        },
+        {
+          "orbit": 6,
+          "size": 96,
+          "classes": [
+            "EEo"
+          ],
+          "classLabel": "EEo",
+          "representative": [
+            -4,
+            -3,
+            -1
+          ]
+        },
+        {
+          "orbit": 7,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -4,
+            -3,
+            2
+          ]
+        },
+        {
+          "orbit": 8,
+          "size": 24,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -4,
+            -2,
+            -2
+          ]
+        },
+        {
+          "orbit": 9,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -3,
+            -2,
+            -2
+          ]
+        },
+        {
+          "orbit": 10,
+          "size": 8,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -2,
+            -2,
+            -2
+          ]
+        }
+      ]
+    },
+    "H": {
+      "count": 11,
+      "histogram": "8x2, 24x6, 48x1, 96x2",
+      "table": [
+        {
+          "orbit": 0,
+          "size": 8,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -4,
+            -4,
+            -4
+          ]
+        },
+        {
+          "orbit": 1,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -4,
+            -4,
+            -3
+          ]
+        },
+        {
+          "orbit": 2,
+          "size": 24,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -4,
+            -4,
+            -2
+          ]
+        },
+        {
+          "orbit": 3,
+          "size": 96,
+          "classes": [
+            "EC"
+          ],
+          "classLabel": "EC",
+          "representative": [
+            -4,
+            -4,
+            -1
+          ]
+        },
+        {
+          "orbit": 4,
+          "size": 48,
+          "classes": [
+            "EEa"
+          ],
+          "classLabel": "EEa",
+          "representative": [
+            -4,
+            -4,
+            0
+          ]
+        },
+        {
+          "orbit": 5,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -4,
+            -3,
+            -2
+          ]
+        },
+        {
+          "orbit": 6,
+          "size": 96,
+          "classes": [
+            "EEo"
+          ],
+          "classLabel": "EEo",
+          "representative": [
+            -4,
+            -3,
+            -1
+          ]
+        },
+        {
+          "orbit": 7,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -4,
+            -3,
+            2
+          ]
+        },
+        {
+          "orbit": 8,
+          "size": 24,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -4,
+            -2,
+            -2
+          ]
+        },
+        {
+          "orbit": 9,
+          "size": 24,
+          "classes": [
+            "CE"
+          ],
+          "classLabel": "CE",
+          "representative": [
+            -3,
+            -2,
+            -2
+          ]
+        },
+        {
+          "orbit": 10,
+          "size": 8,
+          "classes": [
+            "CC"
+          ],
+          "classLabel": "CC",
+          "representative": [
+            -2,
+            -2,
+            -2
+          ]
+        }
+      ]
+    },
+    "hOrbitToGOrbits": [
+      {
+        "hOrbit": 0,
+        "size": 8,
+        "gOrbits": [
+          0
+        ]
+      },
+      {
+        "hOrbit": 1,
+        "size": 24,
+        "gOrbits": [
+          1
+        ]
+      },
+      {
+        "hOrbit": 2,
+        "size": 24,
+        "gOrbits": [
+          2
+        ]
+      },
+      {
+        "hOrbit": 3,
+        "size": 96,
+        "gOrbits": [
+          3
+        ]
+      },
+      {
+        "hOrbit": 4,
+        "size": 48,
+        "gOrbits": [
+          4
+        ]
+      },
+      {
+        "hOrbit": 5,
+        "size": 24,
+        "gOrbits": [
+          5
+        ]
+      },
+      {
+        "hOrbit": 6,
+        "size": 96,
+        "gOrbits": [
+          6
+        ]
+      },
+      {
+        "hOrbit": 7,
+        "size": 24,
+        "gOrbits": [
+          7
+        ]
+      },
+      {
+        "hOrbit": 8,
+        "size": 24,
+        "gOrbits": [
+          8
+        ]
+      },
+      {
+        "hOrbit": 9,
+        "size": 24,
+        "gOrbits": [
+          9
+        ]
+      },
+      {
+        "hOrbit": 10,
+        "size": 8,
+        "gOrbits": [
+          10
+        ]
+      }
+    ],
+    "merged": []
+  },
+  "orientationFreedom": {
+    "G": [
+      {
+        "orbit": 0,
+        "size": 8,
+        "classLabel": "CC",
+        "freedom": 3,
+        "freedomOrders": [
+          3
+        ],
+        "groupType": "C3",
+        "uniform": true
+      },
+      {
+        "orbit": 1,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 4,
+        "freedomOrders": [
+          4
+        ],
+        "groupType": "C4",
+        "uniform": true
+      },
+      {
+        "orbit": 2,
+        "size": 24,
+        "classLabel": "CC",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 3,
+        "size": 96,
+        "classLabel": "EC",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 4,
+        "size": 48,
+        "classLabel": "EEa",
+        "freedom": 8,
+        "freedomOrders": [
+          8
+        ],
+        "groupType": "D4",
+        "uniform": true
+      },
+      {
+        "orbit": 5,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 6,
+        "size": 96,
+        "classLabel": "EEo",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 7,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 8,
+        "size": 24,
+        "classLabel": "CC",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 9,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 10,
+        "size": 8,
+        "classLabel": "CC",
+        "freedom": 3,
+        "freedomOrders": [
+          3
+        ],
+        "groupType": "C3",
+        "uniform": true
+      }
+    ],
+    "H": [
+      {
+        "orbit": 0,
+        "size": 8,
+        "classLabel": "CC",
+        "freedom": 3,
+        "freedomOrders": [
+          3
+        ],
+        "groupType": "C3",
+        "uniform": true
+      },
+      {
+        "orbit": 1,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 4,
+        "freedomOrders": [
+          4
+        ],
+        "groupType": "C4",
+        "uniform": true
+      },
+      {
+        "orbit": 2,
+        "size": 24,
+        "classLabel": "CC",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 3,
+        "size": 96,
+        "classLabel": "EC",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 4,
+        "size": 48,
+        "classLabel": "EEa",
+        "freedom": 8,
+        "freedomOrders": [
+          8
+        ],
+        "groupType": "D4",
+        "uniform": true
+      },
+      {
+        "orbit": 5,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 6,
+        "size": 96,
+        "classLabel": "EEo",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 7,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 8,
+        "size": 24,
+        "classLabel": "CC",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 9,
+        "size": 24,
+        "classLabel": "CE",
+        "freedom": 1,
+        "freedomOrders": [
+          1
+        ],
+        "groupType": "trivial",
+        "uniform": true
+      },
+      {
+        "orbit": 10,
+        "size": 8,
+        "classLabel": "CC",
+        "freedom": 3,
+        "freedomOrders": [
+          3
+        ],
+        "groupType": "C3",
+        "uniform": true
+      }
+    ],
+    "byClassG": [
+      {
+        "classLabel": "CC",
+        "orbits": 4,
+        "cells": 64,
+        "freedoms": [
+          1,
+          3
+        ],
+        "types": [
+          "C3",
+          "trivial"
+        ]
+      },
+      {
+        "classLabel": "CE",
+        "orbits": 4,
+        "cells": 96,
+        "freedoms": [
+          1,
+          4
+        ],
+        "types": [
+          "C4",
+          "trivial"
+        ]
+      },
+      {
+        "classLabel": "EC",
+        "orbits": 1,
+        "cells": 96,
+        "freedoms": [
+          1
+        ],
+        "types": [
+          "trivial"
+        ]
+      },
+      {
+        "classLabel": "EEa",
+        "orbits": 1,
+        "cells": 48,
+        "freedoms": [
+          8
+        ],
+        "types": [
+          "D4"
+        ]
+      },
+      {
+        "classLabel": "EEo",
+        "orbits": 1,
+        "cells": 96,
+        "freedoms": [
+          1
+        ],
+        "types": [
+          "trivial"
+        ]
+      }
+    ],
+    "byClassH": [
+      {
+        "classLabel": "CC",
+        "orbits": 4,
+        "cells": 64,
+        "freedoms": [
+          1,
+          3
+        ],
+        "types": [
+          "C3",
+          "trivial"
+        ]
+      },
+      {
+        "classLabel": "CE",
+        "orbits": 4,
+        "cells": 96,
+        "freedoms": [
+          1,
+          4
+        ],
+        "types": [
+          "C4",
+          "trivial"
+        ]
+      },
+      {
+        "classLabel": "EC",
+        "orbits": 1,
+        "cells": 96,
+        "freedoms": [
+          1
+        ],
+        "types": [
+          "trivial"
+        ]
+      },
+      {
+        "classLabel": "EEa",
+        "orbits": 1,
+        "cells": 48,
+        "freedoms": [
+          8
+        ],
+        "types": [
+          "D4"
+        ]
+      },
+      {
+        "classLabel": "EEo",
+        "orbits": 1,
+        "cells": 96,
+        "freedoms": [
+          1
+        ],
+        "types": [
+          "trivial"
+        ]
+      }
+    ]
+  },
+  "parity": {
+    "method": "Common partition = the H-orbit partition. Every H-orbit is a union of G-orbits (verified), so G's generator parity vectors are re-expressed on H-orbits by XOR-ing the parities of the G-orbits inside each H-orbit; this was checked to equal the parity of the restriction to the H-orbit directly. Ranks on the native G-orbit partition are reported separately.",
+    "onHOrbits": {
+      "parts": 11,
+      "rankG": 5,
+      "rankH": 6,
+      "distinctNonZeroG": 6,
+      "distinctNonZeroH": 8,
+      "spanSizeG": 32,
+      "spanSizeH": 64
+    },
+    "onGOrbits": {
+      "parts": 11,
+      "rankG": 5,
+      "distinctNonZeroG": 6,
+      "spanSizeG": 32
+    }
+  },
+  "wikiOldModelComparison": {
+    "source": "wiki/Level-2-Complete-Answer.md sections 4.2-4.3 (old abstract model, 972 atoms)",
+    "documentedOrbitCount": 11,
+    "measuredOrbitCountG": 11,
+    "rows": [
+      {
+        "classLabel": "CC",
+        "documentedOrbits": 4,
+        "measuredOrbitsG": 4,
+        "documentedFreedom": 3,
+        "measuredFreedomsG": [
+          1,
+          3
+        ],
+        "documentedType": "C3",
+        "measuredTypesG": [
+          "C3",
+          "trivial"
+        ],
+        "orbitsAgree": true,
+        "freedomAgrees": false
+      },
+      {
+        "classLabel": "CE",
+        "documentedOrbits": 4,
+        "measuredOrbitsG": 4,
+        "documentedFreedom": 4,
+        "measuredFreedomsG": [
+          1,
+          4
+        ],
+        "documentedType": "C4",
+        "measuredTypesG": [
+          "C4",
+          "trivial"
+        ],
+        "orbitsAgree": true,
+        "freedomAgrees": false
+      },
+      {
+        "classLabel": "EC",
+        "documentedOrbits": 1,
+        "measuredOrbitsG": 1,
+        "documentedFreedom": 1,
+        "measuredFreedomsG": [
+          1
+        ],
+        "documentedType": "trivial",
+        "measuredTypesG": [
+          "trivial"
+        ],
+        "orbitsAgree": true,
+        "freedomAgrees": true
+      },
+      {
+        "classLabel": "EEa",
+        "documentedOrbits": 1,
+        "measuredOrbitsG": 1,
+        "documentedFreedom": 8,
+        "measuredFreedomsG": [
+          8
+        ],
+        "documentedType": "D4",
+        "measuredTypesG": [
+          "D4"
+        ],
+        "orbitsAgree": true,
+        "freedomAgrees": true
+      },
+      {
+        "classLabel": "EEo",
+        "documentedOrbits": 1,
+        "measuredOrbitsG": 1,
+        "documentedFreedom": 4,
+        "measuredFreedomsG": [
+          1
+        ],
+        "documentedType": "C4",
+        "measuredTypesG": [
+          "trivial"
+        ],
+        "orbitsAgree": true,
+        "freedomAgrees": false
+      }
+    ]
+  },
+  "membership": {
+    "invariantChecks": [
+      {
+        "atom": "region:X-3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X-3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X-3:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:X0:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:X0:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:X0:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:X3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X3:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Y-3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y-3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y-3:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Y0:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Y0:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Y0:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Y3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y3:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Z-3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z-3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z-3:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Z0:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Z0:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Z0:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 4,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "region:Z3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z3:c0_0:s5@180",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:X0:c0_0:n12:0-1-2@90",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:X0:c0_0:n12:0-1-2@-90",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:X0:c0_0:n12:0-1-2@180",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:X3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X3:c0_0:n20:0-1-4-2-3@180",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@180",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Y0:c0_0:n12:0-1-2@90",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Y0:c0_0:n12:0-1-2@-90",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Y0:c0_0:n12:0-1-2@180",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@180",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@180",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Z0:c0_0:n12:0-1-2@90",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Z0:c0_0:n12:0-1-2@-90",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "16",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Z0:c0_0:n12:0-1-2@180",
+        "family": "subset",
+        "supportSize": 12,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      },
+      {
+        "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@180",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "0",
+        "parityInSpan": true,
+        "violatesSomeInvariant": false
+      }
+    ],
+    "violating": [
+      {
+        "atom": "region:X-3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X-3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:X3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y-3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y-3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Y3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z-3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z-3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z3:c0_0:s5@90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "region:Z3:c0_0:s5@-90",
+        "family": "region",
+        "supportSize": 12,
+        "side": 5,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "512",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:X3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      },
+      {
+        "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@-90",
+        "family": "subset",
+        "supportSize": 20,
+        "side": 9,
+        "orbitPreserved": true,
+        "orbitViolations": [],
+        "orientationConsistent": true,
+        "orientationViolations": [],
+        "parityDefined": true,
+        "parityVector": "162",
+        "parityInSpan": false,
+        "violatesSomeInvariant": true
+      }
+    ],
+    "provedOutsideG": 24,
+    "undetermined": 30,
+    "parityEvidence": [
+      {
+        "vector": "512",
+        "orbits": [
+          {
+            "orbit": 9,
+            "size": 24,
+            "classLabel": "CE"
+          }
+        ],
+        "atoms": [
+          "region:X-3:c0_0:s5@90",
+          "region:X-3:c0_0:s5@-90",
+          "region:X3:c0_0:s5@90",
+          "region:X3:c0_0:s5@-90",
+          "region:Y-3:c0_0:s5@90",
+          "region:Y-3:c0_0:s5@-90",
+          "region:Y3:c0_0:s5@90",
+          "region:Y3:c0_0:s5@-90",
+          "region:Z-3:c0_0:s5@90",
+          "region:Z-3:c0_0:s5@-90",
+          "region:Z3:c0_0:s5@90",
+          "region:Z3:c0_0:s5@-90"
+        ]
+      },
+      {
+        "vector": "162",
+        "orbits": [
+          {
+            "orbit": 1,
+            "size": 24,
+            "classLabel": "CE"
+          },
+          {
+            "orbit": 5,
+            "size": 24,
+            "classLabel": "CE"
+          },
+          {
+            "orbit": 7,
+            "size": 24,
+            "classLabel": "CE"
+          }
+        ],
+        "atoms": [
+          "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+          "subset:X-3:c0_0:n20:0-1-4-2-3@-90",
+          "subset:X3:c0_0:n20:0-1-4-2-3@90",
+          "subset:X3:c0_0:n20:0-1-4-2-3@-90",
+          "subset:Y-3:c0_0:n20:0-1-4-2-3@90",
+          "subset:Y-3:c0_0:n20:0-1-4-2-3@-90",
+          "subset:Y3:c0_0:n20:0-1-4-2-3@90",
+          "subset:Y3:c0_0:n20:0-1-4-2-3@-90",
+          "subset:Z-3:c0_0:n20:0-1-4-2-3@90",
+          "subset:Z-3:c0_0:n20:0-1-4-2-3@-90",
+          "subset:Z3:c0_0:n20:0-1-4-2-3@90",
+          "subset:Z3:c0_0:n20:0-1-4-2-3@-90"
+        ]
+      }
+    ],
+    "symmetry": {
+      "symmetriesChecked": 48,
+      "existingAtomSetClosed": true,
+      "additionalAtomSetClosed": true,
+      "additionalClassCount": 8,
+      "additionalClasses": [
+        {
+          "size": 12,
+          "representative": "region:X-3:c0_0:s5@90",
+          "members": [
+            "region:X-3:c0_0:s5@90",
+            "region:X-3:c0_0:s5@-90",
+            "region:X3:c0_0:s5@90",
+            "region:X3:c0_0:s5@-90",
+            "region:Y-3:c0_0:s5@-90",
+            "region:Y-3:c0_0:s5@90",
+            "region:Y3:c0_0:s5@-90",
+            "region:Y3:c0_0:s5@90",
+            "region:Z-3:c0_0:s5@90",
+            "region:Z-3:c0_0:s5@-90",
+            "region:Z3:c0_0:s5@90",
+            "region:Z3:c0_0:s5@-90"
+          ]
+        },
+        {
+          "size": 6,
+          "representative": "region:X-3:c0_0:s5@180",
+          "members": [
+            "region:X-3:c0_0:s5@180",
+            "region:X3:c0_0:s5@180",
+            "region:Y-3:c0_0:s5@180",
+            "region:Y3:c0_0:s5@180",
+            "region:Z-3:c0_0:s5@180",
+            "region:Z3:c0_0:s5@180"
+          ]
+        },
+        {
+          "size": 6,
+          "representative": "region:X0:c0_0:s5@90",
+          "members": [
+            "region:X0:c0_0:s5@90",
+            "region:X0:c0_0:s5@-90",
+            "region:Y0:c0_0:s5@-90",
+            "region:Y0:c0_0:s5@90",
+            "region:Z0:c0_0:s5@90",
+            "region:Z0:c0_0:s5@-90"
+          ]
+        },
+        {
+          "size": 3,
+          "representative": "region:X0:c0_0:s5@180",
+          "members": [
+            "region:X0:c0_0:s5@180",
+            "region:Y0:c0_0:s5@180",
+            "region:Z0:c0_0:s5@180"
+          ]
+        },
+        {
+          "size": 12,
+          "representative": "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+          "members": [
+            "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+            "subset:X-3:c0_0:n20:0-1-4-2-3@-90",
+            "subset:X3:c0_0:n20:0-1-4-2-3@90",
+            "subset:X3:c0_0:n20:0-1-4-2-3@-90",
+            "subset:Y-3:c0_0:n20:0-1-4-2-3@-90",
+            "subset:Y-3:c0_0:n20:0-1-4-2-3@90",
+            "subset:Y3:c0_0:n20:0-1-4-2-3@-90",
+            "subset:Y3:c0_0:n20:0-1-4-2-3@90",
+            "subset:Z-3:c0_0:n20:0-1-4-2-3@90",
+            "subset:Z-3:c0_0:n20:0-1-4-2-3@-90",
+            "subset:Z3:c0_0:n20:0-1-4-2-3@90",
+            "subset:Z3:c0_0:n20:0-1-4-2-3@-90"
+          ]
+        },
+        {
+          "size": 6,
+          "representative": "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+          "members": [
+            "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+            "subset:X3:c0_0:n20:0-1-4-2-3@180",
+            "subset:Y-3:c0_0:n20:0-1-4-2-3@180",
+            "subset:Y3:c0_0:n20:0-1-4-2-3@180",
+            "subset:Z-3:c0_0:n20:0-1-4-2-3@180",
+            "subset:Z3:c0_0:n20:0-1-4-2-3@180"
+          ]
+        },
+        {
+          "size": 6,
+          "representative": "subset:X0:c0_0:n12:0-1-2@90",
+          "members": [
+            "subset:X0:c0_0:n12:0-1-2@90",
+            "subset:X0:c0_0:n12:0-1-2@-90",
+            "subset:Y0:c0_0:n12:0-1-2@-90",
+            "subset:Y0:c0_0:n12:0-1-2@90",
+            "subset:Z0:c0_0:n12:0-1-2@90",
+            "subset:Z0:c0_0:n12:0-1-2@-90"
+          ]
+        },
+        {
+          "size": 3,
+          "representative": "subset:X0:c0_0:n12:0-1-2@180",
+          "members": [
+            "subset:X0:c0_0:n12:0-1-2@180",
+            "subset:Y0:c0_0:n12:0-1-2@180",
+            "subset:Z0:c0_0:n12:0-1-2@180"
+          ]
+        }
+      ]
+    },
+    "search": {
+      "method": "Bidirectional BFS on the state graph. The move group acts freely on the solved state, so an additional atom lies in G iff the state it produces is reachable with existing atoms only.",
+      "forwardDepth": 2,
+      "backwardDepthAllTargets": 1,
+      "backwardDepthRepresentatives": 2,
+      "results": [
+        {
+          "atom": "region:X-3:c0_0:s5@180",
+          "supportSize": 12,
+          "side": 5,
+          "symmetryClass": 1,
+          "isClassRepresentative": true,
+          "searchedWordLength": 4,
+          "forwardStates": 115030,
+          "backwardStates": 115030,
+          "wordFound": null
+        },
+        {
+          "atom": "region:X0:c0_0:s5@90",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 2,
+          "isClassRepresentative": true,
+          "searchedWordLength": 4,
+          "forwardStates": 115030,
+          "backwardStates": 115030,
+          "wordFound": null
+        },
+        {
+          "atom": "region:X0:c0_0:s5@-90",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 2,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:X0:c0_0:s5@180",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 3,
+          "isClassRepresentative": true,
+          "searchedWordLength": 4,
+          "forwardStates": 115030,
+          "backwardStates": 115030,
+          "wordFound": null
+        },
+        {
+          "atom": "region:X3:c0_0:s5@180",
+          "supportSize": 12,
+          "side": 5,
+          "symmetryClass": 1,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Y-3:c0_0:s5@180",
+          "supportSize": 12,
+          "side": 5,
+          "symmetryClass": 1,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Y0:c0_0:s5@90",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 2,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Y0:c0_0:s5@-90",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 2,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Y0:c0_0:s5@180",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 3,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Y3:c0_0:s5@180",
+          "supportSize": 12,
+          "side": 5,
+          "symmetryClass": 1,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Z-3:c0_0:s5@180",
+          "supportSize": 12,
+          "side": 5,
+          "symmetryClass": 1,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Z0:c0_0:s5@90",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 2,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Z0:c0_0:s5@-90",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 2,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Z0:c0_0:s5@180",
+          "supportSize": 4,
+          "side": 5,
+          "symmetryClass": 3,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "region:Z3:c0_0:s5@180",
+          "supportSize": 12,
+          "side": 5,
+          "symmetryClass": 1,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+          "supportSize": 20,
+          "side": 9,
+          "symmetryClass": 5,
+          "isClassRepresentative": true,
+          "searchedWordLength": 4,
+          "forwardStates": 115030,
+          "backwardStates": 115030,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:X0:c0_0:n12:0-1-2@90",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 6,
+          "isClassRepresentative": true,
+          "searchedWordLength": 4,
+          "forwardStates": 115030,
+          "backwardStates": 115030,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:X0:c0_0:n12:0-1-2@-90",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 6,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:X0:c0_0:n12:0-1-2@180",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 7,
+          "isClassRepresentative": true,
+          "searchedWordLength": 4,
+          "forwardStates": 115030,
+          "backwardStates": 115030,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:X3:c0_0:n20:0-1-4-2-3@180",
+          "supportSize": 20,
+          "side": 9,
+          "symmetryClass": 5,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@180",
+          "supportSize": 20,
+          "side": 9,
+          "symmetryClass": 5,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Y0:c0_0:n12:0-1-2@90",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 6,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Y0:c0_0:n12:0-1-2@-90",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 6,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Y0:c0_0:n12:0-1-2@180",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 7,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@180",
+          "supportSize": 20,
+          "side": 9,
+          "symmetryClass": 5,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@180",
+          "supportSize": 20,
+          "side": 9,
+          "symmetryClass": 5,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Z0:c0_0:n12:0-1-2@90",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 6,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Z0:c0_0:n12:0-1-2@-90",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 6,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Z0:c0_0:n12:0-1-2@180",
+          "supportSize": 12,
+          "side": 9,
+          "symmetryClass": 7,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        },
+        {
+          "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@180",
+          "supportSize": 20,
+          "side": 9,
+          "symmetryClass": 5,
+          "isClassRepresentative": false,
+          "searchedWordLength": 3,
+          "forwardStates": 115030,
+          "backwardStates": 469,
+          "wordFound": null
+        }
+      ]
+    }
+  },
+  "verdict": {
+    "classification": "B",
+    "reason": "24 of 54 additional atoms have an orbit-parity vector outside the GF(2) span of G's generator parities (rank 5 of 11 orbits), which proves those atoms are not in G and hence that H is strictly larger and reaches states G cannot. The other 30 additional atoms break no invariant and were not expressed as words in G, so their own membership is undetermined."
+  }
+}

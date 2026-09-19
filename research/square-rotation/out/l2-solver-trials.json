@@ -1,0 +1,4064 @@
+{
+  "level": 2,
+  "generatedAt": "2026-09-18T20:05:23.403Z",
+  "pilot": false,
+  "counts": {
+    "existingAtoms": 468,
+    "additionalAtoms": 54
+  },
+  "invariants": {
+    "orbitSizes": [
+      8,
+      24,
+      24,
+      96,
+      48,
+      24,
+      96,
+      24,
+      24,
+      24,
+      8
+    ],
+    "parityRank": 5,
+    "note": "Site orbits and orbit-wise permutation parity are homomorphic invariants of G. Failing either proves a state is outside G; passing both proves nothing (orientation freedom is not tested)."
+  },
+  "warmMs": 4623,
+  "categoryTimingsMs": {
+    "single-additional": 6621,
+    "additional-only": 3100,
+    "mixed": 6544
+  },
+  "summary": [
+    {
+      "category": "single-additional",
+      "solver": "level2-slice-reduction",
+      "attempts": 54,
+      "solverSuccesses": 30,
+      "replayVerified": 30,
+      "failures": 24,
+      "declaredScopeRejections": 0,
+      "failureClasses": {
+        "i:outside-G-proved": 24
+      },
+      "totalSolverMs": 6526,
+      "medianMoveCount": 128
+    },
+    {
+      "category": "single-additional",
+      "solver": "level2-block-quotient",
+      "attempts": 54,
+      "solverSuccesses": 0,
+      "replayVerified": 0,
+      "failures": 54,
+      "declaredScopeRejections": 54,
+      "failureClasses": {
+        "i:outside-G-proved": 24,
+        "v:out-of-declared-scope": 30
+      },
+      "totalSolverMs": 27,
+      "medianMoveCount": null
+    },
+    {
+      "category": "additional-only",
+      "solver": "level2-slice-reduction",
+      "attempts": 9,
+      "solverSuccesses": 5,
+      "replayVerified": 5,
+      "failures": 4,
+      "declaredScopeRejections": 0,
+      "failureClasses": {
+        "i:outside-G-proved": 4
+      },
+      "totalSolverMs": 3045,
+      "medianMoveCount": 1021
+    },
+    {
+      "category": "additional-only",
+      "solver": "level2-block-quotient",
+      "attempts": 9,
+      "solverSuccesses": 0,
+      "replayVerified": 0,
+      "failures": 9,
+      "declaredScopeRejections": 9,
+      "failureClasses": {
+        "i:outside-G-proved": 4,
+        "v:out-of-declared-scope": 5
+      },
+      "totalSolverMs": 4,
+      "medianMoveCount": null
+    },
+    {
+      "category": "mixed",
+      "solver": "level2-slice-reduction",
+      "attempts": 9,
+      "solverSuccesses": 6,
+      "replayVerified": 6,
+      "failures": 3,
+      "declaredScopeRejections": 0,
+      "failureClasses": {
+        "i:outside-G-proved": 3
+      },
+      "totalSolverMs": 6399,
+      "medianMoveCount": 2371
+    },
+    {
+      "category": "mixed",
+      "solver": "level2-block-quotient",
+      "attempts": 9,
+      "solverSuccesses": 0,
+      "replayVerified": 0,
+      "failures": 9,
+      "declaredScopeRejections": 9,
+      "failureClasses": {
+        "v:out-of-declared-scope": 6,
+        "i:outside-G-proved": 3
+      },
+      "totalSolverMs": 3,
+      "medianMoveCount": null
+    }
+  ],
+  "singleAtomVerdicts": [
+    {
+      "atom": "region:X-3:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:X-3:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:X-3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X0:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 233,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X0:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 233,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X0:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 36,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X3:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:X3:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:X3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y-3:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Y-3:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Y-3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y0:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 220,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y0:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 215,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y0:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 38,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y3:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Y3:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Y3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z-3:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Z-3:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Z-3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z0:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 212,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z0:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 212,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z0:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 36,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z3:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Z3:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0x200 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "region:Z3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@-90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X0:c0_0:n12:0-1-2@90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 316,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X0:c0_0:n12:0-1-2@-90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 318,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X0:c0_0:n12:0-1-2@180",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 103,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X3:c0_0:n20:0-1-4-2-3@90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:X3:c0_0:n20:0-1-4-2-3@-90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:X3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@-90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 124,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y0:c0_0:n12:0-1-2@90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 363,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y0:c0_0:n12:0-1-2@-90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 326,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y0:c0_0:n12:0-1-2@180",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 93,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@-90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 124,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@-90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z0:c0_0:n12:0-1-2@90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 285,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z0:c0_0:n12:0-1-2@-90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 296,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z0:c0_0:n12:0-1-2@180",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 96,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@-90",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "not-in-G-proved",
+      "certifyingSolvers": [],
+      "shortestVerifiedWord": null,
+      "invariantEvidence": "orbit-wise parity vector 0xa2 lies outside the F2-span of the 468 generators"
+    },
+    {
+      "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    }
+  ],
+  "membershipCertificates": [
+    {
+      "atom": "region:X-3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X0:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 233,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X0:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 233,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X0:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 36,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:X3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y-3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y0:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 220,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y0:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 215,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y0:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 38,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Y3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z-3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z0:c0_0:s5@90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 212,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z0:c0_0:s5@-90",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 212,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z0:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 4,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 36,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "region:Z3:c0_0:s5@180",
+      "ringSide": 5,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 92,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X0:c0_0:n12:0-1-2@90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 316,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X0:c0_0:n12:0-1-2@-90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 318,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X0:c0_0:n12:0-1-2@180",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 103,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:X3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y-3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 124,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y0:c0_0:n12:0-1-2@90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 363,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y0:c0_0:n12:0-1-2@-90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 326,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y0:c0_0:n12:0-1-2@180",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 93,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Y3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 124,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z-3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z0:c0_0:n12:0-1-2@90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 285,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z0:c0_0:n12:0-1-2@-90",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 296,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z0:c0_0:n12:0-1-2@180",
+      "ringSide": 9,
+      "supportSize": 12,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 96,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    },
+    {
+      "atom": "subset:Z3:c0_0:n20:0-1-4-2-3@180",
+      "ringSide": 9,
+      "supportSize": 20,
+      "verdict": "in-G-certified",
+      "certifyingSolvers": [
+        "level2-slice-reduction"
+      ],
+      "shortestVerifiedWord": 128,
+      "invariantEvidence": "both invariants satisfied (no obstruction found)"
+    }
+  ],
+  "trials": [
+    {
+      "category": "single-additional",
+      "label": "region:X-3:c0_0:s5@90",
+      "atom": {
+        "id": "region:X-3:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 8.966166999999587,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.6900830000004134,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X-3:c0_0:s5@-90",
+      "atom": {
+        "id": "region:X-3:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.5088750000004438,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 2.0267090000006647,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X-3:c0_0:s5@180",
+      "atom": {
+        "id": "region:X-3:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 92,
+          "runtimeMs": 190.68887500000073,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.5679170000003069,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X0:c0_0:s5@90",
+      "atom": {
+        "id": "region:X0:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 233,
+          "runtimeMs": 403.10170800000014,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.5892080000003261,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (0,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X0:c0_0:s5@-90",
+      "atom": {
+        "id": "region:X0:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 233,
+          "runtimeMs": 382.0928330000006,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.5835829999996349,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (0,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X0:c0_0:s5@180",
+      "atom": {
+        "id": "region:X0:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 36,
+          "runtimeMs": 16.658916999999747,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.48445799999990413,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (0,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X3:c0_0:s5@90",
+      "atom": {
+        "id": "region:X3:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.076082999999926,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4791660000000775,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X3:c0_0:s5@-90",
+      "atom": {
+        "id": "region:X3:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0670000000000073,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.47979099999975006,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:X3:c0_0:s5@180",
+      "atom": {
+        "id": "region:X3:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 92,
+          "runtimeMs": 162.11141600000064,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.5315829999999551,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y-3:c0_0:s5@90",
+      "atom": {
+        "id": "region:Y-3:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0250409999998737,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.3922499999998763,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y-3:c0_0:s5@-90",
+      "atom": {
+        "id": "region:Y-3:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9920419999998558,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4227080000000569,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y-3:c0_0:s5@180",
+      "atom": {
+        "id": "region:Y-3:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 92,
+          "runtimeMs": 160.82016600000043,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.479750000000422,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y0:c0_0:s5@90",
+      "atom": {
+        "id": "region:Y0:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 220,
+          "runtimeMs": 338.07616700000017,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.46141699999952834,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,0,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y0:c0_0:s5@-90",
+      "atom": {
+        "id": "region:Y0:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 215,
+          "runtimeMs": 282.1121669999993,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.48295800000050804,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,0,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y0:c0_0:s5@180",
+      "atom": {
+        "id": "region:Y0:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 38,
+          "runtimeMs": 16.20391699999982,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4745419999999285,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,0,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y3:c0_0:s5@90",
+      "atom": {
+        "id": "region:Y3:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0276659999999538,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4275420000003578,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y3:c0_0:s5@-90",
+      "atom": {
+        "id": "region:Y3:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9974579999998241,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.43370800000047893,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Y3:c0_0:s5@180",
+      "atom": {
+        "id": "region:Y3:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 92,
+          "runtimeMs": 158.09212500000012,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.48487500000010186,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z-3:c0_0:s5@90",
+      "atom": {
+        "id": "region:Z-3:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0531670000000304,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4252089999999953,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z-3:c0_0:s5@-90",
+      "atom": {
+        "id": "region:Z-3:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0160000000005311,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4186250000002474,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z-3:c0_0:s5@180",
+      "atom": {
+        "id": "region:Z-3:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 92,
+          "runtimeMs": 160.88145799999984,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4385409999995318,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z0:c0_0:s5@90",
+      "atom": {
+        "id": "region:Z0:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 212,
+          "runtimeMs": 323.2657080000008,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4557089999998425,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,0) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z0:c0_0:s5@-90",
+      "atom": {
+        "id": "region:Z0:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 212,
+          "runtimeMs": 291.04904200000055,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4575829999994312,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,0) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z0:c0_0:s5@180",
+      "atom": {
+        "id": "region:Z0:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 4
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 36,
+          "runtimeMs": 15.37945800000034,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4391249999998763,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,0) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z3:c0_0:s5@90",
+      "atom": {
+        "id": "region:Z3:c0_0:s5",
+        "angle": 90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.2556250000006912,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4140830000005735,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z3:c0_0:s5@-90",
+      "atom": {
+        "id": "region:Z3:c0_0:s5",
+        "angle": -90,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9744169999994483,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4101250000003347,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "region:Z3:c0_0:s5@180",
+      "atom": {
+        "id": "region:Z3:c0_0:s5",
+        "angle": 180,
+        "side": 5,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 92,
+          "runtimeMs": 165.77154100000007,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.5717500000000655,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X-3:c0_0:n20:0-1-4-2-3@90",
+      "atom": {
+        "id": "subset:X-3:c0_0:n20:0-1-4-2-3",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9909999999999854,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4100830000006681,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X-3:c0_0:n20:0-1-4-2-3@-90",
+      "atom": {
+        "id": "subset:X-3:c0_0:n20:0-1-4-2-3",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9579999999996289,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4058340000001408,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X-3:c0_0:n20:0-1-4-2-3@180",
+      "atom": {
+        "id": "subset:X-3:c0_0:n20:0-1-4-2-3",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 128,
+          "runtimeMs": 177.2421660000009,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.44487499999922875,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X0:c0_0:n12:0-1-2@90",
+      "atom": {
+        "id": "subset:X0:c0_0:n12:0-1-2",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 316,
+          "runtimeMs": 361.18441600000006,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.476542000000336,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (0,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X0:c0_0:n12:0-1-2@-90",
+      "atom": {
+        "id": "subset:X0:c0_0:n12:0-1-2",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 318,
+          "runtimeMs": 349.75487500000054,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.47745799999938754,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (0,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X0:c0_0:n12:0-1-2@180",
+      "atom": {
+        "id": "subset:X0:c0_0:n12:0-1-2",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 103,
+          "runtimeMs": 27.705707999999504,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4267500000005384,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (0,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X3:c0_0:n20:0-1-4-2-3@90",
+      "atom": {
+        "id": "subset:X3:c0_0:n20:0-1-4-2-3",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9512080000004062,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4092499999987922,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X3:c0_0:n20:0-1-4-2-3@-90",
+      "atom": {
+        "id": "subset:X3:c0_0:n20:0-1-4-2-3",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9413750000003347,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4055420000004233,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:X3:c0_0:n20:0-1-4-2-3@180",
+      "atom": {
+        "id": "subset:X3:c0_0:n20:0-1-4-2-3",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 128,
+          "runtimeMs": 174.55249999999978,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4588340000009339,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y-3:c0_0:n20:0-1-4-2-3@90",
+      "atom": {
+        "id": "subset:Y-3:c0_0:n20:0-1-4-2-3",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9989999999997963,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4014999999999418,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y-3:c0_0:n20:0-1-4-2-3@-90",
+      "atom": {
+        "id": "subset:Y-3:c0_0:n20:0-1-4-2-3",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9905839999992168,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.41629200000170385,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y-3:c0_0:n20:0-1-4-2-3@180",
+      "atom": {
+        "id": "subset:Y-3:c0_0:n20:0-1-4-2-3",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 124,
+          "runtimeMs": 174.41995899999893,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.44337500000074215,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y0:c0_0:n12:0-1-2@90",
+      "atom": {
+        "id": "subset:Y0:c0_0:n12:0-1-2",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 363,
+          "runtimeMs": 419.4592499999999,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4529999999995198,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,0,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y0:c0_0:n12:0-1-2@-90",
+      "atom": {
+        "id": "subset:Y0:c0_0:n12:0-1-2",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 326,
+          "runtimeMs": 379.27720899999986,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.7084580000009737,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,0,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y0:c0_0:n12:0-1-2@180",
+      "atom": {
+        "id": "subset:Y0:c0_0:n12:0-1-2",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 93,
+          "runtimeMs": 35.5424579999999,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4462499999990541,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,0,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y3:c0_0:n20:0-1-4-2-3@90",
+      "atom": {
+        "id": "subset:Y3:c0_0:n20:0-1-4-2-3",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0064579999998386,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.43141599999944447,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y3:c0_0:n20:0-1-4-2-3@-90",
+      "atom": {
+        "id": "subset:Y3:c0_0:n20:0-1-4-2-3",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9947079999983544,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4262909999997646,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Y3:c0_0:n20:0-1-4-2-3@180",
+      "atom": {
+        "id": "subset:Y3:c0_0:n20:0-1-4-2-3",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 124,
+          "runtimeMs": 180.43525000000045,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4568749999998545,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z-3:c0_0:n20:0-1-4-2-3@90",
+      "atom": {
+        "id": "subset:Z-3:c0_0:n20:0-1-4-2-3",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.1274159999993572,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.42954199999985576,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z-3:c0_0:n20:0-1-4-2-3@-90",
+      "atom": {
+        "id": "subset:Z-3:c0_0:n20:0-1-4-2-3",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0516250000000582,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4227920000012091,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z-3:c0_0:n20:0-1-4-2-3@180",
+      "atom": {
+        "id": "subset:Z-3:c0_0:n20:0-1-4-2-3",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 128,
+          "runtimeMs": 171.21441699999923,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.43295800000123563,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z0:c0_0:n12:0-1-2@90",
+      "atom": {
+        "id": "subset:Z0:c0_0:n12:0-1-2",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 285,
+          "runtimeMs": 395.21658299999945,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.46808299999975134,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,0) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z0:c0_0:n12:0-1-2@-90",
+      "atom": {
+        "id": "subset:Z0:c0_0:n12:0-1-2",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 296,
+          "runtimeMs": 367.462042000001,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4812920000003942,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,0) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z0:c0_0:n12:0-1-2@180",
+      "atom": {
+        "id": "subset:Z0:c0_0:n12:0-1-2",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 12
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 96,
+          "runtimeMs": 34.93733400000019,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.48337500000161526,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,0) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z3:c0_0:n20:0-1-4-2-3@90",
+      "atom": {
+        "id": "subset:Z3:c0_0:n20:0-1-4-2-3",
+        "angle": 90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.1284580000010465,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4808339999999589,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z3:c0_0:n20:0-1-4-2-3@-90",
+      "atom": {
+        "id": "subset:Z3:c0_0:n20:0-1-4-2-3",
+        "angle": -90,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 1.0941669999992882,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.46229200000016135,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "single-additional",
+      "label": "subset:Z3:c0_0:n20:0-1-4-2-3@180",
+      "atom": {
+        "id": "subset:Z3:c0_0:n20:0-1-4-2-3",
+        "angle": 180,
+        "side": 9,
+        "supportSize": 20
+      },
+      "scrambleLength": 1,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 128,
+          "runtimeMs": 177.80716700000085,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.45179100000132166,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,1) holds cells from 2 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len5 seed101",
+      "scrambleLength": 5,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.9348339999996824,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.3907500000004802,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 4 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len5 seed102",
+      "scrambleLength": 5,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.8765829999993002,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.3735839999990276,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 5 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len5 seed103",
+      "scrambleLength": 5,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 639,
+          "runtimeMs": 484.2189589999998,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4288329999999405,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 4 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len10 seed101",
+      "scrambleLength": 10,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 0,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 840,
+          "runtimeMs": 465.84912500000064,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4281670000000304,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 4 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len10 seed102",
+      "scrambleLength": 10,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 512,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.8766670000004524,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.34416699999928824,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 4 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len10 seed103",
+      "scrambleLength": 10,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 162,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.8690839999999298,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.3599579999990965,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 3 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len20 seed101",
+      "scrambleLength": 20,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 16,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 1021,
+          "runtimeMs": 727.8311669999985,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.41779200000019046,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 4 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len20 seed102",
+      "scrambleLength": 20,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 690,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 1026,
+          "runtimeMs": 552.941499999999,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.4446250000000873,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 4 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "additional-only",
+      "label": "add-only len20 seed103",
+      "scrambleLength": 20,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 690,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 1109,
+          "runtimeMs": 810.8560830000006,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.42212499999914144,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 6 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len20 seed201",
+      "scrambleLength": 20,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 843,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 2003,
+          "runtimeMs": 786.5140420000007,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.3644170000006852,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 5 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len20 seed202",
+      "scrambleLength": 20,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 929,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.7167499999995925,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.25362499999937427,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 3 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len20 seed203",
+      "scrambleLength": 20,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 1285,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 1762,
+          "runtimeMs": 824.7951250000006,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.3608749999984866,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 3 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len50 seed201",
+      "scrambleLength": 50,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 1558,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 2371,
+          "runtimeMs": 1167.425792,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.31925000000046566,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 3 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len50 seed202",
+      "scrambleLength": 50,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 2047,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 2333,
+          "runtimeMs": 1029.2140830000026,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.30841700000019046,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 3 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len50 seed203",
+      "scrambleLength": 50,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 746,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 2625,
+          "runtimeMs": 1241.3290420000012,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.26608300000225427,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 6 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len100 seed201",
+      "scrambleLength": 100,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 945,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.6343329999981506,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.2147079999995185,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 8 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len100 seed202",
+      "scrambleLength": 100,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 1102,
+        "parityInSpan": false,
+        "provablyOutsideG": true
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.6163330000017595,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": false,
+          "notes": "orbit parity vector lies outside the reachable span — the state is not reachable by legal moves"
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.2031669999996666,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "i:outside-G-proved",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 6 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    },
+    {
+      "category": "mixed",
+      "label": "mixed len100 seed203",
+      "scrambleLength": 100,
+      "invariant": {
+        "orbitConsistent": true,
+        "offOrbitCells": 0,
+        "parityMask": 417,
+        "parityInSpan": true,
+        "provablyOutsideG": false
+      },
+      "scrambleOk": true,
+      "scrambleNote": "all atoms legal in situ",
+      "solves": [
+        {
+          "solver": "level2-slice-reduction",
+          "success": true,
+          "moveCount": 2764,
+          "runtimeMs": 1347.9407920000012,
+          "replayVerified": true,
+          "replayDetail": "400/400 cells exact",
+          "failureClass": "none",
+          "declaredScopeRejection": false,
+          "notes": "Level 2 solved by class-by-class commutator reduction (full slice generator set supported)."
+        },
+        {
+          "solver": "level2-block-quotient",
+          "success": false,
+          "moveCount": 0,
+          "runtimeMs": 0.2767920000005688,
+          "replayVerified": false,
+          "replayDetail": "no solution returned",
+          "failureClass": "v:out-of-declared-scope",
+          "declaredScopeRejection": true,
+          "notes": "Block region (-1,-1,-1) holds cells from 6 different home blocks — single-layer moves have torn block boundaries, which this solver version does not repair."
+        }
+      ]
+    }
+  ],
+  "completenessCaveat": "A finite set of successful trials is not a completeness proof for either model: it certifies membership for the states actually tested and nothing more."
+}

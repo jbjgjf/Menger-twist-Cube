@@ -13,6 +13,9 @@
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "verify:l3": "tsx research/scratch/l3-audit-tooldata.ts && tsx research/scratch/l3-sim-vs-engine.ts && tsx research/scratch/l3-orbit-groups.ts",
+    "audit:square": "node --import tsx research/square-rotation/reproduce-four-block.ts && node --import tsx research/square-rotation/legality-invariance.ts && node --import tsx research/square-rotation/audit-level2.ts && node --import tsx research/square-rotation/extensions-count.ts && node --import tsx research/square-rotation/cache-assumption.ts",
+    "audit:square:groups": "node --import tsx research/square-rotation/group-compare.ts && node --import tsx research/square-rotation/solver-trials.ts",
+    "test:square": "node --import tsx --test research/square-rotation/test/*.test.ts",
     "bench": "npm run bench --workspace=@menger/solver-core --"
   },
   "devDependencies": {
