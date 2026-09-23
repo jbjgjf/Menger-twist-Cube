@@ -249,7 +249,7 @@ export default function PuzzleCube({
           if (isDemo && onToggleDemoCubie) onToggleDemoCubie(targetCubie.id);
         }
       },
-      onDoubleClick: (targetCubie: Cubie, event: ThreeEvent<MouseEvent>) => {
+      onDoubleClick: (_targetCubie: Cubie, event: ThreeEvent<MouseEvent>) => {
         event.stopPropagation();
         if (onClearSelection) onClearSelection();
       },
@@ -357,7 +357,7 @@ export default function PuzzleCube({
                 if (isDemo && onToggleDemoCubie) onToggleDemoCubie(targetCubie.id);
               }
             }}
-            onDoubleClick={(targetCubie, event) => {
+            onDoubleClick={(_targetCubie, event) => {
               event.stopPropagation();
               if (onClearSelection) onClearSelection();
             }}
