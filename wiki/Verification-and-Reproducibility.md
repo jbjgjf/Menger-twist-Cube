@@ -65,6 +65,7 @@ npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --lengt
 - `research/scratch/l3-sim-vs-engine.ts`：疎シミュレータと実エンジンの比較
 - `docs/architecture/rotation-legality-design-log.md`：物理衝突判定と Level 2 の未再検証事項
 - `docs/research/level3-solver-completion-audit.md`：Level 3 完成監査
+- `docs/research/square-region-rotation-model.md`, `docs/research/square-region-rotation-impact.md`：正方形断面の内面回転を網羅した拡張モデルの定義と、Level 2 の差分・群比較（`npm run audit:square`, `npm run test:square`）
 
 ## 5. 残っている研究課題
 

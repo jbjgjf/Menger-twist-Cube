@@ -1,0 +1,22 @@
+{
+ "level": 2,
+ "method": "Every \"collides\" answer used by the subset enumeration is re-proved by an exact rational separating-axis test at a rational angle (tan(φ/2) = p/2^24) strictly inside the sweep. -180 checked via the mirrored plane.",
+ "claims": {
+  "claims": 58236,
+  "certifiedByWitness": 58236,
+  "certifiedByScan": 0,
+  "uncertified": [],
+  "uncertifiedCount": 0
+ },
+ "rederivedVsAudit": {
+  "rederived": 459,
+  "audit": 459,
+  "missing": [],
+  "extra": []
+ },
+ "minusHalfTurn": {
+  "closedSquareSets": 153,
+  "freeOnlyAtMinus180": []
+ },
+ "elapsedMs": 19746
+}

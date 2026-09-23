@@ -1,5 +1,14 @@
 # レベル2：旧生成群 G と拡張生成群 H の群構造比較
 
+> **注記（2026-09-23 追記）：§5–§7 は後の結果で置き換えられた。**
+> この報告書は `group-compare.ts` の時点（2026-09-18）の記録であり、本文は変更していない。その後、次の結果が得られた。
+>
+> - §5 で「未判定」とした30手は、**すべて G に属する**ことが示された。`solver-trials.ts` は語長だけを記録していたが、語そのものは `out/l2-index-certificate.json` に保存し、`verify-certificates.ts` で再生検証できる。
+> - したがって、§6 の「未判定の30手も G に属さないと推測する」は**誤り**であった。
+> - 指数は **$[H:G]=2$ と証明された**（Schreier 生成元1044個をすべて再生検証。`index-certificate.ts`）。
+>
+> 最新の結論は `docs/research/square-region-rotation-impact.md` §1・§6 を参照。
+
 生成スクリプト: `research/square-rotation/group-compare.ts`
 （`node --import tsx research/square-rotation/group-compare.ts [--deep-search]`）
 出力データ: `research/square-rotation/out/l2-group-compare.json`

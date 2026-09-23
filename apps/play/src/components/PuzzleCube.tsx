@@ -145,6 +145,7 @@ export default function PuzzleCube({
   transparentView,
   dragPreview,
   isDemo,
+  demoSelectedCubies,
   onSelectFrame,
   onSelectCubie,
   onSelectExtension,
