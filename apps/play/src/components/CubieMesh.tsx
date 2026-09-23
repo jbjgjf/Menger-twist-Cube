@@ -34,7 +34,7 @@ const faceColors = [
   new Color('#009e60'), // Front (Green)
   new Color('#0051ba'), // Back (Blue)
 ];
-const grayColor = new Color('#6b7280');
+const grayColor = new Color('#64748b');
 
 export default function CubieMesh({
   cubie,
@@ -140,7 +140,8 @@ export default function CubieMesh({
           attach={`material-${index}`}
           color={isDemoGray ? grayColor : color}
           transparent={isDemoTransparent || dimmed}
-          opacity={isDemoGray ? 0.45 : dimmed ? 0.18 : transparent ? 0.52 : 0.96}
+          opacity={isDemoGray ? 0.25 : dimmed ? 0.18 : transparent ? 0.52 : 0.96}
+          depthWrite={!isDemoGray}
           metalness={0}
           roughness={1}
           emissive={isDemoGray ? grayColor : color}

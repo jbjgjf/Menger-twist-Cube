@@ -34,7 +34,7 @@ const faceColors = [
   new Color('#009e60'), // Front (Green)
   new Color('#0051ba'), // Back (Blue)
 ];
-const grayColor = new Color('#6b7280');
+const grayColor = new Color('#64748b');
 
 const dummy = new Object3D();
 
@@ -115,7 +115,7 @@ export default function InstancedCubieMeshes({
   const isDemoGray = isDemo && !highlighted;
   const isDemoTransparent = isDemoGray || transparent;
 
-  const materialOpacity = isDemoGray ? 0.45 : dimmed ? 0.16 : transparent ? 0.52 : 0.96;
+  const materialOpacity = isDemoGray ? 0.25 : dimmed ? 0.16 : transparent ? 0.52 : 0.96;
   const emissiveIntensity = isDemoGray ? 0.1 : highlighted ? 0.18 : dimmed ? 0.01 : 0.02;
   const castsShadow = cubies.length <= 10000;
 
@@ -156,6 +156,7 @@ export default function InstancedCubieMeshes({
           color={isDemoGray ? grayColor : color}
           transparent={isDemoTransparent || dimmed}
           opacity={materialOpacity}
+          depthWrite={!isDemoGray}
           metalness={0}
           roughness={1}
           emissive={isDemoGray ? grayColor : color}
