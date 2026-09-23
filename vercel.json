@@ -30,6 +30,10 @@
     {
       "source": "/keyboard/:path*",
       "destination": "/keyboard.html"
+    },
+    {
+      "source": "/demo",
+      "destination": "/index.html"
     }
   ],
   "headers": [
