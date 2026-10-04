@@ -9,7 +9,7 @@ export type TwistAngle = 90 | -90 | 180;
 
 export type InteractionTier = 'competitive-manual' | 'assisted-manual' | 'research-evaluation';
 export type TurnTargetKind = 'frame' | 'extension';
-export type ExtensionTargetFamily = 'block' | 'slab';
+export type ExtensionTargetFamily = 'block' | 'slab' | 'ring';
 
 export interface Move {
   frameId: FrameId;
@@ -70,6 +70,8 @@ export interface TurnTarget {
  */
 export interface MengerPuzzleState {
   level: number;
+  /** Absent means `standard`; see `moveSystems.ts`. */
+  moveSystem?: 'standard' | 'inner-square';
   interactionTier: InteractionTier;
   frames: RotationFrame[];
   frameById: Map<FrameId, RotationFrame>;

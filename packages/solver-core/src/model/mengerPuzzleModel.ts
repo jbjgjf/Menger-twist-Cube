@@ -1,4 +1,4 @@
-import type { MengerPuzzleState, TwistAngle } from '@menger/engine';
+import type { MengerPuzzleState, MoveSystem, TwistAngle } from '@menger/engine';
 import {
   applyExtensionRotation,
   applyTwistToCubies,
@@ -82,11 +82,15 @@ const isMoveLegal = (state: MengerPuzzleState, move: SolverMove): boolean => {
  * knowledge of this interface — the dependency only points one way
  * (solver-core -> engine), so engine stays usable by the Play app (or any
  * future consumer) without dragging in solver concepts.
+ *
+ * One model per move system. The system only decides which turn targets a
+ * freshly created state carries; legality and application read the state's own
+ * target tables, so the rest of the adapter is shared.
  */
-export const mengerPuzzleModel: PuzzleModel<MengerPuzzleState, SolverMove> = {
-  id: 'menger-cube',
+export const createMengerPuzzleModel = (moveSystem: MoveSystem): PuzzleModel<MengerPuzzleState, SolverMove> => ({
+  id: moveSystem === 'standard' ? 'menger-cube' : `menger-cube+${moveSystem}`,
   levelsSupported: [1, 2, 3, 4, 5],
-  createState: createMengerPuzzleState,
+  createState: (level) => createMengerPuzzleState(level, { moveSystem }),
   cloneState: (state) => ({ ...state, cubies: cloneCubies(state.cubies) }),
   legalMoves: (state) => [...frameLegalMoves(state), ...extensionLegalMoves(state)],
   isMoveLegal,
@@ -94,4 +98,11 @@ export const mengerPuzzleModel: PuzzleModel<MengerPuzzleState, SolverMove> = {
   isSolved: (state) => isExactlySolved(state.cubies),
   describeMove: (move) => move.notation,
   stateFingerprint: (state) => stateKey(state.cubies, false),
-};
+});
+
+/** The shipped system. Every existing solver, proof and benchmark is stated for this model. */
+export const mengerPuzzleModel: PuzzleModel<MengerPuzzleState, SolverMove> = createMengerPuzzleModel('standard');
+
+/** `standard` plus the Level 2 inner square ring rotations. Opt-in. */
+export const innerSquareMengerPuzzleModel: PuzzleModel<MengerPuzzleState, SolverMove> =
+  createMengerPuzzleModel('inner-square');

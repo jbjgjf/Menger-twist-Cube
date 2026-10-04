@@ -4,6 +4,7 @@ export * from './generateMenger';
 export * from './frameDefinitions';
 export * from './levels';
 export * from './turnTargets';
+export * from './moveSystems';
 export * from './rotationLegality';
 export * from './moves';
 export * from './puzzleState';

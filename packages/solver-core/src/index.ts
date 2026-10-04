@@ -4,7 +4,7 @@
 import './algorithms/register';
 
 export type { PuzzleModel } from './model/puzzleModel';
-export { mengerPuzzleModel } from './model/mengerPuzzleModel';
+export { createMengerPuzzleModel, innerSquareMengerPuzzleModel, mengerPuzzleModel } from './model/mengerPuzzleModel';
 
 export type {
   SolverAlgorithm,
@@ -19,6 +19,7 @@ export { registerAlgorithm, getAlgorithm, listAlgorithms } from './algorithm/reg
 export { level1QuotientAlgorithm, warmLevel1Solver } from './algorithms/level1QuotientSolver';
 export { level2BlockQuotientAlgorithm, warmLevel2Solver } from './algorithms/level2BlockQuotientSolver';
 export { level2SliceReductionAlgorithm, warmLevel2SliceReductionSolver } from './algorithms/level2SliceReductionSolver';
+export { level2InnerSquareCosetAlgorithm, innerSquareCosetOf } from './algorithms/level2InnerSquareCosetSolver';
 export { level3BlockQuotientAlgorithm, warmLevel3BlockQuotientSolver } from './algorithms/level3BlockQuotientSolver';
 export { level3SliceReductionAlgorithm, warmLevel3SliceReductionSolver } from './algorithms/level3SliceReductionSolver';
 export { onSolverDebug, emitSolverDebug } from './debug';

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Cubie } from '@menger/engine';
+import { isMoveSystemAvailable, moveSystems, type Cubie, type MoveSystem } from '@menger/engine';
 import {
   createLocalStorageBenchmarkStore,
+  createMengerPuzzleModel,
   createSeededRng,
   listAlgorithms,
-  mengerPuzzleModel,
   onSolverDebug,
   runBenchmark,
   scrambleState,
@@ -41,6 +41,17 @@ const formatClock = (timestamp: number): string => {
 // so existing benchmark history carries over to /lab.
 const benchmarkStore = createLocalStorageBenchmarkStore('menger.solver.benchmarks.v2');
 
+// The move system is chosen before the level: it decides which rotations the
+// cube has at all. `standard` is the shipped set every existing proof refers
+// to; the others are opt-in extensions and are never the default.
+const moveSystemLabels: Record<MoveSystem, string> = {
+  standard: 'Standard (shipped moves)',
+  'inner-square': 'Inner square rotations (+18 ring targets)',
+};
+const preferredAlgorithmForSystem: Partial<Record<MoveSystem, string>> = {
+  'inner-square': 'level2-inner-square-coset',
+};
+
 export default function App() {
   const algorithms = useMemo(() => listAlgorithms(), []);
   const solverLevels = useMemo(
@@ -50,7 +61,23 @@ export default function App() {
 
   const isDesktop = useIsDesktop();
 
+  const [moveSystem, setMoveSystem] = useState<MoveSystem>('standard');
+  const puzzleModel = useMemo(() => createMengerPuzzleModel(moveSystem), [moveSystem]);
+  const systemLevels = useMemo(
+    () => solverLevels.filter((candidate) => isMoveSystemAvailable(moveSystem, candidate)),
+    [solverLevels, moveSystem],
+  );
   const [level, setLevel] = useState(solverLevels[0] ?? 1);
+
+  const changeMoveSystem = (next: MoveSystem) => {
+    setMoveSystem(next);
+    // A system may exist for some levels only; move to one it has.
+    if (!isMoveSystemAvailable(next, level)) {
+      setLevel(solverLevels.find((candidate) => isMoveSystemAvailable(next, candidate)) ?? level);
+    }
+    const preferred = preferredAlgorithmForSystem[next];
+    if (preferred && algorithms.some((candidate) => candidate.id === preferred)) setAlgorithmId(preferred);
+  };
 
   // A Level 3 run scrambles 8,000 cells, solves for minutes, and replays
   // hundreds of thousands of moves on a 3D scene. That is a desktop-only
@@ -88,7 +115,11 @@ export default function App() {
   const playback = useSolvePlayback(log);
   const { load: loadPlayback } = playback;
 
-  const basePuzzle = useMemo(() => mengerPuzzleModel.createState(level), [level]);
+  // The state update that changes the system and the one that moves the level
+  // land in the same render, but guard anyway: an unavailable pair must never
+  // reach the engine, which throws on it.
+  const effectiveLevel = isMoveSystemAvailable(moveSystem, level) ? level : (systemLevels[0] ?? level);
+  const basePuzzle = useMemo(() => puzzleModel.createState(effectiveLevel), [puzzleModel, effectiveLevel]);
 
   // Level change resets the bench: solved cube, no moves, level-appropriate
   // algorithm preselected (a level/algorithm mismatch previously produced an
@@ -110,13 +141,13 @@ export default function App() {
     setError(null);
     const rng = createSeededRng(singleSeed);
     const movePool = algorithm.scrambleMovePool
-      ? (state: typeof basePuzzle) => algorithm.scrambleMovePool!(mengerPuzzleModel, state)
+      ? (state: typeof basePuzzle) => algorithm.scrambleMovePool!(puzzleModel, state)
       : undefined;
-    const { state: scrambled, moves } = scrambleState(mengerPuzzleModel, basePuzzle, rng, scrambleLength, movePool);
+    const { state: scrambled, moves } = scrambleState(puzzleModel, basePuzzle, rng, scrambleLength, movePool);
     setScrambledCubies(scrambled.cubies);
     setSolveResult(null);
     loadPlayback([scrambled.cubies], []);
-    log(`scramble: level ${level}, seed ${singleSeed}, ${moves.length} moves${movePool ? ` (generator set of ${algorithm.id})` : ''}`);
+    log(`scramble: ${moveSystem} system, level ${level}, seed ${singleSeed}, ${moves.length} moves${movePool ? ` (generator set of ${algorithm.id})` : ''}`);
   };
 
   const solve = async () => {
@@ -124,16 +155,16 @@ export default function App() {
     setError(null);
     setIsSolving(true);
     const inputCubies = scrambledCubies ?? basePuzzle.cubies;
-    log(`solve: running ${algorithm.id} on level ${level}`);
+    log(`solve: running ${algorithm.id} on level ${level} (${moveSystem} system)`);
     try {
       const result = algorithm.id === 'level3-slice-reduction'
         ? await solveInWorker(algorithm.id, level, inputCubies, log)
-        : await algorithm.solve(mengerPuzzleModel, { ...basePuzzle, cubies: inputCubies });
+        : await algorithm.solve(puzzleModel, { ...basePuzzle, cubies: inputCubies });
       setSolveResult(result);
       setSolveRecords(
         benchmarkStore.record(result, {
           algorithmId: algorithm.id,
-          modelId: mengerPuzzleModel.id,
+          modelId: puzzleModel.id,
           scrambleSeed: scrambledCubies ? String(singleSeed) : null,
         }),
       );
@@ -154,7 +185,7 @@ export default function App() {
           let current = { ...basePuzzle, cubies: inputCubies };
           const states: Cubie[][] = [inputCubies];
           for (const move of result.output_moves) {
-            current = mengerPuzzleModel.applyMove(current, move);
+            current = puzzleModel.applyMove(current, move);
             states.push(current.cubies);
           }
           loadPlayback(states, result.output_moves, { autoPlay: true });
@@ -194,7 +225,7 @@ export default function App() {
       };
       const result = algorithm.id === 'level3-slice-reduction'
         ? await benchmarkInWorker(algorithm.id, spec, log)
-        : await runBenchmark(mengerPuzzleModel, algorithm, spec);
+        : await runBenchmark(puzzleModel, algorithm, spec);
       setBenchmarkResult(result);
       log(`benchmark: done — ${(result.summary.successRate * 100).toFixed(1)}% success`);
     } catch (cause) {
@@ -267,15 +298,30 @@ export default function App() {
         </header>
 
         <section className="rounded-lg border border-slate-700 bg-slate-900/60 p-3">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
+            <label className="text-xs text-slate-400">
+              Move system
+              <select
+                className={numberInputClass}
+                value={moveSystem}
+                onChange={(event) => changeMoveSystem(event.target.value as MoveSystem)}
+                disabled={isSolving || isRunning}
+              >
+                {moveSystems.map((candidate) => (
+                  <option key={candidate} value={candidate}>
+                    {moveSystemLabels[candidate]}
+                  </option>
+                ))}
+              </select>
+            </label>
             <label className="text-xs text-slate-400">
               Level
               <select
                 className={numberInputClass}
-                value={level}
+                value={effectiveLevel}
                 onChange={(event) => setLevel(Number(event.target.value))}
               >
-                {solverLevels.map((candidate) => (
+                {systemLevels.map((candidate) => (
                   <option key={candidate} value={candidate}>
                     Level {candidate} ({3 ** candidate}×{3 ** candidate}×{3 ** candidate})
                   </option>
@@ -342,6 +388,15 @@ export default function App() {
               hundreds of thousands of moves — a phone stalls on it rather than finishing it. Open the lab on a
               computer (precise pointer, window at least 1024px wide) to scramble, solve, and watch the phase
               breakdown. Committed CLI results below can still be imported and read on this device.
+            </p>
+          )}
+          {moveSystem === 'inner-square' && (
+            <p className="mt-2 rounded border border-cyan-700/50 bg-cyan-950/30 px-3 py-2 text-xs leading-5 text-cyan-100">
+              Inner square system (Level 2 only): the standard 468 atomic moves plus 54 ring moves — in each middle
+              plane (layer −3, 0, +3 of every axis) the inner and outer square rings turn independently. This group is
+              exactly twice the standard one. <code>level2-inner-square-coset</code> crosses into the standard half
+              with at most one ring turn and then runs <code>level2-slice-reduction</code>; the standard-only solvers
+              fail on the other half by design.
             </p>
           )}
           {algorithm && (

@@ -252,3 +252,25 @@ npm run audit:square:index          # [H:G]=2 の証明書の生成と独立再�
 ```
 
 `npx tsx <file>` はこの環境ではIPCパイプを作れず失敗するため、`node --import tsx <file>` を使う。
+
+## 12. 系としての組み込み（2026-10-04 追記）
+
+監査結果を、既定を変えない**選択式の系（move system）**として組み込んだ。
+
+| 層 | 追加したもの |
+| --- | --- |
+| エンジン | `packages/engine/src/moveSystems.ts`。系は `standard`（既定・出荷済みの操作集合）と `inner-square`（`standard`＋リング18対象）。`createMengerPuzzleState(level, { moveSystem })` で選ぶ。`inner-square` はレベル2だけで定義し、他のレベルでは例外を投げる |
+| ソルバー | `createMengerPuzzleModel(moveSystem)`、`innerSquareMengerPuzzleModel`、アルゴリズム `level2-inner-square-coset` |
+| Lab | Level の前に「Move system」の選択。`inner-square` を選ぶとレベルは2に固定され、上記アルゴリズムが選ばれる |
+
+**変えていないもの。** `moveSystem` を指定しない状態は、以前と同じ324対象・468原子手である（テストで固定）。既存の操作ID、Play、既存ソルバーの挙動、既存の証明の適用範囲は変わらない。リング対象のIDは `ring:<軸><層>:<inner|outer>`（例：`ring:Z+3:inner`）、表記は `RZ+3i` の形である。`depth` は 0 とし、深さで extension を選ぶ既存コード（1、1.5、2）に拾われないようにした。
+
+**アルゴリズム `level2-inner-square-coset`。** $[H:G]=2$、$G=\ker\psi$（impact 文書 §6.1）をそのまま使う。
+
+1. 状態の $\psi$ を計算する（軌道別偶奇ベクトルが $G$ の張る空間に入るか）。
+2. $\psi=1$ なら、$\psi$ を反転する合法手（$\ell=\pm3$ 面のリングの四分の一回転）を1手施す。
+3. `level2-slice-reduction` に渡す。
+
+**完全性について。** このアルゴリズムが $H$ の全到達可能状態を解くことは、`level2-slice-reduction` が $G$ の全到達可能状態を解くことと**同値**である。後者はレベル2では未証明（wiki §4.7）なので、このアルゴリズムの完全性も未証明である。ただし、拡張によって新しく生じる未証明部分はない。
+
+**試験（実測、完全性の証明ではない）。** 拡張系の全522原子手からの seed 1〜12・長さ30のスクランブルで、12件すべてを解き、解を1手ずつ合法性検査付きで再生して完成状態と一致した。リング手の使用数は $\psi$ の値（0 または 1）と一致した。$\psi=1$ の状態では、`level2-slice-reduction` 単独は必ず失敗した（`research/square-rotation/test/inner-square-system.test.ts`）。
