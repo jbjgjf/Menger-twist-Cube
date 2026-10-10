@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>講義ノート</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>講義ノート</h1>
+<p class="sub">手元用。左の見出しの意味：板＝黒板に書く、画＝画面に出す、紙＝配布資料、話＝口頭で言う、注＝注意。番号は主張台帳の番号。</p>
+
+<h3>前日まで</h3>
+<ul>
+<li><code>npm ci</code>。<code>npm run verify:l3</code> を一度走らせて、所要時間を計っておく。</li>
+<li><code>npm run dev</code>（パズル）と <code>lecture/out/screen.html</code> を開けることを確認する。</li>
+<li>配布資料を人数分＋2 部印刷する。チョークは白と黄。</li>
+<li>主張台帳の 2, 5, 13, 15 を週末までに直せたかどうかで、話し方が変わる。各セッションに両方の言い方を書いておいた。</li>
+</ul>
+
+<h3>冒頭の三文</h3>
+<p>「持ってきたものは、一つの有限群の族と、その元を状態だけから構成するアルゴリズムと、それを支える計算機証明です。二日間でお願いしたいのは、どの主張がどの強さで成り立っているかを判定していただくことです。まだ閉じていない箇所は、こちらから先に示します。」</p>
+
+<!-- ===================================================== -->
+<h2><span>1日目　S1　全体像と主張台帳</span><span class="t">9:30–10:30</span></h2>
+
+<div class="cue"><div class="k">画</div><div><code>npm run dev</code>。Level 1 → 2 → 3 を回す。穴があるので回らない場所がある、と見せる（Level 2 の深さ 2 の一セル回転を試し、拒否されるところ）。5 分以内。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>問い</p>
+<p>（健全性）返した手順は本当に解くか。<br>（完全性）到達可能な任意の状態で手順は成功するか。<br>（効率）手順は短いか。</p>
+</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>注意。到達可能な $s=g\cdot e$ は $g^{-1}$ で解ける。存在だけなら自明。</p>
+<p>中身は (i) $G_n$ の構造、(ii) $g$ を知らずに $s$ だけから語を作る手続き。</p>
+</div></div>
+<div class="cue"><div class="k">注</div><div>これは先に自分から言う。言われてから認めると印象が悪い。</div></div>
+
+<div class="cue"><div class="k">紙</div><div>主張台帳を一緒に上から読む。凡例の五段階を説明し、今日の目標は「この表の状態の欄に先生方が同意できること」だと言う。</div></div>
+
+<div class="cue"><div class="k">話</div><div>既知の穴を先に四つ挙げる。
+<ol>
+<li>2：合法手の集合を浮動小数点の判定で決めている。</li>
+<li>5：Jordan の定理の証明書は実行時に生成していて、保存していない。</li>
+<li>13, 16：向きについて、全体の制約が決まっていない。そのため Level 3 の完全性は、正確には向きの部分が未完。</li>
+<li>Level 2 は、物理モデルでの完全性が未証明。</li>
+</ol></div></div>
+
+<div class="qa avoid">
+<p class="q">wiki では「Level 3 の完全性は証明済み」と書いているが、どちらが正しいのか。</p>
+<p class="a">台帳のほうが正しい。wiki の補題 10 は、降下手が常に存在することを証明していない。今回の準備で見つけた。</p>
+</div>
+
+<!-- ===================================================== -->
+<h2><span>1日目　S2　定義</span><span class="t">10:45–12:15</span></h2>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>定義（位置）。$e_n=(3^n-1)/2$。$p\in\{-e_n,\dots,e_n\}^3$ は一意に</p>
+$$p=\sum_{j=0}^{n-1}3^j d_j,\qquad d_j\in\{-1,0,1\}^3$$
+<p>と書ける（座標ごとの平衡 3 進展開）。$z(d)$ は $d$ の 0 成分の数。</p>
+$$P_n=\{p : z(d_j)\le1\ \ (0\le j<n)\}.$$
+<p>一桁あたり $z=0$ が 8 通り、$z=1$ が 12 通り。よって $|P_n|=20^n$。</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>$n=1$ は $3\times3\times3$ から面の中心 6 個と中心 1 個を除いた 20 個。$z\ge2$ が「穴」になる、と立体で示す。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>定義（状態）。$C=SO(3,\mathbf Z)$、$|C|=24$。$X_n=P_n\times C$ に作用させて考える。$(p,Q)$ は「位置 $p$ に向き $Q$ のセルがある」。</p>
+<p>原子手 $(D,a,c,\theta)$ は、$D$ 上で次のように作用し、他の点は固定する。</p>
+$$(p,Q)\longmapsto\bigl(c+R_{a,\theta}(p-c),\ R_{a,\theta}Q\bigr)\qquad(p\in D)$$
+<p>条件は $R_{a,\theta}(D-c)+c=D$。この作用は右からの $C$ の掛け算と可換なので、</p>
+$$G_n\le\mathrm{Sym}_C(X_n)\cong C\wr\mathrm{Sym}(P_n).$$
+</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>定義（合法性）。各セルを閉じた単位立方体とする。$B_D$ を動く部分、$B_K$ を止まっている部分とする。</p>
+$$\bigcup_{0\le t\le1}R_{a,t\theta}(\mathrm{int}\,B_D)\ \cap\ \mathrm{int}\,B_K=\varnothing.$$
+<p>境界での接触は許す。</p>
+<p>補題 0（主張 1）。合法性は状態によらない。</p>
+<p>証明。どの状態でも、占有されている立体は $\bigcup_{p\in P_n}(p+[-\tfrac12,\tfrac12]^3)$ で一定である（手は $D$ を $D$ に写し、立方体は向きによらない）。よって条件は $(D,a,\theta)$ だけで決まる。$\square$</p>
+<p>系。$S_n$ は $\mathrm{Sym}_C(X_n)$ の固定した部分集合で、$G_n=\langle S_n\rangle$ は群になる。</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>状態に依存したら群でなく亜群になる。この補題は wiki に明示していない。ここで足す。逆元については、有限群なので自動的に入る。なお $-\theta$ の掃引領域は $\theta$ と同じ集合になる（$R_{-t\theta}D=R_{(1-t)\theta}D$）。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>手の族。frame（厚さ $3^q$ の層）、extension（深さ $d$。辺型の子ブロックを、その 0 成分の軸のまわりに回す）、slab（深さ $d+\frac12$。その三分した薄板）。</p>
+</div></div>
+<div class="cue"><div class="k">画</div><div>screen の「手の数」。frame は全て合法で、制限がかかるのは extension だけ。Level 3 の深さ 3 は 4800 候補のうち 744 しか合法でない。反例として、Level 2 の $(1,3,4)$ の Y 軸回転を示す。$45^\circ$ で中心から $1/\sqrt2$ まではみ出し、隣接面 $1/2$ を越える。</div></div>
+
+<div class="cue"><div class="k">話</div><div>弱点を二つ、自分から言う。
+<ol>
+<li>判定は、角度区間を $0.0014^\circ$ まで細分し、許容誤差 $10^{-9}$ で行っている（2）。境界でちょうど接する対角の隣接が一番危ない。
+<br><span class="small">直せた場合：「各ペアは平面上の単位正方形の回転に帰着するので、有理数の厳密判定に置き換えました。結果は浮動小数点の判定と一致しました」。<br>直せなかった場合：「方針はこうです。数値判定の結果と照合する回帰テストはあります」。</span></li>
+<li>手の族は一意に決まるものではない。$z=0$ 面の $(\pm5,\pm5,0)$ の 4 セルを原点の Z 軸まわりに回す操作は判定を通るが、$S_3$ に入らない（3）。論文では生成元を明示的に定義し、「全合法剛体回転」のモデルは別の問題として扱う。</li>
+</ol></div></div>
+
+<div class="qa avoid">
+<p class="q">なぜこの手の族を選んだのか。</p>
+<p class="a">物理的なパズルとして自然な「層」と「再帰的な辺ブロック」だから。正方形断面の回転まで含めた最大モデルは、Level 2 で指数 2 の拡大になることまで分かっている（25）。</p>
+<p class="q">浮動小数点で決めた集合について、定理と言えるのか。</p>
+<p class="a">現状では言えない部分がある。台帳でも計△にしている。厳密化は機械的にできる。</p>
+<p class="q">鏡映は入らないのか。</p>
+<p class="a">入らない。$C$ は回転だけ。</p>
+</div>
+
+<!-- ===================================================== -->
+<h2><span>1日目　S3　Level 3 の位置群</span><span class="t">13:30–15:00</span></h2>
+<div class="cue"><div class="k">注</div><div>始める前に、別の端末で <code>npm run verify:l3</code> を開始しておく。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>補題 3。$S$ に対し、$x\sim s(x)$（$s\in S$）で張ったグラフの連結成分は $G=\langle S\rangle$ の位置軌道に一致する。</p>
+<p>証明。同じ連結成分にある点は、生成元とその逆を順に作用させて移れる。逆に、群の元は生成元とその逆の語なので、移り先への道がある。$\square$</p>
+</div></div>
+<div class="cue"><div class="k">画</div><div>screen の「軌道」。サイズ 8 が 4 個、24 が 112 個、96 が 45 個、192 が 1 個、384 が 2 個で、計 164 軌道。15 クラスの表を見せ、クラスが軌道に分裂することを見せる。164 軌道の一覧はスクロールで見せるだけにする。</div></div>
+<div class="cue"><div class="k">話</div><div>クラスは不変量で、座標の回転が各桁の 0 の数と、0 の軸が一致するかどうかを保つことから従う。ただし解く単位は軌道。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>定理（Jordan）。$G\le\mathrm{Sym}(n)$ が原始的で、素数 $p\le n-3$ の長さ $p$ の巡回置換を含むなら、$G\ge\mathrm{Alt}(n)$ である。互換を含むなら $G=\mathrm{Sym}(n)$ である。</p>
+<p>補題 6（5）。164 軌道すべてで $\mathrm{Alt}(\Omega)\le G^\Omega$。</p>
+<p>証明書は二つある。</p>
+<p>(a) 原始性。$x_0$ を固定し、各 $y\ne x_0$ について $(x_0,y)$ を含む最小の $G$-合同関係を閉包で求め、それが全体になることを確かめる。非自明なブロック系があれば、$x_0$ を含むブロックに属するある $y$ でその系の中に収まり、全体にはならない。だからこれで十分。</p>
+<p>(b) 巡回置換。ある語 $g$ の巡回分解に、長さ素数 $p$ の巡回がちょうど一つあり、他の長さの最小公倍数 $K$ が $p$ と互いに素であるとする。このとき $g^K$ は $p$-巡回置換になる。$|\Omega|=8$ の軌道は、群を閉包まで全列挙して $\mathrm{Sym}(8)$ を得た。</p>
+</div></div>
+<div class="cue"><div class="k">画</div><div><code>verify:l3</code> の三つ目の出力。「primitive + 67-cycle -&gt; Alt(96)」のような行を読む。乱数は候補 $g$ を探すためだけに使い、判定は具体的な置換で行う。素数の値は候補の選び方によって変わりうる。</div></div>
+<div class="cue"><div class="k">話</div><div>文献は Dixon–Mortimer §3.3、Wielandt §13。証明書の語は保存していない（計△）。
+<span class="small">直せた場合：「全 164 本の $g$ を語として保存し、独立に検査できます」。</span></div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>定義。$K_\Omega=\{g\in G : g \text{ は }(P\setminus\Omega)\times C\text{ の各点を固定する}\}$。</p>
+<p>純粋工具とは、$T\in K_\Omega$ で $\pi_\Omega(T)\ne1$ かつ、$\Omega$ 内で位置を固定するセルの向きも変えないもの。（6）164 本あり、全 8000 セルで検査済み。</p>
+</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>命題（7）。$\mathrm{Alt}(\Omega)\le\pi_\Omega(K_\Omega)$。</p>
+<p>証明。$\Omega$ は $G$-不変なので $(P\setminus\Omega)\times C$ も $G$-不変である。不変集合の各点を固定する部分群なので $K_\Omega\trianglelefteq G$。よって $\pi_\Omega(K_\Omega)\trianglelefteq G^\Omega$。純粋工具があるので $\pi_\Omega(K_\Omega)\ne1$。$G^\Omega\in\{\mathrm{Alt}(\Omega),\mathrm{Sym}(\Omega)\}$ かつ $|\Omega|\ge8$ なので、自明でない正規部分群は $\mathrm{Alt}(\Omega)$ を含む。$\square$</p>
+</div></div>
+<div class="cue"><div class="k">注</div><div>ここが山場。wiki の補題 9 は「補題 6 と 7 により」で飛ばしている。射影に Alt が入ることと、外を固定する元で Alt が作れることは別の主張だ、と言葉で強調する。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>偶奇。$\varepsilon:\prod_i\mathrm{Sym}(\Omega_i)\to\mathbf F_2^{164}$ は全射な準同型で、核は $A:=\prod_i\mathrm{Alt}(\Omega_i)$。</p>
+<p>補題 8（8）。$V:=\varepsilon(G)$ は原子手のベクトル 20 種で張られ、$\dim V=15$。</p>
+<p>定理 A（9）。$\pi:G\to\prod_i\mathrm{Sym}(\Omega_i)$、$\Pi=\pi(G)$ とおくと</p>
+$$\Pi=\varepsilon^{-1}(V),\qquad |\Pi|=2^{15}\prod_{i=1}^{164}\frac{|\Omega_i|!}{2}.$$
+<p>証明。$K_{\Omega_i}$ の位置の像は互いに素な台を持つので、命題から $A\le\Pi$。よって $\Pi=\varepsilon^{-1}(\varepsilon(\Pi))=\varepsilon^{-1}(V)$。位数は $|A|\cdot|V|$。$\square$</p>
+<p>系（10）。$\log_{10}|\Pi|\approx11399.35$。長さ $d$ 以下の語は $(M^{d+1}-1)/(M-1)$ 個以下（$M=3591$）。よって $\mathrm{diam}(G_3)\ge3207$。</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>定理 A は wiki にない。今回整理して出てきた主張で、論文の主定理の候補。wiki と <code>verify:l3</code> の出力では下界は 3206 で、そちらは $2^{15}$ を掛けていない。</div></div>
+
+<div class="qa avoid">
+<p class="q">なぜ GAP や Magma で位数を直接計算しないのか。</p>
+<p class="a">するべきで、予定している。位置の作用は 8000 点、各軌道の $\Omega\times C$ は最大 9216 点で、Schreier–Sims の範囲に入る。独立検証として出す。</p>
+<p class="q">164 という数に構造的な説明はあるか。</p>
+<p class="a">まだない。クラスごとの分裂の仕方は表のとおり。説明は今後の課題。</p>
+<p class="q">サイズ 8 の軌道で $G^\Omega=\mathrm{Sym}(8)$ なのは問題ないか。</p>
+<p class="a">問題ない。奇置換の分は $\varepsilon$ と $V$ に入っている。</p>
+</div>
+
+<!-- ===================================================== -->
+<h2><span>1日目　S4　向き</span><span class="t">15:15–16:30</span></h2>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>$x\in P$ に対し $H_x=\{R\in C : (x,R)\in G\cdot(x,I)\}$。</p>
+<p>補題。$H_x$ は $\mathrm{Stab}_G(x)\to C,\ g\mapsto R_g$ の像で、$C$ の部分群になる。</p>
+<p>証明。$g\in\mathrm{Stab}(x)$ は $C$-同変なので $(x,Q)\mapsto(x,R_gQ)$ と作用する。よって $R_{gh}=R_gR_h$。$\square$</p>
+<p>計算は $\Omega\times C$（$24|\Omega|$ 点以下）の全探索でできる。</p>
+</div></div>
+<div class="cue"><div class="k">画</div><div>screen の「向き」。148 軌道 7,224 セルでは自明。$C_3$ が 4 軌道 32 セル、$C_4$ が 11 軌道 552 セル、$D_4$ が 1 軌道 192 セル。合計 776 セル。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>未解決（13）。$O:=\{(R_g(x))_x : g\in\ker\pi\}\le\prod_x H_x$。</p>
+<p>分かっているのは $O\le\prod_x H_x$ だけで、等号かどうかは分かっていない。</p>
+<p>例。ルービックキューブの角は、各点では $H_x=C_3$ だが、$O=\{\sum=0\}$ である。</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>向きの段階が常に成功するには「到達可能な向き状態には必ず $\Phi$ を下げる手がある」ことが必要で、これは $O$ が分からないと言えない。実装には失敗の分岐が残っている（<code>level3SliceReductionSolver.ts:1248</code>）。7 例ではこの分岐に入っていない。
+<br><span class="small">直せた場合：「$O$ を計算しました。$C_3$, $C_4$ の軌道では $\mathbf Z/k$ 加群として、$D_4$ の軌道は GAP で計算し、保存済みの twister が $O$ を生成することを証明書にしました」。</span></div></div>
+
+<div class="qa avoid">
+<p class="q">軌道をまたいだ向きの結合はありうるか。</p>
+<p class="a">ありうる。$O$ は軌道ごとの直積とは限らない。偶奇（$\dim V=15$）で軌道間の結合が実際に起きているので、向きでも起きうると考えるべき。</p>
+<p class="q">D4 の twister 13 語で足りるのか。</p>
+<p class="a">分からない。13 語が位置を変えず、向きを非自明に変えることは確認した（12）。生成するかどうかは $O$ が決まってから。</p>
+</div>
+
+<h2><span>1日目　まとめ</span><span class="t">16:30–17:00</span></h2>
+<div class="cue"><div class="k">紙</div><div>依存関係図を見せる。今日触れたのは上半分で、破線は 13 から下だけ。その日に出た質問を台帳の余白に書き込んでもらい、回収して夜に整理する。</div></div>
+
+<!-- ===================================================== -->
+<h2><span>2日目　S5　構成的アルゴリズム</span><span class="t">9:30–11:00</span></h2>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>入力 $s\in G\cdot e$（到達可能な状態）。</p>
+<p>段階 1。偶奇。$\varepsilon(s)\in V$ を基底 $\varepsilon(a_1),\dots,\varepsilon(a_{15})$ で表し、該当する $a_k$ を打つ。15 手以内（14）。</p>
+<p>段階 2。位置。各軌道で純粋工具 $T$ を共役 $uTu^{-1}$ して使う。準備手 $u$ は、順序対のグラフ $\{(x,y)\in\Omega^2 : x\ne y\}$ の幅優先探索で探す（有限、打ち切りなし）。</p>
+<p>段階 3。残りが 32 セル以下になったら、偶置換を 3-cycle に分解し、順序付き三つ組のグラフの双方向探索で実現する。</p>
+<p>段階 4。向き。$\Phi=\sum_x d(x)$ を単調に下げる。</p>
+</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>補題 4。偶置換は 3-cycle の積で書ける。</p>
+<p>証明。（右から合成する）</p>
+$$(a\,b)(c\,d)=(a\,b\,c)(b\,c\,d),\qquad (a\,b)(a\,c)=(a\,c\,b).$$
+<p>偶置換は偶数個の互換の積なので、二つずつ組にすればよい。$\square$</p>
+<p>補題 9（15、理論）。偶奇を正規化した後の位置は必ず完成する。</p>
+<p>証明。命題から、$\pi_\Omega(k)$ が 3-cycle になる $k\in K_\Omega$ がある。$u\in G$ に対し、$uku^{-1}\in K_\Omega$ は $u$ で運んだ三点上の 3-cycle になる。$G^\Omega\ge\mathrm{Alt}(\Omega)$ は順序付き三つ組に推移的に作用するので（$|\Omega|\ge5$）、任意の三つ組の 3-cycle を $\Omega$ の外を乱さずに作れる。補題 4 から終わる。$\square$</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>理論はこれで閉じる。実装には二点、正直に言うべきことがある。
+<ol>
+<li>32 セルを超える間は貪欲法で配置していて、予算 $4|\Omega|$ を超えると失敗を返す（<code>:908</code>）。理論上は、予算切れのときに段階 3 へ落とせばよいので修正は簡単。</li>
+<li>支持幅 3 の工具がない 31 軌道では、3-cycle を実行時に導出している。論文では、その語を証明書として保存する。</li>
+</ol>
+<span class="small">直せた場合：「予算切れは段階 3 に落とすようにしました。打ち切りは残っていません」。</span></div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>補題 10（16）。$\Phi\in\mathbf Z_{\ge0}$ が毎回真に下がるなら、有限回で止まる。</p>
+<p>欠けているのは「到達可能な向き状態で $\Phi>0$ なら、$\Phi$ を下げる手が必ずある」こと。これは $O$ が決まらないと言えない。</p>
+</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>健全性（17）。出力の語を実エンジンで一手ずつ適用し、各手の直前に合法性を検査し、最後に全 8000 セルの位置と向きの一致を要求する。一つでも違えば失敗を返す。</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>だから完全性が未完でも、誤った成功は返らない。返る結果は「成功」か「失敗」で、「間違った成功」はない。</div></div>
+
+<div class="qa avoid">
+<p class="q">「メモリ不足を起こさない限り」という条件付きの定理は許されるのか。</p>
+<p class="a">数学的な主張は、探索するグラフが有限で、打ち切りがなく、目的の頂点が到達可能であることまで。資源の話は、定理の外の実行上の問題として分けて書く。</p>
+<p class="q">探索の準備手は最短か。</p>
+<p class="a">幅優先探索なので、そのグラフの中では最短。全体の手順は最短ではない。</p>
+</div>
+
+<!-- ===================================================== -->
+<h2><span>2日目　S6　計算機証明の監査</span><span class="t">11:15–12:15</span></h2>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>信頼しなければならないもの：</p>
+<p>(i) 候補の生成と合法性判定 → $S_3$。<br>(ii) 原子手の作用（実エンジン）。<br>(iii) union-find、偶奇の掃き出し、$\Omega\times C$ の探索。<br>(iv) 証明書の検査（原始性、巡回置換、工具の作用）。</p>
+<p>信頼しなくてよいもの：探索の本体（疎シミュレータ）。結果は (ii) で再生して検査するから。</p>
+</div></div>
+<div class="cue"><div class="k">画</div><div><code>verify:l3</code> の一つ目と二つ目の出力。工具 164/164、軌道外への作用 0、固定セルのねじれ 0、退化 0、支持幅 3:133 4:17 6:14、語長は 16〜84（中央値 16）。シミュレータとエンジンの差分は 6/6 一致。<code>level3SliceReductionToolData.ts</code> を開いて、工具の語が原子手 ID の列であることを見せる。</div></div>
+<div class="cue"><div class="k">話</div><div>独立検証の計画を言う。(i) を有理数で厳密化する。(iii)(iv) は GAP で再計算する。証明書（巡回元の語、3-cycle の語、twister）を JSON で保存し、検査プログラムを短く独立に書く。</div></div>
+
+<div class="qa avoid">
+<p class="q">実エンジン自体が間違っていたら。</p>
+<p class="a">その場合は (ii) が信頼の土台に入る。エンジンの原子手の作用は、定義の式をそのまま実装したもので、テストもある。論文では作用を定義どおりに書き下した検査器を別に用意する。</p>
+</div>
+
+<!-- ===================================================== -->
+<h2><span>2日目　S7　Level 2</span><span class="t">13:30–14:30</span></h2>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>$G_2^{\mathrm{phys}}\le G_2^{\mathrm{abs}}$。生成元は 468 個と 972 個。</p>
+<p>深さ 2 の一セル回転は、240 候補のうち 72 だけが合法。</p>
+<p>旧モデルの構成は 168 個の違法な一セル回転を含む工具を使っている。部分群に対しては、工具がそのまま使えるとは限らない。</p>
+</div></div>
+<div class="cue"><div class="k">話</div><div>逆説：大きい Level 3 は理論がほぼ閉じていて、小さい Level 2 が閉じていない。理由は、Level 2 の解法を衝突判定の導入前に作ったから。物理モデルでも軌道は 11 個（サイズ $8\times2$, $24\times6$, $48$, $96\times2$）で、偶奇の像と $H_x$ は計算済み（23）。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>命題（25）。$H=\langle S_2\cup E\rangle$（$E$ は正方形断面の内面回転 54 手）とすると $[H:G_2]=2$。</p>
+<p>証明の骨子。$\dim\varepsilon(H)=\dim\varepsilon(G_2)+1$ なので、$\psi(h)=[\varepsilon(h)\notin\varepsilon(G_2)]$ は全射準同型 $H\to\mathbf F_2$ で、$G_2\le\ker\psi$。代表系 $\{1,a\}$ に関する $\ker\psi$ の Schreier 生成元を、それぞれ $G_2$ の語で書き、実エンジンで再生して確認した。よって $\ker\psi=G_2$。$\square$</p>
+</div></div>
+<div class="cue"><div class="k">画</div><div><code>research/square-rotation/out/l2-index-certificate.json</code> を開き、<code>argument</code> と一つの Schreier 生成元の語を見せる。</div></div>
+<div class="cue"><div class="k">話</div><div>今後の道筋：$G_2$ は 9600 点上の置換群なので、GAP で位数と構造がすぐ出る規模。そこから Level 3 と同じ形の定理 A を作り、合法手だけで工具を作り直す。</div></div>
+
+<!-- ===================================================== -->
+<h2><span>2日目　S8　効率と God's number</span><span class="t">14:30–15:15</span></h2>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>距離は、合法な原子手（$\pm90^\circ$, $180^\circ$）を 1 手として数える。通常のルービックキューブの距離とは違うので、$20$ という値とは比べられない。</p>
+$$\#\{\text{長さ}\le d\text{ の語}\}\le\frac{M^{d+1}-1}{M-1}.$$
+<p>Level 3：$\mathrm{diam}\ge3207$（定理 A から）。上界は不明（20）。<br>Level 2：$\ge191$ と書かれているが、各軌道で Alt を含むことを前提にしているので未確認（27）。<br>Level 1：$14\le\mathrm{diam}\le32$（文書による）。</p>
+</div></div>
+<div class="cue"><div class="k">注</div><div>Level 1 の上界 32 の根拠は事前に確認しておく。確認できなければ「文書の値です」とだけ言う。</div></div>
+<div class="cue"><div class="k">話</div><div>実測の 11 万〜42 万手は、非最適なアルゴリズムの出力にすぎず、上界ではない。改善の候補は、準備手とその逆を相殺すること、支持の広い工具でまとめて配置すること。</div></div>
+
+<!-- ===================================================== -->
+<h2><span>2日目　S9　論文化の相談</span><span class="t">15:30–16:45</span></h2>
+
+<div class="cue"><div class="k">紙</div><div>台帳を最後にもう一度。「証」と「計」の行が論文の本体、「未」の行が残りの課題か、未解決問題としての記載になる。</div></div>
+
+<div class="cue"><div class="k">板</div><div class="board">
+<p>主定理の候補</p>
+<p>A.　Level 3 の位置群 $\Pi_3$ の決定（9）。<br>B.　Level 3 の全群 $G_3$ の位数と構造（13 を閉じたあと）。<br>C.　構成的アルゴリズムの完全性と健全性（15, 16）。<br>D.　Level 2 の拡大の指数 2（25）と、直径の下界（10）。</p>
+</div></div>
+
+<div class="cue"><div class="k">話</div><div>相談したいこと。
+<ol>
+<li>主定理を A, B のような群の構造にするか、C のようなアルゴリズムにするか。</li>
+<li>計算機証明の書き方。証明書の形式と、本文と付録の分け方。</li>
+<li>投稿先の候補。</li>
+<li>Level 2 を同じ論文に入れるか、分けるか。</li>
+<li>指導の頻度と形。</li>
+</ol></div></div>
+
+<div class="cue"><div class="k">話</div><div>先行研究は、ルービックキューブ群の構造（Joyner など）、God's number $=20$（Rokicki ほか）、計算群論（Seress）、Jordan の定理。メンガーのスポンジ型パズルの数学的な先行研究は調べた範囲で＿＿＿＿（事前に埋める）。</div></div>
+
+<h2><span>2日目　総括</span><span class="t">16:45–17:15</span></h2>
+<div class="cue"><div class="k">話</div><div>この二日間で状態が変わった行を、台帳の上で確認する。直す作業の順番は 13 → 15 → 2 → 5 の証明書 → Level 2 の GAP 計算。次回、それぞれの結果を持ってくると約束する。</div></div>
+
+</body>
+</html>

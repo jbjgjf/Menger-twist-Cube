@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>画面</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<style>
+html{background:#fff;scroll-snap-type:y mandatory}
+body{margin:0;color:#000;background:#fff;font-family:"KaTeX_Main","IPAexMincho",serif;font-size:min(1.9vw,3.1vh);line-height:1.45}
+section{min-height:100vh;padding:6vh 9vw;box-sizing:border-box;scroll-snap-align:start}
+h1{font-weight:normal;font-size:1.25em;margin:0 0 4vh;font-family:"KaTeX_Main","IPAGothic",sans-serif}
+table{border-collapse:collapse;border-top:2px solid #000;border-bottom:2px solid #000}
+th{font-weight:normal;text-align:left;border-bottom:1px solid #000;padding:.35em .9em}
+td{padding:.18em .9em}
+td.r,th.r{text-align:right}
+tfoot td{border-top:1px solid #000}
+section.cat{font-size:.55em;line-height:1.35}
+.cat table{width:100%}
+.cat thead th{position:sticky;top:0;background:#fff}
+code{font-family:"DejaVu Sans Mono",monospace;font-size:.85em}
+p{margin:0 0 1.2vh}
+.big{font-size:1.5em}
+</style>
+</head>
+<body>
+
+<section>
+<h1>手の数　合法 / 候補</h1>
+<table>
+<thead><tr><th>族</th><th class=r>Level 2</th><th class=r>Level 3</th></tr></thead>
+<tbody>
+<tr><td>frame　厚さ 1</td><td class=r>27 / 27</td><td class=r>81 / 81</td></tr>
+<tr><td>frame　厚さ 3</td><td class=r>9 / 9</td><td class=r>27 / 27</td></tr>
+<tr><td>frame　厚さ 9</td><td class=r>—</td><td class=r>9 / 9</td></tr>
+<tr><td>extension　深さ 1</td><td class=r>12 / 12</td><td class=r>12 / 12</td></tr>
+<tr><td>slab　深さ 1.5</td><td class=r>36 / 36</td><td class=r>36 / 36</td></tr>
+<tr><td>extension　深さ 2</td><td class=r>72 / 240</td><td class=r>72 / 240</td></tr>
+<tr><td>slab　深さ 2.5</td><td class=r>—</td><td class=r>216 / 720</td></tr>
+<tr><td>extension　深さ 3</td><td class=r>—</td><td class=r>744 / 4800</td></tr>
+</tbody>
+<tfoot><tr><td>対象</td><td class=r>156 / 324</td><td class=r>1197 / 5925</td></tr>
+<tr><td>原子手（$\times3$）</td><td class=r>468</td><td class=r>3591</td></tr></tfoot>
+</table>
+</section>
+
+<section>
+<h1>Level 3　軌道</h1>
+<table>
+<thead><tr><th class=r>サイズ</th><th class=r>軌道</th><th class=r>セル</th></tr></thead>
+<tbody>
+<tr><td class=r>8</td><td class=r>4</td><td class=r>32</td></tr>
+<tr><td class=r>24</td><td class=r>112</td><td class=r>2,688</td></tr>
+<tr><td class=r>96</td><td class=r>45</td><td class=r>4,320</td></tr>
+<tr><td class=r>192</td><td class=r>1</td><td class=r>192</td></tr>
+<tr><td class=r>384</td><td class=r>2</td><td class=r>768</td></tr>
+</tbody>
+<tfoot><tr><td></td><td class=r>164</td><td class=r>8,000</td></tr></tfoot>
+</table>
+</section>
+
+<section>
+<h1>Level 3　クラスと軌道</h1>
+<table style="font-size:.8em">
+<thead><tr><th>クラス</th><th class=r>セル</th><th class=r>軌道</th><th>サイズ</th></tr></thead>
+<tbody>
+<tr><td>CCC</td><td class=r>512</td><td class=r>24</td><td>8×4, 24×20</td></tr>
+<tr><td>CCE</td><td class=r>768</td><td class=r>32</td><td>24×32</td></tr>
+<tr><td>CEC</td><td class=r>768</td><td class=r>26</td><td>24×24, 96×2</td></tr>
+<tr><td>CEE/bo</td><td class=r>384</td><td class=r>13</td><td>24×12, 96×1</td></tr>
+<tr><td>CEE/b|o</td><td class=r>768</td><td class=r>26</td><td>24×24, 96×2</td></tr>
+<tr><td>ECC</td><td class=r>768</td><td class=r>8</td><td>96×8</td></tr>
+<tr><td>ECE/Bo</td><td class=r>384</td><td class=r>4</td><td>96×4</td></tr>
+<tr><td>ECE/B|o</td><td class=r>768</td><td class=r>8</td><td>96×8</td></tr>
+<tr><td>EEC/Bb</td><td class=r>384</td><td class=r>1</td><td>384×1</td></tr>
+<tr><td>EEC/B|b</td><td class=r>768</td><td class=r>8</td><td>96×8</td></tr>
+<tr><td>EEE/Bbo</td><td class=r>192</td><td class=r>1</td><td>192×1</td></tr>
+<tr><td>EEE/Bb|o</td><td class=r>384</td><td class=r>1</td><td>384×1</td></tr>
+<tr><td>EEE/Bo|b</td><td class=r>384</td><td class=r>4</td><td>96×4</td></tr>
+<tr><td>EEE/B|bo</td><td class=r>384</td><td class=r>4</td><td>96×4</td></tr>
+<tr><td>EEE/B|b|o</td><td class=r>384</td><td class=r>4</td><td>96×4</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h1>Level 3　位置群</h1>
+<div class=big>$$\Pi_3=\varepsilon^{-1}(V),\qquad \dim V=15,\qquad |\Pi_3|=2^{15}\prod_{i=1}^{164}\frac{|\Omega_i|!}{2}$$</div>
+<p style="margin-top:5vh">$\log_{10}|\Pi_3|\approx 11399.35\quad\Longrightarrow\quad \mathrm{diam}(G_3)\ge 3207$</p>
+</section>
+
+<section>
+<h1>Level 3　向き</h1>
+<table>
+<thead><tr><th>$H_x$</th><th class=r>軌道</th><th class=r>セル</th><th>処理</th></tr></thead>
+<tbody>
+<tr><td>自明</td><td class=r>148</td><td class=r>7,224</td><td>位置が決まれば向きも決まる</td></tr>
+<tr><td>$C_3$</td><td class=r>4</td><td class=r>32</td><td>位置を変えないねじり工具</td></tr>
+<tr><td>$C_4$</td><td class=r>11</td><td class=r>552</td><td>合法な一セル回転</td></tr>
+<tr><td>$D_4$</td><td class=r>1</td><td class=r>192</td><td>一セル回転と twister 13 語</td></tr>
+</tbody>
+</table>
+<p style="margin-top:5vh">$O\le\prod_x H_x$ の決定は未解決。</p>
+</section>
+
+<section>
+<h1>検証</h1>
+<p><code>npm run verify:l3</code></p>
+<p style="font-size:.7em">純粋工具の監査　／　疎シミュレータと実エンジンの比較　／　各軌道の置換群の証明書</p>
+<p style="margin-top:6vh"><code>research/square-rotation/out/l2-index-certificate.json</code></p>
+<p style="font-size:.7em">$[H:G_2]=2$ の証明書</p>
+</section>
+
+<section class=cat>
+<h1>Level 3　164 軌道</h1>
+<table>
+<thead><tr><th>ID</th><th>クラス</th><th>代表位置</th><th class=r>サイズ</th><th class=r>$|H_x|$</th><th>一セル回転</th><th class=r>工具の支持</th><th class=r>工具の長さ</th></tr></thead>
+<tbody>
+<tr><td>O000</td><td>CCC</td><td>(-13,-13,-13)</td><td class=r>8</td><td class=r>3</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O001</td><td>CCE</td><td>(-13,-13,-12)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O002</td><td>CCC</td><td>(-13,-13,-11)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O003</td><td>CEC</td><td>(-13,-13,-10)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O004</td><td>CEE/bo</td><td>(-13,-13,-9)</td><td class=r>96</td><td class=r>4</td><td>あり</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O005</td><td>CEC</td><td>(-13,-13,-8)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O006</td><td>CCC</td><td>(-13,-13,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O007</td><td>CCE</td><td>(-13,-13,-6)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O008</td><td>CCC</td><td>(-13,-13,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O009</td><td>ECC</td><td>(-13,-13,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O010</td><td>ECE/Bo</td><td>(-13,-13,-3)</td><td class=r>96</td><td class=r>4</td><td>あり</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O011</td><td>ECC</td><td>(-13,-13,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O012</td><td>EEC/Bb</td><td>(-13,-13,-1)</td><td class=r>384</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O013</td><td>EEE/Bbo</td><td>(-13,-13,0)</td><td class=r>192</td><td class=r>8</td><td>あり</td><td class=r>4</td><td class=r>20</td></tr>
+<tr><td>O014</td><td>CCE</td><td>(-13,-12,-11)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O015</td><td>CEE/b|o</td><td>(-13,-12,-10)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>84</td></tr>
+<tr><td>O016</td><td>CEE/b|o</td><td>(-13,-12,-8)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>84</td></tr>
+<tr><td>O017</td><td>CCE</td><td>(-13,-12,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O018</td><td>CCE</td><td>(-13,-12,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O019</td><td>ECE/B|o</td><td>(-13,-12,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O020</td><td>ECE/B|o</td><td>(-13,-12,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O021</td><td>EEE/Bb|o</td><td>(-13,-12,-1)</td><td class=r>384</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>20</td></tr>
+<tr><td>O022</td><td>ECE/B|o</td><td>(-13,-12,2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O023</td><td>ECE/B|o</td><td>(-13,-12,4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O024</td><td>CCE</td><td>(-13,-12,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O025</td><td>CCE</td><td>(-13,-12,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O026</td><td>CCE</td><td>(-13,-12,11)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O027</td><td>CCC</td><td>(-13,-11,-11)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O028</td><td>CCC</td><td>(-13,-11,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O029</td><td>CCE</td><td>(-13,-11,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O030</td><td>CCC</td><td>(-13,-11,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O031</td><td>ECC</td><td>(-13,-11,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O032</td><td>ECE/Bo</td><td>(-13,-11,-3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O033</td><td>ECC</td><td>(-13,-11,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O034</td><td>ECC</td><td>(-13,-11,2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O035</td><td>ECE/Bo</td><td>(-13,-11,3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O036</td><td>ECC</td><td>(-13,-11,4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O037</td><td>CCC</td><td>(-13,-11,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O038</td><td>CCE</td><td>(-13,-11,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O039</td><td>CCC</td><td>(-13,-11,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O040</td><td>CEC</td><td>(-13,-10,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O041</td><td>CEE/b|o</td><td>(-13,-10,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O042</td><td>CEC</td><td>(-13,-10,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O043</td><td>EEC/B|b</td><td>(-13,-10,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O044</td><td>EEE/Bo|b</td><td>(-13,-10,-3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O045</td><td>EEC/B|b</td><td>(-13,-10,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O046</td><td>EEC/B|b</td><td>(-13,-10,2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O047</td><td>EEE/Bo|b</td><td>(-13,-10,3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O048</td><td>EEC/B|b</td><td>(-13,-10,4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O049</td><td>CEC</td><td>(-13,-10,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O050</td><td>CEE/b|o</td><td>(-13,-10,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O051</td><td>CEC</td><td>(-13,-10,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O052</td><td>CEE/bo</td><td>(-13,-9,-7)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O053</td><td>CEE/bo</td><td>(-13,-9,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O054</td><td>EEE/B|bo</td><td>(-13,-9,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O055</td><td>EEE/B|bo</td><td>(-13,-9,-2)</td><td class=r>96</td><td class=r>4</td><td>あり</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O056</td><td>CEE/bo</td><td>(-13,-9,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O057</td><td>CEE/bo</td><td>(-13,-9,7)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O058</td><td>CEC</td><td>(-13,-8,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O059</td><td>CEE/b|o</td><td>(-13,-8,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O060</td><td>CEC</td><td>(-13,-8,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O061</td><td>CEC</td><td>(-13,-8,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O062</td><td>CEE/b|o</td><td>(-13,-8,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O063</td><td>CEC</td><td>(-13,-8,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O064</td><td>CCC</td><td>(-13,-7,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O065</td><td>CCE</td><td>(-13,-7,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O066</td><td>CCC</td><td>(-13,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O067</td><td>CCC</td><td>(-13,-7,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O068</td><td>CCE</td><td>(-13,-7,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O069</td><td>CCE</td><td>(-13,-6,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O070</td><td>CCE</td><td>(-13,-6,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O071</td><td>CCC</td><td>(-13,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O072</td><td>CCE</td><td>(-12,-11,-11)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O073</td><td>CCE</td><td>(-12,-11,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O074</td><td>CCE</td><td>(-12,-11,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O075</td><td>ECE/B|o</td><td>(-12,-11,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O076</td><td>ECE/B|o</td><td>(-12,-11,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O077</td><td>ECE/B|o</td><td>(-12,-11,2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O078</td><td>ECE/B|o</td><td>(-12,-11,4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O079</td><td>CCE</td><td>(-12,-11,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O080</td><td>CCE</td><td>(-12,-11,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O081</td><td>CEE/b|o</td><td>(-12,-10,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O082</td><td>CEE/b|o</td><td>(-12,-10,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O083</td><td>EEE/B|b</td><td>o</td><td class=r>(-1,-1,0);(-1,0,-1);(0,-1,-1)</td><td class=r>96</td><td>—</td><td class=r>no</td><td class=r>4</td></tr>
+<tr><td>O084</td><td>EEE/B|b</td><td>o</td><td class=r>(-1,-1,0);(-1,0,-1);(0,-1,1)</td><td class=r>96</td><td>—</td><td class=r>no</td><td class=r>4</td></tr>
+<tr><td>O085</td><td>EEE/B|b</td><td>o</td><td class=r>(-1,-1,0);(-1,0,1);(0,-1,-1)</td><td class=r>96</td><td>—</td><td class=r>no</td><td class=r>4</td></tr>
+<tr><td>O086</td><td>EEE/B|b</td><td>o</td><td class=r>(-1,-1,0);(-1,0,1);(0,-1,1)</td><td class=r>96</td><td>—</td><td class=r>no</td><td class=r>4</td></tr>
+<tr><td>O087</td><td>CEE/b|o</td><td>(-12,-10,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O088</td><td>CEE/b|o</td><td>(-12,-10,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O089</td><td>CEE/b|o</td><td>(-12,-8,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O090</td><td>CEE/b|o</td><td>(-12,-8,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O091</td><td>CEE/b|o</td><td>(-12,-8,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O092</td><td>CEE/b|o</td><td>(-12,-8,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O093</td><td>CCE</td><td>(-12,-7,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O094</td><td>CCE</td><td>(-12,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O095</td><td>CCE</td><td>(-12,-7,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O096</td><td>CCE</td><td>(-12,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O097</td><td>CCC</td><td>(-11,-11,-11)</td><td class=r>8</td><td class=r>3</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O098</td><td>CCC</td><td>(-11,-11,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O099</td><td>CCE</td><td>(-11,-11,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O100</td><td>CCC</td><td>(-11,-11,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O101</td><td>ECC</td><td>(-11,-11,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O102</td><td>ECE/Bo</td><td>(-11,-11,-3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O103</td><td>ECC</td><td>(-11,-11,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>4</td><td class=r>36</td></tr>
+<tr><td>O104</td><td>CEC</td><td>(-11,-10,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O105</td><td>CEE/b|o</td><td>(-11,-10,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O106</td><td>CEC</td><td>(-11,-10,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O107</td><td>EEC/B|b</td><td>(-11,-10,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O108</td><td>EEE/Bo|b</td><td>(-11,-10,-3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O109</td><td>EEC/B|b</td><td>(-11,-10,-2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O110</td><td>EEC/B|b</td><td>(-11,-10,2)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O111</td><td>EEE/Bo|b</td><td>(-11,-10,3)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O112</td><td>EEC/B|b</td><td>(-11,-10,4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>84</td></tr>
+<tr><td>O113</td><td>CEC</td><td>(-11,-10,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O114</td><td>CEE/b|o</td><td>(-11,-10,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O115</td><td>CEC</td><td>(-11,-10,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O116</td><td>CEE/bo</td><td>(-11,-9,-7)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O117</td><td>CEE/bo</td><td>(-11,-9,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O118</td><td>EEE/B|bo</td><td>(-11,-9,-4)</td><td class=r>96</td><td class=r>1</td><td>—</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O119</td><td>EEE/B|bo</td><td>(-11,-9,-2)</td><td class=r>96</td><td class=r>4</td><td>あり</td><td class=r>6</td><td class=r>84</td></tr>
+<tr><td>O120</td><td>CEE/bo</td><td>(-11,-9,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O121</td><td>CEE/bo</td><td>(-11,-9,7)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O122</td><td>CEC</td><td>(-11,-8,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O123</td><td>CEE/b|o</td><td>(-11,-8,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O124</td><td>CEC</td><td>(-11,-8,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O125</td><td>CEC</td><td>(-11,-8,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O126</td><td>CEE/b|o</td><td>(-11,-8,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O127</td><td>CEC</td><td>(-11,-8,7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O128</td><td>CCC</td><td>(-11,-7,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O129</td><td>CCE</td><td>(-11,-7,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O130</td><td>CCC</td><td>(-11,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O131</td><td>CCC</td><td>(-11,-7,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O132</td><td>CCE</td><td>(-11,-7,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O133</td><td>CCE</td><td>(-11,-6,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O134</td><td>CCE</td><td>(-11,-6,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O135</td><td>CCC</td><td>(-11,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O136</td><td>CEC</td><td>(-10,-7,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O137</td><td>CEE/b|o</td><td>(-10,-7,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O138</td><td>CEC</td><td>(-10,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O139</td><td>CEC</td><td>(-10,-7,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O140</td><td>CEE/b|o</td><td>(-10,-7,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O141</td><td>CEE/b|o</td><td>(-10,-6,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O142</td><td>CEE/b|o</td><td>(-10,-6,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O143</td><td>CEC</td><td>(-10,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O144</td><td>CEE/bo</td><td>(-9,-7,-7)</td><td class=r>24</td><td class=r>4</td><td>あり</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O145</td><td>CEE/bo</td><td>(-9,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O146</td><td>CEE/bo</td><td>(-9,-7,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O147</td><td>CEE/bo</td><td>(-9,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O148</td><td>CEC</td><td>(-8,-7,-7)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O149</td><td>CEE/b|o</td><td>(-8,-7,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O150</td><td>CEC</td><td>(-8,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O151</td><td>CEC</td><td>(-8,-7,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O152</td><td>CEE/b|o</td><td>(-8,-7,6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O153</td><td>CEE/b|o</td><td>(-8,-6,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O154</td><td>CEE/b|o</td><td>(-8,-6,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O155</td><td>CEC</td><td>(-8,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O156</td><td>CCC</td><td>(-7,-7,-7)</td><td class=r>8</td><td class=r>3</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O157</td><td>CCE</td><td>(-7,-7,-6)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O158</td><td>CCC</td><td>(-7,-7,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O159</td><td>CCE</td><td>(-7,-6,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O160</td><td>CCE</td><td>(-7,-6,5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>16</td></tr>
+<tr><td>O161</td><td>CCC</td><td>(-7,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O162</td><td>CCE</td><td>(-6,-5,-5)</td><td class=r>24</td><td class=r>1</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+<tr><td>O163</td><td>CCC</td><td>(-5,-5,-5)</td><td class=r>8</td><td class=r>3</td><td>—</td><td class=r>3</td><td class=r>32</td></tr>
+</tbody>
+</table>
+</section>
+
+</body>
+</html>
