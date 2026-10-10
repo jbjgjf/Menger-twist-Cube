@@ -55,9 +55,19 @@ npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --lengt
 
 この成功は現行物理モデルでの完全性証明を代替しません。
 
+Level 2 の完全性の証明が依拠する計算機検査は、次で再実行できます。
+
+```sh
+npm run prove:l2   # 検査 C1–C9（全探索）
+npm run test:l2    # 不変量を満たす状態を直接構成して解く試験を含む
+```
+
 ## 4. ソース内の証拠
 
-- `packages/solver-core/src/algorithms/level2SliceReductionSolver.ts`：Level 2 構成的解法
+- `docs/proofs/level2-completeness.tex`、`docs/proofs/level3-completeness.tex`：論文形式の証明
+- `packages/solver-core/src/algorithms/level2CertifiedSolver.ts`：Level 2 完全解法（証明の対象）
+- `research/level2-completeness/certify.ts`：Level 2 の証明が依拠する計算機検査
+- `packages/solver-core/src/algorithms/level2SliceReductionSolver.ts`：Level 2 構成的解法（短いが完全性は未証明）
 - `packages/solver-core/src/algorithms/level3SliceReductionSolver.ts`：Level 3 完全解法
 - `packages/solver-core/src/algorithms/level3SliceReductionToolData.ts`：164 軌道の純粋工具データ
 - `research/scratch/l3-orbit-groups.ts`：各軌道の置換群証明書
@@ -71,7 +81,7 @@ npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --lengt
 
 ### Level 2
 
-合法な 72 種の一セル回転だけを用いて、軌道、向き自由度、偶奇生成空間、位置工具、向き工具を再構成することが最優先です。結果によっては現行ソルバーの修正だけで済む場合も、解法構造自体の変更が必要な場合もあります。
+完全性は 2026-10 に証明されました（`docs/proofs/level2-completeness.tex`）。残る課題は効率です。証明済みの解法 `level2-certified` は約3,800手、未証明の `level2-slice-reduction` は約1,300手であり、短い解法の完全性の証明、または証明済みの解法の短縮が次の課題です。
 
 ### Level 3
 
@@ -79,4 +89,4 @@ npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --lengt
 
 ### God's number
 
-Level 3 では $G_3\ge 3206$ という下界がありますが、意味のある上界や正確な値は分かっていません。Level 2 についても現行物理モデルの到達可能状態数を改めて数える必要があります。
+Level 3 では $G_3\ge 3206$ という下界がありますが、意味のある上界や正確な値は分かっていません。Level 2 の到達可能状態数は $|G|\approx2.66\times10^{575}$ と決定されました。情報量による下界は216手です。

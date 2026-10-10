@@ -8,3 +8,4 @@
 - [5. Level 3](Level-3-Complete-Answer)
 - [付録A：164軌道](Level-3-Orbit-Catalogue)
 - [付録B：検証と再現](Verification-and-Reproducibility)
+- 論文形式の証明：リポジトリの `docs/proofs/`

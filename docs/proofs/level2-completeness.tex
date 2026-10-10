@@ -1,0 +1,595 @@
+\documentclass[a4paper,11pt]{ltjsarticle}
+\input{preamble}
+
+\title{メンガー・ツイスト・キューブ Level 2 の\\到達可能状態の決定と完全解法}
+\author{Menger Cube プロジェクト}
+\date{2026年10月4日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Level 2 のメンガー・ツイスト・キューブ（400セル）について，合法原子手が生成する群を完全に決定し，
+到達可能な任意の状態を完成状態へ戻す解法の完全性を証明する．
+対象は二つの操作系である．一つは現行の標準系（468原子手，生成群 $G$），もう一つは標準系に
+一層の正方形リング回転を加えた拡張系（522原子手，生成群 $H$）である．
+主結果は次の三点である．
+(1) 状態が到達可能であることは，軌道ごとの置換の偶奇ベクトルが定まった部分空間に入り，
+二つの角軌道のねじれ和と一つの辺軌道の反転数がすべて零であることと同値である．
+(2) $|G|\approx 2.66\times10^{575}$ であり，$[H:G]=2$ である．
+(3) 実装 \code{level2-certified} は，両方の系で，到達可能な任意の状態に対して合法原子手だけからなる解を構成する．
+証明は，有限個の計算機検査（すべて全探索であり，乱数を使わない）と，それらから結論を導く数学的議論に分かれる．
+\end{abstract}
+
+\tableofcontents
+
+\section{序}
+
+\subsection{問題と結果}
+
+Level 2 のパズルは $9\times9\times9$ 格子のうちメンガーのスポンジに属する400個の単位立方体（セル）からなる．
+合法な回転（原子手）を有限回行って得られる状態を\emph{到達可能}という．
+本稿の目的は，到達可能な状態の集合を不変量で特徴づけ，その全体を解く手続きを与えることである．
+
+これまで Level 2 については，衝突判定を導入する前の抽象的な回転モデルに対する構成があるだけで，
+現行の物理モデル（回転中に他のセルと衝突しない手だけを許す）での完全性は未証明であった．
+既存の実装 \code{level2-slice-reduction} は多くの例を解くが，経験的な選択規則を含むため，
+そのままでは完全性を証明できない．
+本稿は，証明できる形の解法を新たに構成し，その完全性を示す．
+
+\subsection{証明の構成}
+
+証明は二方向の包含からなる．
+到達可能な状態全体を $G$，不変量で定まる状態の集合を $U$ とする．
+\begin{itemize}
+\item $G\subseteq U$：各原子手が不変量を保つことを，全原子手について検査する（第\ref{sec:invariants}節）．
+\item $U\subseteq G$：$U$ の任意の状態を完成状態へ移す原子手の列を構成する（第\ref{sec:algorithm}節）．
+\end{itemize}
+後者の構成がそのまま解法であり，その停止性と正しさの証明が解法の完全性の証明になる．
+
+計算機に任せる部分は第\ref{sec:checks}節に検査 C1--C9 として列挙する．
+どの検査も有限集合の全列挙であり，確率的な要素はない．
+
+\section{設定}\label{sec:setting}
+
+\subsection{位置，向き，状態}
+
+Level 2 の位置集合を $P$ と書く．$P$ は $\{-4,\dots,4\}^3$ の部分集合で，
+$p=3b+o$（$b,o\in\{-1,0,1\}^3$）と書いたとき $b$ と $o$ のそれぞれで零成分が高々一つであるもの全体である．
+$|P|=20^2=400$ である．
+
+立方体の回転群（成分が $0,\pm1$ で行列式が $1$ の $3\times3$ 直交行列の全体）を $C$ と書く．$|C|=24$ である．
+
+セルを，完成状態での位置（そのセルの\emph{家}）で識別する．
+\emph{状態}とは組 $s=(\sigma,\rho)$ である．
+ここで $\sigma\colon P\to P$ は全単射で，$\sigma(x)$ は家が $x$ のセルの現在位置を表す．
+$\rho\colon P\to C$ は各セルの向きを表し，完成状態での向きを単位行列 $I$ とする．
+完成状態は $e=(\mathrm{id},I)$ である．
+
+\subsection{原子手}
+
+\emph{原子手} $a$ は，回転対象 $D_a\subseteq P$，座標軸に平行な回転軸，角度 $\theta\in\{90^\circ,-90^\circ,180^\circ\}$ の組である．
+$a$ は $D_a$ をそれ自身に写す位置の置換 $\pi_a$（$D_a$ の外では恒等）と，回転行列 $R_a\in C$ を定める．
+状態 $s=(\sigma,\rho)$ に $a$ を施した状態 $s\cdot a=(\sigma',\rho')$ を
+\[
+\sigma'(x)=\pi_a(\sigma(x)),\qquad
+\rho'(x)=\begin{cases}R_a\,\rho(x)&(\sigma(x)\in D_a)\\ \rho(x)&(\sigma(x)\notin D_a)\end{cases}
+\]
+で定める．原子手の列（\emph{語}）$a_1a_2\cdots a_k$ は左から順に施す．
+
+原子手が合法かどうかは，どの位置がセルで占められているかだけで決まる．
+合法な原子手は占有位置の集合 $P$ を保つので，合法性は状態によらない．
+したがって合法原子手の集合 $S$ は固定された有限集合であり，各合法原子手の逆（同じ対象で角度の符号を変えたもの）も合法である．
+
+\begin{definition}[二つの操作系]
+\begin{itemize}
+\item \emph{標準系} $S_{\mathrm{std}}$：フレーム回転，再帰拡張回転，薄板回転のうち合法なもの．$|S_{\mathrm{std}}|=468$（156対象 $\times$ 3角度）．
+\item \emph{拡張系} $S_{\mathrm{in}}$：$S_{\mathrm{std}}$ に，各軸の層 $-3,0,+3$ の面における内側・外側の正方形リングの回転（18対象）を加えたもの．$|S_{\mathrm{in}}|=522$．
+\end{itemize}
+\end{definition}
+
+拡張系の18対象は，一層の中で外接正方形の中心を軸として回せるセル集合を網羅的に列挙して得られたもので，
+標準系に含まれない合法対象のすべてである（\code{docs/research/square-region-rotation-model.md}）．
+両系の全原子手が回転中に他のセルと正の体積で交わらないことは，整数演算による証明書で確認されている（同文書）．
+
+\subsection{群としての定式化}
+
+状態の全体に，$s\cdot a$ で定まる原子手の作用を延長すると，語の全体は群として作用する．
+系 $S$ に対し，完成状態 $e$ から $S$ の語で到達できる状態の全体を $G_S$ と書く．
+$e$ から状態 $s$ へ移す語が定める変換は $s$ だけで決まるので，$G_S$ は群の構造を持ち，到達可能な状態と群の元は一対一に対応する．
+以下，$G=G_{S_{\mathrm{std}}}$，$H=G_{S_{\mathrm{in}}}$ と書く．$S_{\mathrm{std}}\subseteq S_{\mathrm{in}}$ なので $G\le H$ である．
+
+\section{位置軌道と向きの自由度}\label{sec:orbits}
+
+\subsection{位置軌道}
+
+$P$ を頂点集合とし，ある原子手 $a\in S$ について $\pi_a(x)=y$ となる $x,y$ を辺で結んだグラフの連結成分を\emph{位置軌道}という．
+これは $G_S$ の $P$ への作用の軌道と一致する．
+
+\begin{proposition}[検査 C2]\label{prop:orbits}
+標準系でも拡張系でも，位置軌道は表\ref{tab:orbits}の11個である．
+\end{proposition}
+
+\begin{table}[ht]
+\centering
+\caption{位置軌道．「向き群」は第\ref{subsec:freedom}節の $H_0$，「転がし」は一セル回転の原子手を持つセルの数．}\label{tab:orbits}
+\begin{tabular}{rrcccc}
+\toprule
+軌道 & セル数 & 代表位置 & クラス & 向き群 & 転がし \\
+\midrule
+$\Omega_0$ & 8 & $(-4,-4,-4)$ & CC & $C_3$ & 0 \\
+$\Omega_1$ & 24 & $(-4,-4,-3)$ & CE & $C_4$ & 24 \\
+$\Omega_2$ & 24 & $(-4,-4,-2)$ & CC & $1$ & 0 \\
+$\Omega_3$ & 96 & $(-4,-4,-1)$ & EC & $1$ & 0 \\
+$\Omega_4$ & 48 & $(-4,-4,0)$ & EEa & $D_4$ & 48 \\
+$\Omega_5$ & 24 & $(-4,-3,-2)$ & CE & $1$ & 0 \\
+$\Omega_6$ & 96 & $(-4,-3,-1)$ & EEo & $1$ & 0 \\
+$\Omega_7$ & 24 & $(-4,-3,2)$ & CE & $1$ & 0 \\
+$\Omega_8$ & 24 & $(-4,-2,-2)$ & CC & $1$ & 0 \\
+$\Omega_9$ & 24 & $(-3,-2,-2)$ & CE & $1$ & 0 \\
+$\Omega_{10}$ & 8 & $(-2,-2,-2)$ & CC & $C_3$ & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+クラスは $p=3b+o$ の桁の形による分類である（C は零成分なし，E は零成分一つ．EEa は $b$ と $o$ の零成分の軸が一致，EEo は不一致）．
+
+\subsection{向きの自由度}\label{subsec:freedom}
+
+軌道 $\Omega$ の代表位置を $x_\Omega$ とする．
+家が $x_\Omega$ のセル一個だけを追跡すると，その（位置，向き）の組は有限集合 $\Omega\times C$ の中を動く．
+完成状態 $(x_\Omega,I)$ から到達できる組の全体を $Q_\Omega\subseteq\Omega\times C$ とし，
+位置 $p$ での切り口を $Q_p=\{R:(p,R)\in Q_\Omega\}$ と書く．
+$H_0=H_0(\Omega)=Q_{x_\Omega}$ は $C$ の部分群である（家に戻る変換の合成は家に戻る）．
+
+各位置 $p\in\Omega$ について，$Q_p$ の元を一つ選んで $r_p$ と書く（$r_{x_\Omega}=I$）．これを\emph{基準向き}と呼ぶ．
+
+\begin{lemma}[検査 C3]\label{lem:coset}
+すべての軌道 $\Omega$ とすべての $p\in\Omega$ について $Q_p=r_pH_0$ である．
+$H_0$ の同型類は表\ref{tab:orbits}のとおりである．
+\end{lemma}
+
+これは一般論からも従う（$Q_p$ は $H_0$ の右からの作用で保たれ，$(x_\Omega,I)\to(p,r_p)$ と $(x_\Omega,I)\to(p,R)$ を比べれば $r_p^{-1}R\in H_0$ が出る）が，本稿では計算機で直接確認した値を用いる．
+
+\begin{definition}[ねじれ座標]
+状態 $s=(\sigma,\rho)$ と家 $x\in\Omega$ のセルについて
+\[
+\tau_s(x)=r_{\sigma(x)}^{-1}\,\rho(x)\,r_x\in C
+\]
+と定める．完成状態では $\tau_e(x)=I$ である．
+\end{definition}
+
+\begin{definition}[許容状態]
+状態 $s$ が\emph{許容}であるとは，すべての $x$ について $\sigma(x)$ が $x$ と同じ軌道にあり，
+$\tau_s(x)\in H_0(\Omega)$（$\Omega$ は $x$ の軌道）となることをいう．許容状態の全体を $W$ と書く．
+\end{definition}
+
+$W$ の元は，各軌道 $\Omega_i$ の置換と，各セルの $\tau\in H_0(\Omega_i)$ を自由に選んで決まるので，
+\begin{equation}\label{eq:W}
+|W|=\prod_{i=0}^{10}|\Omega_i|!\,\cdot\,|H_0(\Omega_i)|^{|\Omega_i|}
+=(8!)^2(24!)^6\,48!\,(96!)^2\cdot3^{16}\cdot4^{24}\cdot8^{48}.
+\end{equation}
+
+\begin{lemma}[原子手のねじれ座標への作用，検査 C4前半]\label{lem:delta}
+原子手 $a$ と位置 $p\in\Omega$ に対し
+\[
+\delta(a,p)=r_{\pi_a(p)}^{-1}\,R_a(p)\,r_p
+\]
+とおく．ここで $R_a(p)$ は $p\in D_a$ なら $R_a$，そうでなければ $I$ である．
+このとき $\delta(a,p)\in H_0(\Omega)$ であり，状態 $s$ で位置 $p$ にあるセル $x$ について
+\[
+\tau_{s\cdot a}(x)=\delta(a,p)\,\tau_s(x)
+\]
+が成り立つ．特に $W\cdot a\subseteq W$，したがって $G_S\subseteq W$ である．
+
+語 $g=a_1\cdots a_k$ に対しては，位置への作用を $\pi_g=\pi_{a_k}\circ\cdots\circ\pi_{a_1}$ とし，
+\[
+\delta(g,p)=\delta(a_k,p_{k-1})\cdots\delta(a_2,p_1)\,\delta(a_1,p_0),\qquad p_0=p,\ p_j=\pi_{a_j}(p_{j-1})
+\]
+と定めると，$\delta(g,p)\in H_0(\Omega)$，$\tau_{s\cdot g}(x)=\delta(g,p)\,\tau_s(x)$ であり，
+$\delta(g^{-1},\pi_g(p))=\delta(g,p)^{-1}$ が成り立つ．
+\end{lemma}
+
+\begin{proof}
+$\sigma(x)=p$ とすると $\tau_{s\cdot a}(x)=r_{\pi_a(p)}^{-1}R_a(p)\rho(x)r_x
+=r_{\pi_a(p)}^{-1}R_a(p)r_p\cdot r_p^{-1}\rho(x)r_x=\delta(a,p)\tau_s(x)$．
+$\delta(a,p)\in H_0$ は，全原子手・全位置について計算機で確認した．
+$e\in W$ と $W\cdot a\subseteq W$ から $G_S\subseteq W$ が従う．
+語についての主張は原子手の場合を繰り返し用いれば得られる．
+最後の等式は，$gg^{-1}$ が恒等変換であることから $\delta(g^{-1},\pi_g(p))\,\delta(g,p)=I$ となることによる．
+\end{proof}
+
+\section{不変量}\label{sec:invariants}
+
+\subsection{軌道偶奇}
+
+許容状態 $s$ では $\sigma$ は各軌道を保つ．
+$\varepsilon(s)\in\F_2^{11}$ を，第 $i$ 成分が $\sigma|_{\Omega_i}$ の偶奇（偶なら $0$，奇なら $1$）であるベクトルとする．
+符号の乗法性から，$\varepsilon(s\cdot a)=\varepsilon(s)+\varepsilon(a)$ である（$\varepsilon(a)$ は $\pi_a$ の偶奇ベクトル）．
+
+\begin{definition}
+系 $S$ に対し $V_S=\Span\{\varepsilon(a):a\in S\}\subseteq\F_2^{11}$ とおく．
+\end{definition}
+
+\begin{proposition}[検査 C5]\label{prop:parity}
+$\dim V_{S_{\mathrm{std}}}=5$，$\dim V_{S_{\mathrm{in}}}=6$ である．
+軌道 $\Omega_i$ に対応する単位ベクトルを $u_i$ と書くと，基底として次が取れる．
+\begin{align*}
+V_{S_{\mathrm{std}}}&=\Span\{\,u_0+u_5+u_7+u_8,\ \ u_1+u_5+u_7+u_9,\ \ u_2+u_5+u_7+u_{10},\ \ u_4,\ \ u_3+u_6\,\},\\
+V_{S_{\mathrm{in}}}&=V_{S_{\mathrm{std}}}\oplus\Span\{u_9\}.
+\end{align*}
+\end{proposition}
+
+\subsection{ねじれ和と反転数}
+
+向き群が $C_3$ の軌道 $\Omega_0,\Omega_{10}$ では，同型 $\chi\colon H_0\to\Z/3$ を一つ固定する．
+向き群が $D_4$ の軌道 $\Omega_4$ では，位数4の巡回部分群を $C_4\le H_0$ とし，
+$\chi\colon H_0\to H_0/C_4\cong\Z/2$ を自然な準同型とする．$\chi(\tau)=1$ のセルを\emph{反転している}という．
+
+\begin{definition}
+許容状態 $s$ に対し
+\[
+\theta_0(s)=\sum_{x\in\Omega_0}\chi(\tau_s(x))\in\Z/3,\quad
+\theta_{10}(s)=\sum_{x\in\Omega_{10}}\chi(\tau_s(x))\in\Z/3,\quad
+\varphi(s)=\sum_{x\in\Omega_4}\chi(\tau_s(x))\in\Z/2
+\]
+と定める．$\theta_0,\theta_{10}$ を\emph{ねじれ和}，$\varphi$ を\emph{反転偶奇}と呼ぶ．
+\end{definition}
+
+\begin{lemma}[不変性，検査 C4後半]\label{lem:invariance}
+両方の系のすべての原子手 $a$ と，$\Omega\in\{\Omega_0,\Omega_4,\Omega_{10}\}$ について
+\[
+\sum_{p\in\Omega}\chi(\delta(a,p))=0
+\]
+である．したがってすべての許容状態 $s$ について
+$\theta_0(s\cdot a)=\theta_0(s)$，$\theta_{10}(s\cdot a)=\theta_{10}(s)$，$\varphi(s\cdot a)=\varphi(s)$ である．
+\end{lemma}
+
+\begin{proof}
+前半は全原子手について計算機で確認した（標準系 $468\times3=1404$ 件，拡張系 $522\times3=1566$ 件）．
+後半は，補題\ref{lem:delta}と $\chi$ が準同型であることから
+$\sum_x\chi(\tau_{s\cdot a}(x))=\sum_x\chi(\tau_s(x))+\sum_{p\in\Omega}\chi(\delta(a,p))$ となり，
+$x\mapsto\sigma(x)$ が $\Omega$ の全単射であることから従う．
+\end{proof}
+
+\subsection{必要条件}
+
+\begin{definition}
+系 $S$ に対し
+\[
+U_S=\{\,s\in W:\ \varepsilon(s)\in V_S,\ \theta_0(s)=0,\ \theta_{10}(s)=0,\ \varphi(s)=0\,\}
+\]
+とおく．
+\end{definition}
+
+\begin{proposition}\label{prop:necessary}
+$G_S\subseteq U_S$ である．
+\end{proposition}
+
+\begin{proof}
+$e\in U_S$ である．$s\in U_S$ なら，補題\ref{lem:delta}により $s\cdot a\in W$，
+$\varepsilon(s\cdot a)=\varepsilon(s)+\varepsilon(a)\in V_S$，補題\ref{lem:invariance}によりねじれ和と反転偶奇は変わらない．
+語の長さに関する帰納法で結論を得る．
+\end{proof}
+
+\section{工具}\label{sec:tools}
+
+以下，$X_k$ は層 $x=k$ の一セル厚フレームを X 軸まわりに $90^\circ$ 回す原子手を表し，$Y_k$ も同様とする．
+これらはすべて標準系に属する．語 $A,B$ の交換子を $[A,B]=ABA^{-1}B^{-1}$ と書く（左から順に施す）．
+
+\begin{definition}
+語 $T$ が\emph{純粋}であるとは，それが定める変換が，ある有限個の位置の外では位置も向きも変えないことをいう．
+その有限個の位置の最小の集合を $\supp T$ と書く．
+\end{definition}
+
+\begin{lemma}[共役]\label{lem:conj}
+$T$ を純粋な語，$g$ を任意の語とし，$g$ の位置への作用を $\pi_g$ とする．
+語 $g^{-1}Tg$ は純粋で，$\supp(g^{-1}Tg)=\pi_g(\supp T)$ である．
+$T$ が位置を $x\mapsto y$ と動かすなら，$g^{-1}Tg$ は $\pi_g(x)\mapsto\pi_g(y)$ と動かす．
+\end{lemma}
+
+\begin{proof}
+位置 $q\notin\pi_g(\supp T)$ にあるセルは，$g^{-1}$ で $\supp T$ の外へ運ばれ，$T$ で位置も向きも変わらず，$g$ で元に戻る．
+向きの変化は $g^{-1}$ と $g$ で打ち消す．位置の動きについての主張は合成を追えば分かる．
+\end{proof}
+
+\subsection{純粋な3-cycle}
+
+\begin{proposition}[検査 C6]\label{prop:threecycles}
+各軌道 $\Omega_i$ について，表\ref{tab:threecycles}の語
+\[
+T_i=[\,a_i,\ b_ic_ib_i^{-1}\,]
+\]
+（8原子手）は純粋で，$\supp T_i$ は $\Omega_i$ のちょうど三点からなり，$T_i$ はその三点を巡回させる．
+\end{proposition}
+
+\begin{table}[ht]
+\centering
+\caption{各軌道の純粋な3-cycle $T_i=[a_i,\,b_ic_ib_i^{-1}]$．}\label{tab:threecycles}
+\begin{tabular}{rccc@{\qquad}rccc}
+\toprule
+軌道 & $a_i$ & $b_i$ & $c_i$ & 軌道 & $a_i$ & $b_i$ & $c_i$ \\
+\midrule
+$\Omega_0$ & $Y_{+4}$ & $X_{-4}$ & $Y_{-4}$ & $\Omega_6$ & $Y_{-1}$ & $X_{-4}$ & $Y_{-3}$ \\
+$\Omega_1$ & $Y_{-3}$ & $X_{-4}$ & $Y_{-4}$ & $\Omega_7$ & $Y_{+2}$ & $X_{-4}$ & $Y_{-3}$ \\
+$\Omega_2$ & $Y_{-2}$ & $X_{-4}$ & $Y_{-4}$ & $\Omega_8$ & $Y_{+2}$ & $X_{-4}$ & $Y_{-2}$ \\
+$\Omega_3$ & $Y_{-1}$ & $X_{-4}$ & $Y_{-4}$ & $\Omega_9$ & $Y_{+2}$ & $X_{-3}$ & $Y_{-2}$ \\
+$\Omega_4$ & $Y_{0}$ & $X_{-4}$ & $Y_{-4}$ & $\Omega_{10}$ & $Y_{+2}$ & $X_{-2}$ & $Y_{-2}$ \\
+$\Omega_5$ & $Y_{-2}$ & $X_{-4}$ & $Y_{-3}$ & & & & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+これはルービックキューブの角の3-cycle $[R,\,U^{-1}L^{-1}U]$ と同じ形である．
+層 $a_i$ と，層 $c_i$ を $b_i$ で運んだものが，ちょうど一つの位置でだけ交わることを利用している．
+
+\begin{proposition}[三重推移性，検査 C7]\label{prop:transitive}
+各軌道 $\Omega$ について，$G_{S_{\mathrm{std}}}$ は $\Omega$ の相異なる三点の順序付き組の全体
+（$|\Omega|(|\Omega|-1)(|\Omega|-2)$ 個）に推移的に作用する．
+\end{proposition}
+
+\begin{proof}
+順序付き三点組を頂点とし，原子手による移り先へ辺を張った有限グラフを，$T_i$ の三点組から幅優先探索で全探索した．
+到達した頂点の数は，$|\Omega|=8,24,48,96$ に対してそれぞれ $336$，$12144$，$103776$，$857280$ であり，全体の数に等しい．
+\end{proof}
+
+\begin{corollary}\label{cor:any3cycle}
+任意の軌道 $\Omega$ と，$\Omega$ の相異なる任意の三点 $x,y,z$ に対し，
+位置を $x\mapsto y\mapsto z\mapsto x$ と動かし，他のすべてのセルの位置と向きを変えない標準系の語が存在する．
+\end{corollary}
+
+\begin{proof}
+$T_i$ が $x_0\mapsto y_0\mapsto z_0\mapsto x_0$ と動かすとする．
+命題\ref{prop:transitive}により $\pi_g(x_0,y_0,z_0)=(x,y,z)$ となる語 $g$ があり，補題\ref{lem:conj}により $g^{-1}T_ig$ が求める語である．
+\end{proof}
+
+\subsection{向き工具}
+
+\begin{proposition}[検査 C6, C7]\label{prop:pairtools}
+次の語（各20原子手）は，すべてのセルの位置を固定し，$\supp$ が一つの軌道のちょうど二点である純粋な語である．
+\begin{align*}
+P_0&=(Y_{-4}\,T_0\,Y_{-4}^{-1})\,(X_{-4}\,T_0^{-1}\,X_{-4}^{-1})&&(\Omega_0),\\
+P_{10}&=(Y_{-2}\,T_{10}\,Y_{-2}^{-1})\,(X_{-2}\,T_{10}^{-1}\,X_{-2}^{-1})&&(\Omega_{10}),\\
+P_4&=(Y_{-4}^{2}\,T_4\,Y_{-4}^{2})\,(X_{0}\,T_4^{-1}\,X_{0}^{-1})&&(\Omega_4).
+\end{align*}
+$P_0,P_{10}$ は二つのセルのねじれ座標に，$\chi$ の値が $0$ でなく和が $0$ となる元を左から掛ける．
+$P_4$ は二つのセルのねじれ座標に，どちらも $\chi=1$（反転）の元を左から掛ける．
+さらに，$G_{S_{\mathrm{std}}}$ は $\Omega_0,\Omega_4,\Omega_{10}$ のそれぞれで，相異なる二点の順序付き組の全体に推移的に作用する．
+\end{proposition}
+
+\begin{lemma}[向き工具の共役]\label{lem:pairconj}
+$\Omega\in\{\Omega_0,\Omega_4,\Omega_{10}\}$，対応する工具を $P$ とし，$\supp P=\{x_0,y_0\}$ とする．
+$x\ne y$ を $\Omega$ の任意の二点とする．
+$\pi_g(x_0)=x$，$\pi_g(y_0)=y$ となる語 $g$ が存在し，$Q=g^{-1}Pg$ は位置をすべて固定し，$\supp Q=\{x,y\}$ である．
+さらに，$P$ が $x_0$ のセルのねじれ座標に左から掛ける元を $d_0$ とすると，
+$Q$ が $x$ のセルのねじれ座標に左から掛ける元 $d$ は $H_0$ の中で $d_0$ と共役であり，$\chi(d)=\chi(d_0)\ne0$ である．
+\end{lemma}
+
+\begin{proof}
+$g$ の存在は命題\ref{prop:pairtools}の二重推移性による．$\supp Q=\{x,y\}$ と位置の固定は補題\ref{lem:conj}による．
+位置 $x$ にあるセルを追う．$g^{-1}$ はこのセルを $x_0$ へ運び，ねじれ座標に $\delta(g^{-1},x)=\delta(g,x_0)^{-1}$ を掛ける．
+$P$ は位置を変えずに $d_0$ を掛ける．$g$ は $x$ へ戻し，$\delta(g,x_0)$ を掛ける．したがって
+\[
+d=\delta(g,x_0)\,d_0\,\delta(g,x_0)^{-1}
+\]
+であり，補題\ref{lem:delta}により $\delta(g,x_0)\in H_0$ である．
+$\chi$ は可換群への準同型なので $\chi(d)=\chi(d_0)$ であり，命題\ref{prop:pairtools}により $\chi(d_0)\ne0$ である．
+\end{proof}
+
+\begin{proposition}[転がし，検査 C8]\label{prop:rolls}
+$\Omega_1$ と $\Omega_4$ のすべての位置 $p$ について，$p$ のセルだけを回す原子手が三つ（$\pm90^\circ,180^\circ$）ある．
+それらがねじれ座標に左から掛ける元は，恒等元と合わせて，$\Omega_1$ では $H_0$ 全体，$\Omega_4$ では $C_4$ をなす．
+\end{proposition}
+
+\section{主定理と解法}\label{sec:algorithm}
+
+\begin{theorem}[到達可能状態の決定]\label{thm:main}
+$S\in\{S_{\mathrm{std}},S_{\mathrm{in}}\}$ に対し $G_S=U_S$ である．
+すなわち状態 $s$ が系 $S$ で到達可能であるための必要十分条件は，次の四つがすべて成り立つことである．
+\begin{enumerate}
+\item $s$ は許容である（各セルが自分の軌道にあり，ねじれ座標が $H_0$ に入る）．
+\item $\varepsilon(s)\in V_S$．
+\item $\theta_0(s)=\theta_{10}(s)=0$．
+\item $\varphi(s)=0$．
+\end{enumerate}
+\end{theorem}
+
+必要性は命題\ref{prop:necessary}で示した．十分性を，$s\in U_S$ を完成状態へ移す語を構成して示す．
+
+\subsection{解法 L2-C}
+
+入力は状態 $s$．
+\begin{description}
+\item[段階0（判定）] 条件1--4を検査する．一つでも成り立たなければ「到達不能」と答えて終わる．
+\item[段階1（偶奇）] $\varepsilon(w)=\varepsilon(s)$ となる $S$ の語 $w$ を取り，施す．
+$w$ は，$V_S$ を頂点集合とし原子手の偶奇ベクトルを辺とするグラフの幅優先探索で求める．
+\item[段階2（位置）] 軌道ごとに次を繰り返す．
+家にないセルがある位置 $a$ を取り，そのセルの家を $b$ とする．
+$b$ にあるセルの家を $c$ とする．$c=a$ のときは，$a,b$ 以外で家にないセルがある位置を $c$ とする．
+系\ref{cor:any3cycle}の語で $a\mapsto b\mapsto c\mapsto a$ と動かす．
+\item[段階3（向き）] 位置はすべて完成している．
+\begin{enumerate}
+\item[(a)] $\Omega\in\{\Omega_0,\Omega_{10},\Omega_4\}$ の位置を $x_1,\dots,x_n$ と並べる．
+$i=1,\dots,n-1$ の順に，$\chi(\tau(x_i))\ne0$ である間，補題\ref{lem:pairconj}の語（$\supp=\{x_i,x_{i+1}\}$）を施す．
+\item[(b)] $\Omega_1,\Omega_4$ の各位置で，ねじれ座標を $I$ にする転がしを一つ施す．
+\end{enumerate}
+\end{description}
+
+\subsection{正しさの証明}
+
+\begin{proof}[定理\ref{thm:main}の十分性の証明]
+$s\in U_S$ とする．
+
+\emph{段階1．} $\varepsilon(s)\in V_S$ であり，$V_S$ は原子手の偶奇ベクトルで張られるので，$\varepsilon(w)=\varepsilon(s)$ となる語 $w$ が存在する．
+$s_1=s\cdot w$ は $\varepsilon(s_1)=0$ を満たし，補題\ref{lem:delta}，\ref{lem:invariance}により $s_1\in W$，$\theta_0=\theta_{10}=\varphi=0$ のままである．
+
+\emph{段階2．} 各軌道で $\sigma|_\Omega$ は偶置換である．
+位置 $a$ のセルは家が $b\ne a$ である．$b$ のセルは家が $b$ ではない（家が $b$ のセルは $a$ にある）．
+$c$ が「$b$ にあるセルの家」で $c\ne a$ のとき，家が $c$ のセルは $b$ にあるので，$c$ にあるセルは家にない（$b$ にあるセルは家にないので $c\ne b$ でもある）．
+$c=a$ のときは $a,b$ の二つのセルが互いの家にある．$\sigma|_\Omega$ は偶置換なので単独の互換ではあり得ず，$a,b$ 以外に家にないセルが存在する．
+いずれの場合も，三つの位置 $a,b,c$ のセルはすべて家になく，3-cycle を施した後は $a$ にあったセルが家 $b$ に入る．
+系\ref{cor:any3cycle}の語は三点以外に作用しないので，家にあるセルの数は軌道 $\Omega$ で少なくとも一つ増え，他の軌道は変わらない．
+したがって高々 $|\Omega|$ 回で $\Omega$ の位置は完成する．
+3-cycle は偶置換なので，途中で $\sigma|_\Omega$ は偶のままである．
+使う語は $G$ の元なので，$W$ に留まり，ねじれ和と反転偶奇は零のままである．
+段階2の終わりに得られる状態 $s_2$ は $\sigma=\mathrm{id}$，$s_2\in W$，$\theta_0=\theta_{10}=\varphi=0$ を満たす．
+
+\emph{段階3．} 向き群が自明な七つの軌道では $\tau=I$，すなわち $\rho=I$ である．
+
+$\Omega_0,\Omega_{10}$：補題\ref{lem:pairconj}の語は $x_i$ のねじれ座標に $\chi(d)\ne0$ の元 $d$ を掛ける．
+$H_0\cong\Z/3$ なので，高々二回で $\tau(x_i)=I$ となる．この語は $x_i,x_{i+1}$ 以外を変えないので，$x_1,\dots,x_{i-1}$ は $I$ のままである．
+$i=n-1$ まで終えると，$\theta=0$ から $\chi(\tau(x_n))=0$，すなわち $\tau(x_n)=I$ である．
+
+$\Omega_4$：補題\ref{lem:pairconj}の語は $x_i$ のねじれ座標に $\chi(d)=1$ の元を掛けるので，一回で $\chi(\tau(x_i))=0$ となる．
+$i=n-1$ まで終えると，$\varphi=0$ から $\chi(\tau(x_n))=0$ である．
+このとき全セルで $\tau\in C_4$ であり，命題\ref{prop:rolls}の転がしで各セルを独立に $\tau=I$ にできる．
+
+$\Omega_1$：$H_0\cong\Z/4$ であり，命題\ref{prop:rolls}の転がしで各セルを独立に $\tau=I$ にできる．
+
+位置が完成しているとき $\tau(x)=r_x^{-1}\rho(x)r_x$ なので，$\tau=I$ は $\rho=I$ と同値である．
+以上で完成状態 $e$ に到達した．使った語を連結したものを $v$ とすると $s\cdot v=e$ であり，$s=e\cdot v^{-1}\in G_S$ である．
+\end{proof}
+
+\begin{remark}[拡張系について]
+段階2と段階3で使う工具はすべて標準系の語である．
+系による違いは段階0の $V_S$ と段階1の語 $w$ だけである．
+拡張系では $w$ にリング回転が高々一つ現れる．
+\end{remark}
+
+\subsection{帰結}
+
+\begin{corollary}[位数]\label{cor:order}
+\[
+|G_S|=\frac{|W|\cdot|V_S|}{2^{11}\cdot3\cdot3\cdot2},
+\]
+ここで $|W|$ は式\eqref{eq:W}のとおりである．数値は
+\[
+|G|=\frac{|W|\cdot2^5}{36864}\approx2.6557\times10^{575}\quad(576\text{桁}),\qquad |H|=2\,|G|.
+\]
+\end{corollary}
+
+\begin{proof}
+写像 $\Phi=(\varepsilon,\theta_0,\theta_{10},\varphi)\colon W\to M=\F_2^{11}\times\Z/3\times\Z/3\times\Z/2$ を考える．
+$W$ の元は，各軌道の置換と各セルの $\tau\in H_0$ の自由な選択で決まる．
+$\varepsilon$ は置換だけ，残りは $\tau$ だけで決まり，$\chi$ は全射準同型なので，$\Phi$ の各ファイバーの大きさは $|W|/|M|$ である．
+$U_S=\Phi^{-1}(V_S\times\{0\})$ なので $|U_S|=|W|\cdot|V_S|/|M|$，$|M|=2^{11}\cdot18=36864$ である．
+\end{proof}
+
+\begin{corollary}[拡張系と標準系]\label{cor:index}
+$[H:G]=2$ である．$H$ で到達可能な状態 $s$ が $G$ でも到達可能であることは $\varepsilon(s)\in V_{S_{\mathrm{std}}}$ と同値である．
+\end{corollary}
+
+これは，Schreier 生成元の再生検証による別証明（\code{docs/research/square-region-rotation-impact.md}）と一致する．二つの証明は互いに独立である．
+
+\begin{corollary}[所属判定]
+与えられた状態が到達可能かどうかは，条件1--4の検査（セル数に線形な時間）で判定できる．
+\end{corollary}
+
+\begin{corollary}[向きだけの状態]
+位置がすべて完成している到達可能状態の全体は，$\prod_xH_0$ の中で $\theta_0=\theta_{10}=\varphi=0$ で定まる部分群であり，
+位数は $3^{14}\cdot4^{24}\cdot8^{48}/2$ である．これは両方の系で共通である．
+\end{corollary}
+
+\section{実装の完全性}\label{sec:impl}
+
+\begin{theorem}[\code{level2-certified} の完全性]\label{thm:impl}
+実装 \code{level2-certified}
+（\code{packages/solver-core/src/algorithms/level2CertifiedSolver.ts}）は，標準系と拡張系のそれぞれで，次を満たす．
+\begin{enumerate}
+\item 入力が到達可能な状態なら，合法原子手だけからなる有限の語を出力し，その語は入力を完成状態へ移す．
+\item 入力が到達不能な状態なら，語を出力せず，破れている条件を報告する．
+\end{enumerate}
+ただし，計算機がメモリ不足などの資源障害を起こさないものとする．
+\end{theorem}
+
+\begin{proof}
+実装は解法 L2-C をそのまま実行する．
+段階2，3で必要な共役語 $g$ は，順序付き三点組（または二点組）のグラフを工具の組から幅優先探索して求める．
+この探索に深さや頂点数の上限はなく，全頂点に到達したことを実行時に検査する（到達数が $n(n-1)(n-2)$ または $n(n-1)$ に等しくなければ例外を出す）．
+工具の語は，ライブラリ構築時に純粋性と支持を再検査する．
+したがって定理\ref{thm:main}の証明の各段が，実装の中でそのまま成り立つ．
+
+出力の前に，実装は語を呼び出し側のモデルで一手ずつ再生し，各手の直前に合法性を検査し，最後に全400セルの位置と向きが完成状態と一致することを要求する．
+よって仮に実装に誤りがあっても，誤った語が成功として返ることはない（健全性）．
+完全性は，定理\ref{thm:main}の証明により，再生が必ず成功することから従う．
+\end{proof}
+
+隣接する同一対象の原子手は合成して短縮する（$g$ と直後の $g'^{-1}$ の打ち消しなど）．これは変換を変えない．
+
+\paragraph{手数．}
+段階1は高々 $\dim V_S\le6$ 手，段階2は家にないセル一つにつき高々一回の3-cycle（8手と共役語），段階3は向きの違うセル一つにつき定数回の工具である．
+実測では，両方の系で約3,700--4,100手，求解時間は初回の探索を除いて0.1秒未満であった．
+これは最短手数ではない．
+
+\section{計算機検査の一覧}\label{sec:checks}
+
+証明が依拠する計算上の事実を列挙する．
+すべて \code{research/level2-completeness/certify.ts} が，解法の実装とは別のコードで検査する
+（共有するのは工具の語だけである）．原子手はエンジンの合法手列挙から取り，位置と向きの計算は整数演算だけで行う．
+実行は \code{npm run prove:l2}，結果は \code{research/level2-completeness/out/certificate.json} に保存される．
+
+\begin{check}原子手の集合が逆について閉じている（468個，522個）．\end{check}
+\begin{check}位置軌道が表\ref{tab:orbits}の11個である（命題\ref{prop:orbits}）．\end{check}
+\begin{check}各軌道の（位置，向き）オートマトンを全探索し，$H_0$ が部分群であること，$Q_p=r_pH_0$，$H_0$ の同型類，$\chi$ が準同型であることを確認する（補題\ref{lem:coset}）．\end{check}
+\begin{check}全原子手・全位置で $\delta(a,p)\in H_0$，および $\Omega_0,\Omega_4,\Omega_{10}$ で $\sum_p\chi(\delta(a,p))=0$（補題\ref{lem:delta}，\ref{lem:invariance}）．\end{check}
+\begin{check}偶奇ベクトルの張る空間の次元と基底（命題\ref{prop:parity}）．\end{check}
+\begin{check}工具の語：$T_0,\dots,T_{10}$ が純粋な3-cycleであること，$P_0,P_4,P_{10}$ が位置を固定する二点工具で $\chi$ の値が命題\ref{prop:pairtools}のとおりであること．\end{check}
+\begin{check}各軌道の順序付き三点組，および $\Omega_0,\Omega_4,\Omega_{10}$ の順序付き二点組への推移性（全探索）．\end{check}
+\begin{check}$\Omega_1,\Omega_4$ の全位置に三つの転がしがあり，命題\ref{prop:rolls}の部分群をなすこと．\end{check}
+\begin{check}位数の計算（系\ref{cor:order}）と $|H|/|G|=2$．\end{check}
+
+\paragraph{回帰テスト．}
+\code{npm run test:l2} は，上の検査に加えて次を行う．
+\begin{itemize}
+\item $U_S$ の元を，原子手を一切使わずに乱数で直接構成し（軌道ごとの置換と $\tau$ を選び，条件2--4に合わせて調整する），すべて解けることを確認する．
+これは $U_S\subseteq G_S$ を，スクランブルでは現れにくい状態で試す．
+\item 条件1--4のうち一つだけを破った状態が，対応する理由で拒否されることを確認する．
+\item 全原子手からの乱数スクランブルが解けることを確認する．
+\end{itemize}
+これらの試験は実装の誤りを見つけるためのものであり，完全性の根拠は第\ref{sec:algorithm}節の証明である．
+
+\section{証明に至る過程}
+
+\paragraph{既存解法の扱い．}
+\code{level2-slice-reduction} は，クラスごとに工具を貪欲に当てはめる解法で，手数は約1,300手と短い．
+しかし，工具の選択と向きの修正に経験的な規則が入っており，あらゆる入力で前進が保証されることを示せなかった．
+そこで，短さよりも証明可能性を優先した別の解法を構成した．
+
+\paragraph{群の位数を直接数える方法の断念．}
+Schreier--Sims 法で $|G|$ を直接求めることを検討した．
+忠実な置換表現の次数は840で足りるが，基底の長さが約400，各段の軌道が最大384になり，
+決定的な版では Schreier 生成元のふるい落としの回数が現実的でない．
+代わりに，不変量による上界と構成による下界を一致させる古典的な方法を取った．
+
+\paragraph{不変量の発見．}
+ねじれ座標 $\tau$ を導入すると，各原子手は $\tau$ に $H_0$ の元を左から掛ける．
+$H_0$ の可換化への像の和が，原子手ごとに定数だけ変化する量になる．
+この定数を全原子手で計算したところ，$C_3$ の二軌道と $D_4/C_4$ についてはすべて零であった．
+$C_4$ の成分については，一セルの転がしが原子手として存在するため制約が生じない．
+
+\paragraph{工具の発見．}
+3-cycle は，フレーム原子手の三つ組 $(a,b,c)$ について $[a,bcb^{-1}]$ を全探索して得た．
+全11軌道で一層フレームだけの8手の語が見つかった．
+向き工具は，一つの3-cycleの共役のうち，位置への作用が同じで向きへの作用が異なる二つの商として得た．
+
+\paragraph{拡張系．}
+拡張系で変わるのは偶奇の空間が一次元増えることだけであり，同じ証明が両方の系に通用する．
+これにより，以前に Schreier 生成元で示した $[H:G]=2$ が，独立な方法で再確認された．
+
+\section{適用範囲と限界}
+
+\begin{itemize}
+\item 本稿の定理は，第\ref{sec:setting}節で定めた二つの操作系についてのものである．
+複数層にまたがる厚みのある正方形回転や，座標軸に平行でない軸の回転は，どちらの系にも含まれない．
+それらを加えた群については何も主張しない．
+\item 原子手の合法性（回転中に衝突しないこと）は本稿の前提である．
+両系の全原子手については整数演算による無衝突の証明書がある．
+拡張系が一層の正方形回転を網羅していることも別文書の結果である．
+\item 証明は有限個の計算機検査に依拠する．検査は全探索であり再実行できるが，検査プログラム自体の形式的検証は行っていない．
+独立性を高めるため，検査プログラムと解法の実装は別のコードとして書かれている．
+\item 解は最短ではない．God's number については何も主張しない．
+情報量による下界は，$|G|$ と原子手数468から $d\ge\lceil\log_{468}|G|\rceil=216$ 手である．
+\item Level 3 の拡張系については，本稿の方法を適用していない．
+\end{itemize}
+
+\end{document}

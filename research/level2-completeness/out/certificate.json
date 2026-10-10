@@ -1,0 +1,452 @@
+{
+ "level": 2,
+ "ok": true,
+ "failures": [],
+ "standard": {
+  "system": "standard",
+  "atoms": 468,
+  "orbits": [
+   {
+    "index": 0,
+    "size": 8,
+    "representative": [
+     -4,
+     -4,
+     -4
+    ],
+    "freedom": 3,
+    "freedomType": "C3",
+    "classModulus": 3,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": 20,
+    "orderedTriplesReached": 336
+   },
+   {
+    "index": 1,
+    "size": 24,
+    "representative": [
+     -4,
+     -4,
+     -3
+    ],
+    "freedom": 4,
+    "freedomType": "C4",
+    "classModulus": 1,
+    "cellsWithRolls": 24,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 2,
+    "size": 24,
+    "representative": [
+     -4,
+     -4,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 3,
+    "size": 96,
+    "representative": [
+     -4,
+     -4,
+     -1
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 857280
+   },
+   {
+    "index": 4,
+    "size": 48,
+    "representative": [
+     -4,
+     -4,
+     0
+    ],
+    "freedom": 8,
+    "freedomType": "D4",
+    "classModulus": 2,
+    "cellsWithRolls": 48,
+    "threeCycleLength": 8,
+    "pairToolLength": 20,
+    "orderedTriplesReached": 103776
+   },
+   {
+    "index": 5,
+    "size": 24,
+    "representative": [
+     -4,
+     -3,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 6,
+    "size": 96,
+    "representative": [
+     -4,
+     -3,
+     -1
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 857280
+   },
+   {
+    "index": 7,
+    "size": 24,
+    "representative": [
+     -4,
+     -3,
+     2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 8,
+    "size": 24,
+    "representative": [
+     -4,
+     -2,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 9,
+    "size": 24,
+    "representative": [
+     -3,
+     -2,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 10,
+    "size": 8,
+    "representative": [
+     -2,
+     -2,
+     -2
+    ],
+    "freedom": 3,
+    "freedomType": "C3",
+    "classModulus": 3,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": 20,
+    "orderedTriplesReached": 336
+   }
+  ],
+  "invarianceChecks": 1404,
+  "parity": {
+   "rank": 5,
+   "basis": [
+    417,
+    674,
+    1188,
+    16,
+    72
+   ],
+   "basisAtoms": [
+    "frame:X_-4@90",
+    "frame:X_-3@90",
+    "frame:X_-2@90",
+    "extension:d1:proot:s001@90",
+    "extension-slab:d1_5:proot:s001:l0@90"
+   ],
+   "distinctNonZeroAtomVectors": 6
+  },
+  "orderedPairsReached": [
+   {
+    "orbit": 0,
+    "reached": 56
+   },
+   {
+    "orbit": 4,
+    "reached": 2256
+   },
+   {
+    "orbit": 10,
+    "reached": 56
+   }
+  ],
+  "order": {
+   "W": "305931643138539970035944278952119968436999692698726230110922554766521060681020016759223876752313458481713454103210138521570481118705144156197501467675716444834571576282077489828377219797462641845347017192706928652302298354151856686112982761463191560190640266300331316251396837084733883267812866196492895480518723801580077007110245024295006540909656178993525242713256166849476601277273741238820107977861833964082825533533166286039550582963209570092322989754252480471788333203441786682269876550526566400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "M": "36864",
+   "C": "32",
+   "G": "265565662446649279545090519923715250379340011023199852526842495457049531841163208992381837458605432709820706686814356355529931526653770968921442246246281636141121159967081154364910781074186321046308174646446986677345745099090153373361964202659020451554375231163482045357115309969387051447754224128900082882394725522204927957560976583589415400095187655376323995410812644834615105275411233714253565953005064204933008275636429067742665436600008307371808150828344167076205150350209884272803712283443200000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "digits": 576
+  }
+ },
+ "innerSquare": {
+  "system": "inner-square",
+  "atoms": 522,
+  "orbits": [
+   {
+    "index": 0,
+    "size": 8,
+    "representative": [
+     -4,
+     -4,
+     -4
+    ],
+    "freedom": 3,
+    "freedomType": "C3",
+    "classModulus": 3,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": 20,
+    "orderedTriplesReached": 336
+   },
+   {
+    "index": 1,
+    "size": 24,
+    "representative": [
+     -4,
+     -4,
+     -3
+    ],
+    "freedom": 4,
+    "freedomType": "C4",
+    "classModulus": 1,
+    "cellsWithRolls": 24,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 2,
+    "size": 24,
+    "representative": [
+     -4,
+     -4,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 3,
+    "size": 96,
+    "representative": [
+     -4,
+     -4,
+     -1
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 857280
+   },
+   {
+    "index": 4,
+    "size": 48,
+    "representative": [
+     -4,
+     -4,
+     0
+    ],
+    "freedom": 8,
+    "freedomType": "D4",
+    "classModulus": 2,
+    "cellsWithRolls": 48,
+    "threeCycleLength": 8,
+    "pairToolLength": 20,
+    "orderedTriplesReached": 103776
+   },
+   {
+    "index": 5,
+    "size": 24,
+    "representative": [
+     -4,
+     -3,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 6,
+    "size": 96,
+    "representative": [
+     -4,
+     -3,
+     -1
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 857280
+   },
+   {
+    "index": 7,
+    "size": 24,
+    "representative": [
+     -4,
+     -3,
+     2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 8,
+    "size": 24,
+    "representative": [
+     -4,
+     -2,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 9,
+    "size": 24,
+    "representative": [
+     -3,
+     -2,
+     -2
+    ],
+    "freedom": 1,
+    "freedomType": "1",
+    "classModulus": 1,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": null,
+    "orderedTriplesReached": 12144
+   },
+   {
+    "index": 10,
+    "size": 8,
+    "representative": [
+     -2,
+     -2,
+     -2
+    ],
+    "freedom": 3,
+    "freedomType": "C3",
+    "classModulus": 3,
+    "cellsWithRolls": 0,
+    "threeCycleLength": 8,
+    "pairToolLength": 20,
+    "orderedTriplesReached": 336
+   }
+  ],
+  "invarianceChecks": 1566,
+  "parity": {
+   "rank": 6,
+   "basis": [
+    417,
+    674,
+    1188,
+    16,
+    72,
+    512
+   ],
+   "basisAtoms": [
+    "frame:X_-4@90",
+    "frame:X_-3@90",
+    "frame:X_-2@90",
+    "extension:d1:proot:s001@90",
+    "extension-slab:d1_5:proot:s001:l0@90",
+    "ring:X-3:inner@90"
+   ],
+   "distinctNonZeroAtomVectors": 8
+  },
+  "orderedPairsReached": [
+   {
+    "orbit": 0,
+    "reached": 56
+   },
+   {
+    "orbit": 4,
+    "reached": 2256
+   },
+   {
+    "orbit": 10,
+    "reached": 56
+   }
+  ],
+  "order": {
+   "W": "305931643138539970035944278952119968436999692698726230110922554766521060681020016759223876752313458481713454103210138521570481118705144156197501467675716444834571576282077489828377219797462641845347017192706928652302298354151856686112982761463191560190640266300331316251396837084733883267812866196492895480518723801580077007110245024295006540909656178993525242713256166849476601277273741238820107977861833964082825533533166286039550582963209570092322989754252480471788333203441786682269876550526566400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "M": "36864",
+   "C": "64",
+   "G": "531131324893298559090181039847430500758680022046399705053684990914099063682326417984763674917210865419641413373628712711059863053307541937842884492492563272282242319934162308729821562148372642092616349292893973354691490198180306746723928405318040903108750462326964090714230619938774102895508448257800165764789451044409855915121953167178830800190375310752647990821625289669230210550822467428507131906010128409866016551272858135485330873200016614743616301656688334152410300700419768545607424566886400000000000000000000000000000000000000000000000000000000000000000000000000000000",
+   "digits": 576
+  }
+ },
+ "index": "2"
+}

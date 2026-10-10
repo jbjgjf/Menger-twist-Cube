@@ -18,6 +18,8 @@
     "audit:square:certificates": "node --import tsx research/square-rotation/exact-sweep-certificate.ts && node --import tsx research/square-rotation/rejection-certificates.ts && node --import tsx research/square-rotation/envelope-only-check.ts",
     "audit:square:index": "node --import tsx research/square-rotation/index-certificate.ts && node --import tsx research/square-rotation/verify-certificates.ts",
     "test:square": "node --import tsx --test research/square-rotation/test/*.test.ts",
+    "prove:l2": "node --import tsx research/level2-completeness/certify.ts",
+    "test:l2": "node --import tsx --test research/level2-completeness/test/*.test.ts",
     "bench": "npm run bench --workspace=@menger/solver-core --"
   },
   "devDependencies": {

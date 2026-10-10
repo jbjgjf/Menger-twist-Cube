@@ -1,0 +1,29 @@
+% Shared preamble for the proof documents in docs/proofs/.
+% Build with LuaLaTeX:  lualatex level2-completeness.tex  (run twice for references)
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{補題}
+\newtheorem{proposition}[theorem]{命題}
+\newtheorem{corollary}[theorem]{系}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{定義}
+\newtheorem{check}{検査}
+\renewcommand{\thecheck}{C\arabic{check}}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{注意}
+
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Alt}{\operatorname{Alt}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\F}{\mathbf{F}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}

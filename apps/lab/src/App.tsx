@@ -49,7 +49,7 @@ const moveSystemLabels: Record<MoveSystem, string> = {
   'inner-square': 'Inner square rotations (+18 ring targets)',
 };
 const preferredAlgorithmForSystem: Partial<Record<MoveSystem, string>> = {
-  'inner-square': 'level2-inner-square-coset',
+  'inner-square': 'level2-certified',
 };
 
 export default function App() {
@@ -394,9 +394,11 @@ export default function App() {
             <p className="mt-2 rounded border border-cyan-700/50 bg-cyan-950/30 px-3 py-2 text-xs leading-5 text-cyan-100">
               Inner square system (Level 2 only): the standard 468 atomic moves plus 54 ring moves — in each middle
               plane (layer −3, 0, +3 of every axis) the inner and outer square rings turn independently. This group is
-              exactly twice the standard one. <code>level2-inner-square-coset</code> crosses into the standard half
-              with at most one ring turn and then runs <code>level2-slice-reduction</code>; the standard-only solvers
-              fail on the other half by design.
+              exactly twice the standard one. <code>level2-certified</code> is the solver proved complete for both
+              systems (<code>docs/proofs/level2-completeness.tex</code>). <code>level2-inner-square-coset</code> gives
+              shorter solutions by crossing into the standard half with at most one ring turn and then running
+              <code>level2-slice-reduction</code>, but it is not proved complete; the standard-only solvers fail on the
+              other half by design.
             </p>
           )}
           {algorithm && (

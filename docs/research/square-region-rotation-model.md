@@ -271,6 +271,8 @@ npm run audit:square:index          # [H:G]=2 の証明書の生成と独立再�
 2. $\psi=1$ なら、$\psi$ を反転する合法手（$\ell=\pm3$ 面のリングの四分の一回転）を1手施す。
 3. `level2-slice-reduction` に渡す。
 
+**2026-10-04 追記。** 完全性が証明された解法は `level2-certified` である（`docs/proofs/level2-completeness.tex`）。標準系と拡張系の両方で、到達可能な任意の状態を解く。Lab で `inner-square` を選んだときの既定もこの解法に変更した。以下の `level2-inner-square-coset` は、手数の短い代替として残している。
+
 **完全性について。** このアルゴリズムが $H$ の全到達可能状態を解くことは、`level2-slice-reduction` が $G$ の全到達可能状態を解くことと**同値**である。後者はレベル2では未証明（wiki §4.7）なので、このアルゴリズムの完全性も未証明である。ただし、拡張によって新しく生じる未証明部分はない。
 
 **試験（実測、完全性の証明ではない）。** 拡張系の全522原子手からの seed 1〜12・長さ30のスクランブルで、12件すべてを解き、解を1手ずつ合法性検査付きで再生して完成状態と一致した。リング手の使用数は $\psi$ の値（0 または 1）と一致した。$\psi=1$ の状態では、`level2-slice-reduction` 単独は必ず失敗した（`research/square-rotation/test/inner-square-system.test.ts`）。
