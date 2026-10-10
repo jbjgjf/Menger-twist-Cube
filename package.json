@@ -20,6 +20,8 @@
     "test:square": "node --import tsx --test research/square-rotation/test/*.test.ts",
     "prove:l2": "node --import tsx research/level2-completeness/certify.ts",
     "test:l2": "node --import tsx --test research/level2-completeness/test/*.test.ts",
+    "prove:l3": "node --import tsx research/level3-completeness/certify.ts",
+    "test:l3": "node --import tsx --test research/level3-completeness/test/*.test.ts",
     "bench": "npm run bench --workspace=@menger/solver-core --"
   },
   "devDependencies": {

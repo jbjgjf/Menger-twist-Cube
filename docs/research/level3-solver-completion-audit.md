@@ -44,7 +44,9 @@ The claim is structural, not “seven random tests passed.”
    GF(2) subspace. The remaining permutation on every orbit is even.
 5. Wide pure tools are combined into a 3-cycle. Since `Alt(m)` is
    3-transitive for these orbit sizes, setup conjugation carries that cycle to
-   every ordered triple of distinct sites.
+   every ordered triple of distinct sites. *(Revised 2026-10-10: the 3-cycles
+   of the 31 wide-tool orbits are now static, certified words rather than a
+   per-solve search that could come up empty.)*
 6. The placement search exhausts the finite ordered-pair graph, and the exact
    finishing search exhausts the finite ordered-triple graph. The original
    depth-20, depth-8, and two-million-node cutoffs no longer exist.
@@ -53,7 +55,11 @@ The claim is structural, not “seven random tests passed.”
    C4, C3, and D4 freedoms. Single- and pair-site setup searches exhaust their
    finite graphs; each accepted application strictly lowers a non-negative
    orientation potential. The depth-20, 400,000-node, and 2,000-iteration
-   empirical guards no longer exist.
+   empirical guards no longer exist. *(Revised 2026-10-10: this step assumed a
+   descent always exists, which was never proved. The twist group has joint
+   constraints — twist sum 0 on the C3 orbits, even flip count on the D4 orbit —
+   and the solver now finishes with a certified completion built on them. See
+   `docs/proofs/level3-completeness.tex`, section "2026年10月10日の改訂".)*
 8. The sparse result is not trusted at the boundary: the real engine performs
    the legality-checked exact replay.
 

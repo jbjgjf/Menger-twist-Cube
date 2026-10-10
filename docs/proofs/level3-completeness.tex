@@ -3,7 +3,7 @@
 
 \title{メンガー・ツイスト・キューブ Level 3 の\\構成的可解性}
 \author{Menger Cube プロジェクト}
-\date{2026年10月4日}
+\date{2026年10月10日}
 
 \begin{document}
 \maketitle
@@ -11,8 +11,9 @@
 \begin{abstract}
 Level 3 のメンガー・ツイスト・キューブ（8,000セル）について，現行の衝突判定を通る3,591個の合法原子手から到達可能な任意の状態を，
 実装 \code{level3-slice-reduction} が有限個の合法原子手で完成状態へ戻すことを証明する．
-証明は，位置軌道の分解，各軌道が交代群を含むこと，全軌道の純粋工具，軌道偶奇の正規化，向きの自由度の決定，の五つの補題からなる．
-本稿は，これまでプロジェクトの wiki（第3章・第5章）に記述されていた証明を，Level 2 の文書と同じ形式に移したものであり，新しい主張は加えていない．
+証明は，位置軌道の分解，各軌道が交代群を含むこと，全軌道の純粋な3-cycle，軌道偶奇の正規化，向きの不変量と二点工具，からなる．
+あわせて，到達可能な状態を不変量で完全に特徴づけ，$G_3$ の位数を決定する（定理\ref{thm:structure}）．
+2026年10月10日の改訂で，旧版の位置の補題と向きの補題にあった論理の飛躍を埋めた（第\ref{sec:revision}節）．
 \end{abstract}
 
 \tableofcontents
@@ -92,6 +93,26 @@ $x\notin U(S)$ なら $U^{-1}(x)\notin S$ なので $T(U^{-1}(x))=U^{-1}(x)$，�
 \end{theorem}
 
 これは「有限手の解が存在する」だけでなく，実装がその手列を構成するという主張である．
+
+\begin{theorem}[到達可能状態の決定]\label{thm:structure}
+状態 $s=(\sigma,\rho)$ が到達可能であるための必要十分条件は，次の四つがすべて成り立つことである．
+記号 $H(\Omega)$，$\tau_s$，$\chi$，$\varphi$ は第\ref{sec:orientation}節で，$V$ は第\ref{sec:parity}節で定義する．
+\begin{enumerate}
+\item（許容）$\sigma$ は各軌道を保ち，すべてのセル $x$ について $\tau_s(x)\in H(\Omega)$ である（$\Omega$ は $x$ の軌道）．
+\item（軌道偶奇）$\varepsilon(\sigma)\in V$．ここで $V\subseteq\F_2^{164}$ は原子手の偶奇ベクトルが張る15次元の部分空間である．
+\item（ねじれ和）$H(\Omega)\cong C_3$ である四つの軌道のそれぞれで $\sum_{x\in\Omega}\chi(\tau_s(x))=0$（$\Z/3$ において）．
+\item（反転偶奇）$H(\Omega)\cong D_4$ である一つの軌道で $\sum_{x\in\Omega}\varphi(\tau_s(x))=0$（$\Z/2$ において）．
+\end{enumerate}
+したがって，位置への作用の像は $P=\{\pi\in\prod_i\Sym(\Omega_i):\varepsilon(\pi)\in V\}$ であり，
+\[
+|G_3|=\underbrace{2^{15}\prod_{i=1}^{164}\frac{|\Omega_i|!}{2}}_{|P|}\cdot\underbrace{3^{28}\cdot4^{552}\cdot\frac{8^{192}}{2}}_{\text{向き}},
+\qquad \log_{10}|G_3|\approx11918.138
+\]
+である．
+\end{theorem}
+
+条件3と4は，ルービックキューブの「角のねじれの和は $0$」「辺の反転は偶数個」に当たる同時制約である．
+セルごとの向きの自由度 $H(\Omega)$ だけからは見えず，旧版では扱っていなかった．
 
 \paragraph{適用範囲．}
 定理は $S_3$ が生成する $G_3$ についてのものである．
@@ -233,13 +254,48 @@ EEE/$B|b|o$ & 384 & 4 & $96\times4$ \\
 独立の監査の結果は，164個中164個が合格，軌道の外への作用0件，固定セルのねじれ0件，退化した工具0件である．
 \end{proof}
 
-支持が4点または6点の工具しかない軌道では，二つの共役を合成して共通の作用を打ち消し，支持3点の工具を導く．
-実装は有限探索の後に，全支持上の作用を検査する．
+軌道のちょうど三点を巡回させる純粋位置工具を，\emph{純粋な3-cycle}と呼ぶ．
 
-\section{偶奇の正規化}
+\begin{lemma}[純粋な3-cycle，検査 C5]\label{lem:purecycle}
+164個の軌道のそれぞれに，純粋な3-cycleが具体的な語として存在する．
+\end{lemma}
+\begin{proof}[計算機による証明]
+133軌道では，保存された工具そのものが純粋な3-cycleである．
+残る31軌道の工具は，二つの互換の積（17軌道）または二つの3-cycleの積（14軌道）である．
+これらの軌道では，工具の二つの共役 $A,B$ で積 $AB$ がちょうど三点を動かすものを，準備の語の長さについての幅優先探索で求め，語として保存した
+（\code{level3SliceReductionCertifiedData.ts}，42--170原子手）．
+164個の語すべてについて，全8,000セルの位置と向きへの作用を計算し，宣言された軌道の三点を巡回させ，それ以外を何も変えないことを確認した．
+\end{proof}
+
+\begin{lemma}[交代群の純粋な実現]\label{lem:purealt}
+$\Omega$ を軌道とする．
+\begin{enumerate}
+\item $\Omega$ の相異なる任意の三点 $x,y,z$ に対し，$x\to y\to z\to x$ と巡回させる純粋な3-cycleが $G_3$ に存在する．
+\item 任意の $\alpha\in\Alt(\Omega)$ に対し，$\Omega$ の外の位置と向きを固定し，$\Omega$ の位置に $\alpha$ として作用する $g\in G_3$ が存在する．
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+補題\ref{lem:purecycle}の純粋な3-cycleを $T$，それが巡回させる三点を順に $(t_0,t_1,t_2)$ とする．
+補題\ref{lem:alt}により $\Alt(\Omega)\le G_3^\Omega$ であり，$|\Omega|\ge8$ なので $\Alt(\Omega)$ は $\Omega$ の相異なる三点の順序付き組の上に推移的に作用する．
+よって $(x,y,z)$ を $(t_0,t_1,t_2)$ へ運ぶ $u\in G_3$ がある．
+語 $u\,T\,u^{-1}$（$u$，$T$，$u^{-1}$ の順に施す）は，補題\ref{lem:conj}により $\{x,y,z\}$ の外の位置を固定し，$x\to y\to z\to x$ と巡回させる．
+動かないセルは $u$ で $T$ の支持の外へ運ばれ，そこで $T$ は向きも変えないので，$u^{-1}$ で元の位置と向きに戻る．
+したがって $u\,T\,u^{-1}$ は純粋な3-cycleである．これで1が示された．
+2は，補題\ref{lem:threecycles}により $\alpha$ を3-cycleの積に分解し，各3-cycleを1で実現すればよい．
+\end{proof}
+
+\begin{remark}
+補題\ref{lem:alt}だけからは補題\ref{lem:purealt}は出ない．
+補題\ref{lem:alt}は $G_3$ が $\Omega$ に誘導する置換群についての主張であり，$\Omega$ に3-cycleとして作用する元が $\Omega$ の外を乱さないことは保証しない．
+群論の言葉では次のとおりである．$\Omega$ の外の位置と向きを固定する元の全体 $K_\Omega$ は，$\Omega$ が $G_3$ で不変なので $G_3$ の正規部分群であり，
+その像は $G_3^\Omega$ の正規部分群である．補題\ref{lem:purecycle}によりこの像は自明でなく，
+$|\Omega|\ge8$ のとき $\Alt(\Omega)$ を含む群の自明でない正規部分群は $\Alt(\Omega)$ を含む．
+\end{remark}
+
+\section{偶奇の正規化}\label{sec:parity}
 
 状態 $s\in G_3$ の164ビットの偶奇ベクトルを $\varepsilon(s)$ とする．
-3,591個の原子手が与える非零ベクトルは20種類あり，その張る空間の次元は15である．
+3,591個の原子手が与える非零ベクトルは20種類あり，その張る空間 $V=\Span\{\varepsilon(a):a\in S_3\}$ の次元は15である（検査 C4）．
 
 \begin{lemma}\label{lem:parity}
 任意の到達可能状態の軌道偶奇は，高々15個の原子手ですべて偶に正規化できる．
@@ -254,58 +310,203 @@ $s\in\langle S_3\rangle$ なので，$\varepsilon(s)$ は $\{\varepsilon(a):a\in
 
 \section{位置の解法}
 
-各軌道について，工具を共役して，未完成のセルを完成位置へ運ぶ．
-準備の語は，順序付き二点 $(x,y)\in\Omega^2$（$x\ne y$）の有限グラフを幅優先探索して求める．
-
-支持が4点または6点の工具だけでは，最後の少数のセルで貪欲法が循環し得る．
-そこで，残りが32セル以下になったら，残りの置換を補題\ref{lem:threecycles}により3-cycleへ厳密に分解する．
-必要な順序付き三点上の3-cycleは，目的の三点の側と既知の工具の三点の側からの双方向の幅優先探索で構成する．
+各軌道 $\Omega$ を，次の二段階で順に処理する．工具はすべて補題\ref{lem:purecycle}の純粋な3-cycleの共役である．
+\begin{description}
+\item[貪欲段階（発見的）] 未完成のセルが32個より多い間，完成済みのセルを壊す数より多くのセルを完成させる共役を，
+順序付き二点 $(x,y)\in\Omega^2$（$x\ne y$）の有限グラフの幅優先探索で探して施す．見つからなければ厳密段階へ移る．
+\item[厳密段階] 残りの置換を補題\ref{lem:threecycles}の手順で3-cycleへ分解し，各3-cycleを，
+目的の三点の側と保存された3-cycleの三点の側からの双方向の幅優先探索で構成する．
+\end{description}
+貪欲段階は語を短くするためのもので，完全性には寄与しない．
 
 \begin{lemma}\label{lem:position}
 偶奇の正規化の後，位置の解法は有限回で $\sigma=\mathrm{id}$ に到達する．
 \end{lemma}
 \begin{proof}
-各軌道の残りの置換は偶であり，3-cycleの有限積である．
-補題\ref{lem:alt}と補題\ref{lem:tools}により，必要な3-cycleの共役が存在する．
-順序付き二点・三点の状態の数は有限で，探索に深さや頂点数の打ち切りがないので，存在する準備の語は必ず見つかる．
-工具は軌道の外を固定するので，他の軌道を壊さない．164軌道を順に処理すれば全位置が完成する．
+一つの軌道 $\Omega$ を考える．
+貪欲段階の一回は完成セルの数を真に増やすので，高々 $|\Omega|$ 回で終わる．
+そこで使う語は純粋な3-cycleの共役であり，$\Omega$ の外を変えず，$\Omega$ 上では偶である．
+したがって厳密段階の開始時に，$\Omega$ 上の残りの置換は偶であり，$\Omega$ の外は処理前のままである．
+
+厳密段階の一回は，長さ3以上の巡回があればその先頭の三点上の3-cycleを一つ施して二つ以上のセルを完成させ，
+なければ二つの互換を二つの3-cycleで消して四つのセルを完成させる．
+残りが偶置換なので，互換が一つだけ残ることはない．よって高々 $|\Omega|$ 回で $\Omega$ が完成する．
+
+必要な3-cycleが必ず構成できることを示す．
+相異なる三点の順序付き組を頂点とし，原子手の作用を辺とする有限グラフを考える．
+補題\ref{lem:alt}により $G_3^\Omega$ は三点の順序付き組の上に推移的なので，このグラフは連結である．
+探索に深さや頂点数の打ち切りはないので，目的の三点から保存された3-cycleの三点への道 $u$ が必ず見つかり，
+補題\ref{lem:purealt}の証明のとおり $u\,T\,u^{-1}$ が目的の純粋な3-cycleになる．
+
+工具は軌道の外を固定するので，完成済みの軌道を壊さない．164軌道を順に処理すれば全位置が完成する．
 \end{proof}
 
-\section{向き}
+\section{向き}\label{sec:orientation}
 
-各軌道の $\Omega\times C$ 上のオートマトン（一つのセルの位置と向きの遷移）を全探索した結果，
-148軌道（7,224セル）では完成位置で可能な向きが一つだけであり，位置が決まれば向きも決まる．
-非自明なのは16軌道（776セル）である（表\ref{tab:freedom}）．
+\subsection{ねじれ座標}
+
+各軌道 $\Omega$ に基点 $x_\Omega$ を一つ固定する．
+基点のセルが完成状態から原子手の列で位置 $y\in\Omega$ に来たときに取り得る向きの集合を $Q_y\subseteq C$ とし，$H(\Omega)=Q_{x_\Omega}$ とおく．
+$Q_y$ は，一つのセルの（位置，向き）の遷移を表す $\Omega\times C$ 上のオートマトンの全探索で求まる．
+
+\begin{lemma}[検査 C3]\label{lem:coset}
+すべての軌道 $\Omega$ について $H(\Omega)$ は $C$ の部分群であり，各 $y\in\Omega$ について，$r_y\in Q_y$ を一つ選ぶと $Q_y=r_yH(\Omega)$ である．
+$H(\Omega)$ は148軌道（7,224セル）で自明であり，残る16軌道（776セル）では表\ref{tab:freedom}のとおりである．
+\end{lemma}
 
 \begin{table}[ht]
 \centering
-\caption{向きの自由度が非自明な軌道．}\label{tab:freedom}
-\begin{tabular}{crrl}
+\caption{向きの自由度が非自明な軌道と，その同時制約．}\label{tab:freedom}
+\begin{tabular}{crrll}
 \toprule
-群 & 軌道数 & セル数 & 処理 \\
+$H(\Omega)$ & 軌道数 & セル数 & 一セル回転 & 軌道全体の制約 \\
 \midrule
-$C_3$ & 4 & 32 & 位置を固定するねじり工具 \\
-$C_4$ & 11 & 552 & 主に合法な一セル回転 \\
-$D_4$ & 1 & 192 & 一セル回転と専用のねじり工具 \\
+$C_3$ & 4 & 32 & なし & ねじれ和が $0$ \\
+$C_4$ & 11 & 552 & 全セルにあり & なし \\
+$D_4$ & 1 & 192 & 全セルにあり（回転部分） & 反転が偶数個 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-12軌道には合法な一セル回転がある．
-大きさ8の四つの CCC 軌道は $C_3$ の自由度を持つが一セル回転がなく，工具どうしの向きへの作用の差からねじり工具を作る．
-192セルの EEE/$Bbo$ 軌道は $D_4$ の自由度を持ち，一セル回転だけではすべての残差を直せないため，13個の専用の語を保存している．
-監査では13個すべてが，位置を固定する非自明な向きの操作である．
+\begin{definition}[ねじれ座標]
+状態 $s=(\sigma,\rho)$ と家 $x\in\Omega$ のセルについて $\tau_s(x)=r_{\sigma(x)}^{-1}\,\rho(x)\,r_x$ と定める．
+原子手 $a$ と位置 $p\in\Omega$ については，$a$ が $p$ を選ぶとき $R_a(p)=R_a$，選ばないとき $R_a(p)=I$ として
+\[
+\delta(a,p)=r_{\pi_a(p)}^{-1}\,R_a(p)\,r_p
+\]
+と定める．ここで $\pi_a$ は $a$ の位置への作用である．
+\end{definition}
+
+\begin{lemma}\label{lem:delta}
+$\delta(a,p)\in H(\Omega)$ であり，状態 $s$ で位置 $p$ にあるセル $x$ について $\tau_{s\cdot a}(x)=\delta(a,p)\,\tau_s(x)$ が成り立つ．
+特に到達可能な状態 $s$ では，すべての $x$ について $\tau_s(x)\in H(\Omega)$ である．
+語 $g=a_1\cdots a_k$ に対して $\delta(g,p)=\delta(a_k,p_{k-1})\cdots\delta(a_1,p_0)$（$p_0=p$，$p_j=\pi_{a_j}(p_{j-1})$）とおくと，
+同じ式が $g$ について成り立ち，$\delta(g^{-1},\pi_g(p))=\delta(g,p)^{-1}$ である．
+\end{lemma}
+\begin{proof}
+$R_a(p)\,r_p$ は，向き $r_p$ で位置 $p$ にある基点のセルに $a$ を施した後の向きなので $Q_{\pi_a(p)}=r_{\pi_a(p)}H(\Omega)$ に属する．よって $\delta(a,p)\in H(\Omega)$．
+$\sigma(x)=p$ とすると $\tau_{s\cdot a}(x)=r_{\pi_a(p)}^{-1}R_a(p)\rho(x)r_x=\delta(a,p)\,\tau_s(x)$．
+完成状態で $\tau\equiv I$ なので，到達可能な状態では $\tau_s(x)\in H(\Omega)$ となる．語についての主張は原子手の場合の繰り返しである．
+\end{proof}
+
+位置をすべて固定する元の全体を $K=\{g\in G_3:\pi_g=\mathrm{id}\}$ と書く．
+$g\in K$ と任意の $u\in G_3$ について，語 $u\,g\,u^{-1}$ は再び $K$ に属し，補題\ref{lem:delta}から
+\begin{equation}\label{eq:conj}
+\delta(u\,g\,u^{-1},p)=\delta(u,p)^{-1}\,\delta(g,\pi_u(p))\,\delta(u,p)
+\end{equation}
+である．すなわち共役は，ねじれを位置 $\pi_u(p)$ から $p$ へ運び，$H(\Omega)$ の中で共役する．
+
+\subsection{不変量}
+
+$H(\Omega)\cong C_3$ の軌道では，生成元を一つ選んで同型 $\chi\colon H(\Omega)\to\Z/3$ を固定する．
+$H(\Omega)\cong D_4$ の軌道では，位数4の元が生成する巡回部分群を $C(\Omega)$ とし，$\varphi\colon H(\Omega)\to H(\Omega)/C(\Omega)\cong\Z/2$ を商写像とする．
+$\varphi(h)=1$ である $h$ を\emph{反転}と呼ぶ．$C_4$ の軌道では $C(\Omega)=H(\Omega)$ とおく．
+
+\begin{lemma}[不変性，検査 C6]\label{lem:invariance}
+すべての原子手 $a\in S_3$ について，$C_3$ の各軌道で $\sum_{p\in\Omega}\chi(\delta(a,p))=0$，$D_4$ の軌道で $\sum_{p\in\Omega}\varphi(\delta(a,p))=0$ である．
+したがって，条件1を満たす任意の状態 $s$ と任意の語 $g$ について
+\[
+\sum_{x\in\Omega}\chi(\tau_{s\cdot g}(x))=\sum_{x\in\Omega}\chi(\tau_s(x)),\qquad
+\sum_{x\in\Omega}\varphi(\tau_{s\cdot g}(x))=\sum_{x\in\Omega}\varphi(\tau_s(x))
+\]
+が成り立ち，特に到達可能な状態では両方とも $0$ である．
+\end{lemma}
+\begin{proof}
+前半は3,591個の原子手すべてについて計算機で確認した．
+後半は，$\chi$，$\varphi$ が準同型で，$x\mapsto\sigma(x)$ が $\Omega$ の全単射であることから，
+$\sum_x\chi(\tau_{s\cdot a}(x))=\sum_p\chi(\delta(a,p))+\sum_x\chi(\tau_s(x))$ となることによる．$\varphi$ も同様である．
+\end{proof}
+
+\subsection{工具}
+
+\begin{proposition}[一セル回転，検査 C7]\label{prop:rolls}
+$C_4$ の11軌道と $D_4$ の軌道の全744セル $y$ について，$y$ だけを選び位置を動かさない原子手（深さ3の拡張）の回転の全体は，
+$r_y\,C(\Omega)\,r_y^{-1}$ の単位元以外の三つの元と一致する．
+\end{proposition}
+
+\begin{proposition}[二点工具，検査 C8]\label{prop:pairtools}
+\begin{enumerate}
+\item $C_3$ の各軌道 $\Omega$ に，全8,000セルの位置を固定し，$\Omega$ の二つのセル以外の向きを変えず，
+その二つのセルのねじれ座標に $\chi$ の値で $c$ と $-c$（$c\ne0$）を掛ける語 $P_\Omega$ がある（68原子手）．
+\item $D_4$ の軌道に，全8,000セルの位置を固定し，その軌道の二つのセル以外の向きを変えず，その二つのセルにはどちらも反転を掛ける語 $F$ がある（32原子手）．
+\end{enumerate}
+\end{proposition}
+
+$P_\Omega$ は，純粋な3-cycle $T$ と，$T$ の三点を巡回的に自分自身へ写す語 $u$ から $T\cdot u\,T^{-1}u^{-1}$ として得た．
+$F$ は旧版から保存されていた13個の $D_4$ 用の語の一つである．
+
+\subsection{位置を固定する部分群}
+
+\begin{lemma}\label{lem:kernel}
+$g\in K$ をねじれ座標の族 $(\delta(g,x))_x$ と同一視すると，
+\[
+K=\prod_{H(\Omega)\cong C_3}\Bigl\{t\in H(\Omega)^{\Omega}:\sum_x\chi(t_x)=0\Bigr\}\times\prod_{H(\Omega)\cong C_4}H(\Omega)^{\Omega}
+\times\Bigl\{t\in H(\Omega)^{\Omega}:\sum_x\varphi(t_x)=0\Bigr\}_{H(\Omega)\cong D_4}
+\]
+であり，$|K|=3^{28}\cdot4^{552}\cdot8^{192}/2$ である．
+\end{lemma}
+\begin{proof}
+左辺が右辺に含まれることは補題\ref{lem:delta}と補題\ref{lem:invariance}による（$H(\Omega)$ が自明な軌道では $\delta\equiv I$）．
+逆を軌道ごとに示す．以下の元はどれも一つの軌道の中だけを変えるので，軌道ごとに示せば積についても従う．
+
+$C_4$ の軌道：命題\ref{prop:rolls}の一セル回転が，各セルで $H(\Omega)$ の全体を与える．
+
+$C_3$ の軌道：$y\ne y'$ を $\Omega$ の任意の二点とする．補題\ref{lem:alt}により $G_3^\Omega$ は順序付き二点の上に推移的なので，$(y,y')$ を $P_\Omega$ の二つのセルへ運ぶ $u$ がある．
+式\eqref{eq:conj}と $H(\Omega)$ が可換であることから，$u\,P_\Omega\,u^{-1}$ は $y$ に $c$，$y'$ に $-c$ を掛け，他を変えない．
+このような元は和が $0$ の族の全体を生成する．
+
+$D_4$ の軌道：一セル回転が各セルで $C(\Omega)$ の全体を与える．
+任意の二点 $y\ne y'$ について，同様に $u\,F\,u^{-1}$ は $y$ と $y'$ だけを変え，式\eqref{eq:conj}と $\varphi(hfh^{-1})=\varphi(f)$ から，どちらにも反転を掛ける．
+反転が偶数個の族は，このような元を掛けて反転をなくし，残りを一セル回転で消せるので，すべて $K$ に属する．
+\end{proof}
+
+\begin{proof}[定理\ref{thm:structure}の証明]
+必要性．条件1は補題\ref{lem:orbit}と補題\ref{lem:delta}，条件2は $\varepsilon$ が準同型であること，条件3と4は補題\ref{lem:invariance}による．
+
+十分性．$s=(\sigma,\rho)$ が四条件を満たすとする．
+$\varepsilon(\sigma)\in V$ なので，原子手の積 $g_0$ で $\varepsilon(g_0)=\varepsilon(\sigma)$ となるものがある．
+$\sigma\circ\pi_{g_0}^{-1}$ は各軌道で偶なので，補題\ref{lem:purealt}によりこれを位置への作用とする $g_1\in G_3$ がある．
+よって $\pi_g=\sigma$ となる $g\in G_3$ がある．
+状態 $s\cdot g^{-1}$ は位置がすべて完成しており，補題\ref{lem:delta}と補題\ref{lem:invariance}により条件1，3，4を満たす．
+補題\ref{lem:kernel}によりこれは $K$ の元，すなわち到達可能な状態である．したがって $s$ も到達可能である．
+
+位数．位置への作用の像は，上の議論から $P=\{\pi\in\prod_i\Sym(\Omega_i):\varepsilon(\pi)\in V\}$ であり，$|P|=|V|\cdot\prod_i|\Alt(\Omega_i)|=2^{15}\prod_i|\Omega_i|!/2$．
+核は $K$ なので $|G_3|=|P|\cdot|K|$ である．
+\end{proof}
+
+\subsection{向きの解法}
+
+位置が完成した後，実装は次の二段階で向きを完成させる．
+\begin{description}
+\item[降下段階（発見的）] 一セル回転，同じ位置作用を持つ二つの純粋工具の差，$[R,T]$ 型の交換子，$D_4$ 用の語から位置を固定するねじり工具を作る．
+各セルの完成の向きまでの距離の和を $\Phi$ とし，$\Phi$ を真に減らす共役を探して施す．見つからなければ完了段階へ移る．
+\item[完了段階]
+\begin{enumerate}
+\item 全セルについて，そのセルの向きを直す一セル回転があれば施す．
+\item $C_3$ の各軌道で，ねじれたセルが二つ以上ある間，その二つ $y,y'$ を $P_\Omega$ の二つのセルへ運ぶ $u$ を順序付き二点のグラフの幅優先探索で求め，
+$u\,P_\Omega\,u^{-1}$ を一回または二回施して $y$ のねじれを消す．
+\item $D_4$ の軌道で，向きの合わないセルが二つ以上ある間，その二つについて $u\,F\,u^{-1}$ を施し，続けて手順1を行う．
+\end{enumerate}
+\end{description}
 
 \begin{lemma}\label{lem:orientation}
 位置が完成した後の任意の到達可能な向きの状態は，有限回で完成する．
 \end{lemma}
 \begin{proof}
-各軌道で到達可能な向きは，有限オートマトンにより完全に列挙されている．
-合法な一セル回転，二つの純粋工具の差，$[R,T]$ 型の交換子，および $D_4$ 専用の語が，必要な部分群を生成する．
-各セルの完成の向きまでの最短距離の和を $\Phi$ とする．
-単一のセルで $\Phi$ を下げられない場合は，順序付き二セルの状態を有限探索し，$\Phi$ を真に減らす操作を得る．
-$\Phi$ は非負整数で毎回減るので，有限回で $0$ になる．
+降下段階は，$\Phi$ が非負整数で毎回真に減るので，有限回で完成するか，降下が見つからずに終わる．
+その語は位置を固定するので，完了段階の開始時の状態も位置が完成した到達可能な状態であり，補題\ref{lem:invariance}の二つの和は $0$ である．
+
+手順1の後，命題\ref{prop:rolls}により，$C_4$ の軌道のセルはすべて完成し，$D_4$ の軌道で向きの合わないセルは $\varphi(\tau)=1$ のものだけになる．
+
+手順2．$u$ は補題\ref{lem:alt}（二点の順序付き組の上の推移性）により存在し，探索に打ち切りがないので見つかる．
+$u\,P_\Omega\,u^{-1}$ は $y$ に位数3の群 $H(\Omega)$ の単位元でない元を掛けるので，一回または二回で $y$ のねじれが消える．変わるのは $y$ と $y'$ だけなので，ねじれたセルの数は毎回1以上減る．
+ねじれたセルが一つだけ残ることはない．和が $0$ でなくなるからである．よって有限回でこの軌道が完成する．
+
+手順3．反転したセルの数は補題\ref{lem:invariance}により偶数である．$u\,F\,u^{-1}$ は選んだ二つのセルの $\varphi$ を $0$ にし，他を変えない．続く一セル回転でその二つは完成する．
+反転したセルの数は毎回2減るので，有限回で完成する．
 \end{proof}
+
+入力が到達可能でない場合，実装は条件2，3，4のどれが破れているかを報告して失敗する．
 
 \section{主定理の証明}
 
@@ -324,7 +525,7 @@ $\Phi$ は非負整数で毎回減るので，有限回で $0$ になる．
 したがって，仮に探索のシミュレータに実装の差があっても，誤った成功は境界で拒否される．
 さらに，疎なシミュレータと実エンジンは，6試行 $\times$ 40合法原子手 $\times$ 8,000セルについて，位置と向きの差分検査を通過している．
 
-\section{手数}
+\section{手数}\label{sec:moves}
 
 七つの検証例では，解は111,830--424,519手，求解時間は112.1--284.2秒であった．これは最短手数ではない．
 
@@ -338,22 +539,67 @@ $\Phi$ は非負整数で毎回減るので，有限回で $0$ になる．
 \]
 個以上の状態があり，その常用対数は約 $11394.834$ である．
 したがって，最悪の状態を解くのに必要な手数（God's number）は $3206$ 以上である．
+これが旧版の評価である．定理\ref{thm:structure}を使うと，これは次のように上がる（検査 C9）．
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+数える状態 & $\log_{10}$ & 手数の下界 \\
+\midrule
+$\prod_i\Alt(\Omega_i)$（旧版） & $11394.834$ & $3206$ \\
+位置群 $P$ & $11399.349$ & $3207$ \\
+$G_3$ 全体 & $11918.138$ & $3353$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+したがって God's number は $3353$ 以上である．
 現在の解は最適でない解法の出力であり，その手数は God's number の評価としては意味を持たない．
 
 \section{検証と再現}
 
 \begin{itemize}
+\item \code{npm run prove:l3}：下の検査 C1--C9（\code{research/level3-completeness/certify.ts}，乱数なし，数秒）．
+結果は \code{research/level3-completeness/out/certificate.json}．
+\item \code{npm run test:l3}：検査に加え，定理\ref{thm:structure}の四条件を満たす状態を原子手を使わずに直接構成して解く試験と，条件3，4を一つずつ破った状態が拒否される試験．
+解く試験は，通常の動作と，発見的な段階を止めて厳密段階・完了段階だけで解く動作の両方で行う．
 \item \code{npm run verify:l3}：保存済みの純粋工具の監査（\code{research/scratch/l3-audit-tooldata.ts}），
-疎なシミュレータと実エンジンの比較（\code{l3-sim-vs-engine.ts}），軌道の置換群の証明書の検査（\code{l3-orbit-groups.ts}）．
+疎なシミュレータと実エンジンの比較（\code{l3-sim-vs-engine.ts}），軌道の置換群の証明書の検査（\code{l3-orbit-groups.ts}，補題\ref{lem:alt}）．
 \item \code{npm run bench -- --algorithm=level3-slice-reduction --level=3 --seeds=6 --length=100}：一回の求解の再現（数分かかる）．
-\item 工具データ：\code{packages/solver-core/src/algorithms/level3SliceReductionToolData.ts}．
+\item 工具データ：\code{packages/solver-core/src/algorithms/level3SliceReductionToolData.ts}（純粋工具と $D_4$ 用の語），
+\code{level3SliceReductionCertifiedData.ts}（31軌道の3-cycle，$P_\Omega$，$F$．\code{research/level3-completeness/find-tools.ts} が生成する）．
 \item 実装：\code{packages/solver-core/src/algorithms/level3SliceReductionSolver.ts}．
 \end{itemize}
+
+\begin{check}原子手が3,591個で，逆について閉じている．\end{check}
+\begin{check}位置軌道が164個で，大きさが表\ref{tab:orbitsizes}のとおりである．\end{check}
+\begin{check}各軌道の（位置，向き）オートマトンを全探索し，$Q_y=r_yH(\Omega)$ と $H(\Omega)$ の同型類を確認する（補題\ref{lem:coset}）．\end{check}
+\begin{check}偶奇ベクトルの張る空間の次元が15である．\end{check}
+\begin{check}164軌道のすべてに純粋な3-cycleの語がある（補題\ref{lem:purecycle}）．\end{check}
+\begin{check}全原子手で，$C_3$ の各軌道のねじれ和と $D_4$ の軌道の反転の数の偶奇が $0$ である（補題\ref{lem:invariance}）．\end{check}
+\begin{check}$C_4$，$D_4$ の軌道の全744セルに，回転部分のすべてを与える一セル回転がある（命題\ref{prop:rolls}）．\end{check}
+\begin{check}$P_\Omega$ と $F$ が命題\ref{prop:pairtools}のとおりに作用する．\end{check}
+\begin{check}位数の計算と，手数の下界．\end{check}
+
+\section{2026年10月10日の改訂}\label{sec:revision}
+
+旧版（2026年10月4日）には，結論は正しいが証明が閉じていない箇所が二つあった．
+\begin{enumerate}
+\item \textbf{向き（補題\ref{lem:orientation}）．}
+旧版は，セルごとの自由度 $H(\Omega)$ だけを求め，「$\Phi$ を減らす操作が必ず見つかる」ことを前提にしていた．
+軌道全体にかかる同時制約は求めておらず，実装には降下が見つからないときの失敗の分岐があった．
+本版は，同時制約（補題\ref{lem:invariance}）と位置を固定する部分群（補題\ref{lem:kernel}）を決定し，
+その構造に沿って必ず終わる完了段階を実装に加えた．降下段階は語を短くするための発見的な前処理として残している．
+\item \textbf{位置（補題\ref{lem:position}）．}
+旧版は，必要な3-cycleの共役の存在を補題\ref{lem:alt}から直接引いていたが，補題\ref{lem:alt}は軌道の外を乱さない元の存在を与えない．
+本版は補題\ref{lem:purealt}を挟んだ．また，支持が4点または6点の工具しかない31軌道の3-cycleは，旧版では求解のたびに探索で導いており，
+見つからない場合と貪欲法が行き詰まる場合に失敗の分岐があった．本版は3-cycleを語として保存し（補題\ref{lem:purecycle}），貪欲法が行き詰まったら厳密段階に移るようにした．
+\end{enumerate}
+この改訂で実装の出力は変わり得る．第\ref{sec:moves}節の手数と時間は旧版の実装で測ったものである．
 
 \section{Level 2 の文書との関係}
 
 Level 2 の文書（\code{level2-completeness.tex}）は，到達可能な状態の集合を不変量で完全に特徴づけ，群の位数を決定している．
-本稿の Level 3 の定理は可解性だけを主張しており，$G_3$ の位数や，到達可能性の不変量による特徴づけは与えていない．
-Level 2 と同じ方法（ねじれ和・反転偶奇の不変量と，三重推移性の全探索）を Level 3 に適用すれば，同じ形の特徴づけが得られると期待されるが，これは未実施である．
+本稿の定理\ref{thm:structure}は，同じ方法（ねじれ和と反転偶奇の不変量，純粋な3-cycle，二点工具）で得た Level 3 の対応物である．
+違いは，Level 2 では順序付き三点組の上の推移性を全探索で確認しているのに対し，
+Level 3 では軌道が大きいので，原始性と Jordan の定理による補題\ref{lem:alt}から推移性を導いている点である．
 
 \end{document}

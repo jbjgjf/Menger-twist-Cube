@@ -16,6 +16,7 @@ import type { PuzzleModel } from '../model/puzzleModel';
 import { isExactlySolved, progressForCubies, progressSummary, stateKey } from './level1State';
 import { level3BlockQuotientAlgorithm } from './level3BlockQuotientSolver';
 import { level3D4Orbit, level3D4TwisterWords, level3PureToolWords } from './level3SliceReductionToolData';
+import { level3C3TwisterWords, level3D4FlipPairWord, level3ThreeCycleWords } from './level3SliceReductionCertifiedData';
 import { emitSolverDebug } from '../debug';
 
 const solverId = 'level3-slice-reduction';
@@ -152,8 +153,12 @@ interface Library {
   orbitOfSite: Int16Array;
   orbitSites: number[][];
   templates: Template[];
+  /** A certified pure 3-cycle for every orbit; the shipped tool itself where that already is one. */
+  threeCycles: Template[];
   d4Orbit: number;
   d4TwisterWords: Atom[][];
+  /** Certified position-identity words that twist (C3) or flip (D4) exactly two cells of their orbit. */
+  pairTwisters: Map<number, Twister>;
   parityGenerators: Array<{ atom: Atom; vec: bigint }>;
   buildMs: number;
 }
@@ -295,13 +300,14 @@ const buildLibrary = (): Library => {
   }
 
   // --- the one globally pure tool per orbit, from the generated static data ---
-  const templates: Template[] = new Array(orbitSites.length);
-  for (const record of level3PureToolWords) {
-    const word = record.word.map((id) => {
+  const resolveWord = (ids: readonly string[]): Atom[] =>
+    ids.map((id) => {
       const atom = atomById.get(id);
       if (!atom) throw new Error(`${solverId}: tool data references unknown atom ${id}`);
       return atom;
     });
+  const templateOf = (record: { orbit: number; word: readonly string[] }): Template => {
+    const word = resolveWord(record.word);
     const action = actionOver(word, supportCandidates(word));
     const src: number[] = [];
     const dst: number[] = [];
@@ -317,13 +323,34 @@ const buildLibrary = (): Library => {
       src.push(site); dst.push(to); rots.push(rot);
     }
     if (src.length < 3) throw new Error(`${solverId}: tool for orbit ${record.orbit} is degenerate`);
-    templates[record.orbit] = { word, src, dst, rots };
-  }
+    return { word, src, dst, rots };
+  };
+  const templates: Template[] = new Array(orbitSites.length);
+  for (const record of level3PureToolWords) templates[record.orbit] = templateOf(record);
+  const threeCycles: Template[] = new Array(orbitSites.length);
+  for (const record of level3ThreeCycleWords) threeCycles[record.orbit] = templateOf(record);
   for (let orbit = 0; orbit < orbitSites.length; orbit += 1) {
     if (!templates[orbit]) throw new Error(`${solverId}: no pure tool for orbit ${orbit}`);
+    if (templates[orbit]!.src.length === 3) threeCycles[orbit] = templates[orbit]!;
+    if (threeCycles[orbit]?.src.length !== 3) throw new Error(`${solverId}: no pure 3-cycle for orbit ${orbit}`);
   }
 
-  const d4TwisterWords = level3D4TwisterWords.map((word) => word.map((id) => atomById.get(id)!));
+  const d4TwisterWords = level3D4TwisterWords.map((word) => resolveWord(word));
+  const pairTwisters = new Map<number, Twister>();
+  for (const record of [...level3C3TwisterWords, { orbit: level3D4Orbit, word: level3D4FlipPairWord }]) {
+    const word = resolveWord(record.word);
+    const action = actionOver(word, supportCandidates(word));
+    const sites: number[] = [];
+    const rots: number[] = [];
+    for (const [site, [to, rot]] of action.moves) {
+      if (site !== to || orbitOfSite[site] !== record.orbit) {
+        throw new Error(`${solverId}: twister for orbit ${record.orbit} is not a twist of that orbit alone`);
+      }
+      sites.push(site); rots.push(rot);
+    }
+    if (sites.length !== 2) throw new Error(`${solverId}: twister for orbit ${record.orbit} does not twist exactly two cells`);
+    pairTwisters.set(record.orbit, { word, sites, rots });
+  }
 
   // --- parity generators: orbit permutation parity is a solve-wide invariant ---
   const parityVector = (atom: Atom): bigint => {
@@ -352,7 +379,7 @@ const buildLibrary = (): Library => {
 
   libraryCache = {
     canonical, N, siteIndexByKey, atoms, atomById, orbitOfSite, orbitSites,
-    templates, d4Orbit: level3D4Orbit, d4TwisterWords, parityGenerators,
+    templates, threeCycles, d4Orbit: level3D4Orbit, d4TwisterWords, pairTwisters, parityGenerators,
     buildMs: performance.now() - start,
   };
   emitSolverDebug(
@@ -367,6 +394,14 @@ const buildLibrary = (): Library => {
 export const warmLevel3SliceReductionSolver = (): void => {
   buildLibrary();
 };
+
+/**
+ * Test hook. With `certifiedOnly` set, the greedy placement and the orientation
+ * descent are skipped, so a solve runs entirely on the steps the completeness
+ * proof covers (research/level3-completeness/test).
+ */
+export const level3SliceReductionInternals = { certifiedOnly: false };
+const internals = level3SliceReductionInternals;
 
 // ---------- the reduction pipeline on the integer state ----------
 
@@ -535,10 +570,10 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
   // conjugation carries it anywhere inside the orbit. Variants are precomputed
   // per orbit so the placement search can index them by ordered pair.
   //
-  // A width-4 or width-6 tool is a double transposition or wider, which suffices
-  // to generate Alt(orbit) but leaves greedy placement able to cycle on the last
-  // three cells. Two variants sharing one transposition multiply to a 3-cycle;
-  // when such a product exists the derived 3-cycle replaces the wide tool.
+  // A width-4 or width-6 tool is a double transposition or a pair of 3-cycles,
+  // which leaves greedy placement able to cycle on the last three cells. Those
+  // orbits use the certified 3-cycle from the static data instead, so every
+  // orbit's variants are 3-cycles.
   const templateVariantCache = new Map<number, Template[]>();
   const templateVariantsFor = (orbit: number): Template[] => {
     const cached = templateVariantCache.get(orbit);
@@ -585,59 +620,7 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
       return withInverses;
     };
 
-    const base = templates[orbit]!;
-    const withInverses = expand(base);
-
-    if (base.src.length !== 3) {
-      const bySite = new Map<number, number[]>();
-      withInverses.forEach((template, index) => {
-        for (const site of template.src) {
-          const list = bySite.get(site) ?? [];
-          list.push(index);
-          bySite.set(site, list);
-        }
-      });
-      const actionIndex = new Map<Template, Map<number, number>>();
-      const indexFor = (template: Template): Map<number, number> => {
-        let index = actionIndex.get(template);
-        if (!index) { index = new Map(template.src.map((site, offset) => [site, offset])); actionIndex.set(template, index); }
-        return index;
-      };
-      let cycle: Template | null = null;
-      outer:
-      for (let i = 0; i < withInverses.length; i += 1) {
-        const partners = new Set<number>();
-        for (const site of withInverses[i]!.src) for (const j of bySite.get(site) ?? []) if (j > i) partners.add(j);
-        for (const j of partners) {
-          const a = withInverses[i]!;
-          const b = withInverses[j]!;
-          const candidates = new Set([...a.src, ...b.src]);
-          const src: number[] = [];
-          const dst: number[] = [];
-          const rots: number[] = [];
-          const aIndex = indexFor(a);
-          const bIndex = indexFor(b);
-          let clean = true;
-          for (const site of candidates) {
-            const ai = aIndex.get(site);
-            const middle = ai === undefined ? site : a.dst[ai]!;
-            const firstRotation = ai === undefined ? ROT_ID : a.rots[ai]!;
-            const bi = bIndex.get(middle);
-            const to = bi === undefined ? middle : b.dst[bi]!;
-            const rotation = bi === undefined ? firstRotation : rotMul[b.rots[bi]!]![firstRotation]!;
-            if (site === to) { if (rotation !== ROT_ID) clean = false; continue; }
-            src.push(site); dst.push(to); rots.push(rotation);
-          }
-          if (clean && src.length === 3) { cycle = { word: [...a.word, ...b.word], src, dst, rots }; break outer; }
-        }
-      }
-      if (cycle) {
-        const derived = expand(cycle);
-        templateVariantCache.set(orbit, derived);
-        return derived;
-      }
-    }
-
+    const withInverses = expand(lib.threeCycles[orbit]!);
     templateVariantCache.set(orbit, withInverses);
     return withInverses;
   };
@@ -854,12 +837,13 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
   };
 
   /**
-   * Finish an orbit whose residual permutation is small. Parity was normalized
-   * in phase 1, so the residue is even and decomposes into 3-cycles: a cycle of
-   * length >= 3 is shortened by an exact 3-cycle on its first three points, and
-   * two transpositions (a b)(c d) are cleared by (a c d) then (a c b).
+   * Finish an orbit exactly. Parity was normalized in phase 1, so the residue
+   * is even and decomposes into 3-cycles: a cycle of length >= 3 is shortened by
+   * an exact 3-cycle on its first three points, and two transpositions
+   * (a b)(c d) are cleared by (a c d) then (a c b). Every round sends at least
+   * one more cell home, so the guard below is never reached.
    */
-  const finishSmallEvenPermutation = (orbit: number, sites: number[]): Atom[][] | null => {
+  const finishEvenPermutation = (orbit: number, sites: number[]): Atom[][] | null => {
     const words: Atom[][] = [];
     let guard = 0;
     while (true) {
@@ -900,27 +884,31 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
     let toolsUsed = 0;
     for (let orbit = 0; orbit < orbitSites.length; orbit += 1) {
       const sites = orbitSites[orbit]!;
-      let guard = 0;
+      // Greedy placement is a heuristic for short words: each step it takes
+      // solves more cells than it breaks, so it runs at most |orbit| times, but
+      // nothing guarantees it always finds a step. Whenever it does not — and
+      // always for the last 32 cells — the exact 3-cycle decomposition finishes
+      // the orbit, and that one cannot fail on an even permutation.
+      let greedy = !internals.certifiedOnly;
       while (true) {
         const unsolved = sites.filter((site) => state.siteOfPiece[site] !== site);
         if (unsolved.length === 0) break;
-        if (++guard > sites.length * 4) {
-          return fail(`orbit ${orbit} exhausted its placement budget with ${unsolved.length} cell(s) left`);
-        }
         for (const site of sites) posProtected[site] = state.pieceAtSite[site] === site ? 1 : 0;
-        if (unsolved.length <= 32) {
-          const finish = finishSmallEvenPermutation(orbit, sites);
-          if (!finish) return fail(`orbit ${orbit} cannot finish its ${unsolved.length}-cell even permutation`);
-          for (const word of finish) { emitted.push(...word); toolsUsed += 1; }
-          continue;
+        if (greedy && unsolved.length > 32) {
+          const target = unsolved[0]!;
+          const x = state.siteOfPiece[target]!;
+          const sacrificeBudget = Math.max(1, templates[orbit]!.src.length - 2);
+          const placement = findPlacement(orbit, x, target, sacrificeBudget, 1);
+          if (placement) {
+            emit(placement.word);
+            toolsUsed += 1;
+            continue;
+          }
+          greedy = false;
         }
-        const target = unsolved[0]!;
-        const x = state.siteOfPiece[target]!;
-        const sacrificeBudget = Math.max(1, templates[orbit]!.src.length - 2);
-        const placement = findPlacement(orbit, x, target, sacrificeBudget, unsolved.length === 3 ? 3 : 1);
-        if (!placement) return fail(`orbit ${orbit} cannot place cell ${target} from ${x}; ${unsolved.length} unsolved`);
-        emit(placement.word);
-        toolsUsed += 1;
+        const finish = finishEvenPermutation(orbit, sites);
+        if (!finish) return fail(`orbit ${orbit} cannot finish its ${unsolved.length}-cell even permutation`);
+        for (const word of finish) { emitted.push(...word); toolsUsed += 1; }
       }
       for (const site of sites) posProtected[site] = 1;
     }
@@ -1213,48 +1201,136 @@ const runPipeline = (lib: Library, input: PState): PipelineResult => {
     return null;
   };
 
-  {
-    let tools = 0;
-    while (true) {
-      for (let site = 0; site < N; site += 1) {
-        const roll = directRoll(site, state.rotOfPiece[site]!);
-        if (roll) emit([roll]);
+  /**
+   * A setup word carrying the ordered pair (first, second) onto (toFirst,
+   * toSecond), by breadth-first search of the ordered-pair graph of the orbit.
+   * The orbit's permutation group contains Alt(orbit), which is 2-transitive,
+   * so the search always succeeds.
+   */
+  const findPairSetup = (orbit: number, first: number, second: number, toFirst: number, toSecond: number): Atom[] | null => {
+    const start = first * N + second;
+    const goal = toFirst * N + toSecond;
+    const visited = new Map<number, { parent: number; atom: Atom | null }>([[start, { parent: -1, atom: null }]]);
+    let frontier = [start];
+    while (frontier.length > 0 && !visited.has(goal)) {
+      const next: number[] = [];
+      for (const key of frontier) {
+        const a = Math.floor(key / N);
+        const b = key % N;
+        for (const atom of setupAlphabetFor(orbit)) {
+          const nextKey = (atom.map.get(a) ?? a) * N + (atom.map.get(b) ?? b);
+          if (visited.has(nextKey)) continue;
+          visited.set(nextKey, { parent: key, atom });
+          next.push(nextKey);
+        }
       }
+      frontier = next;
+    }
+    if (!visited.has(goal)) return null;
+    const setup: Atom[] = [];
+    for (let node = visited.get(goal)!; node.atom; node = visited.get(node.parent)!) setup.push(node.atom);
+    return setup.reverse();
+  };
+
+  const rollEverything = (): void => {
+    for (let site = 0; site < N; site += 1) {
+      const roll = directRoll(site, state.rotOfPiece[site]!);
+      if (roll) emit([roll]);
+    }
+  };
+
+  /**
+   * The certified completion of the orientation phase. It does not search for a
+   * descent; it follows the structure of the twist group, so it finishes every
+   * state that satisfies the invariants of the legal moves and reports the
+   * broken invariant otherwise (research/level3-completeness/certify.ts, C6-C8):
+   *
+   *   - C4 orbits and the rotation part of the D4 orbit: every cell has its own
+   *     depth-3 rolls, so one pass of rolls clears them;
+   *   - C3 orbits: the twist sum is 0 mod 3. A conjugate of the orbit's two-cell
+   *     twister (c, -c), applied once or twice, clears one twisted cell into
+   *     another twisted cell, so the number of twisted cells strictly drops;
+   *   - D4 orbit: the number of flipped cells is even. A conjugate of the
+   *     two-cell flip turns two flipped cells into unflipped ones, which the
+   *     rolls then clear.
+   */
+  const completeOrientation = (): string | null => {
+    rollEverything();
+    for (const [orbit, twister] of lib.pairTwisters) {
+      const [toFirst, toSecond] = twister.sites as [number, number];
+      const isFlipOrbit = orbit === lib.d4Orbit;
+      while (true) {
+        const dirty = orbitSites[orbit]!.filter((site) => state.rotOfPiece[site] !== ROT_ID);
+        if (dirty.length === 0) break;
+        if (dirty.length === 1) {
+          return isFlipOrbit
+            ? `the D4 orbit has an odd number of flipped cells — the state is not reachable by legal moves`
+            : `orbit ${orbit} has a non-zero twist sum — the state is not reachable by legal moves`;
+        }
+        const [first, second] = dirty as [number, number];
+        const setup = findPairSetup(orbit, first, second, toFirst, toSecond);
+        if (!setup) return `internal error: orbit ${orbit} has no setup for the cell pair ${first}, ${second}`;
+        const word = [...setup, ...twister.word, ...inverseWord(setup)];
+        emit(word);
+        if (isFlipOrbit) {
+          rollEverything();
+        } else if (state.rotOfPiece[first] !== ROT_ID) {
+          emit(word);
+        }
+        if (state.rotOfPiece[first] !== ROT_ID) {
+          return `internal error: the certified twister did not clear cell ${first} of orbit ${orbit}`;
+        }
+      }
+    }
+    const left = state.rotOfPiece.findIndex((rotation) => rotation !== ROT_ID);
+    return left < 0 ? null : `cell ${left} has an orientation no legal move sequence produces at its home site`;
+  };
+
+  {
+    // Strict potential descent first: it uses the shortest twisters available
+    // and usually finishes. It is a heuristic, though — nothing guarantees a
+    // descent step exists from every reachable residue — so when it stalls the
+    // certified completion takes over. Either way the phase terminates.
+    let tools = 0;
+    let certified = false;
+    while (true) {
+      rollEverything();
       const dirty: number[] = [];
       for (let site = 0; site < N; site += 1) if (state.rotOfPiece[site] !== ROT_ID) dirty.push(site);
       if (dirty.length === 0) break;
 
-      for (const site of dirty) {
-        if (orientationPotential(site, state.rotOfPiece[site]!) === 255) {
-          return fail(`cell ${site} has an orientation outside the verified reachable twist subgroup`);
-        }
-      }
-
       let fix: Atom[] | null = null;
-      for (const site of dirty) {
-        fix = findTwistDescent(orbitOfSite[site]!, site);
-        if (fix) break;
-      }
-      if (!fix) {
-        for (let i = 0; i < dirty.length && !fix; i += 1) {
-          for (let j = i + 1; j < dirty.length && !fix; j += 1) {
-            if (orbitOfSite[dirty[i]!] !== orbitOfSite[dirty[j]!]) continue;
-            fix = findPairTwistDescent(orbitOfSite[dirty[i]!]!, dirty[i]!, dirty[j]!);
+      if (!internals.certifiedOnly && dirty.every((site) => orientationPotential(site, state.rotOfPiece[site]!) !== 255)) {
+        for (const site of dirty) {
+          fix = findTwistDescent(orbitOfSite[site]!, site);
+          if (fix) break;
+        }
+        if (!fix) {
+          for (let i = 0; i < dirty.length && !fix; i += 1) {
+            for (let j = i + 1; j < dirty.length && !fix; j += 1) {
+              if (orbitOfSite[dirty[i]!] !== orbitOfSite[dirty[j]!]) continue;
+              fix = findPairTwistDescent(orbitOfSite[dirty[i]!]!, dirty[i]!, dirty[j]!);
+            }
           }
         }
       }
       if (!fix) {
-        const summary = dirty.slice(0, 12).map((site) => `${site}#${state.rotOfPiece[site]}`).join(' ');
-        return fail(`no orientation descent exists for ${dirty.length} twisted cell(s): ${summary}`);
+        const before = emitted.length;
+        const problem = completeOrientation();
+        if (problem) return fail(problem);
+        certified = emitted.length > before;
+        break;
       }
       emit(fix);
       tools += 1;
     }
     markPhase(
       'orientation normalization',
-      tools === 0
-        ? 'Every cell was already oriented after placement, or a single depth-3 roll sufficed.'
-        : `Removed every residual twist with ${tools} twist tool(s) under strict potential descent.`,
+      certified
+        ? `Removed the residual twists with ${tools} descent step(s), then the certified two-cell twisters.`
+        : tools === 0
+          ? 'Every cell was already oriented after placement, or a single depth-3 roll sufficed.'
+          : `Removed every residual twist with ${tools} twist tool(s) under strict potential descent.`,
     );
   }
 

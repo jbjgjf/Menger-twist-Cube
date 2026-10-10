@@ -46,9 +46,9 @@ Purity survives conjugation, so one tool per orbit suffices — setup conjugatio
 
 For each unsolved cell the search runs an ordered-pair BFS over setups, scoring candidates by exact orientation first, then by cells broken, then by cells landed, then by word length, and requiring a net gain (`landed > broken`). Already-solved cells of the orbit are protected, with a sacrifice budget of `width − 2`. The BFS exhausts the finite ordered-pair graph; it has no empirical depth cutoff.
 
-A width-4 or width-6 tool is a double transposition or wider. That is enough to generate `Alt(orbit)`, but greedy placement can cycle on the last three cells, so when two variants sharing one transposition multiply to a clean 3-cycle, the derived 3-cycle replaces the wide tool.
+A width-4 or width-6 tool is a double transposition or a pair of 3-cycles, on which greedy placement can cycle over the last three cells. Those 31 orbits use a pure 3-cycle instead — the product of two conjugates of the wide tool, shipped as a static word in `level3SliceReductionCertifiedData.ts` and re-checked on all 8,000 cells by `research/level3-completeness/certify.ts` — so every orbit's variants are 3-cycles.
 
-Once 32 or fewer cells remain the orbit is finished exactly rather than greedily: parity was normalized in phase 1, so the residue is even and decomposes into 3-cycles — a cycle of length ≥ 3 is shortened by an exact 3-cycle on its first three points, and two transpositions `(a b)(c d)` are cleared by `(a c d)` then `(a c b)`. The exact 3-cycle on a named ordered triple comes from a bidirectional BFS: forward from the wanted triple, backward from the triples the template library already realizes. This search also exhausts its finite graph; the former depth-8/two-million-node tuning limits were removed in the completion audit.
+Greedy placement is a heuristic for short words and is not what completeness rests on. Once 32 or fewer cells remain, or as soon as the greedy search finds no net-gain step, the orbit is finished exactly: parity was normalized in phase 1, so the residue is even and decomposes into 3-cycles — a cycle of length ≥ 3 is shortened by an exact 3-cycle on its first three points, and two transpositions `(a b)(c d)` are cleared by `(a c d)` then `(a c b)`. The exact 3-cycle on a named ordered triple comes from a bidirectional BFS: forward from the wanted triple, backward from the triples the template library already realizes. This search also exhausts its finite graph; the former depth-8/two-million-node tuning limits were removed in the completion audit.
 
 ### Phase 3: orientation
 
@@ -56,7 +56,15 @@ Positions are fixed, so only rotations can be wrong. A twister is a position-ide
 
 Three twister sources: two pure tools with the same position action but different rotation profiles compose to a pure twist; `[roll, tool]` is a pure twist because a depth-3 roll displaces nothing, so the commutator's support stays inside the tool's three cells and its position action cancels; and the shipped D₄ twisters. A single legal roll is tried first at every site.
 
-Descending one cell at a time can stall when the twister's second cell keeps landing back on the first, so an ordered-**pair** search over `(a, ρₐ, b, ρ_b)` finds the joint application that clears both. Both the single-cell transported-state search and this pair search now exhaust their finite graphs; the former depth-20/400,000-node cutoffs were removed. Each accepted twister strictly lowers a non-negative integer potential, so no arbitrary iteration guard is needed. This is what makes the D₄ orbit terminate.
+Descending one cell at a time can stall when the twister's second cell keeps landing back on the first, so an ordered-**pair** search over `(a, ρₐ, b, ρ_b)` finds the joint application that clears both. Both the single-cell transported-state search and this pair search now exhaust their finite graphs; the former depth-20/400,000-node cutoffs were removed. Each accepted twister strictly lowers a non-negative integer potential, so the descent terminates.
+
+The descent is a heuristic, though: nothing proves a descent step exists from every reachable residue. The twist group has joint constraints that the per-cell freedom does not show — on each of the four C₃ orbits the twist sum is 0 mod 3, and on the D₄ orbit the number of flipped cells is even (all 3,591 atoms preserve both; `certify.ts` C6). When the descent stalls, a **certified completion** follows that structure instead of searching for a descent:
+
+- every cell of the C₄ and D₄ orbits has its own depth-3 rolls, so one pass of rolls clears the C₄ orbits and the rotation part of D₄;
+- on a C₃ orbit, a conjugate of the shipped two-cell twister `(c, −c)`, applied once or twice, empties one twisted cell into another, so the count of twisted cells strictly drops, and the zero twist sum means it never stops at one;
+- on the D₄ orbit, a conjugate of the shipped two-cell flip unflips two cells, and the rolls finish them.
+
+The setup for each conjugate is an ordered-pair BFS, which cannot fail because `Alt(orbit)` is 2-transitive. A state that breaks an invariant is rejected with the invariant named.
 
 ### Phase 4: verification on the real engine
 
@@ -68,8 +76,8 @@ The simulator's agreement with the engine is itself verified: `l3-sim-vs-engine.
 
 - Cell identity: no cell is created or destroyed; every output move is a legal, physically admissible turn replayable by the Play reducer.
 - Determinism: tool expansion and every search iterate in fixed orders, so the same state always yields the same solution.
-- Completeness for the fixed Level 3 group: the exported words construct a pure generator on all 164 orbits; `Alt(orbit)` supplies triple transitivity; parity is normalized first; and the ordered pair/triple/orientation searches run to exhaustion over finite graphs rather than stopping at empirical depth/node limits.
-- Honest failure: unreachable parity vectors, non-grid orientations outside the verified subgroup, a structurally disconnected search graph, an illegal move, or a replay mismatch all produce `success: false` with the failing phase named.
+- Completeness for the fixed Level 3 group: every orbit has a shipped pure 3-cycle; `Alt(orbit)` supplies pair and triple transitivity; parity is normalized first; the exact 3-cycle finish and the certified orientation completion terminate on every reachable state; and the searches they use run to exhaustion over finite connected graphs. The proof is `docs/proofs/level3-completeness.tex`; `npm run prove:l3` and `npm run test:l3` re-check it.
+- Honest failure: an unreachable parity vector, a non-zero C₃ twist sum, an odd D₄ flip count, a non-grid orientation, an illegal move, or a replay mismatch all produce `success: false` with the reason named.
 
 ## Limitations
 
