@@ -32,6 +32,10 @@
       "destination": "/keyboard.html"
     },
     {
+      "source": "/octahedron",
+      "destination": "/octahedron.html"
+    },
+    {
       "source": "/demo",
       "destination": "/index.html"
     }

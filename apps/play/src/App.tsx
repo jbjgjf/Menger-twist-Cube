@@ -540,6 +540,12 @@ export default function PlayApp() {
             >
               Solver Lab
             </a>
+            <a
+              href="/octahedron"
+              className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
+            >
+              Octahedron
+            </a>
           </div>
           {controlsOpen && (
             <ControlPanel
@@ -653,6 +659,7 @@ export default function PlayApp() {
               <li><a className="text-cyan-300 hover:text-cyan-200" href="#game-title">Play the 3D puzzle</a></li>
               <li><a className="text-cyan-300 hover:text-cyan-200" href="/keyboard">Read the keyboard guide</a></li>
               <li><a className="text-cyan-300 hover:text-cyan-200" href="/lab">Open the solver algorithm lab</a></li>
+              <li><a className="text-cyan-300 hover:text-cyan-200" href="/octahedron">Try the octahedron puzzle</a></li>
             </ul>
             <p className="mt-5 border-t border-slate-800 pt-5 text-xs leading-5 text-slate-400">
               Runs locally in a modern WebGL browser. No account, download, or installation is required.
