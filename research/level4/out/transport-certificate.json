@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "orbitsChecked": 3050,
+  "minimumGoodRoots": 38,
+  "missing": [],
+  "wordDataSha256": "c1a9710097b21cd57c78fa5a74729fe657b610263b994265d22833d774102664",
+  "pairStatesChecked": 23099392,
+  "maximumPairDistance": 8,
+  "diameterUpperBound": {
+    "parity": "70",
+    "position": "23609664",
+    "orientation": "35336",
+    "total": "23645070"
+  },
+  "lemma": "Three pure 3-cycles with the same directed edge and distinct third sites guarantee an edge realization avoiding any two forbidden sites after arbitrary pair transport."
+}

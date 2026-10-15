@@ -8,6 +8,13 @@ export interface SerializedCubieState {
 
 export type SolverWorkerRequest =
   | {
+      kind: 'scramble';
+      algorithmId: string;
+      level: number;
+      seed: number;
+      length: number;
+    }
+  | {
       kind: 'solve';
       algorithmId: string;
       level: number;
@@ -21,6 +28,7 @@ export type SolverWorkerRequest =
 
 export type SolverWorkerResponse =
   | { kind: 'debug'; event: SolverDebugEvent }
+  | { kind: 'scramble-result'; result: { cubies: SerializedCubieState[]; moveCount: number } }
   | { kind: 'solve-result'; result: SolverRunResult }
   | { kind: 'benchmark-result'; result: BenchmarkRunResult }
   | { kind: 'error'; message: string; stack?: string };

@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "level": 1,
+  "cells": 20,
+  "candidateTargets": 21,
+  "legalAtoms": 63,
+  "orbits": 2,
+  "sizes": {
+    "8": 1,
+    "12": 1
+  },
+  "freedom": {
+    "3": {
+      "orbits": 1,
+      "cells": 8
+    },
+    "8": {
+      "orbits": 1,
+      "cells": 12
+    }
+  },
+  "parityRank": 2,
+  "families": {
+    "frame-s1": {
+      "atoms": 27,
+      "selectedEntries": 180
+    },
+    "ext-d1": {
+      "atoms": 36,
+      "selectedEntries": 36
+    }
+  },
+  "candidateLog10AlternatingProduct": 12.683797496192149,
+  "buildMs": 9.643833999999998,
+  "memory": {
+    "rss": 111886336,
+    "heapTotal": 22102016,
+    "heapUsed": 15114160,
+    "external": 2550604,
+    "arrayBuffers": 38207
+  }
+}

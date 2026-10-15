@@ -1,0 +1,90 @@
+{
+  "schema": 1,
+  "level": 4,
+  "cells": 160000,
+  "candidateTargets": 116568,
+  "legalAtoms": 44784,
+  "orbits": 3050,
+  "sizes": {
+    "8": 8,
+    "24": 2124,
+    "96": 855,
+    "384": 60,
+    "768": 1,
+    "1536": 2
+  },
+  "freedom": {
+    "1": {
+      "orbits": 2871,
+      "cells": 148680
+    },
+    "3": {
+      "orbits": 8,
+      "cells": 64
+    },
+    "4": {
+      "orbits": 170,
+      "cells": 10488
+    },
+    "8": {
+      "orbits": 1,
+      "cells": 768
+    }
+  },
+  "parityRank": 66,
+  "families": {
+    "frame-s1": {
+      "atoms": 729,
+      "selectedEntries": 1440000
+    },
+    "frame-s3": {
+      "atoms": 243,
+      "selectedEntries": 1440000
+    },
+    "frame-s9": {
+      "atoms": 81,
+      "selectedEntries": 1440000
+    },
+    "frame-s27": {
+      "atoms": 27,
+      "selectedEntries": 1440000
+    },
+    "ext-d1": {
+      "atoms": 36,
+      "selectedEntries": 288000
+    },
+    "ext-d1.5": {
+      "atoms": 108,
+      "selectedEntries": 288000
+    },
+    "ext-d2": {
+      "atoms": 216,
+      "selectedEntries": 86400
+    },
+    "ext-d2.5": {
+      "atoms": 648,
+      "selectedEntries": 86400
+    },
+    "ext-d3": {
+      "atoms": 2232,
+      "selectedEntries": 44640
+    },
+    "ext-d3.5": {
+      "atoms": 6696,
+      "selectedEntries": 44640
+    },
+    "ext-d4": {
+      "atoms": 33768,
+      "selectedEntries": 33768
+    }
+  },
+  "candidateLog10AlternatingProduct": 237882.3208177361,
+  "buildMs": 6307.322042,
+  "memory": {
+    "rss": 835371008,
+    "heapTotal": 754253824,
+    "heapUsed": 623777264,
+    "external": 6116064,
+    "arrayBuffers": 3603667
+  }
+}

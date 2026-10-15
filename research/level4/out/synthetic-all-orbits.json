@@ -1,0 +1,30 @@
+{
+  "ok": true,
+  "construction": "One even 3-cycle on every orbit; balanced C3 twists; C4 residues throughout; all 768 D4 cells flipped, with quarter residues. No scramble history.",
+  "orbitsDisrupted": 3050,
+  "positionDefects": 9150,
+  "cells": 160000,
+  "moveCount": 522559,
+  "runtimeMs": 59049.50975,
+  "placements": 3050,
+  "replaySelectedEntries": 1889622902,
+  "wordSha256": "6f4fad10a146623554c69298f914deb49a54d13aab5550dbe565b4c874d4b9d1",
+  "phases": [
+    {
+      "phase": "orbit parity normalization",
+      "moves": 0
+    },
+    {
+      "phase": "orbit placement",
+      "moves": 497001
+    },
+    {
+      "phase": "certified orientation completion",
+      "moves": 522559
+    },
+    {
+      "phase": "independent raw-atom replay",
+      "moves": 522559
+    }
+  ]
+}

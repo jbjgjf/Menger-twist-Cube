@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Quaternion } from 'three';
 import { isMoveSystemAvailable, moveSystems, type Cubie, type MoveSystem } from '@menger/engine';
 import {
   createLocalStorageBenchmarkStore,
@@ -18,7 +19,7 @@ import ExplanationTimeline from './components/ExplanationTimeline';
 import { useIsDesktop } from './useIsDesktop';
 import ResultsTable from './components/ResultsTable';
 import { useSolvePlayback } from './playback/useSolvePlayback';
-import { benchmarkInWorker, solveInWorker } from './runSolverWorker';
+import { benchmarkInWorker, scrambleInWorker, solveInWorker } from './runSolverWorker';
 
 const numberInputClass =
   'w-full rounded border border-slate-700 bg-slate-950/60 px-2 py-1 text-sm text-slate-100 outline-none focus:border-cyan-500';
@@ -93,12 +94,15 @@ export default function App() {
   const [seedCount, setSeedCount] = useState(20);
 
   const [scrambledCubies, setScrambledCubies] = useState<Cubie[] | null>(null);
+  const [scrambledSeed, setScrambledSeed] = useState<number | null>(null);
   const [solveResult, setSolveResult] = useState<SolverRunResult | null>(null);
   const [benchmarkResult, setBenchmarkResult] = useState<BenchmarkRunResult | null>(null);
   const [importedResult, setImportedResult] = useState<BenchmarkRunResult | null>(null);
   const [solveRecords, setSolveRecords] = useState<SolverBenchmarkRecord[]>(benchmarkStore.load);
   const [isRunning, setIsRunning] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
+  const [isScrambling, setIsScrambling] = useState(false);
+  const isBusy = isRunning || isSolving || isScrambling;
   const [error, setError] = useState<string | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -126,6 +130,7 @@ export default function App() {
   // instant "Failed" that read as a broken solver).
   useEffect(() => {
     setScrambledCubies(null);
+    setScrambledSeed(null);
     setSolveResult(null);
     loadPlayback([basePuzzle.cubies], []);
     setAlgorithmId((current) => {
@@ -136,15 +141,31 @@ export default function App() {
     });
   }, [level, basePuzzle, algorithms, loadPlayback]);
 
-  const scramble = () => {
-    if (!algorithm) return;
+  const scramble = async () => {
+    if (!algorithm || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)) return;
     setError(null);
+    if (level >= 4) {
+      setIsScrambling(true);
+      try {
+        const result = await scrambleInWorker(algorithm.id, level, singleSeed, scrambleLength, log);
+        const cubies = basePuzzle.cubies.map((c, i) => {
+          const saved = result.cubies[i];
+          if (!saved || saved.id !== c.id) throw new Error('Scramble worker returned an inconsistent cell order.');
+          return { ...c, currentPosition: saved.currentPosition, orientation: new Quaternion(...saved.orientation) };
+        });
+        setScrambledCubies(cubies); setScrambledSeed(singleSeed); setSolveResult(null); loadPlayback([cubies], []);
+        log(`scramble: level ${level}, seed ${singleSeed}, ${result.moveCount} moves (${algorithm.id}, full generator set)`);
+      } catch (cause) { setError(cause instanceof Error ? cause.message : 'Scramble failed.'); }
+      finally { setIsScrambling(false); }
+      return;
+    }
     const rng = createSeededRng(singleSeed);
     const movePool = algorithm.scrambleMovePool
       ? (state: typeof basePuzzle) => algorithm.scrambleMovePool!(puzzleModel, state)
       : undefined;
     const { state: scrambled, moves } = scrambleState(puzzleModel, basePuzzle, rng, scrambleLength, movePool);
     setScrambledCubies(scrambled.cubies);
+    setScrambledSeed(singleSeed);
     setSolveResult(null);
     loadPlayback([scrambled.cubies], []);
     log(`scramble: ${moveSystem} system, level ${level}, seed ${singleSeed}, ${moves.length} moves${movePool ? ` (generator set of ${algorithm.id})` : ''}`);
@@ -157,7 +178,7 @@ export default function App() {
     const inputCubies = scrambledCubies ?? basePuzzle.cubies;
     log(`solve: running ${algorithm.id} on level ${level} (${moveSystem} system)`);
     try {
-      const result = algorithm.id === 'level3-slice-reduction'
+      const result = level >= 3
         ? await solveInWorker(algorithm.id, level, inputCubies, log)
         : await algorithm.solve(puzzleModel, { ...basePuzzle, cubies: inputCubies });
       setSolveResult(result);
@@ -165,11 +186,11 @@ export default function App() {
         benchmarkStore.record(result, {
           algorithmId: algorithm.id,
           modelId: puzzleModel.id,
-          scrambleSeed: scrambledCubies ? String(singleSeed) : null,
+          scrambleSeed: scrambledCubies ? String(scrambledSeed ?? singleSeed) : null,
         }),
       );
       if (result.success) {
-        if (result.move_count > maxMaterializedPlaybackMoves) {
+        if (level >= 4 || result.move_count > maxMaterializedPlaybackMoves) {
           // A Level 3 solution can contain hundreds of thousands of moves.
           // Materializing Cubie[8000] after every move would require billions
           // of references, and rendering one DOM row per move would freeze or
@@ -179,7 +200,7 @@ export default function App() {
           loadPlayback([basePuzzle.cubies], []);
           log(
             `solve: success — ${result.move_count} moves in ${result.runtime_ms.toFixed(1)}ms; ` +
-            `full playback omitted above the ${maxMaterializedPlaybackMoves}-move safety limit`,
+            (level >= 4 ? 'verified endpoint shown in the Level 4 results view' : `full playback omitted above the ${maxMaterializedPlaybackMoves}-move safety limit`),
           );
         } else {
           let current = { ...basePuzzle, cubies: inputCubies };
@@ -206,6 +227,7 @@ export default function App() {
 
   const resetCube = () => {
     setScrambledCubies(null);
+    setScrambledSeed(null);
     setSolveResult(null);
     loadPlayback([basePuzzle.cubies], []);
     log('cube reset to solved state');
@@ -223,7 +245,7 @@ export default function App() {
         scrambleSeeds: seeds,
         scrambleLength,
       };
-      const result = algorithm.id === 'level3-slice-reduction'
+      const result = level >= 3
         ? await benchmarkInWorker(algorithm.id, spec, log)
         : await runBenchmark(puzzleModel, algorithm, spec);
       setBenchmarkResult(result);
@@ -305,7 +327,7 @@ export default function App() {
                 className={numberInputClass}
                 value={moveSystem}
                 onChange={(event) => changeMoveSystem(event.target.value as MoveSystem)}
-                disabled={isSolving || isRunning}
+                disabled={isBusy}
               >
                 {moveSystems.map((candidate) => (
                   <option key={candidate} value={candidate}>
@@ -319,6 +341,7 @@ export default function App() {
               <select
                 className={numberInputClass}
                 value={effectiveLevel}
+                disabled={isBusy}
                 onChange={(event) => setLevel(Number(event.target.value))}
               >
                 {systemLevels.map((candidate) => (
@@ -333,6 +356,7 @@ export default function App() {
               <select
                 className={numberInputClass}
                 value={algorithmId}
+                disabled={isBusy}
                 onChange={(event) => setAlgorithmId(event.target.value)}
               >
                 {algorithms.map((candidate) => (
@@ -365,27 +389,27 @@ export default function App() {
             <div className="col-span-2 flex items-end gap-2">
               <button
                 className={buttonClass}
-                onClick={scramble}
-                disabled={!algorithm || isSolving || blockedOnThisDevice}
+                onClick={() => void scramble()}
+                disabled={!algorithm || isBusy || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)}
               >
-                Scramble
+                {isScrambling ? 'Scrambling…' : 'Scramble'}
               </button>
               <button
                 className={`${buttonClass} border-cyan-500/60 bg-cyan-900/40 hover:bg-cyan-800/50`}
                 onClick={() => void solve()}
-                disabled={!algorithm || isSolving || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)}
+                disabled={!algorithm || isBusy || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)}
               >
                 {isSolving ? 'Solving…' : 'Solve'}
               </button>
-              <button className={buttonClass} onClick={resetCube} disabled={isSolving}>
+              <button className={buttonClass} onClick={resetCube} disabled={isBusy}>
                 Reset cube
               </button>
             </div>
           </div>
           {blockedOnThisDevice && (
             <p className="mt-2 rounded border border-amber-500/50 bg-amber-950/30 px-3 py-2 text-xs leading-5 text-amber-200">
-              Level {level} runs on desktop only. A solve scrambles 8,000 cells, runs for minutes, and replays
-              hundreds of thousands of moves — a phone stalls on it rather than finishing it. Open the lab on a
+              Level {level} runs on desktop only. A solve processes {(20 ** level).toLocaleString()} cells and can
+              produce millions of moves. Open the lab on a
               computer (precise pointer, window at least 1024px wide) to scramble, solve, and watch the phase
               breakdown. Committed CLI results below can still be imported and read on this device.
             </p>
@@ -412,14 +436,21 @@ export default function App() {
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
           <section className="rounded-lg border border-slate-700 bg-slate-900/60 p-3">
             <div className="relative h-[520px] overflow-hidden rounded-lg border border-slate-800">
-              <CubeView
+              {level >= 4 ? (
+                <div className="flex h-full flex-col items-center justify-center gap-3 px-8 text-center">
+                  <p className="text-lg text-slate-100">Level 4 research solver</p>
+                  <p className="text-sm text-slate-400">160,000 cells · 3,050 position orbits · full legal move set</p>
+                  <p className="max-w-lg text-sm text-slate-400">Scramble and solve on a desktop, then inspect the phase log and numerical results. The Level 4 lab displays results without a 3D scene or move-by-move playback.</p>
+                  {solveResult && <p className="text-sm text-cyan-300">{solveResult.success ? 'Exactly solved' : 'Solve failed'} · {solveResult.move_count.toLocaleString()} moves</p>}
+                </div>
+              ) : <CubeView
                 puzzle={basePuzzle}
                 cubies={displayedCubies}
                 activeMove={activeMove}
                 progressRef={playback.progressRef}
                 tick={playback.tick}
-              />
-              <div className="pointer-events-none absolute left-3 top-3 rounded bg-slate-950/80 px-3 py-2 font-mono text-xs text-slate-200">
+              />}
+              {level < 4 && <div className="pointer-events-none absolute left-3 top-3 rounded bg-slate-950/80 px-3 py-2 font-mono text-xs text-slate-200">
                 <p>
                   Move {playback.index}/{playback.moves.length}
                   {playback.playing ? ' · playing' : playback.moves.length > 0 ? ' · paused' : ''}
@@ -429,10 +460,10 @@ export default function App() {
                     {playback.playing ? 'animating' : 'next'}: {nextMove.notation}
                   </p>
                 )}
-              </div>
+              </div>}
             </div>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2">
+            {level < 4 && <div className="mt-3 flex flex-wrap items-center gap-2">
               <button className={buttonClass} title="Reset to scrambled state (Home)" onClick={playback.stop}>
                 ⏮
               </button>
@@ -497,13 +528,18 @@ export default function App() {
                 className="ml-auto h-1.5 w-40 accent-cyan-400 bg-slate-850 rounded-lg appearance-none cursor-pointer disabled:cursor-not-allowed"
                 aria-label="Playback progress"
               />
-            </div>
+            </div>}
           </section>
 
           <section className="flex max-h-[620px] flex-col gap-3">
             <div className="min-h-0 flex-1 overflow-y-auto rounded-lg border border-slate-700 bg-slate-900/60 p-3">
               <h2 className="mb-2 text-sm font-semibold text-slate-100">Solution moves</h2>
-              {playback.moves.length === 0 ? (
+              {level >= 4 ? (
+                <p className="text-xs text-slate-400">
+                  {solveResult?.success ? `Verified solution: ${solveResult.move_count.toLocaleString()} moves. ` : 'Solve to obtain a verified move count. '}
+                  Level 4 displays the result without browser playback. The full move list is available through the headless solver API.
+                </p>
+              ) : playback.moves.length === 0 ? (
                 <p className="text-xs text-slate-500">
                   No solution loaded. Scramble, then Solve — successful runs replay here move by move.
                 </p>
@@ -596,7 +632,7 @@ export default function App() {
               <button
                 className={buttonClass}
                 onClick={() => void runLiveBenchmark()}
-                disabled={!algorithm || isRunning || blockedOnThisDevice}
+                disabled={!algorithm || isBusy || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)}
               >
                 {isRunning ? 'Running…' : `Run benchmark (${seedCount} seeds)`}
               </button>

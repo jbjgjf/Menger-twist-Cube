@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "level": 3,
+  "cells": 8000,
+  "candidateTargets": 5925,
+  "legalAtoms": 3591,
+  "orbits": 164,
+  "sizes": {
+    "8": 4,
+    "24": 112,
+    "96": 45,
+    "192": 1,
+    "384": 2
+  },
+  "freedom": {
+    "1": {
+      "orbits": 148,
+      "cells": 7224
+    },
+    "3": {
+      "orbits": 4,
+      "cells": 32
+    },
+    "4": {
+      "orbits": 11,
+      "cells": 552
+    },
+    "8": {
+      "orbits": 1,
+      "cells": 192
+    }
+  },
+  "parityRank": 15,
+  "families": {
+    "frame-s1": {
+      "atoms": 243,
+      "selectedEntries": 72000
+    },
+    "frame-s3": {
+      "atoms": 81,
+      "selectedEntries": 72000
+    },
+    "frame-s9": {
+      "atoms": 27,
+      "selectedEntries": 72000
+    },
+    "ext-d1": {
+      "atoms": 36,
+      "selectedEntries": 14400
+    },
+    "ext-d1.5": {
+      "atoms": 108,
+      "selectedEntries": 14400
+    },
+    "ext-d2": {
+      "atoms": 216,
+      "selectedEntries": 4320
+    },
+    "ext-d2.5": {
+      "atoms": 648,
+      "selectedEntries": 4320
+    },
+    "ext-d3": {
+      "atoms": 2232,
+      "selectedEntries": 2232
+    }
+  },
+  "candidateLog10AlternatingProduct": 11394.83401935127,
+  "buildMs": 200.56095900000003,
+  "memory": {
+    "rss": 202162176,
+    "heapTotal": 105873408,
+    "heapUsed": 47602912,
+    "external": 2701032,
+    "arrayBuffers": 188635
+  }
+}

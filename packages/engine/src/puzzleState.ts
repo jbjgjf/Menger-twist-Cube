@@ -6,6 +6,8 @@ import { createTurnTargetMap, generateTurnTargets } from './turnTargets';
 import { generateMoveSystemTurnTargets, isMoveSystemAvailable, type MoveSystem } from './moveSystems';
 
 export interface PuzzleStateOptions extends LevelRenderOptions {
+  /** Build the full mechanics state for headless research, independently of rendering policy. */
+  materializeCubies?: boolean;
   /** Opt-in generator set; defaults to the shipped `standard` system. */
   moveSystem?: MoveSystem;
 }
@@ -27,12 +29,13 @@ export const createMengerPuzzleState = (
   }
   const interactionTier = interactionTierForLevel(level, options);
   const playable = isPlayableLevel(level, options);
-  const cubies = playable ? generateMenger(level) : [];
+  const materialized = options.materializeCubies ?? playable;
+  const cubies = materialized ? generateMenger(level) : [];
   const frames = generateRotationFrames(level);
   const frameById = createFrameMap(frames);
   const turnTargets = [
-    ...generateTurnTargets(level, frames, playable),
-    ...(playable ? generateMoveSystemTurnTargets(moveSystem, level) : []),
+    ...generateTurnTargets(level, frames, materialized),
+    ...(materialized ? generateMoveSystemTurnTargets(moveSystem, level) : []),
   ];
   const turnTargetById = createTurnTargetMap(turnTargets);
 

@@ -1,0 +1,74 @@
+{
+  "formula": "R_n = (100*20^(n-1) + 272*8^(n-1) + 648*3^(n-1))/85",
+  "atomFormula": "M_n = 3*(9*(3^n-1)/2 + R_n + 4*sum_(d=1)^(n-1) R_d)",
+  "directBoundaryEnumerationThroughLevel": 5,
+  "engineCensusAgreementThroughLevel": 4,
+  "theorem": "G_n = Omega(20^n/n), from the independent subgroup C4^(R_n) and the exact move alphabet M_n",
+  "rows": [
+    {
+      "level": 1,
+      "cells": "20",
+      "independentCellRollTargets": "12",
+      "legalAtoms": "63",
+      "rollOnlyGodsLowerBound": 5
+    },
+    {
+      "level": 2,
+      "cells": "400",
+      "independentCellRollTargets": "72",
+      "legalAtoms": "468",
+      "rollOnlyGodsLowerBound": 17
+    },
+    {
+      "level": 3,
+      "cells": "8000",
+      "independentCellRollTargets": "744",
+      "legalAtoms": "3591",
+      "rollOnlyGodsLowerBound": 126
+    },
+    {
+      "level": 4,
+      "cells": "160000",
+      "independentCellRollTargets": "11256",
+      "legalAtoms": "44784",
+      "rollOnlyGodsLowerBound": 1458
+    },
+    {
+      "level": 5,
+      "cells": "3200000",
+      "independentCellRollTargets": "201960",
+      "legalAtoms": "754155",
+      "rollOnlyGodsLowerBound": 20688
+    },
+    {
+      "level": 6,
+      "cells": "64000000",
+      "independentCellRollTargets": "3871416",
+      "legalAtoms": "14192604"
+    },
+    {
+      "level": 7,
+      "cells": "1280000000",
+      "independentCellRollTargets": "76138536",
+      "legalAtoms": "277470639"
+    },
+    {
+      "level": 8,
+      "cells": "25600000000",
+      "independentCellRollTargets": "1512609912",
+      "legalAtoms": "5500606248"
+    },
+    {
+      "level": 9,
+      "cells": "512000000000",
+      "independentCellRollTargets": "30171384168",
+      "legalAtoms": "109628425107"
+    },
+    {
+      "level": 10,
+      "cells": "10240000000000",
+      "independentCellRollTargets": "602782587960",
+      "legalAtoms": "2189519177940"
+    }
+  ]
+}

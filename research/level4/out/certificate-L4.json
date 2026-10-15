@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "level": 4,
+  "cells": 160000,
+  "legalAtoms": 44784,
+  "independentAlternatingOrbits": 3050,
+  "totalOrbits": 3050,
+  "missingOrbits": [],
+  "parityRank": 66,
+  "orientationInvariantChecks": 4698,
+  "independentRollCells": 11256,
+  "pairTwisters": 9,
+  "pairTwistersRequired": 9,
+  "completeGroupOrderCertificate": true,
+  "wordDataSha256": "c1a9710097b21cd57c78fa5a74729fe657b610263b994265d22833d774102664",
+  "log10PositionLowerOrder": 237902.18879744085,
+  "log10OrientationLowerOrder": 7034.396059326119,
+  "log10GroupLowerOrder": 244936.58485676695,
+  "groupLowerOrderDigits": 244937,
+  "groupLowerOrderSha256": "a89b92dadae96af75ac8c01ab8375efe9d8b5b6c4cf73ba619292b3448c3cf91",
+  "godsNumberLowerBound": 52662
+}

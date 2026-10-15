@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "level": 2,
+  "cells": 400,
+  "candidateTargets": 324,
+  "legalAtoms": 468,
+  "orbits": 11,
+  "sizes": {
+    "8": 2,
+    "24": 6,
+    "48": 1,
+    "96": 2
+  },
+  "freedom": {
+    "1": {
+      "orbits": 7,
+      "cells": 312
+    },
+    "3": {
+      "orbits": 2,
+      "cells": 16
+    },
+    "4": {
+      "orbits": 1,
+      "cells": 24
+    },
+    "8": {
+      "orbits": 1,
+      "cells": 48
+    }
+  },
+  "parityRank": 5,
+  "families": {
+    "frame-s1": {
+      "atoms": 81,
+      "selectedEntries": 3600
+    },
+    "frame-s3": {
+      "atoms": 27,
+      "selectedEntries": 3600
+    },
+    "ext-d1": {
+      "atoms": 36,
+      "selectedEntries": 720
+    },
+    "ext-d1.5": {
+      "atoms": 108,
+      "selectedEntries": 720
+    },
+    "ext-d2": {
+      "atoms": 216,
+      "selectedEntries": 216
+    }
+  },
+  "candidateLog10AlternatingProduct": 509.74259520397607,
+  "buildMs": 15.90333299999999,
+  "memory": {
+    "rss": 119111680,
+    "heapTotal": 23674880,
+    "heapUsed": 18120608,
+    "external": 2556852,
+    "arrayBuffers": 44455
+  }
+}
