@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { GizmoHelper, GizmoViewport, TrackballControls } from '@react-three/drei';
+import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import {
   BufferGeometry,
   CanvasTexture,
@@ -174,8 +174,9 @@ export default function OctahedronScene({ puzzle, state, animation, highlighted,
   return (
     <Canvas className="touch-none" shadows camera={{ position: [6, 6, 6], fov: 50, near: 0.1, far: 100 }}>
       <color attach="background" args={['#070b14']} />
-      <fog attach="fog" args={['#070b14', 12, 28]} />
-      <ambientLight intensity={0.85} />
+      <fog attach="fog" args={['#070b14', 32, 75]} />
+      <ambientLight intensity={0.9} />
+      <hemisphereLight args={['#38bdf8', '#070b14', 0.35]} />
       <directionalLight castShadow position={[8, 10, 6]} intensity={1.8} shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
       <directionalLight position={[-8, -2, -6]} intensity={0.6} />
 
@@ -198,7 +199,16 @@ export default function OctahedronScene({ puzzle, state, animation, highlighted,
         <shadowMaterial opacity={0.2} />
       </mesh>
 
-      <TrackballControls makeDefault rotateSpeed={2.5} panSpeed={0.8} zoomSpeed={1.2} />
+      <OrbitControls
+        makeDefault
+        enableDamping
+        dampingFactor={0.06}
+        enablePan={false}
+        rotateSpeed={0.8}
+        zoomSpeed={0.8}
+        minDistance={3.2}
+        maxDistance={22}
+      />
       <CameraReset request={cameraRequest} />
       <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
         <GizmoViewport axisColors={['#ef4444', '#38bdf8', '#4ade80']} labelColor="white" />
