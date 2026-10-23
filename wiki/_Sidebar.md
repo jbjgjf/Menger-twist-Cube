@@ -1,4 +1,4 @@
-## Level 2・3 構成的解法
+## Level 2・3・4 構成的解法
 
 - [概要と結論](Home)
 - [1. 数学的準備](Mathematical-Preliminaries)
@@ -6,6 +6,7 @@
 - [3. 証明の設計](Proof-Architecture)
 - [4. Level 2](Level-2-Complete-Answer)
 - [5. Level 3](Level-3-Complete-Answer)
+- [6. Level 4と一般n](Level-4-Complete-Answer)
 - [付録A：164軌道](Level-3-Orbit-Catalogue)
 - [付録B：検証と再現](Verification-and-Reproducibility)
 - 論文形式の証明：リポジトリの `docs/proofs/`

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { GizmoHelper, GizmoViewport, TrackballControls } from '@react-three/drei';
+import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import { Quaternion, Vector3 } from 'three';
 import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
@@ -48,7 +48,15 @@ const targetMap: Record<CameraPreset, Vector3> = {
   left: new Vector3(-8, 0, 0),
 };
 
-function CameraRig({ cameraPreset, cameraPresetRequest }: { cameraPreset: CameraPreset; cameraPresetRequest: number }) {
+function CameraRig({
+  cameraPreset,
+  cameraPresetRequest,
+  controlsRef,
+}: {
+  cameraPreset: CameraPreset;
+  cameraPresetRequest: number;
+  controlsRef?: React.RefObject<any>;
+}) {
   const { camera } = useThree();
   const goal = useMemo(() => targetMap[cameraPreset].clone(), [cameraPreset]);
   // Camera presets are interpolated along an arc (constant-ish distance from the
@@ -87,9 +95,18 @@ function CameraRig({ cameraPreset, cameraPresetRequest }: { cameraPreset: Camera
     camera.position.copy(startDirection.current).applyQuaternion(rotation).multiplyScalar(radius);
     camera.lookAt(0, 0, 0);
 
+    if (controlsRef?.current) {
+      controlsRef.current.target.set(0, 0, 0);
+      controlsRef.current.update();
+    }
+
     if (1 - t < 0.0015) {
       camera.position.copy(goal);
       camera.lookAt(0, 0, 0);
+      if (controlsRef?.current) {
+        controlsRef.current.target.set(0, 0, 0);
+        controlsRef.current.update();
+      }
       isMoving.current = false;
     }
   });
@@ -121,9 +138,10 @@ export default function Scene(props: SceneProps) {
   return (
     <Canvas className="touch-none" shadows camera={{ position: [6, 6, 6], fov: 50, near: 0.1, far: 100 }}>
       <color attach="background" args={['#070b14']} />
-      <fog attach="fog" args={['#070b14', 12, 28]} />
+      <fog attach="fog" args={['#070b14', 32, 75]} />
 
-      <ambientLight intensity={0.85} />
+      <ambientLight intensity={0.9} />
+      <hemisphereLight args={['#38bdf8', '#070b14', 0.35]} />
       <directionalLight
         castShadow
         position={[8, 10, 6]}
@@ -181,16 +199,23 @@ export default function Scene(props: SceneProps) {
         <shadowMaterial opacity={0.2} />
       </mesh>
 
-      <TrackballControls
-        ref={controlsRef as any}
+      <OrbitControls
+        ref={controlsRef}
         makeDefault
         enabled={!twistActive}
-        rotateSpeed={2.5}
-        panSpeed={0.8}
-        zoomSpeed={1.2}
-        noPan={false}
+        enableDamping
+        dampingFactor={0.06}
+        enablePan={false}
+        rotateSpeed={0.8}
+        zoomSpeed={0.8}
+        minDistance={3.2}
+        maxDistance={22}
       />
-      <CameraRig cameraPreset={props.cameraPreset} cameraPresetRequest={props.cameraPresetRequest} />
+      <CameraRig
+        cameraPreset={props.cameraPreset}
+        cameraPresetRequest={props.cameraPresetRequest}
+        controlsRef={controlsRef}
+      />
 
       <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
         <GizmoViewport axisColors={['#ef4444', '#38bdf8', '#4ade80']} labelColor="white" />

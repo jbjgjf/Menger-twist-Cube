@@ -4,6 +4,8 @@ import {
   mengerPuzzleModel,
   onSolverDebug,
   runBenchmark,
+  createSeededRng,
+  scrambleState,
 } from '@menger/solver-core';
 import type { Cubie } from '@menger/engine';
 import type { SolverWorkerRequest, SolverWorkerResponse } from './solverWorkerProtocol';
@@ -13,10 +15,9 @@ const maxTransferredPlaybackMoves = 10_000;
 
 onSolverDebug((event) => send({ kind: 'debug', event }));
 
-const restoreCubies = (level: number, serialized: Extract<SolverWorkerRequest, { kind: 'solve' }>['cubies']): Cubie[] => {
-  const canonical = mengerPuzzleModel.createState(level);
+const restoreCubies = (canonical: Cubie[], serialized: Extract<SolverWorkerRequest, { kind: 'solve' }>['cubies']): Cubie[] => {
   const byId = new Map(serialized.map((cubie) => [cubie.id, cubie]));
-  return canonical.cubies.map((cubie) => {
+  return canonical.map((cubie) => {
     const saved = byId.get(cubie.id);
     if (!saved) throw new Error(`Worker input is missing cubie ${cubie.id}.`);
     return {
@@ -34,6 +35,17 @@ self.onmessage = (event: MessageEvent<SolverWorkerRequest>): void => {
       const algorithm = getAlgorithm(request.algorithmId);
       if (!algorithm) throw new Error(`Unknown solver algorithm: ${request.algorithmId}`);
 
+      if (request.kind === 'scramble') {
+        const canonical = mengerPuzzleModel.createState(request.level);
+        const pool = algorithm.scrambleMovePool ? (state: typeof canonical) => algorithm.scrambleMovePool!(mengerPuzzleModel, state) : undefined;
+        const { state, moves } = scrambleState(mengerPuzzleModel, canonical, createSeededRng(request.seed), request.length, pool);
+        send({ kind: 'scramble-result', result: { moveCount: moves.length, cubies: state.cubies.map((c) => ({
+          id: c.id, currentPosition: [...c.currentPosition],
+          orientation: [c.orientation.x, c.orientation.y, c.orientation.z, c.orientation.w],
+        })) } });
+        return;
+      }
+
       if (request.kind === 'benchmark') {
         const result = await runBenchmark(mengerPuzzleModel, algorithm, request.spec);
         send({ kind: 'benchmark-result', result });
@@ -43,14 +55,14 @@ self.onmessage = (event: MessageEvent<SolverWorkerRequest>): void => {
       const canonical = mengerPuzzleModel.createState(request.level);
       const result = await algorithm.solve(mengerPuzzleModel, {
         ...canonical,
-        cubies: restoreCubies(request.level, request.cubies),
+        cubies: restoreCubies(canonical.cubies, request.cubies),
       });
       // Hundreds of thousands of verbose SolverMove objects are useful to CLI
       // consumers but not to the Lab, which intentionally skips playback above
       // this limit. Avoid cloning tens of megabytes back to the UI thread.
       send({
         kind: 'solve-result',
-        result: result.move_count > maxTransferredPlaybackMoves
+        result: request.level >= 4 || result.move_count > maxTransferredPlaybackMoves
           ? { ...result, output_moves: [] }
           : result,
       });

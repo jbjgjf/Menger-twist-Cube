@@ -22,6 +22,10 @@
     "test:l2": "node --import tsx --test research/level2-completeness/test/*.test.ts",
     "prove:l3": "node --import tsx research/level3-completeness/certify.ts",
     "test:l3": "node --import tsx --test research/level3-completeness/test/*.test.ts",
+    "prove:l4": "node --import tsx research/level4/certify.ts && node --import tsx research/level4/certify-transport.ts",
+    "verify:l4": "node --import tsx research/level4/validate.ts && node --import tsx research/level4/audit-atoms.ts && node --import tsx research/level4/level-n-formula.ts",
+    "test:l4": "node --import tsx --test research/level4/test/*.test.ts",
+    "verify:l4:synthetic": "node --import tsx research/level4/synthetic.ts",
     "bench": "npm run bench --workspace=@menger/solver-core --"
   },
   "devDependencies": {

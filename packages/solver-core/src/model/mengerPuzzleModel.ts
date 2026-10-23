@@ -90,7 +90,7 @@ const isMoveLegal = (state: MengerPuzzleState, move: SolverMove): boolean => {
 export const createMengerPuzzleModel = (moveSystem: MoveSystem): PuzzleModel<MengerPuzzleState, SolverMove> => ({
   id: moveSystem === 'standard' ? 'menger-cube' : `menger-cube+${moveSystem}`,
   levelsSupported: [1, 2, 3, 4, 5],
-  createState: (level) => createMengerPuzzleState(level, { moveSystem }),
+  createState: (level) => createMengerPuzzleState(level, { moveSystem, materializeCubies: true }),
   cloneState: (state) => ({ ...state, cubies: cloneCubies(state.cubies) }),
   legalMoves: (state) => [...frameLegalMoves(state), ...extensionLegalMoves(state)],
   isMoveLegal,

@@ -1,0 +1,32 @@
+{
+  "modelId": "menger-cube",
+  "algorithmId": "level4-slice-reduction",
+  "level": 4,
+  "scrambleLength": 5,
+  "generatedAt": "2026-10-15T07:52:11.018Z",
+  "records": [
+    {
+      "id": "1792050731017-level-4-certified-orbit-reduction-16137321-cc7gra",
+      "timestamp": "2026-10-15T07:52:11.017Z",
+      "level": 4,
+      "algorithm": "level-4-certified-orbit-reduction@0.1.0",
+      "algorithm_id": "level4-slice-reduction",
+      "model_id": "menger-cube",
+      "scramble_seed": "1",
+      "runtime_ms": 212165.755458,
+      "move_count": 16137321,
+      "success": true,
+      "complexity_estimate": "3,050 independent orbit reductions using exact ordered-pair setup transport, 66-bit parity normalization, certified joint orientation completion, and sparse raw-atom replay",
+      "notes": "Exactly solved all 160,000 cells by sparse integer replay. 23688896 setup-search nodes; 3175 distinct output atoms checked with the supplied model. Solutions are not optimal.",
+      "determinism": "deterministic",
+      "explainability": "structured",
+      "scalability": "Supports level(s): 4."
+    }
+  ],
+  "summary": {
+    "runs": 1,
+    "successRate": 1,
+    "averageRuntime": 212165.755458,
+    "averageMoveCount": 16137321
+  }
+}

@@ -1,5 +1,10 @@
 # Level 3 solver completion audit and God's-number bounds
 
+**2026-10-15 update:** the [Level 4 results](level4-results.md) now extend the
+certified analysis to 160,000 cells, with `52,662 <= G4 <= 23,645,070` and an
+unconditional general-level lower bound `Omega(20^n/n)`. The sections below
+record the earlier Level 3 audit.
+
 Date: 2026-08-30. This is the independent completion audit of
 [`level3-slice-reduction`](../algorithms/level3-slice-reduction-solver.md), made
 after the first production port reported success on two seeded scrambles. It

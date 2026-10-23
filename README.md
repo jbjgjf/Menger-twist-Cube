@@ -45,6 +45,19 @@ Runs the registered algorithm against `count` seeded scrambles and writes a JSON
 
 Load any of those JSON files into `apps/lab` ("Compare against a committed CLI result") to see them alongside a live run.
 
+Level 4 now has a full standard-generator solver:
+
+```bash
+npm run bench -- --algorithm=level4-slice-reduction --level=4 --seeds=1 --length=5
+npm run prove:l4
+```
+
+Its 3,050 independent orbit certificates determine the exact state-space order
+(`log10 |G4| = 244936.58485676695…`) and prove **52,662 ≤ G4 ≤ 23,645,070**
+in the target-turn metric. A general-level legal-move formula also gives
+`G_n = Ω(20^n/n)`. See the [proof](docs/proofs/level4-completeness.md) and
+[solver description](docs/algorithms/level4-slice-reduction-solver.md).
+
 ## Repository layout
 
 ```text
@@ -127,6 +140,12 @@ All solver interaction lives in `apps/lab` (the Play app is manual play only). *
 only**: a solve scrambles 8,000 cells, runs for minutes, and replays hundreds of thousands of moves, so on a
 phone the scramble/solve/benchmark controls are disabled rather than left to stall the tab. Levels 1–2 and
 importing committed CLI results work on every device. The lab scrambles a cube with a seeded, reproducible scramble, runs any registered algorithm, and replays the solution move by move on a centered 3D cube with play / pause / stop / step / jump controls and a 0.1–1.0s per-move speed slider. A debug log streams the solver's phase events (calibration, cubing attempts, fallbacks) live via `onSolverDebug`, solve records persist to `localStorage`, and CLI-generated benchmark JSON files can be imported for comparison.
+
+**Level 4 is a desktop results view:** its 160,000-cell scramble, solve and
+benchmark run in workers. It displays numerical results and phase logs without
+a Lab 3D scene or per-move playback. Node runs can use roughly 1–2 GB and emit
+millions of moves. Headless puzzle states now materialize cells independently
+of the Play app's rendering policy.
 
 ## Documentation
 

@@ -61,3 +61,10 @@ export const benchmarkInWorker = (
   'benchmark-result',
   onDebug,
 );
+
+export const scrambleInWorker = (
+  algorithmId: string, level: number, seed: number, length: number,
+  onDebug?: (message: string) => void,
+): Promise<{ cubies: SerializedCubieState[]; moveCount: number }> => runWorker(
+  { kind: 'scramble', algorithmId, level, seed, length }, 'scramble-result', onDebug,
+);
