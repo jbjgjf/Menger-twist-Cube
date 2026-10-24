@@ -1,3 +1,4 @@
+import { level2BlockRestorationAlgorithm } from './level2BlockRestorationSolver';
 import { registerAlgorithm } from '../algorithm/registry';
 import { level1QuotientAlgorithm } from './level1QuotientSolver';
 import { level2BlockQuotientAlgorithm } from './level2BlockQuotientSolver';
@@ -19,3 +20,9 @@ registerAlgorithm(level2CertifiedAlgorithm);
 registerAlgorithm(level3BlockQuotientAlgorithm);
 registerAlgorithm(level3SliceReductionAlgorithm);
 registerAlgorithm(level4SliceReductionAlgorithm);
+
+registerAlgorithm(level2BlockRestorationAlgorithm);
+
+import { level3BlockRestorationAlgorithm, level4BlockRestorationAlgorithm } from './higherBlockRestorationSolver';
+registerAlgorithm(level3BlockRestorationAlgorithm);
+registerAlgorithm(level4BlockRestorationAlgorithm);

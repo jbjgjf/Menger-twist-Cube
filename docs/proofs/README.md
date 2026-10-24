@@ -8,6 +8,7 @@
 | [`level3-completeness.tex`](level3-completeness.tex) | Level 3 の到達可能状態の決定（位数、ねじれ和と反転偶奇の不変量）と、解法 `level3-slice-reduction` の構成的可解性 | 証明済み（標準系のみ。2026-10-10 に向きと位置の補題を改訂） |
 | [`preamble.tex`](preamble.tex) | 共通のプリアンブル | — |
 | [`level4-completeness.md`](level4-completeness.md) | Level4の独立交代群、正確な群位数、完全解法、God's number の上下界、一般nの合法手数と直径下界 | 計算証明と構成的証明（標準系） |
+| [`block-restoration.md`](block-restoration.md) | 一般nのブロック判定・部分群・条件付き還元、Level3/4の復元距離下界 | 解析的証明＋既存位置群証明に依存する整数計算 |
 
 ## ビルド
 

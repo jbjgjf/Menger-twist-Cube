@@ -281,3 +281,12 @@ export const orbitAlphabet = (group: SparseGroup, orbit: number): SparseAtom[] =
   }
   return out;
 };
+
+// Shared by restoration and certified Level4 reduction to avoid duplicating its
+// multi-million-entry atom maps in the same worker.
+const sharedGroups = new Map<number, SparseGroup>();
+export const getCachedSparseGroup = (level: number): SparseGroup => {
+  let group = sharedGroups.get(level);
+  if (!group) { group = createSparseGroup(level); sharedGroups.set(level, group); }
+  return group;
+};

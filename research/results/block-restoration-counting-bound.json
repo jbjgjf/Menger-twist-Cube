@@ -1,0 +1,74 @@
+[
+  {
+    "level": 3,
+    "rank": 15,
+    "atoms": 3591,
+    "orbits": [
+      [
+        8,
+        4
+      ],
+      [
+        24,
+        112
+      ],
+      [
+        96,
+        45
+      ],
+      [
+        192,
+        1
+      ],
+      [
+        384,
+        2
+      ]
+    ],
+    "cells": 8000,
+    "blocks": 400,
+    "positionalOrderDigits": 11400,
+    "ambientRigidOrderDigits": 1421,
+    "cosetsLowerBoundDigits": 9979,
+    "restorationDiameterLowerBound": 2807,
+    "statement": "Some reachable Level 3 states require at least 2807 target turns to restore positional leaf-block rigidity, even with orientations ignored."
+  },
+  {
+    "level": 4,
+    "rank": 66,
+    "atoms": 44784,
+    "orbits": [
+      [
+        8,
+        8
+      ],
+      [
+        24,
+        2124
+      ],
+      [
+        96,
+        855
+      ],
+      [
+        384,
+        60
+      ],
+      [
+        768,
+        1
+      ],
+      [
+        1536,
+        2
+      ]
+    ],
+    "cells": 160000,
+    "blocks": 8000,
+    "positionalOrderDigits": 237903,
+    "ambientRigidOrderDigits": 38795,
+    "cosetsLowerBoundDigits": 199108,
+    "restorationDiameterLowerBound": 42809,
+    "statement": "Some reachable Level 4 states require at least 42809 target turns to restore positional leaf-block rigidity, even with orientations ignored."
+  }
+]

@@ -26,7 +26,9 @@
     "verify:l4": "node --import tsx research/level4/validate.ts && node --import tsx research/level4/audit-atoms.ts && node --import tsx research/level4/level-n-formula.ts",
     "test:l4": "node --import tsx --test research/level4/test/*.test.ts",
     "verify:l4:synthetic": "node --import tsx research/level4/synthetic.ts",
-    "bench": "npm run bench --workspace=@menger/solver-core --"
+    "bench": "npm run bench --workspace=@menger/solver-core --",
+    "test:block-restoration": "node --import tsx --test research/block-restoration/*.test.ts",
+    "prove:block-restoration": "node --import tsx research/block-restoration/counting-bound.ts && node --import tsx research/block-restoration/census.ts"
   },
   "devDependencies": {
     "@types/node": "^25.8.0",

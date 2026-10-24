@@ -1,0 +1,75 @@
+{
+  "note": "Three designed coarse+one/two fine+roll states, not random group samples. Full engine endpoints checked. First solve includes lower-level cold caches.",
+  "records": [
+    {
+      "seed": 0,
+      "level": 3,
+      "inputMoves": [
+        "f:Y_s9_g0:90",
+        "f:X_-13:90",
+        "e:extension:d3:p000.000:s001:90"
+      ],
+      "outputMoves": 3,
+      "ms": 1135.448541,
+      "metrics": {
+        "atoms": 1,
+        "restored": true,
+        "initialDefect": 512,
+        "bestDefect": 0,
+        "expanded": 2,
+        "blockEvaluations": 128,
+        "quotient": true,
+        "fallback": false,
+        "selectedEntries": 3713
+      },
+      "fullEngineVerified": true
+    },
+    {
+      "seed": 1,
+      "level": 3,
+      "inputMoves": [
+        "f:Y_s9_g1:90",
+        "f:X_-12:90",
+        "e:extension:d3:p000.000:s001:90"
+      ],
+      "outputMoves": 18,
+      "ms": 43.80658399999993,
+      "metrics": {
+        "atoms": 1,
+        "restored": true,
+        "initialDefect": 256,
+        "bestDefect": 0,
+        "expanded": 5,
+        "blockEvaluations": 320,
+        "quotient": true,
+        "fallback": false,
+        "selectedEntries": 49857
+      },
+      "fullEngineVerified": true
+    },
+    {
+      "seed": 2,
+      "level": 3,
+      "inputMoves": [
+        "f:Y_s9_g2:90",
+        "f:X_-11:90",
+        "f:Y_-13:90",
+        "e:extension:d3:p000.000:s001:90"
+      ],
+      "outputMoves": 4,
+      "ms": 102.90420799999993,
+      "metrics": {
+        "atoms": 2,
+        "restored": true,
+        "initialDefect": 989,
+        "bestDefect": 0,
+        "expanded": 2723,
+        "blockEvaluations": 47834,
+        "quotient": true,
+        "fallback": false,
+        "selectedEntries": 4225
+      },
+      "fullEngineVerified": true
+    }
+  ]
+}

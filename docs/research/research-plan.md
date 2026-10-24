@@ -144,3 +144,9 @@ known?" instantly in judging.
 - [ ] Review ISEF rules: continuation-project rules, required forms. No human subjects
       → paperwork stays light.
 - [ ] Decide category (Mathematics vs. Systems Software) once results shape is clear.
+
+## Block restoration experiment (2026-10-24)
+
+[Level2 block restoration and word shortening](block-restoration.md) records the
+implemented bounded state-based search, certified completion, commuting cancellation,
+paired measurements, and the remaining Level3/4 and general-level research questions.

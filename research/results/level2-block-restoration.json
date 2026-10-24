@@ -1,0 +1,382 @@
+{
+  "preservingAtoms": 279,
+  "legalAtoms": 468,
+  "note": "Sequential seeded comparison; first runs include cold caches. D time is optimization only; hybrid includes full engine replay. Not uniform random states.",
+  "records": [
+    {
+      "family": "rigid",
+      "seed": 1,
+      "search": {
+        "moves": 0,
+        "restored": true,
+        "initialDefect": 0,
+        "finalDefect": 0,
+        "expanded": 0,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 3306,
+        "ms": 1593.3540000000003
+      },
+      "dOnly": {
+        "moves": 3241,
+        "optimizationMs": 2.7982499999998254
+      },
+      "hybrid": {
+        "moves": 18,
+        "ms": 144.78862500000014,
+        "phase": "{\"moves\":0,\"restored\":true,\"initialDefect\":0,\"finalDefect\":0,\"expanded\":0,\"multiRegionMoves\":0,\"quotient\":true,\"beforeShortening\":18}"
+      }
+    },
+    {
+      "family": "rigid",
+      "seed": 2,
+      "search": {
+        "moves": 0,
+        "restored": true,
+        "initialDefect": 0,
+        "finalDefect": 0,
+        "expanded": 0,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 4155,
+        "ms": 57.107916999999816
+      },
+      "dOnly": {
+        "moves": 4056,
+        "optimizationMs": 2.954957999999806
+      },
+      "hybrid": {
+        "moves": 14,
+        "ms": 6.045458000000053,
+        "phase": "{\"moves\":0,\"restored\":true,\"initialDefect\":0,\"finalDefect\":0,\"expanded\":0,\"multiRegionMoves\":0,\"quotient\":true,\"beforeShortening\":14}"
+      }
+    },
+    {
+      "family": "rigid",
+      "seed": 3,
+      "search": {
+        "moves": 0,
+        "restored": true,
+        "initialDefect": 0,
+        "finalDefect": 0,
+        "expanded": 0,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 3291,
+        "ms": 42.33437499999991
+      },
+      "dOnly": {
+        "moves": 3246,
+        "optimizationMs": 2.5117919999997866
+      },
+      "hybrid": {
+        "moves": 7,
+        "ms": 5.221000000000004,
+        "phase": "{\"moves\":0,\"restored\":true,\"initialDefect\":0,\"finalDefect\":0,\"expanded\":0,\"multiRegionMoves\":0,\"quotient\":true,\"beforeShortening\":7}"
+      }
+    },
+    {
+      "family": "one-tear",
+      "seed": 1,
+      "search": {
+        "moves": 1,
+        "restored": true,
+        "initialDefect": 32,
+        "finalDefect": 0,
+        "expanded": 59,
+        "multiRegionMoves": 1
+      },
+      "baseline": {
+        "moves": 3331,
+        "ms": 38.01999999999998
+      },
+      "dOnly": {
+        "moves": 3253,
+        "optimizationMs": 2.400333000000046
+      },
+      "hybrid": {
+        "moves": 19,
+        "ms": 15.743834000000334,
+        "phase": "{\"moves\":1,\"restored\":true,\"initialDefect\":32,\"finalDefect\":0,\"expanded\":59,\"multiRegionMoves\":1,\"quotient\":true,\"beforeShortening\":19}"
+      }
+    },
+    {
+      "family": "one-tear",
+      "seed": 2,
+      "search": {
+        "moves": 1,
+        "restored": true,
+        "initialDefect": 64,
+        "finalDefect": 0,
+        "expanded": 62,
+        "multiRegionMoves": 1
+      },
+      "baseline": {
+        "moves": 3789,
+        "ms": 74.95625000000018
+      },
+      "dOnly": {
+        "moves": 3691,
+        "optimizationMs": 2.298583000000235
+      },
+      "hybrid": {
+        "moves": 15,
+        "ms": 9.116542000000209,
+        "phase": "{\"moves\":1,\"restored\":true,\"initialDefect\":64,\"finalDefect\":0,\"expanded\":62,\"multiRegionMoves\":1,\"quotient\":true,\"beforeShortening\":15}"
+      }
+    },
+    {
+      "family": "one-tear",
+      "seed": 3,
+      "search": {
+        "moves": 1,
+        "restored": true,
+        "initialDefect": 32,
+        "finalDefect": 0,
+        "expanded": 65,
+        "multiRegionMoves": 1
+      },
+      "baseline": {
+        "moves": 3213,
+        "ms": 41.62304099999983
+      },
+      "dOnly": {
+        "moves": 3166,
+        "optimizationMs": 1.8689580000000205
+      },
+      "hybrid": {
+        "moves": 8,
+        "ms": 7.540334000000257,
+        "phase": "{\"moves\":1,\"restored\":true,\"initialDefect\":32,\"finalDefect\":0,\"expanded\":65,\"multiRegionMoves\":1,\"quotient\":true,\"beforeShortening\":8}"
+      }
+    },
+    {
+      "family": "two-tears",
+      "seed": 1,
+      "search": {
+        "moves": 2,
+        "restored": true,
+        "initialDefect": 64,
+        "finalDefect": 0,
+        "expanded": 308,
+        "multiRegionMoves": 2
+      },
+      "baseline": {
+        "moves": 3379,
+        "ms": 38.965458000000126
+      },
+      "dOnly": {
+        "moves": 3301,
+        "optimizationMs": 2.147207999999864
+      },
+      "hybrid": {
+        "moves": 20,
+        "ms": 18.728250000000116,
+        "phase": "{\"moves\":2,\"restored\":true,\"initialDefect\":64,\"finalDefect\":0,\"expanded\":308,\"multiRegionMoves\":2,\"quotient\":true,\"beforeShortening\":20}"
+      }
+    },
+    {
+      "family": "two-tears",
+      "seed": 2,
+      "search": {
+        "moves": 2,
+        "restored": true,
+        "initialDefect": 96,
+        "finalDefect": 0,
+        "expanded": 309,
+        "multiRegionMoves": 2
+      },
+      "baseline": {
+        "moves": 3592,
+        "ms": 49.530459000000064
+      },
+      "dOnly": {
+        "moves": 3495,
+        "optimizationMs": 2.4507920000000922
+      },
+      "hybrid": {
+        "moves": 21,
+        "ms": 20.465541999999914,
+        "phase": "{\"moves\":2,\"restored\":true,\"initialDefect\":96,\"finalDefect\":0,\"expanded\":309,\"multiRegionMoves\":2,\"quotient\":true,\"beforeShortening\":21}"
+      }
+    },
+    {
+      "family": "two-tears",
+      "seed": 3,
+      "search": {
+        "moves": 2,
+        "restored": true,
+        "initialDefect": 60,
+        "finalDefect": 0,
+        "expanded": 314,
+        "multiRegionMoves": 2
+      },
+      "baseline": {
+        "moves": 3152,
+        "ms": 46.39920800000027
+      },
+      "dOnly": {
+        "moves": 3111,
+        "optimizationMs": 2.6349169999994047
+      },
+      "hybrid": {
+        "moves": 9,
+        "ms": 18.973417000000154,
+        "phase": "{\"moves\":2,\"restored\":true,\"initialDefect\":60,\"finalDefect\":0,\"expanded\":314,\"multiRegionMoves\":2,\"quotient\":true,\"beforeShortening\":9}"
+      }
+    },
+    {
+      "family": "mixed",
+      "seed": 1,
+      "search": {
+        "moves": 0,
+        "restored": false,
+        "initialDefect": 68,
+        "finalDefect": 4,
+        "expanded": 9216,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 3114,
+        "ms": 40.675624999999854
+      },
+      "dOnly": {
+        "moves": 3061,
+        "optimizationMs": 1.8041669999993246
+      },
+      "hybrid": {
+        "moves": 3061,
+        "ms": 535.5932499999999,
+        "phase": "{\"moves\":0,\"restored\":false,\"initialDefect\":68,\"finalDefect\":4,\"expanded\":9216,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":3114}"
+      }
+    },
+    {
+      "family": "mixed",
+      "seed": 2,
+      "search": {
+        "moves": 4,
+        "restored": true,
+        "initialDefect": 134,
+        "finalDefect": 0,
+        "expanded": 6413,
+        "multiRegionMoves": 2
+      },
+      "baseline": {
+        "moves": 4119,
+        "ms": 53.85179200000039
+      },
+      "dOnly": {
+        "moves": 4042,
+        "optimizationMs": 2.439792000000125
+      },
+      "hybrid": {
+        "moves": 20,
+        "ms": 270.41141700000026,
+        "phase": "{\"moves\":4,\"restored\":true,\"initialDefect\":134,\"finalDefect\":0,\"expanded\":6413,\"multiRegionMoves\":2,\"quotient\":true,\"beforeShortening\":20}"
+      }
+    },
+    {
+      "family": "mixed",
+      "seed": 3,
+      "search": {
+        "moves": 3,
+        "restored": true,
+        "initialDefect": 80,
+        "finalDefect": 0,
+        "expanded": 3433,
+        "multiRegionMoves": 1
+      },
+      "baseline": {
+        "moves": 3846,
+        "ms": 52.477458999999726
+      },
+      "dOnly": {
+        "moves": 3797,
+        "optimizationMs": 1.9349169999995866
+      },
+      "hybrid": {
+        "moves": 11,
+        "ms": 142.7802500000007,
+        "phase": "{\"moves\":3,\"restored\":true,\"initialDefect\":80,\"finalDefect\":0,\"expanded\":3433,\"multiRegionMoves\":1,\"quotient\":true,\"beforeShortening\":11}"
+      }
+    },
+    {
+      "family": "mixed-30",
+      "seed": 1,
+      "search": {
+        "moves": 0,
+        "restored": false,
+        "initialDefect": 272,
+        "finalDefect": 206,
+        "expanded": 9216,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 3842,
+        "ms": 55.55762500000037
+      },
+      "dOnly": {
+        "moves": 3794,
+        "optimizationMs": 2.3409999999994398
+      },
+      "hybrid": {
+        "moves": 3794,
+        "ms": 501.3723749999999,
+        "phase": "{\"moves\":0,\"restored\":false,\"initialDefect\":272,\"finalDefect\":206,\"expanded\":9216,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":3842}"
+      }
+    },
+    {
+      "family": "mixed-30",
+      "seed": 2,
+      "search": {
+        "moves": 0,
+        "restored": false,
+        "initialDefect": 263,
+        "finalDefect": 243,
+        "expanded": 9216,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 4158,
+        "ms": 51.24833300000046
+      },
+      "dOnly": {
+        "moves": 4094,
+        "optimizationMs": 2.2894169999999576
+      },
+      "hybrid": {
+        "moves": 4094,
+        "ms": 399.50524999999925,
+        "phase": "{\"moves\":0,\"restored\":false,\"initialDefect\":263,\"finalDefect\":243,\"expanded\":9216,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":4158}"
+      }
+    },
+    {
+      "family": "mixed-30",
+      "seed": 3,
+      "search": {
+        "moves": 0,
+        "restored": false,
+        "initialDefect": 249,
+        "finalDefect": 172,
+        "expanded": 9216,
+        "multiRegionMoves": 0
+      },
+      "baseline": {
+        "moves": 3801,
+        "ms": 52.60941600000115
+      },
+      "dOnly": {
+        "moves": 3746,
+        "optimizationMs": 2.3586670000004233
+      },
+      "hybrid": {
+        "moves": 3746,
+        "ms": 398.5120000000006,
+        "phase": "{\"moves\":0,\"restored\":false,\"initialDefect\":249,\"finalDefect\":172,\"expanded\":9216,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":3801}"
+      }
+    }
+  ]
+}

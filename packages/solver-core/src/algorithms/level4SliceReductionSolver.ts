@@ -5,19 +5,19 @@ import { emitSolverDebug } from '../debug';
 import { isExactlySolved, progressForCubies, stateKey } from './level1State';
 import { level4CertifiedData } from './level4CertifiedData';
 import { reduceMengerState, sparseStateOf } from './mengerCertifiedReduction';
-import { createSparseGroup, localLegalityCubies, type SparseAtom, type SparseGroup } from './mengerSparseGroup';
+import { getCachedSparseGroup, localLegalityCubies, type SparseAtom, type SparseGroup } from './mengerSparseGroup';
 
 const id = 'level4-slice-reduction';
 const name = 'level-4-certified-orbit-reduction';
 const version = '0.1.0';
 let groupCache: SparseGroup | undefined;
 export const warmLevel4SliceReductionSolver = (): void => { getGroup(); };
-const getGroup = (): SparseGroup => groupCache ??= createSparseGroup(4, (s) => emitSolverDebug(id, s));
+const getGroup = (): SparseGroup => groupCache ??= getCachedSparseGroup(4);
 const primedTargets = new WeakSet<object>();
 const poolCache = new WeakMap<object, SolverMove[]>();
 export const level4ScrambleWeight = (a: SparseAtom): number =>
   a.kind === 'frame' ? 50 : Number(a.family.slice(5)) <= 2.5 ? 20 : a.family === 'ext-d4' ? 1 : 4;
-const primeStateLegality = (group: SparseGroup, state: MengerPuzzleState): void => {
+export const primeLevel4StateLegality = (group: SparseGroup, state: MengerPuzzleState): void => {
   if (primedTargets.has(state.turnTargets)) return;
   const seen = new Set<string>();
   const cubieAt = (p: [number, number, number]) => group.canonical.cubies[group.siteAt(p)];
@@ -54,7 +54,7 @@ const solve = async (model: PuzzleModel<MengerPuzzleState, SolverMove>, puzzle: 
     // Occupancy is invariant, so legality is checked once per distinct atom on
     // the actual input geometry. Every output atom comes from this legal set.
     const checked = new Set<string>();
-    primeStateLegality(group, puzzle);
+    primeLevel4StateLegality(group, puzzle);
     for (const a of result.atoms) {
       if (checked.has(a.id)) continue;
       if (!model.isMoveLegal(puzzle, a.move)) return failure(`The model rejects output atom ${a.id}.`);
@@ -74,7 +74,7 @@ const scrambleMovePool = (_model: PuzzleModel<MengerPuzzleState, SolverMove>, st
   const cached = poolCache.get(state.turnTargets);
   if (cached) return cached;
   const group = getGroup();
-  primeStateLegality(group, state);
+  primeLevel4StateLegality(group, state);
   const pool = group.atoms.flatMap((a) => {
     const weight = level4ScrambleWeight(a);
     return Array.from({ length: weight }, () => a.move);

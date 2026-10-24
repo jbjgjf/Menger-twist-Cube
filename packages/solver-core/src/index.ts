@@ -36,3 +36,7 @@ export { summarizeBenchmarkRecords } from './benchmark/summarize';
 export { createSeededRng, scrambleState } from './benchmark/scramble';
 export { createLocalStorageBenchmarkStore } from './benchmark/storage/localStorageStore';
 export type { BenchmarkStore } from './benchmark/storage/localStorageStore';
+
+export { level2BlockRestorationAlgorithm } from './algorithms/level2BlockRestorationSolver';
+
+export { level3BlockRestorationAlgorithm, level4BlockRestorationAlgorithm } from './algorithms/higherBlockRestorationSolver';

@@ -78,3 +78,13 @@ unavailable in the working environment. A local commit and portable bundle/patch
 can be reviewed or imported without that access; their paths are reported in
 the task response. The accompanying PR description contains the review summary
 and validation commands.
+
+## Level2 restoration prototype (2026-10-24)
+
+See [block restoration](block-restoration.md) for the implemented Level2 fast path,
+word-shortening baseline, reproducible comparisons and limits. This is a bounded
+heuristic with certified completion, not yet a general-level block-restoration theorem.
+
+Level3/4の登録済み階層復元方式と一般命題・中間目標への手数下界を追加した。
+[研究記録](block-restoration.md)と
+[証明](../proofs/block-restoration.md)を参照。全状態に効率的な一般n再帰解法は未証明。
