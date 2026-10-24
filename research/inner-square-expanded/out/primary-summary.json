@@ -95,11 +95,24 @@
       "level": 4,
       "length": 1000,
       "expectedTrials": 3,
-      "completeTrials": 0,
+      "completeTrials": 2,
       "missingOrFailedSeeds": [
-        101,
-        102,
-        103
+        102
+      ],
+      "meanBaselineMoves": 19576040.5,
+      "meanDMoves": 19333817.5,
+      "meanPercentReductionD": 1.2374840871731418,
+      "pairedSeedBootstrap95Percentile": [
+        1.213122167946757,
+        1.2618460063995267
+      ],
+      "hierarchicalEqualsD": 2,
+      "displacedRange": [
+        153471,
+        153904
+      ],
+      "implementationHashes": [
+        "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a"
       ]
     }
   ]

@@ -34,5 +34,10 @@
       "{\"placements\":78360,\"setupNodes\":133222390,\"selectedEntries\":89853666400}"
     ],
     "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 25932334,
+    "optimizationMs": 121218.3615,
+    "verifiedSelectedEntries": 89217190092
   }
 }

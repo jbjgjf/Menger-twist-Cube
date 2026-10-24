@@ -39,5 +39,15 @@
     "moves": 19218026,
     "optimizationMs": 103974.34462499997,
     "verifiedSelectedEntries": 73494910456
+  },
+  "restoration": {
+    "moves": 19218026,
+    "ms": 739646.1365000001,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":126148,\"bestDefect\":126148,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":31,\"maxDefectChange\":4096,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":19463627,\"selectedEntries\":73494910456}",
+      "{\"placements\":73820,\"setupNodes\":57690393,\"selectedEntries\":73908984952}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
   }
 }

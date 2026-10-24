@@ -2,6 +2,8 @@
 
 Menger twisty puzzleの研究を、ISEFで説明・再現・検証できる数学・計算研究へ発展させてください。
 リポジトリは `jbjgjf/Menger-twist-Cube`、ローカルは `/Users/shou/hobby/menger-cube` です。
+Draft PR: https://github.com/jbjgjf/Menger-twist-Cube/pull/13
+ブランチ: `codex/inner-square-complete-l3-l4`。
 この作業の変更と生データを保持し、最初に現在のgit状態と計算中プロセスを確認してください。
 
 ## 最初に読むもの
@@ -52,3 +54,9 @@ Level4は数千万手・数百億の選択セル更新になり、数分以上�
 
 一般nの無条件完全性、全nの効率的アルゴリズム、新規性の確定、外部専門家による証明レビューは未完了。
 AIが生成・修正した箇所と学生本人の検証・発見を研究記録に分け、裏付けのないISEF水準や新規性を断言しないでください。
+
+## プレビュー配信に関する残件
+
+PR作成時のVercelプレビュー3件は失敗した。ローカル `npm run build --workspace=@menger/lab` は成功。
+Vercel接続は `team_jYWAv8vTZaVhpYoBb54n8vai` / `jbjgjfs-projects` のログ参照が403となり、配信失敗の原因は確定できていない。
+研究結果の検証と区別し、必要なら正しいVercelチームアクセスを取得してログを調べる。勝手に配信設定や保護を変更しない。
