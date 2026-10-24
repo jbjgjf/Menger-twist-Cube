@@ -35,5 +35,19 @@
       "{\"placements\":73527,\"setupNodes\":57536817,\"selectedEntries\":74275535379}"
     ],
     "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 19509022,
+    "ms": 765163.195958,
+    "success": true,
+    "explanation": [
+      "{\"placements\":73527,\"setupNodes\":57536817,\"selectedEntries\":74275535379}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 19264931,
+    "optimizationMs": 88313.11858300003,
+    "verifiedSelectedEntries": 73866084075
   }
 }

@@ -32,7 +32,8 @@ const file=`research/inner-square-expanded/out/bench-L${level}-${sampling==='dir
 mkdirSync('research/inner-square-expanded/out',{recursive:true});
 
 record.restorationIncludesD=true;
-record.runOrder=seed%2?['certified','restoration']:['restoration','certified'];
+record.runOrder=variant==='all'?(seed%2?['certified','restoration']:['restoration','certified']):[variant];
+record.requestedVariant=variant;
 record.transportPolicy='dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits';
 const implementationHash=createHash('sha256');
 for(const file of ['mengerInnerSquareReduction.ts','higherBlockRestorationSolver.ts','mengerBlockRestoration.ts','mengerFactoredTransport.ts','mengerSparsePairTransport.ts','mengerPairTransport.ts','mengerAbelianSignature.ts','mengerSparseGroup.ts','level2BlockRestorationSolver.ts','innerSquareTools.json'])implementationHash.update(readFileSync(`packages/solver-core/src/algorithms/${file}`));

@@ -20,7 +20,6 @@
   "sampling": "Parametrized full-group state: uniform kernel and uniform signature section under ideal independent draws; seeded LCG in experiments. No random-walk mixing claim.",
   "restorationIncludesD": true,
   "runOrder": [
-    "restoration",
     "certified"
   ],
   "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
@@ -39,5 +38,7 @@
     "moves": 25932334,
     "optimizationMs": 121218.3615,
     "verifiedSelectedEntries": 89217190092
-  }
+  },
+  "requestedVariant": "certified",
+  "metadataNote": "Run order corrected to the actual certified-only direct-control invocation; numerical results unchanged."
 }

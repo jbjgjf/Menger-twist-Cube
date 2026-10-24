@@ -6,6 +6,8 @@ Draft PR: https://github.com/jbjgjf/Menger-twist-Cube/pull/13
 ブランチ: `codex/inner-square-complete-l3-l4`。
 この作業の変更と生データを保持し、最初に現在のgit状態と計算中プロセスを確認してください。
 
+確定した完了状況は `research/inner-square-expanded/STATUS.md` を最初に確認してください。
+
 ## 最初に読むもの
 
 1. `docs/research/isef-research-brief.md`：研究課題、主結果、限界。

@@ -43,7 +43,7 @@ Long balanced-family walks contain slice, extension and inner moves, including h
 
 The held-out Level 2/3 cohorts each contain ten seeds at lengths 100 and 1,000. The Level 4 cohort contains three length-1,000 seeds, plus a separate directly constructed full-group state. Timings share one machine and are descriptive. Bootstrap intervals summarize seed variation; they do not establish uniform-group or runtime superiority.
 
-The current deep Level 2/3 results show no extra move reduction from hierarchical restoration beyond D. This negative result motivates stronger restoration or automatic sharing, and belongs in the presentation.
+The completed deep Level 2/3/4 results show no extra move reduction from hierarchical restoration beyond D. This negative result motivates stronger restoration or automatic sharing, and belongs in the presentation.
 
 ## Work still needed for an ISEF submission
 

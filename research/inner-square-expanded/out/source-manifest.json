@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-24T16:27:39.463Z",
+  "generatedAt": "2026-10-24T16:41:04.754Z",
   "environment": {
     "node": "v24.11.0",
     "platform": "darwin",
@@ -9,7 +9,7 @@
     "totalMemoryBytes": 34359738368
   },
   "note": "Final source inventory. Primary benchmark implementationSha256 hashes its declared solver files and catalog; this manifest additionally records the supporting source. Runtime trials shared a machine.",
-  "sourceManifestSha256": "4207eb2a2b6e39d2febbfcacd4b984dd8dfc503acf57f32ddd9606f3ece1fd40",
+  "sourceManifestSha256": "01919094ba370272864d656c9628f63625a94a287c8905f63f71a936c0d3eb54",
   "files": [
     {
       "path": "packages/engine/src/data/innerSquareCatalog.json",
@@ -173,7 +173,7 @@
     },
     {
       "path": "research/inner-square-expanded/benchmark.ts",
-      "sha256": "e6c791cb901d682be43f65a3c7e14bae104be3f44ee5bc9f5944468416720960"
+      "sha256": "8ba01fa1d5731ed7709cbdafd1edbb776604c96459aa04e9ed1efee98c7fc6ac"
     },
     {
       "path": "research/inner-square-expanded/certify.ts",
