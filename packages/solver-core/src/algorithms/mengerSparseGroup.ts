@@ -61,9 +61,9 @@ export const localLegalityCubies = (
   const width = target.family === 'slab' ? 3 * target.scale : target.scale;
   const radius = Math.SQRT2 * width / 2;
   const lo = target.pivot.map((v, i) => Math.max(-extent,
-    Math.ceil(v - (i === axis ? (target.scale - 1) / 2 : radius + 0.5)))) as Vector3Tuple;
+    Math.ceil(v - (i === axis ? (target.family === 'ring' ? 0 : (target.scale - 1) / 2) : radius + 0.5)))) as Vector3Tuple;
   const hi = target.pivot.map((v, i) => Math.min(extent,
-    Math.floor(v + (i === axis ? (target.scale - 1) / 2 : radius + 0.5)))) as Vector3Tuple;
+    Math.floor(v + (i === axis ? (target.family === 'ring' ? 0 : (target.scale - 1) / 2) : radius + 0.5)))) as Vector3Tuple;
   const result: Cubie[] = [];
   for (let x = lo[0]; x <= hi[0]; x++) for (let y = lo[1]; y <= hi[1]; y++) for (let z = lo[2]; z <= hi[2]; z++) {
     const c = cubieAt([x, y, z]);
@@ -72,9 +72,9 @@ export const localLegalityCubies = (
   return result;
 };
 
-export const createSparseGroup = (level: number, progress?: (message: string) => void): SparseGroup => {
+export const createSparseGroup = (level: number, progress?: (message: string) => void, moveSystem: 'standard' | 'inner-square' = 'standard', base?: SparseGroup): SparseGroup => {
   const start = performance.now();
-  const canonical = createMengerPuzzleState(level, { materializeCubies: true });
+  const canonical = createMengerPuzzleState(level, { materializeCubies: true, moveSystem });
   const sites = canonical.cubies.map((c) => c.homePosition);
   const N = sites.length;
   if (N !== 20 ** level) throw new Error(`Expected ${20 ** level} sites, got ${N}`);
@@ -88,7 +88,8 @@ export const createSparseGroup = (level: number, progress?: (message: string) =>
     return lattice[latticeKey(p)]!;
   };
   const cubieAt = (p: Vector3Tuple): Cubie | undefined => canonical.cubies[siteAt(p)];
-  const atoms: SparseAtom[] = [];
+  const atoms: SparseAtom[] = base ? [...base.atoms] : [];
+  if (base && (base.N !== N || base.sites.some((p,i) => p.some((v,j) => sites[i]![j] !== v)))) throw new Error('Shared alphabet site order differs');
   const addAtom = (target: TurnTarget, selected: number[], angle: TwistAngle, frameId?: string): void => {
     const axis = target.axis.findIndex((x) => x !== 0);
     const basis = axis === 0 ? [1, 0, 0, 0, 0, -1, 0, 1, 0] : axis === 1 ? [0, 0, 1, 0, 1, 0, -1, 0, 0] : [0, -1, 0, 1, 0, 0, 0, 0, 1];
@@ -108,14 +109,14 @@ export const createSparseGroup = (level: number, progress?: (message: string) =>
     atoms.push({
       id: `${frameId ? 'f' : 'e'}:${frameId ?? target.id}:${angle}`,
       kind: frameId ? 'frame' : 'extension', refId: frameId ?? target.id, angle, rot, map,
-      family: frameId ? `frame-s${target.scale}` : `ext-d${target.depth}`,
+      family: frameId ? `frame-s${target.scale}` : target.family === 'ring' ? 'inner-square' : `ext-d${target.depth}`,
       maxSite: selected.reduce((m, s) => Math.max(m, s), -1),
       move: { targetKind: frameId ? 'frame' : 'extension', targetId: target.id,
         ...(frameId ? { frameId } : { extensionTargetId: target.id }), angle,
         notation: `${target.name}${suffix}`, reason: '' },
     });
   };
-  for (const frame of canonical.frames) {
+  for (const frame of base ? [] : canonical.frames) {
     const target = canonical.turnTargetById.get(`frame:${frame.id}`)!;
     const selected: number[] = [];
     sites.forEach((p, i) => { if (frame.selector(p)) selected.push(i); });
@@ -124,7 +125,7 @@ export const createSparseGroup = (level: number, progress?: (message: string) =>
   progress?.(`L${level}: ${atoms.length} frame atoms built`);
   let done = 0;
   for (const target of canonical.turnTargets) {
-    if (target.kind !== 'extension') continue;
+    if (target.kind !== 'extension' || (base && target.family !== 'ring')) continue;
     const local = localLegalityCubies(target, cubieAt, extent);
     const selected = local.filter((c) => target.selector(c.homePosition)).map((c) => siteAt(c.homePosition));
     if (selected.length !== target.affectedCountEstimate) throw new Error(`${target.id}: selected-site count differs`);
@@ -284,9 +285,11 @@ export const orbitAlphabet = (group: SparseGroup, orbit: number): SparseAtom[] =
 
 // Shared by restoration and certified Level4 reduction to avoid duplicating its
 // multi-million-entry atom maps in the same worker.
-const sharedGroups = new Map<number, SparseGroup>();
-export const getCachedSparseGroup = (level: number): SparseGroup => {
-  let group = sharedGroups.get(level);
-  if (!group) { group = createSparseGroup(level); sharedGroups.set(level, group); }
+const sharedGroups = new Map<string, SparseGroup>();
+export const getCachedSparseGroup = (level: number, system: 'standard' | 'inner-square' = 'standard'): SparseGroup => {
+  const key = `${system}:${level}`;
+  let group = sharedGroups.get(key);
+  if (!group) { const base = system === 'inner-square' ? getCachedSparseGroup(level, 'standard') : undefined;
+    group = createSparseGroup(level, undefined, system, base); sharedGroups.set(key, group); }
   return group;
 };

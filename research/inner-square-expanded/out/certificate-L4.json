@@ -1,0 +1,28 @@
+{
+  "level": 4,
+  "moveSystem": "inner-square",
+  "completeGroupOrderCertificate": true,
+  "completeSolverCertificate": true,
+  "atoms": 91602,
+  "orbits": 1294,
+  "pureCycleOrbits": 1294,
+  "pairGenerators": 67,
+  "basis": {
+    "dimension4": 1353,
+    "dimension3": 8,
+    "rows4": 187,
+    "rows3": 0,
+    "imageOrder": "1766847064778384329583297500742918515827483896875618958121606201292619776",
+    "generatorsChecked": 91602
+  },
+  "groupOrderDigits": 403271,
+  "positionalOrderDigits": 394980,
+  "restorationDiameterLowerBound": 71785,
+  "rigidCosetsLowerBoundDigits": 356186,
+  "groupOrderSha256": "b9a2bafecab4198439564c0a1fd803d562f2d956041e8e4102201c5c9fe22e61",
+  "countingDiameterLowerBound": 81274,
+  "oldToolDataSha256": "9c0c9fde5d583c7e6fd28242ae510a8d2b44090d2b5c25ab62c01f7174d20d1c",
+  "oldOrbitPairStateBound": 2359296,
+  "catalogFileSha256": "97079907e00aec227ef3214f1abdaceca5151117bf4f9d9246a4c4e8f01d22c9",
+  "toolDataSha256": "625eac5fdd4ad471e13a1af0d4172699bc08e2e0bc119ca3db595d3e2aa28e3e"
+}

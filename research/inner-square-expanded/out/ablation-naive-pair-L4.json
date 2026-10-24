@@ -1,0 +1,14 @@
+{
+  "level": 4,
+  "length": 100,
+  "seed": 11,
+  "moveSystem": "inner-square",
+  "method": "Development raw expanded-orbit bidirectional pair BFS before old-fiber factoring",
+  "result": "failed",
+  "error": "Map maximum size exceeded",
+  "lastCompletedOrbit": 40,
+  "nextLargeOrbit": 41,
+  "nextLargeOrbitSize": 25248,
+  "exactDevelopmentSourceHashRecorded": false,
+  "interpretation": "Qualitative memory failure, not a controlled runtime comparison. Current factored implementation completes this declared seed and long held-out inputs."
+}

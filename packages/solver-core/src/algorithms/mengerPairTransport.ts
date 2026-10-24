@@ -18,7 +18,7 @@ export class MengerPairTransport {
   readonly roots: Root[] = [];
   readonly alternatives = new Map<number, Root[]>();
   readonly next: Int32Array;
-  readonly generator: Int16Array;
+  readonly generator: Int32Array;
   readonly rootOf: Int16Array;
   readonly visitedStates: number;
   readonly maxDistance: number;
@@ -74,7 +74,7 @@ export class MengerPairTransport {
     if (this.roots.length >= 32768 || this.alphabet.length >= 32768) throw new Error('Pair tables exceed their certified Level 4 index width');
     const size = this.m * this.m;
     this.next = new Int32Array(size).fill(-2);
-    this.generator = new Int16Array(size).fill(-1);
+    this.generator = new Int32Array(size).fill(-1);
     this.rootOf = new Int16Array(size).fill(-1);
     const queue = new Int32Array(size);
     let tail = 0;

@@ -63,7 +63,8 @@ test('the inner-square system adds exactly the 18 audited ring targets, all lega
 });
 
 test('the inner-square system is refused where it is not defined', () => {
-  assert.throws(() => createMengerPuzzleState(3, { moveSystem: 'inner-square' }), /not defined for level 3/);
+  assert.equal(createMengerPuzzleState(3, { moveSystem: 'inner-square' }).turnTargets.filter(t => t.family === 'ring').length, 690);
+  assert.throws(() => createMengerPuzzleState(5, { moveSystem: 'inner-square' }), /not defined for level 5/);
 });
 
 test('ψ: 24 of the 54 ring atoms leave the standard coset, no standard atom does', () => {

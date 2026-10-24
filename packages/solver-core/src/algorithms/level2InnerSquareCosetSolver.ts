@@ -206,6 +206,7 @@ const solve = async (
  * set, which under the inner-square model includes the 54 ring atoms.
  */
 export const level2InnerSquareCosetAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  moveSystemsSupported: ['inner-square'],
   id: solverId,
   name: solverName,
   version: solverVersion,

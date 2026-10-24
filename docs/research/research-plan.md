@@ -7,7 +7,7 @@ the reasoning, not day-to-day status.
 
 ## Thesis (one sentence)
 
-> We define and implement a new family of self-similar fractal twisty puzzles
+> We specify and implement collision-checked move systems on a family of self-similar fractal twisty puzzles
 > (generalized Menger cubes), analyze their group structure rigorously (orbit
 > decomposition, orientation freedom, state-space counting), and demonstrate with
 > reproducible benchmarks that structure-aware solving methods (quotient / reduction)
@@ -150,3 +150,9 @@ known?" instantly in judging.
 [Level2 block restoration and word shortening](block-restoration.md) records the
 implemented bounded state-based search, certified completion, commuting cancellation,
 paired measurements, and the remaining Level3/4 and general-level research questions.
+
+## Primary move system and revised experiment (2026-10-25)
+
+The current research target includes all audited inner square rotations, slices and extensions.
+[The inner-square study](inner-square-study.md) records the merged-orbit model, joint holonomy signatures,
+complete reduction, held-out comparisons and the distinction from historical standard-system results.

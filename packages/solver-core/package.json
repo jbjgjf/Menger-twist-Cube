@@ -8,7 +8,7 @@
   },
   "types": "./src/index.ts",
   "scripts": {
-    "bench": "tsx src/cli/bench.ts",
+    "bench": "node --import tsx src/cli/bench.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

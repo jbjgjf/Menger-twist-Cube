@@ -1,0 +1,20 @@
+[
+  {
+    "orbit": 4,
+    "size": 3216,
+    "oldFibers": 71,
+    "moves": 164,
+    "ms": 2700.675459,
+    "fullEngine": true,
+    "phase": "{\"placements\":1,\"setupNodes\":23885,\"selectedEntries\":518128}"
+  },
+  {
+    "orbit": 41,
+    "size": 25248,
+    "oldFibers": 407,
+    "moves": 132,
+    "ms": 17436.475292,
+    "fullEngine": true,
+    "phase": "{\"placements\":1,\"setupNodes\":186610,\"selectedEntries\":207320}"
+  }
+]

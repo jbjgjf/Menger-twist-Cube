@@ -1,15 +1,11 @@
+import catalog from './data/innerSquareCatalog.json';
 import type { AxisName, TurnTarget } from './types';
 import type { Vector3Tuple } from 'three';
 
-/**
- * A move system is a named generator set for the same physical cube.
- *
- * - `standard`: the shipped set (frames + recursive block/slab/cell extensions).
- *   Every existing proof, move id and solver is stated for this system.
- * - `inner-square`: `standard` plus the single-layer inner square rotations
- *   found by the exhaustive audit in `docs/research/square-region-rotation-*.md`.
- *   It is opt-in and never the default, so nothing that was true of `standard`
- *   changes by its existence.
+/** Named, explicitly different generator sets on the same occupied geometry.
+ * `standard` is retained for historical comparisons and its existing proofs.
+ * `inner-square` adds the exhaustive single-plane square-subset catalog; only
+ * levels with a complete checked-in catalog are exposed.
  */
 export type MoveSystem = 'standard' | 'inner-square';
 
@@ -18,9 +14,8 @@ export const moveSystems: readonly MoveSystem[] = ['standard', 'inner-square'];
 /** Levels a system is defined for; `null` means "every level the engine supports". */
 export const moveSystemLevels: Record<MoveSystem, readonly number[] | null> = {
   standard: null,
-  // Only Level 2 has been audited exhaustively. Level 3 has such rotations too
-  // (e.g. the four cells (+-5,+-5,0)) but their full list is not established.
-  'inner-square': [2],
+  // Level2 keeps its stable 18 audited IDs; higher levels come from the exhaustive catalog.
+  'inner-square': [1, 2, ...Object.keys(catalog).map(Number)],
 };
 
 export const isMoveSystemAvailable = (system: MoveSystem, level: number): boolean =>
@@ -44,7 +39,30 @@ const perpIndices: Record<AxisName, [number, number]> = { X: [1, 2], Y: [2, 0], 
  * from the standard system, and proved each one interference-free exactly.
  */
 export const generateInnerSquareTurnTargets = (level: number): TurnTarget[] => {
-  if (level !== 2) return [];
+  if (level === 1) return [];
+  if (level !== 2) {
+    const data = (catalog as Record<string, { profiles: Array<{ pattern: number; targets: Array<{ pivot: number[]; cells: number[][]; angles: number[] }> }> }>)[level];
+    if (!data) throw new Error(`No exhaustive inner-square catalog for Level ${level}`);
+    const size = 3 ** level; const extent = (size - 1) / 2;
+    const targets: TurnTarget[] = [];
+    for (const axisName of axisNames) {
+      const axis = axisNames.indexOf(axisName); const [u,v] = perpIndices[axisName];
+      for (let layer = -extent; layer <= extent; layer++) {
+        let digits = layer + extent; let pattern = 0;
+        for (let d=0; d<level; d++) { if (digits % 3 !== 1) pattern |= 1 << d; digits = Math.floor(digits / 3); }
+        for (const [i,t] of data.profiles[pattern]!.targets.entries()) {
+          const pivot: Vector3Tuple = [0,0,0]; pivot[axis] = layer; pivot[u] = t.pivot[0]!; pivot[v] = t.pivot[1]!;
+          const selected = new Set(t.cells.map(p => (p[0]! + extent) * size + p[1]! + extent));
+          const side = Math.max(...t.cells.map(p => p[0]!)) - Math.min(...t.cells.map(p => p[0]!)) + 1;
+          const id = `ring:n${level}:${axisName}${layer}:i${i}`;
+          targets.push({ id, name: id, kind: 'extension', family: 'ring', axisName, axis: axisVectors[axisName],
+            scale: side, depth: 0, pivot, affectedCountEstimate: t.cells.length,
+            selector: p => p[axis] === layer && selected.has((p[u]! + extent) * size + p[v]! + extent) });
+        }
+      }
+    }
+    return targets;
+  }
   const targets: TurnTarget[] = [];
   for (const axisName of axisNames) {
     const axisIndex = axisNames.indexOf(axisName);
@@ -62,7 +80,7 @@ export const generateInnerSquareTurnTargets = (level: number): TurnTarget[] => {
           name: `R${axisName}${layerLabel}${ring === 'inner' ? 'i' : 'o'}`,
           axisName,
           axis: axisVectors[axisName],
-          scale: 1,
+          scale: ring === 'inner' ? 5 : 9,
           // Outside the block/slab/cell depth ladder (1, 1.5, 2) on purpose, so
           // code that picks extensions by depth never picks a ring by accident.
           depth: 0,

@@ -40,3 +40,7 @@ export type { BenchmarkStore } from './benchmark/storage/localStorageStore';
 export { level2BlockRestorationAlgorithm } from './algorithms/level2BlockRestorationSolver';
 
 export { level3BlockRestorationAlgorithm, level4BlockRestorationAlgorithm } from './algorithms/higherBlockRestorationSolver';
+
+export { level3InnerSquareCertifiedAlgorithm, level4InnerSquareCertifiedAlgorithm } from './algorithms/innerSquareCertifiedSolver';
+
+export { shareCommutatorSetup } from './algorithms/mengerSharedCorrection';

@@ -1,0 +1,118 @@
+{
+  "records": [
+    {
+      "orbit": 0,
+      "kind": "C3",
+      "moves": 239,
+      "ms": 179.34362499999997,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 1,
+      "kind": "C4",
+      "moves": 367,
+      "ms": 30.380083000000013,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 4,
+      "kind": "C4",
+      "moves": 218,
+      "ms": 57.378375000000005,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 7,
+      "kind": "C4",
+      "moves": 367,
+      "ms": 18.61529200000018,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 10,
+      "kind": "C4",
+      "moves": 910,
+      "ms": 45.662458000000015,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 13,
+      "kind": "C4",
+      "moves": 764,
+      "ms": 118.07825000000003,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 13,
+      "kind": "flip",
+      "moves": 73,
+      "ms": 95.55820799999992,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 49,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 25.615166000000045,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 52,
+      "kind": "C4",
+      "moves": 2060,
+      "ms": 27.46287499999994,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 54,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 20.10816600000021,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 72,
+      "kind": "C3",
+      "moves": 239,
+      "ms": 22.529250000000047,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 91,
+      "kind": "C4",
+      "moves": 2060,
+      "ms": 41.78258399999959,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 91,
+      "kind": "flip",
+      "moves": 696,
+      "ms": 58.44095800000014,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 112,
+      "kind": "C3",
+      "moves": 239,
+      "ms": 14.828791999999794,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 115,
+      "kind": "C3",
+      "moves": 239,
+      "ms": 22.54054099999985,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 13,
+      "kind": "single D4 commutator",
+      "moves": 424,
+      "ms": 109.58033299999988
+    }
+  ],
+  "rejectedNonUnit": true,
+  "rejectedLoneC3": true,
+  "rotationAlphabet": 24
+}

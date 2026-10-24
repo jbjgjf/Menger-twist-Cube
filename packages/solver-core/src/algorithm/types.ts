@@ -1,4 +1,4 @@
-import type { FrameId, TurnTargetKind, TwistAngle } from '@menger/engine';
+import type { FrameId, TurnTargetKind, TwistAngle, MoveSystem } from '@menger/engine';
 import type { PuzzleModel } from '../model/puzzleModel';
 
 export interface SolverMove {
@@ -79,6 +79,8 @@ export interface SolverAlgorithm<TState = unknown, TMove = unknown> {
   readonly name: string;
   readonly version: string;
   readonly levelsSupported: readonly number[];
+  /** Omitted means the historical standard system only. */
+  readonly moveSystemsSupported?: readonly MoveSystem[];
   solve(model: PuzzleModel<TState, TMove>, state: TState): Promise<SolverRunResult>;
   /**
    * Optional: the move generator set this algorithm is designed to invert.

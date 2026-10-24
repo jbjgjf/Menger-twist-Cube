@@ -1,0 +1,1004 @@
+{
+  "level": 3,
+  "atoms": 5565,
+  "oldOrbits": 164,
+  "newOrbits": 116,
+  "rank": 27,
+  "maxOrbit": 768,
+  "sizes": {
+    "8": 4,
+    "24": 71,
+    "96": 32,
+    "120": 2,
+    "168": 1,
+    "192": 2,
+    "384": 1,
+    "576": 1,
+    "672": 1,
+    "768": 1
+  },
+  "freedoms": {
+    "1": 103,
+    "3": 4,
+    "4": 7,
+    "8": 2
+  },
+  "merged": [
+    {
+      "orbit": 0,
+      "size": 8,
+      "freedom": 3,
+      "oldOrbits": [
+        0
+      ]
+    },
+    {
+      "orbit": 1,
+      "size": 24,
+      "freedom": 4,
+      "oldOrbits": [
+        1
+      ]
+    },
+    {
+      "orbit": 2,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        2
+      ]
+    },
+    {
+      "orbit": 3,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        3
+      ]
+    },
+    {
+      "orbit": 4,
+      "size": 168,
+      "freedom": 4,
+      "oldOrbits": [
+        4,
+        116,
+        121,
+        144
+      ]
+    },
+    {
+      "orbit": 5,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        5
+      ]
+    },
+    {
+      "orbit": 6,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        6
+      ]
+    },
+    {
+      "orbit": 7,
+      "size": 24,
+      "freedom": 4,
+      "oldOrbits": [
+        7
+      ]
+    },
+    {
+      "orbit": 8,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        8
+      ]
+    },
+    {
+      "orbit": 9,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        9
+      ]
+    },
+    {
+      "orbit": 10,
+      "size": 96,
+      "freedom": 4,
+      "oldOrbits": [
+        10
+      ]
+    },
+    {
+      "orbit": 11,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        11
+      ]
+    },
+    {
+      "orbit": 12,
+      "size": 384,
+      "freedom": 1,
+      "oldOrbits": [
+        12
+      ]
+    },
+    {
+      "orbit": 13,
+      "size": 192,
+      "freedom": 8,
+      "oldOrbits": [
+        13
+      ]
+    },
+    {
+      "orbit": 14,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        14
+      ]
+    },
+    {
+      "orbit": 15,
+      "size": 672,
+      "freedom": 1,
+      "oldOrbits": [
+        15,
+        16,
+        19,
+        23,
+        81,
+        88,
+        89,
+        92,
+        105,
+        114,
+        123,
+        126,
+        137,
+        140,
+        149,
+        152
+      ]
+    },
+    {
+      "orbit": 16,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        17
+      ]
+    },
+    {
+      "orbit": 17,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        18
+      ]
+    },
+    {
+      "orbit": 18,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        20
+      ]
+    },
+    {
+      "orbit": 19,
+      "size": 576,
+      "freedom": 1,
+      "oldOrbits": [
+        21,
+        84,
+        85
+      ]
+    },
+    {
+      "orbit": 20,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        22
+      ]
+    },
+    {
+      "orbit": 21,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        24
+      ]
+    },
+    {
+      "orbit": 22,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        25
+      ]
+    },
+    {
+      "orbit": 23,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        26
+      ]
+    },
+    {
+      "orbit": 24,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        27
+      ]
+    },
+    {
+      "orbit": 25,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        28
+      ]
+    },
+    {
+      "orbit": 26,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        29
+      ]
+    },
+    {
+      "orbit": 27,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        30
+      ]
+    },
+    {
+      "orbit": 28,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        31
+      ]
+    },
+    {
+      "orbit": 29,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        32
+      ]
+    },
+    {
+      "orbit": 30,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        33
+      ]
+    },
+    {
+      "orbit": 31,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        34
+      ]
+    },
+    {
+      "orbit": 32,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        35
+      ]
+    },
+    {
+      "orbit": 33,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        36
+      ]
+    },
+    {
+      "orbit": 34,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        37
+      ]
+    },
+    {
+      "orbit": 35,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        38
+      ]
+    },
+    {
+      "orbit": 36,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        39
+      ]
+    },
+    {
+      "orbit": 37,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        40
+      ]
+    },
+    {
+      "orbit": 38,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        41
+      ]
+    },
+    {
+      "orbit": 39,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        42
+      ]
+    },
+    {
+      "orbit": 40,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        43
+      ]
+    },
+    {
+      "orbit": 41,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        44
+      ]
+    },
+    {
+      "orbit": 42,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        45
+      ]
+    },
+    {
+      "orbit": 43,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        46
+      ]
+    },
+    {
+      "orbit": 44,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        47
+      ]
+    },
+    {
+      "orbit": 45,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        48
+      ]
+    },
+    {
+      "orbit": 46,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        49
+      ]
+    },
+    {
+      "orbit": 47,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        50
+      ]
+    },
+    {
+      "orbit": 48,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        51
+      ]
+    },
+    {
+      "orbit": 49,
+      "size": 24,
+      "freedom": 4,
+      "oldOrbits": [
+        52
+      ]
+    },
+    {
+      "orbit": 50,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        53
+      ]
+    },
+    {
+      "orbit": 51,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        54
+      ]
+    },
+    {
+      "orbit": 52,
+      "size": 96,
+      "freedom": 4,
+      "oldOrbits": [
+        55
+      ]
+    },
+    {
+      "orbit": 53,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        56
+      ]
+    },
+    {
+      "orbit": 54,
+      "size": 24,
+      "freedom": 4,
+      "oldOrbits": [
+        57
+      ]
+    },
+    {
+      "orbit": 55,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        58
+      ]
+    },
+    {
+      "orbit": 56,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        59
+      ]
+    },
+    {
+      "orbit": 57,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        60
+      ]
+    },
+    {
+      "orbit": 58,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        61
+      ]
+    },
+    {
+      "orbit": 59,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        62
+      ]
+    },
+    {
+      "orbit": 60,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        63
+      ]
+    },
+    {
+      "orbit": 61,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        64
+      ]
+    },
+    {
+      "orbit": 62,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        65
+      ]
+    },
+    {
+      "orbit": 63,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        66
+      ]
+    },
+    {
+      "orbit": 64,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        67
+      ]
+    },
+    {
+      "orbit": 65,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        68
+      ]
+    },
+    {
+      "orbit": 66,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        69
+      ]
+    },
+    {
+      "orbit": 67,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        70
+      ]
+    },
+    {
+      "orbit": 68,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        71
+      ]
+    },
+    {
+      "orbit": 69,
+      "size": 120,
+      "freedom": 1,
+      "oldOrbits": [
+        72,
+        73,
+        80,
+        93,
+        96
+      ]
+    },
+    {
+      "orbit": 70,
+      "size": 768,
+      "freedom": 1,
+      "oldOrbits": [
+        74,
+        75,
+        78,
+        79,
+        82,
+        83,
+        86,
+        87,
+        90,
+        91,
+        94,
+        95,
+        133,
+        134,
+        141,
+        142,
+        153,
+        154,
+        159,
+        160
+      ]
+    },
+    {
+      "orbit": 71,
+      "size": 192,
+      "freedom": 1,
+      "oldOrbits": [
+        76,
+        77
+      ]
+    },
+    {
+      "orbit": 72,
+      "size": 8,
+      "freedom": 3,
+      "oldOrbits": [
+        97
+      ]
+    },
+    {
+      "orbit": 73,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        98
+      ]
+    },
+    {
+      "orbit": 74,
+      "size": 120,
+      "freedom": 1,
+      "oldOrbits": [
+        99,
+        129,
+        132,
+        157,
+        162
+      ]
+    },
+    {
+      "orbit": 75,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        100
+      ]
+    },
+    {
+      "orbit": 76,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        101
+      ]
+    },
+    {
+      "orbit": 77,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        102
+      ]
+    },
+    {
+      "orbit": 78,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        103
+      ]
+    },
+    {
+      "orbit": 79,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        104
+      ]
+    },
+    {
+      "orbit": 80,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        106
+      ]
+    },
+    {
+      "orbit": 81,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        107
+      ]
+    },
+    {
+      "orbit": 82,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        108
+      ]
+    },
+    {
+      "orbit": 83,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        109
+      ]
+    },
+    {
+      "orbit": 84,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        110
+      ]
+    },
+    {
+      "orbit": 85,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        111
+      ]
+    },
+    {
+      "orbit": 86,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        112
+      ]
+    },
+    {
+      "orbit": 87,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        113
+      ]
+    },
+    {
+      "orbit": 88,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        115
+      ]
+    },
+    {
+      "orbit": 89,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        117
+      ]
+    },
+    {
+      "orbit": 90,
+      "size": 96,
+      "freedom": 1,
+      "oldOrbits": [
+        118
+      ]
+    },
+    {
+      "orbit": 91,
+      "size": 96,
+      "freedom": 8,
+      "oldOrbits": [
+        119
+      ]
+    },
+    {
+      "orbit": 92,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        120
+      ]
+    },
+    {
+      "orbit": 93,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        122
+      ]
+    },
+    {
+      "orbit": 94,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        124
+      ]
+    },
+    {
+      "orbit": 95,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        125
+      ]
+    },
+    {
+      "orbit": 96,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        127
+      ]
+    },
+    {
+      "orbit": 97,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        128
+      ]
+    },
+    {
+      "orbit": 98,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        130
+      ]
+    },
+    {
+      "orbit": 99,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        131
+      ]
+    },
+    {
+      "orbit": 100,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        135
+      ]
+    },
+    {
+      "orbit": 101,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        136
+      ]
+    },
+    {
+      "orbit": 102,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        138
+      ]
+    },
+    {
+      "orbit": 103,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        139
+      ]
+    },
+    {
+      "orbit": 104,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        143
+      ]
+    },
+    {
+      "orbit": 105,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        145
+      ]
+    },
+    {
+      "orbit": 106,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        146
+      ]
+    },
+    {
+      "orbit": 107,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        147
+      ]
+    },
+    {
+      "orbit": 108,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        148
+      ]
+    },
+    {
+      "orbit": 109,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        150
+      ]
+    },
+    {
+      "orbit": 110,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        151
+      ]
+    },
+    {
+      "orbit": 111,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        155
+      ]
+    },
+    {
+      "orbit": 112,
+      "size": 8,
+      "freedom": 3,
+      "oldOrbits": [
+        156
+      ]
+    },
+    {
+      "orbit": 113,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        158
+      ]
+    },
+    {
+      "orbit": 114,
+      "size": 24,
+      "freedom": 1,
+      "oldOrbits": [
+        161
+      ]
+    },
+    {
+      "orbit": 115,
+      "size": 8,
+      "freedom": 3,
+      "oldOrbits": [
+        163
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "input": "e:ring:n3:X-9:i1:90",
+  "success": true,
+  "moves": 1,
+  "ms": 335.38608300000004,
+  "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+}

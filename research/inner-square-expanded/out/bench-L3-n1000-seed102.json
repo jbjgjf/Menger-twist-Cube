@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:54:28.693Z",
+  "level": 3,
+  "length": 1000,
+  "seed": 102,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 343,
+    "extension": 312,
+    "inner": 345
+  },
+  "displaced": 7807,
+  "inputSha256": "59c0d66e888784ffbf304c0b7d20d42e6dffb18a209e78589c83001b0887acdf",
+  "wordSha256": "b391acf872d44b75a2a761dfafe8f3ae3bfacd3b0b0afd8e09d4e27eed61cb5b",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 985966,
+    "ms": 5985.759667,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":7082,\"bestDefect\":7082,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":14,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":1034507,\"selectedEntries\":334256117}",
+      "{\"placements\":3810,\"setupNodes\":2119768,\"selectedEntries\":350669449}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 1034507,
+    "ms": 3867.4371659999997,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3810,\"setupNodes\":2119768,\"selectedEntries\":350669449}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 985966,
+    "optimizationMs": 580.1325830000005,
+    "verifiedSelectedEntries": 334256117
+  }
+}

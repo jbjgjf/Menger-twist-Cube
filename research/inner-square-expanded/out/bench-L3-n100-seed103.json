@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:52:39.025Z",
+  "level": 3,
+  "length": 100,
+  "seed": 103,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 20,
+    "extension": 41,
+    "inner": 39
+  },
+  "displaced": 6285,
+  "inputSha256": "8de2e6d68bc342fbee9a8c462b97cd78e209ad754bcb443119d16842ffd57793",
+  "wordSha256": "ef62c5736d3b9691faddaab4acf64d9aa9d4a06c71ca8b9afd09f02cfcac3fc3",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 841796,
+    "ms": 3718.263959,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3070,\"setupNodes\":2118552,\"selectedEntries\":283755534}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 808494,
+    "optimizationMs": 436.616,
+    "verifiedSelectedEntries": 272181810
+  },
+  "restoration": {
+    "moves": 808494,
+    "ms": 5221.274666,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":3561,\"bestDefect\":3561,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":7,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":841796,\"selectedEntries\":272181810}",
+      "{\"placements\":3070,\"setupNodes\":2118552,\"selectedEntries\":283755534}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  }
+}

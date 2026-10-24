@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T16:03:36.211Z",
+  "level": 4,
+  "length": 1000,
+  "seed": 103,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 330,
+    "extension": 341,
+    "inner": 329
+  },
+  "displaced": 153904,
+  "inputSha256": "2b79433a9958f5652d4b27163260bbae61c62f2b0d428af358d24ac7bccd3a92",
+  "wordSha256": "7d7f29a0c2aad893df0e623d9007f71fb636c9387b1a11d6ed22581b11ef54e8",
+  "poolSizes": [
+    1080,
+    43704,
+    46818
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 19688454,
+    "ms": 433707.455,
+    "success": true,
+    "explanation": [
+      "{\"placements\":74397,\"setupNodes\":58897236,\"selectedEntries\":74673484949}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 19449609,
+    "optimizationMs": 107949.01795799995,
+    "verifiedSelectedEntries": 74275249365
+  },
+  "restoration": {
+    "moves": 19449609,
+    "ms": 570606.689458,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":123618,\"bestDefect\":123618,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":31,\"maxDefectChange\":4096,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":19688454,\"selectedEntries\":74275249365}",
+      "{\"placements\":74397,\"setupNodes\":58897236,\"selectedEntries\":74673484949}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:53:37.457Z",
+  "level": 3,
+  "length": 100,
+  "seed": 108,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 28,
+    "extension": 40,
+    "inner": 32
+  },
+  "displaced": 7060,
+  "inputSha256": "19c5e2df262ef45955750c7f12692eae9b4188da2eb275b5ee4786c7349a0588",
+  "wordSha256": "e7bf2ce4d5ac65a583fc7343079aa83230611d5beaec56e2a0a26ed24df800bd",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 883741,
+    "ms": 5654.401375,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":3882,\"bestDefect\":3882,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":8,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":921304,\"selectedEntries\":298843988}",
+      "{\"placements\":3499,\"setupNodes\":2119216,\"selectedEntries\":311810668}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 921304,
+    "ms": 3736.1052090000003,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3499,\"setupNodes\":2119216,\"selectedEntries\":311810668}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 883741,
+    "optimizationMs": 548.2477500000005,
+    "verifiedSelectedEntries": 298843988
+  }
+}

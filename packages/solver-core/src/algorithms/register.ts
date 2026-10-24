@@ -26,3 +26,7 @@ registerAlgorithm(level2BlockRestorationAlgorithm);
 import { level3BlockRestorationAlgorithm, level4BlockRestorationAlgorithm } from './higherBlockRestorationSolver';
 registerAlgorithm(level3BlockRestorationAlgorithm);
 registerAlgorithm(level4BlockRestorationAlgorithm);
+
+import { level3InnerSquareCertifiedAlgorithm, level4InnerSquareCertifiedAlgorithm } from './innerSquareCertifiedSolver';
+registerAlgorithm(level3InnerSquareCertifiedAlgorithm);
+registerAlgorithm(level4InnerSquareCertifiedAlgorithm);

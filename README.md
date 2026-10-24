@@ -48,7 +48,7 @@ Load any of those JSON files into `apps/lab` ("Compare against a committed CLI r
 Level 4 now has a full standard-generator solver:
 
 ```bash
-npm run bench -- --algorithm=level4-slice-reduction --level=4 --seeds=1 --length=5
+npm run bench -- --move-system=standard --algorithm=level4-slice-reduction --level=4 --seeds=1 --length=5
 npm run prove:l4
 ```
 
@@ -57,6 +57,27 @@ Its 3,050 independent orbit certificates determine the exact state-space order
 in the target-turn metric. A general-level legal-move formula also gives
 `G_n = Ω(20^n/n)`. See the [proof](docs/proofs/level4-completeness.md) and
 [solver description](docs/algorithms/level4-slice-reduction-solver.md).
+
+## Inner-square system (current research)
+
+Lab and the benchmark CLI default to the expanded system containing slice,
+recursive extension, and every legal single-plane square-envelope subset rotation
+at Levels 2–4. The geometry scope and exact certificates are described in the
+[expanded proof](docs/proofs/inner-square-completeness.md).
+
+```bash
+npm run bench -- --level=3 --seeds=101 --length=100
+npm run test:inner-square
+npm run audit:inner-square
+npm run prove:inner-square
+```
+
+Levels 3/4 use `level3-inner-square-certified` / `level4-inner-square-certified`.
+Historical slice-reduction algorithms require `--move-system=standard`.
+Expanded Level4 has 1,294 position orbits, a 403,271-digit exact group order,
+and a counting lower bound of 81,274 target turns. This is a lower bound, not an
+optimal solver result. See the [study record](docs/research/inner-square-study.md)
+for the comparison protocol and open questions.
 
 ## Repository layout
 

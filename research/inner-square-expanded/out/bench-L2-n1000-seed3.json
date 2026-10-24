@@ -1,0 +1,53 @@
+{
+  "level": 2,
+  "length": 1000,
+  "seed": 3,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 337,
+    "extension": 315,
+    "inner": 348
+  },
+  "displaced": 393,
+  "inputSha256": "5e3d9992a148ca08e2381119c8f67c1786edbc648f5690483cebdcd425165472",
+  "wordSha256": "00de51c0e1cf7ac510568269d428edbbf8318174d26d40caf9071d37911ec4ba",
+  "poolSizes": [
+    108,
+    360,
+    54
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through orbit size 1536; bidirectional for larger orbits",
+  "implementationSha256": "aeeb4f8911050bd2b5e453b5e4ae3ce1dc6ec4d4a1d3b609df768e8535ab5470",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 4129,
+    "ms": 1425.836458,
+    "success": true,
+    "explanation": [
+      "parity vector 0x715 cancelled (3 atoms)",
+      "every cell on its home site (3322 atoms)",
+      "every cell in its home orientation (1047 atoms)"
+    ]
+  },
+  "D": {
+    "moves": 4044,
+    "optimizationMs": 3.7536250000000564,
+    "verifiedSelectedEntries": 212455
+  },
+  "restoration": {
+    "moves": 4044,
+    "ms": 310.43087500000024,
+    "success": true,
+    "explanation": [
+      "{\"moves\":0,\"restored\":false,\"initialDefect\":351,\"finalDefect\":334,\"expanded\":10000,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":4129}",
+      "parity vector 0x715 cancelled (3 atoms)",
+      "every cell on its home site (3322 atoms)",
+      "every cell in its home orientation (1047 atoms)"
+    ]
+  }
+}

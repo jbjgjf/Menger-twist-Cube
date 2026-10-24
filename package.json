@@ -28,7 +28,12 @@
     "verify:l4:synthetic": "node --import tsx research/level4/synthetic.ts",
     "bench": "npm run bench --workspace=@menger/solver-core --",
     "test:block-restoration": "node --import tsx --test research/block-restoration/*.test.ts",
-    "prove:block-restoration": "node --import tsx research/block-restoration/counting-bound.ts && node --import tsx research/block-restoration/census.ts"
+    "prove:block-restoration": "node --import tsx research/block-restoration/counting-bound.ts && node --import tsx research/block-restoration/census.ts",
+    "test:inner-square": "node --import tsx --test research/inner-square-expanded/test/*.test.ts",
+    "audit:inner-square": "node --import tsx research/inner-square-expanded/enumerate.ts 2 && node --import tsx research/inner-square-expanded/enumerate.ts 3 && node --import tsx research/inner-square-expanded/enumerate.ts 4 && node --import tsx research/inner-square-expanded/export-catalog.ts 4",
+    "prove:inner-square": "node --import tsx research/inner-square-expanded/certify.ts 3 && node --import tsx research/inner-square-expanded/independent-image.ts 3 && node --import tsx research/inner-square-expanded/certify.ts 4 && node --import tsx research/inner-square-expanded/independent-image.ts 4",
+    "bench:inner-square": "node --import tsx research/inner-square-expanded/benchmark.ts",
+    "verify:inner-square": "node --import tsx research/inner-square-expanded/verify-results.ts"
   },
   "devDependencies": {
     "@types/node": "^25.8.0",

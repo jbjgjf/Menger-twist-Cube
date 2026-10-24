@@ -1,0 +1,33 @@
+{
+  "level": 3,
+  "length": 30,
+  "seed": 1,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 10,
+    "extension": 9,
+    "inner": 11
+  },
+  "displaced": 4639,
+  "inputSha256": "f39f7573f344360973fb74a07bdc2881c2ac6edb9afbf1d5acc038a0459885c8",
+  "wordSha256": "743eb7125051d564e6ddda8f448dbffcdc1e5c3e0d7e58965b7150b56023c665",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "certified": {
+    "moves": 688195,
+    "ms": 120370.50775,
+    "success": true,
+    "explanation": [
+      "{\"placements\":2608,\"setupNodes\":48458547,\"selectedEntries\":230875073}"
+    ]
+  },
+  "D": {
+    "moves": 661423,
+    "optimizationMs": 1278.2424589999864,
+    "verifiedSelectedEntries": 221817113
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:55:22.549Z",
+  "level": 3,
+  "length": 1000,
+  "seed": 106,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 312,
+    "extension": 314,
+    "inner": 374
+  },
+  "displaced": 7824,
+  "inputSha256": "39436aebca46b61fce93c62459309df80980d1274d51f7cc5fcc4e104f049ec9",
+  "wordSha256": "1ec29bb65dd5a472bfdd2bdb6a28974bc4a2b2e875ee6da6b0f247cf1748ad94",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 1006202,
+    "ms": 6440.559709,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":7071,\"bestDefect\":7071,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":14,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":1055283,\"selectedEntries\":340125787}",
+      "{\"placements\":3831,\"setupNodes\":2119768,\"selectedEntries\":356698363}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 1055283,
+    "ms": 5754.727709000001,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3831,\"setupNodes\":2119768,\"selectedEntries\":356698363}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 1006202,
+    "optimizationMs": 822.7177080000001,
+    "verifiedSelectedEntries": 340125787
+  }
+}

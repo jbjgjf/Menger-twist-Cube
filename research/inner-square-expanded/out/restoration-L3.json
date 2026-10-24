@@ -1,0 +1,238 @@
+{
+  "level": 3,
+  "liftsChecked": 54,
+  "records": [
+    {
+      "macroAtom": "e:ring:X-3:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X-3:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X-3:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X-3:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X-3:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X-3:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X0:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X0:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X0:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X0:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X0:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X0:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X+3:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X+3:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X+3:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X+3:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X+3:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:X+3:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y-3:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y-3:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y-3:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y-3:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y-3:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y-3:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y0:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y0:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y0:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y0:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y0:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y0:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y+3:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y+3:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y+3:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y+3:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y+3:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Y+3:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z-3:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z-3:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z-3:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z-3:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z-3:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z-3:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z0:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z0:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z0:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z0:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z0:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z0:outer:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z+3:inner:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z+3:inner:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z+3:inner:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z+3:outer:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z+3:outer:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:Z+3:outer:180",
+      "liftLength": 3
+    }
+  ],
+  "fullEngineVerified": true,
+  "outputMoves": 4,
+  "phase": {
+    "atoms": 1,
+    "restored": true,
+    "initialDefect": 512,
+    "bestDefect": 0,
+    "expanded": 2,
+    "blockEvaluations": 128,
+    "distanceLowerBound": 1,
+    "maxDefectChange": 512,
+    "quotient": true,
+    "fallback": false,
+    "beforeShortening": 4,
+    "selectedEntries": 752
+  }
+}

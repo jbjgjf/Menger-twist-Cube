@@ -1,0 +1,57 @@
+{
+  "generatedAt": "2026-10-24T15:51:43.600Z",
+  "level": 2,
+  "length": 100,
+  "seed": 109,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 33,
+    "extension": 35,
+    "inner": 32
+  },
+  "displaced": 385,
+  "inputSha256": "10168e0bdd779b266df5f442cb7ed95003fa83db77d999af8ed3890d7ba16f30",
+  "wordSha256": "4a8d188d4686a4a9726f18fcf22fc6d063a7aef89037156014aeb100caeb87ca",
+  "poolSizes": [
+    108,
+    360,
+    54
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 3765,
+    "ms": 2090.1137919999996,
+    "success": true,
+    "explanation": [
+      "parity vector 0x6fc cancelled (4 atoms)",
+      "every cell on its home site (3190 atoms)",
+      "every cell in its home orientation (845 atoms)"
+    ],
+    "notes": "Solved by the certified reduction in the inner-square move system."
+  },
+  "D": {
+    "moves": 3722,
+    "optimizationMs": 3.1592920000002778,
+    "verifiedSelectedEntries": 203073
+  },
+  "restoration": {
+    "moves": 3722,
+    "ms": 159.99604200000022,
+    "success": true,
+    "explanation": [
+      "{\"moves\":0,\"restored\":false,\"initialDefect\":333,\"finalDefect\":333,\"expanded\":0,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":3765}",
+      "parity vector 0x6fc cancelled (4 atoms)",
+      "every cell on its home site (3190 atoms)",
+      "every cell in its home orientation (845 atoms)"
+    ],
+    "notes": "Solved by the certified reduction in the inner-square move system."
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:53:49.570Z",
+  "level": 3,
+  "length": 100,
+  "seed": 109,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 33,
+    "extension": 35,
+    "inner": 32
+  },
+  "displaced": 7175,
+  "inputSha256": "5d55eb73718320d713813e3264e4e7c8bb00a752b9c625b3cd6b5a342066fcb1",
+  "wordSha256": "fe8cc41750f84352482026479e16132c5d130798bacadba891b2f5a49a8cf4fc",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 915508,
+    "ms": 3714.355292,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3482,\"setupNodes\":2119216,\"selectedEntries\":309112188}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 877440,
+    "optimizationMs": 537.2870830000002,
+    "verifiedSelectedEntries": 296212976
+  },
+  "restoration": {
+    "moves": 877440,
+    "ms": 5827.445708,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":3388,\"bestDefect\":3388,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":7,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":915508,\"selectedEntries\":296212976}",
+      "{\"placements\":3482,\"setupNodes\":2119216,\"selectedEntries\":309112188}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  }
+}

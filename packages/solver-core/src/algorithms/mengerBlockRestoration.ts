@@ -63,10 +63,36 @@ export const blockGeometry = (group: SparseGroup): MengerBlockGeometry => {
   if (!geometry) { geometry = new MengerBlockGeometry(group); geometryCache.set(group, geometry); }
   return geometry;
 };
+const boundCache = new WeakMap<SparseGroup, { maxDefectChange: number; certifiedPreservingAtoms: number }>();
+/** Whole leaf blocks with one common offset rotation certify membership in the
+ * positional block-permuting subgroup. Its right action preserves D on EVERY
+ * state, including torn states. Other atoms obey the moved-piece Lipschitz bound. */
+export function restorationDistanceBound(group: SparseGroup) {
+  let cached = boundCache.get(group); if (cached) return cached;
+  const geometry = blockGeometry(group);
+  const counts = new Uint8Array(geometry.members.length), dest = new Int32Array(counts.length), consistent = new Uint8Array(counts.length);
+  let maxDefectChange = 0, certifiedPreservingAtoms = 0;
+  for (const atom of group.atoms) {
+    const touched: number[] = []; let moved = 0;
+    for (const [s,t] of atom.map) {
+      if (s === t) continue; moved++;
+      const home = geometry.region[s]!;
+      if (!counts[home]) { touched.push(home); dest[home] = geometry.region[t]!; consistent[home] = 1; }
+      counts[home] = counts[home]! + 1;
+      if (dest[home] !== geometry.region[t] || !matching[geometry.offset[s]!]![geometry.offset[t]!]!.includes(atom.rot)) consistent[home] = 0;
+    }
+    const preserves = touched.every(home => counts[home] === 20 && consistent[home] === 1);
+    if (preserves) certifiedPreservingAtoms++; else maxDefectChange = Math.max(maxDefectChange, moved);
+    for (const home of touched) counts[home] = 0;
+  }
+  cached = { maxDefectChange, certifiedPreservingAtoms }; boundCache.set(group, cached); return cached;
+}
+
 export interface BlockSearchOptions { depth?: number; width?: number; maxNodes?: number }
 export interface BlockSearchResult {
   atoms: SparseAtom[]; restored: boolean; initialDefect: number; bestDefect: number;
   expanded: number; blockEvaluations: number;
+  distanceLowerBound?: number; maxDefectChange?: number; certifiedDepthRejection?: boolean;
 }
 /** Candidate evaluation visits only home blocks touched by the atom. It does not
  * build an N-by-N compatibility table or clone an N-cell state per candidate. */
@@ -81,6 +107,10 @@ export function searchMengerBlockRestoration(group: SparseGroup, input: SparsePu
   const stamps = new Int32Array(geometry.members.length); let stamp = 0;
   let expanded = 0; let blockEvaluations = 0; let bestDefect = initialDefect;
   if (!initialDefect) return { atoms: [], restored: true, initialDefect, bestDefect, expanded, blockEvaluations };
+  const { maxDefectChange } = restorationDistanceBound(group);
+  const distanceLowerBound = maxDefectChange ? Math.ceil(initialDefect / maxDefectChange) : Infinity;
+  if (distanceLowerBound > depthLimit) return { atoms: [], restored: false, initialDefect, bestDefect, expanded, blockEvaluations,
+    distanceLowerBound, maxDefectChange, certifiedDepthRejection: true };
   for (let depth = 0; depth < depthLimit; depth++) {
     const candidates: Array<{ parent: Node; atom: SparseAtom; defect: number; affected: number[]; agreement: number[] }> = [];
     for (const parent of beam) for (const atom of group.atoms) {
@@ -102,7 +132,7 @@ export function searchMengerBlockRestoration(group: SparseGroup, input: SparsePu
       });
       bestDefect = Math.min(bestDefect, defect);
       const candidate = { parent, atom, defect, affected, agreement };
-      if (!defect) return { atoms: [...parent.word, atom], restored: true, initialDefect, bestDefect, expanded, blockEvaluations };
+      if (!defect) return { atoms: [...parent.word, atom], restored: true, initialDefect, bestDefect, expanded, blockEvaluations, distanceLowerBound, maxDefectChange };
       // Store only the bounded beam, not every candidate's arrays.
       if (candidates.length < width || defect < candidates[candidates.length - 1]!.defect) {
         candidates.push(candidate); candidates.sort((a, b) => a.defect - b.defect); candidates.length = Math.min(width, candidates.length);
@@ -116,11 +146,11 @@ export function searchMengerBlockRestoration(group: SparseGroup, input: SparsePu
       return { positions, pieces, agreements: scores, defect, word: [...parent.word, atom] };
     });
   }
-  return { atoms: [], restored: false, initialDefect, bestDefect, expanded, blockEvaluations };
+  return { atoms: [], restored: false, initialDefect, bestDefect, expanded, blockEvaluations, distanceLowerBound, maxDefectChange };
 }
 
 export function inspectMengerBlocks(state: MengerPuzzleState): { defect: number; blocks: number } {
-  const group = getCachedSparseGroup(state.level); const input = sparseStateOf(group, state.cubies);
+  const group = getCachedSparseGroup(state.level, state.moveSystem ?? 'standard'); const input = sparseStateOf(group, state.cubies);
   const geometry = blockGeometry(group);
   return { defect: group.N - geometry.agreements(input.siteOf).reduce((a, b) => a + b, 0), blocks: geometry.members.length };
 }

@@ -1,0 +1,7918 @@
+{
+  "level": 4,
+  "liftsChecked": 1974,
+  "records": [
+    {
+      "macroAtom": "e:ring:n3:X-12:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-12:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-10:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-10:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-10:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-10:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-10:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-10:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-9:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-8:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-8:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-8:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-8:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-8:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-8:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-6:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-4:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-3:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-2:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X-1:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i21:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i21:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i22:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i22:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X0:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X1:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X2:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X3:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X4:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X6:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X8:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X8:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X8:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X8:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X8:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X8:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X9:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X10:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X10:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X10:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X10:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X10:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X10:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:X12:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-12:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-10:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-10:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-10:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-10:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-10:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-10:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-9:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-8:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-8:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-8:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-8:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-8:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-8:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-6:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-4:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-3:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-2:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y-1:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i21:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i21:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i22:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i22:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y0:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y1:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y2:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y3:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y4:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y6:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y8:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y8:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y8:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y8:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y8:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y8:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y9:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y10:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y10:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y10:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y10:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y10:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y10:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Y12:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-12:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-10:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-10:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-10:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-10:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-10:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-10:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-9:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-8:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-8:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-8:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-8:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-8:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-8:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-6:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-4:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-3:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-2:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z-1:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i21:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i21:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i22:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i22:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z0:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z1:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z2:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z3:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z4:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z6:i27:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z8:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z8:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z8:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z8:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z8:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z8:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i6:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i6:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i7:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i7:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z9:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z10:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z10:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z10:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z10:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z10:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z10:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i0:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i0:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i0:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i1:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i1:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i1:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i2:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i2:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i2:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i3:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i3:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i3:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i4:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i4:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i4:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i5:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i5:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i5:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i6:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i7:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i8:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i8:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i8:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i9:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i9:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i9:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i10:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i10:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i10:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i11:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i11:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i11:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i12:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i12:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i12:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i13:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i13:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i13:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i14:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i14:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i14:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i15:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i15:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i15:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i16:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i16:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i16:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i17:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i17:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i17:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i18:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i18:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i18:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i19:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i19:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i19:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i20:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i20:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i20:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i21:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i22:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i23:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i23:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i23:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i24:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i24:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i24:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i25:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i25:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i25:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i26:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i26:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i26:180",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i27:90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i27:-90",
+      "liftLength": 3
+    },
+    {
+      "macroAtom": "e:ring:n3:Z12:i27:180",
+      "liftLength": 3
+    }
+  ],
+  "fullEngineVerified": true,
+  "outputMoves": 4,
+  "phase": {
+    "atoms": 1,
+    "restored": true,
+    "initialDefect": 4096,
+    "bestDefect": 0,
+    "expanded": 2,
+    "blockEvaluations": 1024,
+    "distanceLowerBound": 1,
+    "maxDefectChange": 4096,
+    "quotient": true,
+    "fallback": false,
+    "beforeShortening": 4,
+    "selectedEntries": 4176
+  }
+}

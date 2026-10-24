@@ -795,6 +795,7 @@ const solve = async (
 };
 
 export const level1QuotientAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  moveSystemsSupported: ['standard', 'inner-square'],
   id: solverId,
   name: solverName,
   version: solverVersion,

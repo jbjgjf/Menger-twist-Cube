@@ -2,9 +2,11 @@ import type { MengerPuzzleState } from '@menger/engine';
 import type { SolverAlgorithm, SolverMove } from '../algorithm/types';
 import type { PuzzleModel } from '../model/puzzleModel';
 import { allBlockRotations, applyMatrixToVector } from './blockRotations';
-import { createSparseGroup, type SparseGroup, type SparseAtom } from './mengerSparseGroup';
+import { createSparseGroup, getCachedSparseGroup, type SparseGroup, type SparseAtom } from './mengerSparseGroup';
 import { level2BlockQuotientAlgorithm } from './level2BlockQuotientSolver';
 import { level2CertifiedAlgorithm } from './level2CertifiedSolver';
+import { sparseStateOf } from './mengerCertifiedReduction';
+import { searchMengerBlockRestoration } from './mengerBlockRestoration';
 import { progressForCubies, stateKey } from './level1State';
 
 const block = (p: readonly number[]) => p.map(v => Math.floor((v + 4) / 3) - 1);
@@ -54,7 +56,13 @@ export interface RestorationSearch {
 /** State-only positional beam search. Zero defect means all 20 blocks are rigid,
  * not necessarily home. Budgets affect this fast path, never the certified fallback. */
 export function searchLevel2BlockRestoration(state: MengerPuzzleState, options: RestorationOptions = {}): RestorationSearch {
-  if (state.level !== 2 || state.moveSystem === 'inner-square') throw new Error('Standard Level 2 required');
+  if (state.level !== 2) throw new Error('Level 2 required');
+  if (state.moveSystem === 'inner-square') {
+    const group = getCachedSparseGroup(2, 'inner-square');
+    const result = searchMengerBlockRestoration(group, sparseStateOf(group, state.cubies), { depth: 4, width: 12, maxNodes: 10000, ...options });
+    return { moves: result.atoms.map(a => a.move), restored: result.restored, initialDefect: result.initialDefect,
+      finalDefect: result.bestDefect, expanded: result.expanded, multiRegionMoves: 0 };
+  }
   const { group, score, atoms } = cached ??= buildLibrary();
   const positions = new Int32Array(400).fill(-1);
   for (const c of state.cubies) {
@@ -95,11 +103,24 @@ export function searchLevel2BlockRestoration(state: MengerPuzzleState, options: 
 
 /** Disjoint selected-site supports imply commutation, including orientations.
  * Move equal targets together only across this sufficient commuting condition. */
+const shorteningLibraries = new WeakMap<SparseGroup, { lookup: Map<string,SparseAtom>; canonical: WeakMap<SolverMove,SparseAtom> }>();
 export function shortenLevel2Word(group: SparseGroup, input: readonly SolverMove[]): SolverMove[] {
-  const lookup = new Map(group.atoms.map(a => [`${a.move.targetId}:${a.angle}`, a]));
+  let library = shorteningLibraries.get(group);
+  if (!library) {
+    library = { lookup: new Map(group.atoms.map(a => [`${a.move.targetId}:${a.angle}`, a])), canonical: new WeakMap(group.atoms.map(a => [a.move,a])) };
+    shorteningLibraries.set(group,library);
+  }
+  const { lookup,canonical } = library;
+  const resolve = (move: SolverMove) => canonical.get(move) ?? lookup.get(`${move.targetId}:${move.angle}`);
+  const overlaps = (a: SparseAtom,b: SparseAtom) => {
+    const small = a.map.size <= b.map.size ? a.map : b.map;
+    const large = a.map.size <= b.map.size ? b.map : a.map;
+    for (const s of small.keys()) if (large.has(s)) return true;
+    return false;
+  };
   const out: SolverMove[] = [];
   for (const move of input) {
-    const atom = lookup.get(`${move.targetId}:${move.angle}`);
+    const atom = resolve(move);
     let merged = false;
     if (atom) for (let j = out.length - 1; j >= Math.max(0, out.length - 64); j--) {
       const previous = out[j]!;
@@ -113,8 +134,8 @@ export function shortenLevel2Word(group: SparseGroup, input: readonly SolverMove
         }
         merged = true; break;
       }
-      const other = lookup.get(`${previous.targetId}:${previous.angle}`);
-      if (!other || [...atom.map.keys()].some(s => other.map.has(s))) break;
+      const other = resolve(previous);
+      if (!other || overlaps(atom,other)) break;
     }
     if (!merged) out.push(move);
   }
@@ -122,13 +143,14 @@ export function shortenLevel2Word(group: SparseGroup, input: readonly SolverMove
 }
 
 export const level2BlockRestorationAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  moveSystemsSupported: ['standard', 'inner-square'],
   id: 'level2-block-restoration', name: 'Level 2 block restoration with certified completion',
   version: '0.1.0', levelsSupported: [2],
   async solve(model: PuzzleModel<MengerPuzzleState, SolverMove>, state: MengerPuzzleState) {
     const start = performance.now();
     let search: RestorationSearch | undefined;
     let current = state;
-    if (state.level === 2 && state.moveSystem !== 'inner-square') {
+    if (state.level === 2) {
       try { search = searchLevel2BlockRestoration(state); } catch { /* Certified solver diagnoses invalid states. */ }
     }
     const prefix = search?.moves ?? [];
@@ -140,8 +162,8 @@ export const level2BlockRestorationAlgorithm: SolverAlgorithm<MengerPuzzleState,
     const quotient = result?.success ?? false;
     if (!result?.success) result = await level2CertifiedAlgorithm.solve(model, current);
     const raw = [...prefix, ...result.output_moves];
-    const output = result.success && state.level === 2 && state.moveSystem !== 'inner-square'
-      ? shortenLevel2Word((cached ??= buildLibrary()).group, raw) : raw;
+    const output = result.success && state.level === 2
+      ? shortenLevel2Word(state.moveSystem === 'inner-square' ? getCachedSparseGroup(2, 'inner-square') : (cached ??= buildLibrary()).group, raw) : raw;
     if (result.success) {
       let replay = state;
       for (const move of output) {

@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:52:16.217Z",
+  "level": 3,
+  "length": 100,
+  "seed": 101,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 28,
+    "extension": 33,
+    "inner": 39
+  },
+  "displaced": 7161,
+  "inputSha256": "9db3e6d2815b6d027d500ce349587b6080925cb10930986ce34818fab7932c74",
+  "wordSha256": "ae19caa605bf0f6ea552874f35359d3879e231e2fd1ac407f456d9f20a895739",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 909256,
+    "ms": 3783.8924159999997,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3486,\"setupNodes\":2118664,\"selectedEntries\":307232574}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 870828,
+    "optimizationMs": 501.20891699999993,
+    "verifiedSelectedEntries": 294175534
+  },
+  "restoration": {
+    "moves": 870828,
+    "ms": 5324.199208,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":4343,\"bestDefect\":4343,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":9,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":909256,\"selectedEntries\":294175534}",
+      "{\"placements\":3486,\"setupNodes\":2118664,\"selectedEntries\":307232574}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  }
+}

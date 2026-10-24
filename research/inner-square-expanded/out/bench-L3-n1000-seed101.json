@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:54:15.156Z",
+  "level": 3,
+  "length": 1000,
+  "seed": 101,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 345,
+    "extension": 321,
+    "inner": 334
+  },
+  "displaced": 7838,
+  "inputSha256": "ab9709cbbfa9dd0f9492e902f183f0a4dc934a621fc56ad70afaa15ffe411578",
+  "wordSha256": "f122478a418462582b20ca227a6246ec08b8a1359246c26716ce554e00891e56",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 1053377,
+    "ms": 4102.443875000001,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3816,\"setupNodes\":2119768,\"selectedEntries\":355252022}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 1004356,
+    "optimizationMs": 594.2326249999996,
+    "verifiedSelectedEntries": 338600618
+  },
+  "restoration": {
+    "moves": 1004356,
+    "ms": 5986.856875,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":7101,\"bestDefect\":7101,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":14,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":1053377,\"selectedEntries\":338600618}",
+      "{\"placements\":3816,\"setupNodes\":2119768,\"selectedEntries\":355252022}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  }
+}
