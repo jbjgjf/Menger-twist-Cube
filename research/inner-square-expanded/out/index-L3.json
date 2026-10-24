@@ -1,0 +1,9 @@
+{
+  "level": 3,
+  "oldOrderDigits": 11919,
+  "expandedOrderDigits": 14105,
+  "indexDigits": 2187,
+  "indexApproxScientific": "2.25502575098e2186",
+  "strictExtension": true,
+  "oldOrderFormulaDependency": "docs/proofs/level3-completeness.tex"
+}

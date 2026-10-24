@@ -1,0 +1,22 @@
+[solver:level4-inner-square-certified] Normalized joint signatures in 55 atoms
+[solver:level4-inner-square-certified] Placed orbit 0/1294, size 8, 174 atoms
+[solver:level4-inner-square-certified] Placed orbit 4/1294, size 3216, 137572 atoms
+[solver:level4-inner-square-certified] Placed orbit 13/1294, size 1032, 260286 atoms
+[solver:level4-inner-square-certified] Placed orbit 20/1294, size 24, 345294 atoms
+[solver:level4-inner-square-certified] Placed orbit 38/1294, size 1536, 929072 atoms
+[solver:level4-inner-square-certified] Placed orbit 40/1294, size 24, 957814 atoms
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Map maximum size exceeded
+    at <anonymous> (/Users/shou/hobby/menger-cube/research/inner-square-expanded/benchmark.ts:45:2) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.11.0

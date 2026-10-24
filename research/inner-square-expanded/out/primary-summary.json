@@ -1,0 +1,106 @@
+{
+  "cohort": "held-out seeds101..110 L2/3;101..103 L4; no failure exclusion",
+  "bootstrap": "10000 resamples of paired seeds, PRNG20261025, percentile interval; exploratory uncertainty for the declared seeded distribution, not uniform-group or runtime confidence",
+  "runtimeClaim": false,
+  "groups": [
+    {
+      "level": 2,
+      "length": 100,
+      "expectedTrials": 10,
+      "completeTrials": 10,
+      "missingOrFailedSeeds": [],
+      "meanBaselineMoves": 3871.4,
+      "meanDMoves": 3814.3,
+      "meanPercentReductionD": 1.4725000123409413,
+      "pairedSeedBootstrap95Percentile": [
+        1.3459637841725562,
+        1.6361658144076614
+      ],
+      "hierarchicalEqualsD": 10,
+      "displacedRange": [
+        362,
+        395
+      ],
+      "implementationHashes": [
+        "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a"
+      ]
+    },
+    {
+      "level": 2,
+      "length": 1000,
+      "expectedTrials": 10,
+      "completeTrials": 10,
+      "missingOrFailedSeeds": [],
+      "meanBaselineMoves": 4019,
+      "meanDMoves": 3967.1,
+      "meanPercentReductionD": 1.285573644954769,
+      "pairedSeedBootstrap95Percentile": [
+        1.1048224259109287,
+        1.483298984603108
+      ],
+      "hierarchicalEqualsD": 10,
+      "displacedRange": [
+        384,
+        391
+      ],
+      "implementationHashes": [
+        "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a"
+      ]
+    },
+    {
+      "level": 3,
+      "length": 100,
+      "expectedTrials": 10,
+      "completeTrials": 10,
+      "missingOrFailedSeeds": [],
+      "meanBaselineMoves": 893617.4,
+      "meanDMoves": 857245.2,
+      "meanPercentReductionD": 4.067564967303114,
+      "pairedSeedBootstrap95Percentile": [
+        4.006131003779358,
+        4.123920704558066
+      ],
+      "hierarchicalEqualsD": 10,
+      "displacedRange": [
+        5484,
+        7636
+      ],
+      "implementationHashes": [
+        "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a"
+      ]
+    },
+    {
+      "level": 3,
+      "length": 1000,
+      "expectedTrials": 10,
+      "completeTrials": 10,
+      "missingOrFailedSeeds": [],
+      "meanBaselineMoves": 1054840.1,
+      "meanDMoves": 1005477.3,
+      "meanPercentReductionD": 4.678931636693164,
+      "pairedSeedBootstrap95Percentile": [
+        4.607845021410448,
+        4.750065706564346
+      ],
+      "hierarchicalEqualsD": 10,
+      "displacedRange": [
+        7797,
+        7873
+      ],
+      "implementationHashes": [
+        "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a"
+      ]
+    },
+    {
+      "level": 4,
+      "length": 1000,
+      "expectedTrials": 3,
+      "completeTrials": 0,
+      "missingOrFailedSeeds": [
+        101,
+        102,
+        103
+      ]
+    }
+  ]
+}

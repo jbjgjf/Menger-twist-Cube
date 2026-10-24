@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-24T14:53:11.661Z",
+  "level": 3,
+  "length": 100,
+  "seed": 1,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 34,
+    "extension": 36,
+    "inner": 30
+  },
+  "displaced": 7302,
+  "inputSha256": "898a4cb25d353cfd158ca5c2b0f23220c59463f76998c1b7fbc9cfe5fabf8625",
+  "wordSha256": "56d3e3ebebbb17c1491db0dad1c1a21aba2a4a192d2b688ccf541a5a69770d6e",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "certified": {
+    "moves": 952749,
+    "ms": 2852.199791,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3570,\"setupNodes\":2109544,\"selectedEntries\":321129231}"
+    ]
+  },
+  "D": {
+    "moves": 913381,
+    "optimizationMs": 1398.2522499999995,
+    "verifiedSelectedEntries": 307701003
+  },
+  "transportPolicy": "dense through orbit size 1536; bidirectional for larger orbits",
+  "implementationSha256": "40e17a94e52820188dc4a912027cba0373a1741fea7bcfbd5722ddcd7e4cccb6",
+  "restoration": {
+    "moves": 913381,
+    "ms": 5718.0805,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":3816,\"bestDefect\":3614,\"expanded\":16653,\"blockEvaluations\":347205,\"quotient\":false,\"fallback\":true,\"beforeShortening\":952749,\"selectedEntries\":307701003}",
+      "{\"placements\":3570,\"setupNodes\":2109544,\"selectedEntries\":321129231}"
+    ]
+  },
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "jointLibraryPrewarmed": true,
+  "restorationIncludesD": true
+}

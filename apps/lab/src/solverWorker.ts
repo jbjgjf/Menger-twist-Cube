@@ -1,7 +1,7 @@
 import { Quaternion } from 'three';
 import {
   getAlgorithm,
-  mengerPuzzleModel,
+  createMengerPuzzleModel,
   onSolverDebug,
   runBenchmark,
   createSeededRng,
@@ -32,13 +32,15 @@ self.onmessage = (event: MessageEvent<SolverWorkerRequest>): void => {
   void (async () => {
     try {
       const request = event.data;
+      const model = createMengerPuzzleModel(request.moveSystem);
       const algorithm = getAlgorithm(request.algorithmId);
       if (!algorithm) throw new Error(`Unknown solver algorithm: ${request.algorithmId}`);
+      if (!(algorithm.moveSystemsSupported ?? ['standard']).includes(request.moveSystem)) throw new Error('Algorithm does not support the selected move system.');
 
       if (request.kind === 'scramble') {
-        const canonical = mengerPuzzleModel.createState(request.level);
-        const pool = algorithm.scrambleMovePool ? (state: typeof canonical) => algorithm.scrambleMovePool!(mengerPuzzleModel, state) : undefined;
-        const { state, moves } = scrambleState(mengerPuzzleModel, canonical, createSeededRng(request.seed), request.length, pool);
+        const canonical = model.createState(request.level);
+        const pool = algorithm.scrambleMovePool ? (state: typeof canonical) => algorithm.scrambleMovePool!(model, state) : undefined;
+        const { state, moves } = scrambleState(model, canonical, createSeededRng(request.seed), request.length, pool);
         send({ kind: 'scramble-result', result: { moveCount: moves.length, cubies: state.cubies.map((c) => ({
           id: c.id, currentPosition: [...c.currentPosition],
           orientation: [c.orientation.x, c.orientation.y, c.orientation.z, c.orientation.w],
@@ -47,13 +49,13 @@ self.onmessage = (event: MessageEvent<SolverWorkerRequest>): void => {
       }
 
       if (request.kind === 'benchmark') {
-        const result = await runBenchmark(mengerPuzzleModel, algorithm, request.spec);
+        const result = await runBenchmark(model, algorithm, request.spec);
         send({ kind: 'benchmark-result', result });
         return;
       }
 
-      const canonical = mengerPuzzleModel.createState(request.level);
-      const result = await algorithm.solve(mengerPuzzleModel, {
+      const canonical = model.createState(request.level);
+      const result = await algorithm.solve(model, {
         ...canonical,
         cubies: restoreCubies(canonical.cubies, request.cubies),
       });

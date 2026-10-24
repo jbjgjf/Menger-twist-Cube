@@ -337,8 +337,9 @@ export interface SubsetEnumerationStats {
 export const enumerateSubsetCandidates = (
   cubies: Cubie[],
   level: number,
-  options: { closedSetCap?: number; planeFilter?: (axisIndex: AxisIndex, layer: number) => boolean } = {},
+  options: { closedSetCap?: number; planeFilter?: (axisIndex: AxisIndex, layer: number) => boolean; collisionOracle?: typeof orbitCollides } = {},
 ): { candidates: Candidate[]; stats: SubsetEnumerationStats } => {
+  const collides = options.collisionOracle ?? orbitCollides;
   const cap = options.closedSetCap ?? 1_000_000;
   const planeFilter = options.planeFilter ?? (() => true);
   const config = createPuzzleConfig(level);
@@ -392,7 +393,7 @@ export const enumerateSubsetCandidates = (
             changed = false;
             for (let index = 0; index < orbits.length; index += 1) {
               if (!alive[index]) continue;
-              if (!orbitCollides(orbits[index]!, permanentCells, axisIndex, pivot, angle)) continue;
+              if (!collides(orbits[index]!, permanentCells, axisIndex, pivot, angle)) continue;
               alive[index] = false;
               stats.hardBlockedOrbits += 1;
               permanentCells.push(...orbits[index]!);
@@ -408,7 +409,7 @@ export const enumerateSubsetCandidates = (
             const targets: number[] = [];
             for (const other of live) {
               if (other === index) continue;
-              if (orbitCollides(orbits[index]!, orbits[other]!, axisIndex, pivot, angle)) {
+              if (collides(orbits[index]!, orbits[other]!, axisIndex, pivot, angle)) {
                 targets.push(other);
               }
             }

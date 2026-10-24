@@ -1,0 +1,9 @@
+{
+  "level": 4,
+  "oldOrderDigits": 244937,
+  "expandedOrderDigits": 403271,
+  "indexDigits": 158335,
+  "indexApproxScientific": "1.30714946732e158334",
+  "strictExtension": true,
+  "oldOrderFormulaDependency": "docs/proofs/level4-completeness.md"
+}

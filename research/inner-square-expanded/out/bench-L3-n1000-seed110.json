@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:56:18.856Z",
+  "level": 3,
+  "length": 1000,
+  "seed": 110,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 327,
+    "extension": 323,
+    "inner": 350
+  },
+  "displaced": 7848,
+  "inputSha256": "30260b64998c15d80e64fe0dbf9cbb67177894c97f4827e2b955ed9108b37022",
+  "wordSha256": "115ed1111d6cd35fc15798c4b75abe66232824a3d5dc3a9fd513a2abd0ae81c0",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 1011813,
+    "ms": 6051.564667000001,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":7094,\"bestDefect\":7094,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":14,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":1061915,\"selectedEntries\":342620219}",
+      "{\"placements\":3838,\"setupNodes\":2119768,\"selectedEntries\":359508639}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 1061915,
+    "ms": 3969.401541000001,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3838,\"setupNodes\":2119768,\"selectedEntries\":359508639}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 1011813,
+    "optimizationMs": 571.6081250000007,
+    "verifiedSelectedEntries": 342620219
+  }
+}

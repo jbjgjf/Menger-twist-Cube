@@ -12,3 +12,11 @@
 - [`research/benchmarking.md`](research/benchmarking.md) — benchmark methodology, the CLI, and how to add a new experiment.
 - [`research/level3-solver-completion-audit.md`](research/level3-solver-completion-audit.md) — independent Level 3 completion audit, browser-safety changes, and current Level-n God's-number bounds.
 - [`play/overview.md`](play/overview.md) — the Play app's source layout and where its docs live.
+
+## 現行の研究対象：内面回転を含む系
+
+- [`research/inner-square-study.md`](research/inner-square-study.md) — 研究課題、全生成元の比較方法、ISEFに向けた証拠と限界。
+- [`proofs/inner-square-completeness.md`](proofs/inner-square-completeness.md) — Level3/4の新しい軌道・共同署名・構成的完全性・正確な群位数。
+- [`algorithms/inner-square-certified-solver.md`](algorithms/inner-square-certified-solver.md) — 実装、復元と案D、CLIとLabの利用方法。
+
+上の従来Level3/4資料は `standard` 系に対する成果。現在のLabとCLIは `inner-square` を既定にする。

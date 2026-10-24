@@ -1,14 +1,16 @@
 #!/usr/bin/env node
+import type { MoveSystem } from '@menger/engine';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { mengerPuzzleModel } from '../model/mengerPuzzleModel';
+import { createMengerPuzzleModel } from '../model/mengerPuzzleModel';
 import { getAlgorithm, listAlgorithms } from '../algorithm/registry';
 import { runBenchmark } from '../benchmark/runner';
 import '../algorithms/register';
 
 interface CliArgs {
   algorithmId: string;
+  moveSystem: MoveSystem;
   level: number;
   seeds: number[];
   scrambleLength: number;
@@ -18,7 +20,8 @@ interface CliArgs {
 
 const usage = `Usage: bench [options]
 
-  --algorithm=<id>     Algorithm id to run (default: level1-quotient)
+  --move-system=<id>   inner-square (default) or standard for historical comparison
+  --algorithm=<id>     Algorithm id to run (default: complete solver for selected level)
   --level=<n>           Puzzle level to scramble and solve (default: 1)
   --seeds=1,2,3          Explicit comma-separated scramble seeds
   --count=<n>           Generate seeds 1..n (default: 20, ignored if --seeds is set)
@@ -36,7 +39,10 @@ const parseArgValue = (argv: string[], flag: string): string | undefined => {
 };
 
 const parseArgs = (argv: string[]): CliArgs => {
-  const algorithmId = parseArgValue(argv, 'algorithm') ?? 'level1-quotient';
+  const moveSystem = parseArgValue(argv, 'move-system') ?? 'inner-square';
+  if (moveSystem !== 'standard' && moveSystem !== 'inner-square') throw new Error('Unknown move system');
+  const requestedLevel = Number(parseArgValue(argv, 'level') ?? '1');
+  const algorithmId = parseArgValue(argv, 'algorithm') ?? (requestedLevel === 1 ? 'level1-quotient' : requestedLevel === 2 ? 'level2-certified' : moveSystem === 'standard' ? `level${requestedLevel}-slice-reduction` : `level${requestedLevel}-inner-square-certified`);
   const level = Number(parseArgValue(argv, 'level') ?? '1');
   const scrambleLength = Number(parseArgValue(argv, 'length') ?? '20');
   const seedsArg = parseArgValue(argv, 'seeds');
@@ -47,6 +53,7 @@ const parseArgs = (argv: string[]): CliArgs => {
 
   return {
     algorithmId,
+    moveSystem,
     level,
     seeds,
     scrambleLength,
@@ -78,18 +85,20 @@ const main = async () => {
     return;
   }
 
-  const result = await runBenchmark(mengerPuzzleModel, algorithm, {
+  if (!(algorithm.moveSystemsSupported ?? ['standard']).includes(args.moveSystem)) throw new Error('Algorithm does not support the selected move system. Use --move-system=standard for historical solvers.');
+  const model = createMengerPuzzleModel(args.moveSystem);
+  const result = await runBenchmark(model, algorithm, {
     level: args.level,
     scrambleSeeds: args.seeds,
     scrambleLength: args.scrambleLength,
   });
 
-  const outPath = args.outPath ?? defaultOutPath(args.outDir, mengerPuzzleModel.id, algorithm.id, args.level);
+  const outPath = args.outPath ?? defaultOutPath(args.outDir, model.id, algorithm.id, args.level);
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, JSON.stringify(result, null, 2));
 
   console.log(`Algorithm: ${algorithm.id} (${algorithm.name}@${algorithm.version})`);
-  console.log(`Model: ${mengerPuzzleModel.id}, level ${args.level}, ${args.seeds.length} seed(s), ${args.scrambleLength} scramble moves each`);
+  console.log(`Model: ${model.id}, level ${args.level}, ${args.seeds.length} seed(s), ${args.scrambleLength} scramble moves each`);
   console.log(
     `Success rate: ${(result.summary.successRate * 100).toFixed(1)}% — ` +
       `avg ${result.summary.averageRuntime.toFixed(1)}ms, avg ${result.summary.averageMoveCount.toFixed(1)} moves`,

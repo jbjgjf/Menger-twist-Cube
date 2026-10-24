@@ -1,0 +1,482 @@
+{
+  "records": [
+    {
+      "orbit": 0,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 4157.989083,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 1,
+      "kind": "C4",
+      "moves": 79,
+      "ms": 316.75833299999977,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 4,
+      "kind": "C4",
+      "moves": 104,
+      "ms": 2312.797875,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 4,
+      "kind": "flip",
+      "moves": 416,
+      "ms": 2076.158041999999,
+      "verified": "full engine endpoint"
+    },
+    {
+      "orbit": 7,
+      "kind": "C4",
+      "moves": 79,
+      "ms": 336.2322499999973,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 10,
+      "kind": "C4",
+      "moves": 118,
+      "ms": 356.42745800000193,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 13,
+      "kind": "C4",
+      "moves": 122,
+      "ms": 1642.4932090000002,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 16,
+      "kind": "C4",
+      "moves": 118,
+      "ms": 355.19566699999996,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 19,
+      "kind": "C4",
+      "moves": 79,
+      "ms": 333.51287500000035,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 24,
+      "kind": "C4",
+      "moves": 79,
+      "ms": 342.8763340000005,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 27,
+      "kind": "C4",
+      "moves": 1760,
+      "ms": 342.0978329999998,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 30,
+      "kind": "C4",
+      "moves": 143,
+      "ms": 783.1681669999998,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 33,
+      "kind": "C4",
+      "moves": 1760,
+      "ms": 366.37654199999815,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 36,
+      "kind": "C4",
+      "moves": 2564,
+      "ms": 468.7120410000025,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 39,
+      "kind": "C4",
+      "moves": 366,
+      "ms": 5053.466541999998,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 39,
+      "kind": "flip",
+      "moves": 78,
+      "ms": 4799.053208000001,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 152,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 316.70420800000284,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 155,
+      "kind": "C4",
+      "moves": 215,
+      "ms": 580.3781249999956,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 157,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 297.963416999999,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 158,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 303.02345899999636,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 160,
+      "kind": "C4",
+      "moves": 1027,
+      "ms": 335.51487500000076,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 163,
+      "kind": "C4",
+      "moves": 690,
+      "ms": 686.5277080000014,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 165,
+      "kind": "C4",
+      "moves": 1026,
+      "ms": 324.0274999999965,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 167,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 303.224083000001,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 168,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 309.8144170000014,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 171,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 292.752999999997,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 203,
+      "kind": "C4",
+      "moves": 209,
+      "ms": 468.82800000000134,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 212,
+      "kind": "C4",
+      "moves": 1027,
+      "ms": 376.8765409999978,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 221,
+      "kind": "C4",
+      "moves": 1026,
+      "ms": 326.91483300000255,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 230,
+      "kind": "C4",
+      "moves": 209,
+      "ms": 283.40295799999876,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 334,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 292.02441700000054,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 344,
+      "kind": "C4",
+      "moves": 1027,
+      "ms": 354.8497920000009,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 345,
+      "kind": "C4",
+      "moves": 1026,
+      "ms": 335.5081250000003,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 355,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 314.93649999999616,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 360,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 315.52704200000153,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 369,
+      "kind": "C4",
+      "moves": 1027,
+      "ms": 445.2997499999983,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 378,
+      "kind": "C4",
+      "moves": 1026,
+      "ms": 345.50570800000423,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 387,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 292.62870799999655,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 408,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 286.41679199999635,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 411,
+      "kind": "C4",
+      "moves": 690,
+      "ms": 302.7802090000041,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 412,
+      "kind": "C4",
+      "moves": 147,
+      "ms": 1955.4139579999974,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 412,
+      "kind": "flip",
+      "moves": 86,
+      "ms": 2035.5842499999999,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 414,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 323.9135830000014,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 427,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 549.106375000003,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 436,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 269.3321250000008,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 441,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 317.98179200000595,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 452,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 293.53749999999854,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 500,
+      "kind": "C4",
+      "moves": 209,
+      "ms": 289.4199589999989,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 509,
+      "kind": "C4",
+      "moves": 209,
+      "ms": 314.84083400000236,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 517,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 310.86179200000333,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 520,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 393.7068749999962,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 550,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 492.450208000002,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 727,
+      "kind": "C4",
+      "moves": 1030,
+      "ms": 461.4295420000053,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 852,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 277.33050000000367,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 997,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 292.7346249999973,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1042,
+      "kind": "C4",
+      "moves": 1029,
+      "ms": 318.7798330000005,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1061,
+      "kind": "C4",
+      "moves": 1027,
+      "ms": 313.7450000000026,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1070,
+      "kind": "C4",
+      "moves": 1026,
+      "ms": 326.76774999999907,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1093,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 270.8867919999975,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1096,
+      "kind": "C4",
+      "moves": 690,
+      "ms": 309.5913750000036,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1098,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 642.6253339999967,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1204,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 301.7065829999992,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1207,
+      "kind": "C4",
+      "moves": 210,
+      "ms": 277.7170000000042,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1270,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 280.8359169999967,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1283,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 283.9782500000001,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1290,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 300.49504100000195,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 1293,
+      "kind": "C3",
+      "moves": 62,
+      "ms": 321.3398329999982,
+      "verified": "sparse independent replay"
+    },
+    {
+      "orbit": 4,
+      "kind": "single D4 commutator",
+      "moves": 562,
+      "ms": 2312.865666999998
+    }
+  ],
+  "rejectedNonUnit": true,
+  "rejectedLoneC3": true,
+  "rotationAlphabet": 24
+}

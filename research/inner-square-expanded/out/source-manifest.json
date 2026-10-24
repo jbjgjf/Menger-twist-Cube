@@ -1,0 +1,207 @@
+{
+  "generatedAt": "2026-10-24T16:01:51.163Z",
+  "environment": {
+    "node": "v24.11.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M4",
+    "logicalCpus": 10,
+    "totalMemoryBytes": 34359738368
+  },
+  "note": "Final source inventory. Primary benchmark implementationSha256 hashes its declared solver files and catalog; this manifest additionally records the supporting source. Runtime trials shared a machine.",
+  "sourceManifestSha256": "4207eb2a2b6e39d2febbfcacd4b984dd8dfc503acf57f32ddd9606f3ece1fd40",
+  "files": [
+    {
+      "path": "packages/engine/src/data/innerSquareCatalog.json",
+      "sha256": "97079907e00aec227ef3214f1abdaceca5151117bf4f9d9246a4c4e8f01d22c9"
+    },
+    {
+      "path": "packages/engine/src/frameDefinitions.ts",
+      "sha256": "005449753395eb973203a66408d2db32f1e982c9ae74642d875b897c9fa326f1"
+    },
+    {
+      "path": "packages/engine/src/generateMenger.ts",
+      "sha256": "36f9905f53784f29de81472a0835aedd3a6d5efb355fbf161f81d8ac60d1f801"
+    },
+    {
+      "path": "packages/engine/src/geometry.ts",
+      "sha256": "bae3a539ffd90a3ae8a4252029fa05d620b49f654794c76bd1b78e78b1954d2f"
+    },
+    {
+      "path": "packages/engine/src/index.ts",
+      "sha256": "9654107d8cddffbc48d1c690de778440599f81dd9c14f5502a1a2dc7ccb5bfd4"
+    },
+    {
+      "path": "packages/engine/src/levels.ts",
+      "sha256": "dbef444e6af17c136dcc733e35df13def7a664bccd503f63ac5704493cf95871"
+    },
+    {
+      "path": "packages/engine/src/moveSystems.ts",
+      "sha256": "d6add091341f944e3dd3024e5a80a0858547b815ff432fb31f49ce187e1785b5"
+    },
+    {
+      "path": "packages/engine/src/moves.ts",
+      "sha256": "af3fe176318ee9d5d04d5e8600088b3de6e2afc2200a878ce3614a104946f8db"
+    },
+    {
+      "path": "packages/engine/src/puzzleState.ts",
+      "sha256": "02b079479ebdfb49b5450cd1d00b4f9f61d22c43e8f56fd73d8b4472d1a8de82"
+    },
+    {
+      "path": "packages/engine/src/rotationLegality.ts",
+      "sha256": "4140ceeed7da5e6826e341d34457ccb0e70083e89bb0a6096f7a7f92a9b7a03d"
+    },
+    {
+      "path": "packages/engine/src/turnTargets.ts",
+      "sha256": "a1d193a94a3766d845f6d4c9578c635463a7b4df65123ab88b09da2123263739"
+    },
+    {
+      "path": "packages/engine/src/types.ts",
+      "sha256": "dea013d84f509f080fb9cf17173df3d070c1fa191465a82051ce7f002862f932"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/blockRotations.ts",
+      "sha256": "e4a4ba53f180ea38b30f4db4ee58337b425c992ce0cc248f2c0083ea21787009"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/higherBlockRestorationSolver.ts",
+      "sha256": "34fea0d9223d2407de8dbf2a2123b65b8407cef600cbcfebb1d95712c234d302"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/innerSquareCertifiedSolver.ts",
+      "sha256": "75c13d383c84c684ef45ab2626ba35a27bab7c39fa20ea4ec706b6f67073595e"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/innerSquareTools.json",
+      "sha256": "2deb095346ff9848422f766d9cf18c34196f4d9b926368ee9787d4971fc6f230"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level1QuotientSolver.ts",
+      "sha256": "6ab21228dc61e3c2178ca2075233132642f03ba2b4e6e6fa1c487b1ee2fe39d2"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level1State.ts",
+      "sha256": "43a0caa3846f77b6c8337890b8a3e44664478ae5cd767f3dcc81f06300f174ea"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level2BlockQuotientSolver.ts",
+      "sha256": "c54bccb518afc25d72571468510a0e67bc5c9fa650935e2a9f7032bf1d94afc5"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level2BlockRestorationSolver.ts",
+      "sha256": "13bbaee37ff503999b34795a01345cc20430046817b0fccffe9bd93e93865e65"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level2CertifiedSolver.ts",
+      "sha256": "61639c144130384f85af44061c228cd73d747d045428e879298388e6e0c5c54b"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level2CertifiedTools.ts",
+      "sha256": "ddd0014350af6a0160478a001ea3d8eaa7cddf13de0f9160b1a08497a937df01"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level2InnerSquareCosetSolver.ts",
+      "sha256": "8f9bde3b17a932055318d133e113024a7e4f2b26226ce6b503cf480e09851588"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level2SliceReductionSolver.ts",
+      "sha256": "148a37a8b54f0a1ba060ce36e2c05b74c5925e126759472a18489727f8cbae2d"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level3BlockQuotientSolver.ts",
+      "sha256": "3650a788c91f26317940269fd5c538b74f825b8c09ab7c2cce24615a577c4abb"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level3SliceReductionCertifiedData.ts",
+      "sha256": "735363947dfe45f4e4a24d1ea3947fcf58893a3b0699a805d9d103f83e0c3c92"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level3SliceReductionSolver.ts",
+      "sha256": "ad6961593cb67b99ca9651eb5f36900cc81ef92c100e64795627baaf9451c303"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level3SliceReductionToolData.ts",
+      "sha256": "5e505579288d818b9dd4d4bbf8aaa362de328216e5d047d1f1af446e062a87d2"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level4CertifiedData.ts",
+      "sha256": "2d045860b61d4563c23119da416c65d104750efcc6be6eed4182c24bb5fe9892"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/level4SliceReductionSolver.ts",
+      "sha256": "40b9a90d91d417159e79b18394ad738ac54ca2fe0709be6270d3805b9c53e419"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerAbelianSignature.ts",
+      "sha256": "94e097b5ac3e383e14f7e0b620c19889856fa78fdf903fc227ce29b369164fe0"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerBlockRestoration.ts",
+      "sha256": "ac6cefb22fe4e701071c277fc911e8c954f2c8c175610a64c2bf87fb44284146"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerCertifiedReduction.ts",
+      "sha256": "fab8647b8b4d6e238c02f2e3d55619534c925f45b8718534165063dc80e20953"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerFactoredTransport.ts",
+      "sha256": "31cc9a456b42e3f88c7b5ec9ba9775b476a6337d18a17abecf090824d6b1573f"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerInnerSquareReduction.ts",
+      "sha256": "1c928b059234fd01f54d997aff830d89af158cac43ed04584d31fb99944b12bb"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerPairTransport.ts",
+      "sha256": "468cb821c0a7455625a5de0c2697aff1ab8924efbda02a5201d88cb209cc3fd6"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerSharedCorrection.ts",
+      "sha256": "4d8793b85c76217d214af2ad2f8a91ecedddc3503ecc1dfc446ef618a82074bd"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerSparseGroup.ts",
+      "sha256": "79bc26984511f9b6c5f2e506b7354147dc8bff0223ca3a88c81efa80c3bc8199"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/mengerSparsePairTransport.ts",
+      "sha256": "bfefca706763535ae0030e32b81a523e4f862a0246e200a7016eb954b43c0168"
+    },
+    {
+      "path": "packages/solver-core/src/algorithms/register.ts",
+      "sha256": "dded5b1beffb7245ce8176ae499331d3ccdfc4834a56cbb1dc6b4278e75dcddd"
+    },
+    {
+      "path": "research/inner-square-expanded/benchmark.ts",
+      "sha256": "e6c791cb901d682be43f65a3c7e14bae104be3f44ee5bc9f5944468416720960"
+    },
+    {
+      "path": "research/inner-square-expanded/certify.ts",
+      "sha256": "1d9b31f959b9296f3989405c177fb51f3b1f09bfea106f64d5541f64ae65a701"
+    },
+    {
+      "path": "research/inner-square-expanded/enumerate.ts",
+      "sha256": "a98e7608f52545855382671d740bc4f8c03857c21496125a50748a3835db4c2a"
+    },
+    {
+      "path": "research/inner-square-expanded/exact-pair.ts",
+      "sha256": "c786f1309c49bc29dab275048e70380494918a1cc1668f677f7c66a60fe49ff8"
+    },
+    {
+      "path": "research/inner-square-expanded/sample-state.ts",
+      "sha256": "a460aed83ac51dc16eee3e4cc1dd3fe485193a28154a96f62a59c06864d1595c"
+    },
+    {
+      "path": "research/inner-square-expanded/test/exact-pair.test.ts",
+      "sha256": "c2717efc4f7c1685859d09bb57c470c25b4898825f78edd7a19017536006e522"
+    },
+    {
+      "path": "research/inner-square-expanded/test/shared.test.ts",
+      "sha256": "e9f5e1758b8f3c300e2bc565c35b99d62f595bcf114fbd86623a0bbbb7ef210b"
+    },
+    {
+      "path": "research/inner-square-expanded/test/system.test.ts",
+      "sha256": "11cb0564d201918942b42cc28e1fd4867e9296d4495f8f553fe0b944dbb5ad61"
+    }
+  ]
+}

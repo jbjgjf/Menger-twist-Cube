@@ -1,3 +1,4 @@
+import type { MoveSystem } from '@menger/engine';
 import type { BenchmarkRunResult, BenchmarkRunSpec, SolverDebugEvent, SolverRunResult } from '@menger/solver-core';
 
 export interface SerializedCubieState {
@@ -10,6 +11,7 @@ export type SolverWorkerRequest =
   | {
       kind: 'scramble';
       algorithmId: string;
+      moveSystem: MoveSystem;
       level: number;
       seed: number;
       length: number;
@@ -17,12 +19,14 @@ export type SolverWorkerRequest =
   | {
       kind: 'solve';
       algorithmId: string;
+      moveSystem: MoveSystem;
       level: number;
       cubies: SerializedCubieState[];
     }
   | {
       kind: 'benchmark';
       algorithmId: string;
+      moveSystem: MoveSystem;
       spec: BenchmarkRunSpec;
     };
 

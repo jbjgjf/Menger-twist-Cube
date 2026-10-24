@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:54:41.554Z",
+  "level": 3,
+  "length": 1000,
+  "seed": 103,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 330,
+    "extension": 341,
+    "inner": 329
+  },
+  "displaced": 7797,
+  "inputSha256": "42120903362991815707dd2ec1f507234a6a47000bfae2dfb1d572b95c741611",
+  "wordSha256": "c82062656b9e9ddc3f4e14ea9e714725eb723ced8961dfea71c27f3e3d94ab75",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 1055918,
+    "ms": 4750.079625,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3804,\"setupNodes\":2119768,\"selectedEntries\":357074189}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 1005717,
+    "optimizationMs": 644.6031250000005,
+    "verifiedSelectedEntries": 340150113
+  },
+  "restoration": {
+    "moves": 1005717,
+    "ms": 6129.864083,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":7088,\"bestDefect\":7088,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":14,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":1055918,\"selectedEntries\":340150113}",
+      "{\"placements\":3804,\"setupNodes\":2119768,\"selectedEntries\":357074189}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  }
+}

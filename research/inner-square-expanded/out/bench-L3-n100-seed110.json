@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:54:01.630Z",
+  "level": 3,
+  "length": 100,
+  "seed": 110,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 37,
+    "extension": 30,
+    "inner": 33
+  },
+  "displaced": 7636,
+  "inputSha256": "be30a9251e2ee6c1187f8e4d2ddd20dae72a75a558722440a6cba85b640ccd23",
+  "wordSha256": "af8db1f68ff53abea00d45bdeef8b18024e29745ec407d4ea6abad176d2320bf",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 933611,
+    "ms": 5568.667334,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":4414,\"bestDefect\":4414,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":9,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":973028,\"selectedEntries\":315269965}",
+      "{\"placements\":3700,\"setupNodes\":2108992,\"selectedEntries\":328750005}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 973028,
+    "ms": 4827.301374999999,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3700,\"setupNodes\":2108992,\"selectedEntries\":328750005}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 933611,
+    "optimizationMs": 535.9708749999991,
+    "verifiedSelectedEntries": 315269965
+  }
+}

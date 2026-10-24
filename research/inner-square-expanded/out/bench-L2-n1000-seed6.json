@@ -1,0 +1,53 @@
+{
+  "level": 2,
+  "length": 1000,
+  "seed": 6,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 328,
+    "extension": 344,
+    "inner": 328
+  },
+  "displaced": 392,
+  "inputSha256": "ffbc7a018ad0e832d6ff4c4ab0dc2194c152c6e988f2cd9a8c94cfbd04316410",
+  "wordSha256": "be7d79b49c139c89695675b32232e2e49b2a04dbda5a1750afa8be8cc275e8e5",
+  "poolSizes": [
+    108,
+    360,
+    54
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through orbit size 1536; bidirectional for larger orbits",
+  "implementationSha256": "aeeb4f8911050bd2b5e453b5e4ae3ce1dc6ec4d4a1d3b609df768e8535ab5470",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 3919,
+    "ms": 1781.2505830000002,
+    "success": true,
+    "explanation": [
+      "{\"moves\":0,\"restored\":false,\"initialDefect\":348,\"finalDefect\":335,\"expanded\":10000,\"multiRegionMoves\":0,\"quotient\":false,\"beforeShortening\":3987}",
+      "parity vector 0x6fc cancelled (4 atoms)",
+      "every cell on its home site (3186 atoms)",
+      "every cell in its home orientation (1012 atoms)"
+    ]
+  },
+  "certified": {
+    "moves": 3987,
+    "ms": 54.613582999999835,
+    "success": true,
+    "explanation": [
+      "parity vector 0x6fc cancelled (4 atoms)",
+      "every cell on its home site (3186 atoms)",
+      "every cell in its home orientation (1012 atoms)"
+    ]
+  },
+  "D": {
+    "moves": 3919,
+    "optimizationMs": 2.513500000000022,
+    "verifiedSelectedEntries": 202358
+  }
+}

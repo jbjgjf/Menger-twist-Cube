@@ -6,6 +6,7 @@
 | --- | --- | --- |
 | [`level2-completeness.tex`](level2-completeness.tex) | Level 2 の到達可能状態の決定と、解法 `level2-certified` の完全性。標準系（468原子手）と拡張系（522原子手）の両方 | 証明済み |
 | [`level3-completeness.tex`](level3-completeness.tex) | Level 3 の到達可能状態の決定（位数、ねじれ和と反転偶奇の不変量）と、解法 `level3-slice-reduction` の構成的可解性 | 証明済み（標準系のみ。2026-10-10 に向きと位置の補題を改訂） |
+| [`inner-square-completeness.md`](inner-square-completeness.md) | 内面回転を含むLevel3/4の全候補監査、共同署名、完全解法、群位数、復元下界、一般nの条件付き定理 | 計算証明＋構成的証明（新系） |
 | [`preamble.tex`](preamble.tex) | 共通のプリアンブル | — |
 | [`level4-completeness.md`](level4-completeness.md) | Level4の独立交代群、正確な群位数、完全解法、God's number の上下界、一般nの合法手数と直径下界 | 計算証明と構成的証明（標準系） |
 | [`block-restoration.md`](block-restoration.md) | 一般nのブロック判定・部分群・条件付き還元、Level3/4の復元距離下界 | 解析的証明＋既存位置群証明に依存する整数計算 |
@@ -33,6 +34,8 @@ lualatex level3-completeness.tex && lualatex level3-completeness.tex
 | Level 4 | `npm run verify:l4` | 旧シミュレータ・元エンジンとの照合、一般nの合法手数 |
 | Level 4 | `npm run test:l4` | 高いセルindex、元エンジンでの解再生、二点姿勢補正、到達不能状態の拒否 |
 | Level 4 | `npm run verify:l4:synthetic` | 全3,050軌道を直接乱した不変量整合状態を、履歴なしで構成して解く |
+
+内面回転を含む新系の再検査は `npm run audit:inner-square`、`npm run prove:inner-square`、`npm run test:inner-square`。旧 `prove:l3` / `prove:l4` は標準系を検査する。
 
 ## 新しい証明を追加するとき
 

@@ -635,6 +635,7 @@ const solve = async (
  * set, whichever move system the model belongs to.
  */
 export const level2CertifiedAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  moveSystemsSupported: ['standard', 'inner-square'],
   id: solverId,
   name: solverName,
   version: solverVersion,

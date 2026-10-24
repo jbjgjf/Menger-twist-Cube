@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-10-24T15:51:56.895Z",
+  "level": 4,
+  "length": 1000,
+  "seed": 101,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 345,
+    "extension": 321,
+    "inner": 334
+  },
+  "displaced": 153471,
+  "inputSha256": "044b76a763ecc433876ac18a2af22f37d8edcd619e7085f04c23ed72da637ef7",
+  "wordSha256": "01454cb1bd2eed5f3c91e0eaf05e57c556feb05f174b273a3244fde398e1ce85",
+  "poolSizes": [
+    1080,
+    43704,
+    46818
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 19463627,
+    "ms": 408311.850667,
+    "success": true,
+    "explanation": [
+      "{\"placements\":73820,\"setupNodes\":57690393,\"selectedEntries\":73908984952}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 19218026,
+    "optimizationMs": 103974.34462499997,
+    "verifiedSelectedEntries": 73494910456
+  }
+}

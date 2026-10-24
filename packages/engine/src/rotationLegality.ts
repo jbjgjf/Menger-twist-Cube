@@ -196,7 +196,7 @@ const radialBounds = (center: Point2): { min: number; max: number } => {
   };
 };
 
-const collisionAngleForPair = (
+export const collisionAngleForPair = (
   movingCenter: Point2,
   stationaryCenter: Point2,
   endAngle: number,

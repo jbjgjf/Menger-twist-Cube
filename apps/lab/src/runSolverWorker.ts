@@ -1,4 +1,4 @@
-import type { Cubie } from '@menger/engine';
+import type { Cubie, MoveSystem } from '@menger/engine';
 import type { BenchmarkRunResult, BenchmarkRunSpec, SolverRunResult } from '@menger/solver-core';
 import type {
   SerializedCubieState,
@@ -46,8 +46,9 @@ export const solveInWorker = (
   level: number,
   cubies: Cubie[],
   onDebug?: (message: string) => void,
+  moveSystem: MoveSystem = 'standard',
 ): Promise<SolverRunResult> => runWorker<SolverRunResult>(
-  { kind: 'solve', algorithmId, level, cubies: serializeCubies(cubies) },
+  { kind: 'solve', algorithmId, moveSystem, level, cubies: serializeCubies(cubies) },
   'solve-result',
   onDebug,
 );
@@ -56,8 +57,9 @@ export const benchmarkInWorker = (
   algorithmId: string,
   spec: BenchmarkRunSpec,
   onDebug?: (message: string) => void,
+  moveSystem: MoveSystem = 'standard',
 ): Promise<BenchmarkRunResult> => runWorker<BenchmarkRunResult>(
-  { kind: 'benchmark', algorithmId, spec },
+  { kind: 'benchmark', algorithmId, moveSystem, spec },
   'benchmark-result',
   onDebug,
 );
@@ -65,6 +67,7 @@ export const benchmarkInWorker = (
 export const scrambleInWorker = (
   algorithmId: string, level: number, seed: number, length: number,
   onDebug?: (message: string) => void,
+  moveSystem: MoveSystem = 'standard',
 ): Promise<{ cubies: SerializedCubieState[]; moveCount: number }> => runWorker(
-  { kind: 'scramble', algorithmId, level, seed, length }, 'scramble-result', onDebug,
+  { kind: 'scramble', algorithmId, moveSystem, level, seed, length }, 'scramble-result', onDebug,
 );

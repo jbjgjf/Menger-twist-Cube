@@ -43,15 +43,13 @@ const formatClock = (timestamp: number): string => {
 const benchmarkStore = createLocalStorageBenchmarkStore('menger.solver.benchmarks.v2');
 
 // The move system is chosen before the level: it decides which rotations the
-// cube has at all. `standard` is the shipped set every existing proof refers
-// to; the others are opt-in extensions and are never the default.
+// cube has at all. Inner rotations are primary; historical standard-only
+// results remain available as explicitly separate comparisons.
 const moveSystemLabels: Record<MoveSystem, string> = {
-  standard: 'Standard (shipped moves)',
-  'inner-square': 'Inner square rotations (+18 ring targets)',
+  standard: 'Historical system (without inner rotations)',
+  'inner-square': 'Inner square rotations (primary system)',
 };
-const preferredAlgorithmForSystem: Partial<Record<MoveSystem, string>> = {
-  'inner-square': 'level2-certified',
-};
+const preferredAlgorithmForSystem = (system: MoveSystem, level: number): string | undefined => system === 'inner-square' ? (level === 1 ? 'level1-quotient' : level === 2 ? 'level2-certified' : `level${level}-inner-square-certified`) : undefined;
 
 export default function App() {
   const algorithms = useMemo(() => listAlgorithms(), []);
@@ -62,7 +60,7 @@ export default function App() {
 
   const isDesktop = useIsDesktop();
 
-  const [moveSystem, setMoveSystem] = useState<MoveSystem>('standard');
+  const [moveSystem, setMoveSystem] = useState<MoveSystem>('inner-square');
   const puzzleModel = useMemo(() => createMengerPuzzleModel(moveSystem), [moveSystem]);
   const systemLevels = useMemo(
     () => solverLevels.filter((candidate) => isMoveSystemAvailable(moveSystem, candidate)),
@@ -76,7 +74,7 @@ export default function App() {
     if (!isMoveSystemAvailable(next, level)) {
       setLevel(solverLevels.find((candidate) => isMoveSystemAvailable(next, candidate)) ?? level);
     }
-    const preferred = preferredAlgorithmForSystem[next];
+    const preferred = preferredAlgorithmForSystem(next, level);
     if (preferred && algorithms.some((candidate) => candidate.id === preferred)) setAlgorithmId(preferred);
   };
 
@@ -135,11 +133,12 @@ export default function App() {
     loadPlayback([basePuzzle.cubies], []);
     setAlgorithmId((current) => {
       const selected = algorithms.find((candidate) => candidate.id === current);
-      if (selected?.levelsSupported.includes(level)) return current;
-      const fallback = algorithms.find((candidate) => candidate.levelsSupported.includes(level));
+      if (selected?.levelsSupported.includes(level) && (selected.moveSystemsSupported ?? ['standard']).includes(moveSystem)) return current;
+      const preferred = preferredAlgorithmForSystem(moveSystem, level);
+      const fallback = algorithms.find(candidate => candidate.id === preferred) ?? algorithms.find((candidate) => candidate.levelsSupported.includes(level) && (candidate.moveSystemsSupported ?? ['standard']).includes(moveSystem));
       return fallback?.id ?? current;
     });
-  }, [level, basePuzzle, algorithms, loadPlayback]);
+  }, [level, basePuzzle, algorithms, loadPlayback, moveSystem]);
 
   const scramble = async () => {
     if (!algorithm || blockedOnThisDevice || !algorithm.levelsSupported.includes(level)) return;
@@ -147,7 +146,7 @@ export default function App() {
     if (level >= 4) {
       setIsScrambling(true);
       try {
-        const result = await scrambleInWorker(algorithm.id, level, singleSeed, scrambleLength, log);
+        const result = await scrambleInWorker(algorithm.id, level, singleSeed, scrambleLength, log, moveSystem);
         const cubies = basePuzzle.cubies.map((c, i) => {
           const saved = result.cubies[i];
           if (!saved || saved.id !== c.id) throw new Error('Scramble worker returned an inconsistent cell order.');
@@ -179,7 +178,7 @@ export default function App() {
     log(`solve: running ${algorithm.id} on level ${level} (${moveSystem} system)`);
     try {
       const result = level >= 3
-        ? await solveInWorker(algorithm.id, level, inputCubies, log)
+        ? await solveInWorker(algorithm.id, level, inputCubies, log, moveSystem)
         : await algorithm.solve(puzzleModel, { ...basePuzzle, cubies: inputCubies });
       setSolveResult(result);
       setSolveRecords(
@@ -246,7 +245,7 @@ export default function App() {
         scrambleLength,
       };
       const result = level >= 3
-        ? await benchmarkInWorker(algorithm.id, spec, log)
+        ? await benchmarkInWorker(algorithm.id, spec, log, moveSystem)
         : await runBenchmark(puzzleModel, algorithm, spec);
       setBenchmarkResult(result);
       log(`benchmark: done — ${(result.summary.successRate * 100).toFixed(1)}% success`);
@@ -416,13 +415,9 @@ export default function App() {
           )}
           {moveSystem === 'inner-square' && (
             <p className="mt-2 rounded border border-cyan-700/50 bg-cyan-950/30 px-3 py-2 text-xs leading-5 text-cyan-100">
-              Inner square system (Level 2 only): the standard 468 atomic moves plus 54 ring moves — in each middle
-              plane (layer −3, 0, +3 of every axis) the inner and outer square rings turn independently. This group is
-              exactly twice the standard one. <code>level2-certified</code> is the solver proved complete for both
-              systems (<code>docs/proofs/level2-completeness.tex</code>). <code>level2-inner-square-coset</code> gives
-              shorter solutions by crossing into the standard half with at most one ring turn and then running
-              <code>level2-slice-reduction</code>, but it is not proved complete; the standard-only solvers fail on the
-              other half by design.
+              Includes slice, extension and all audited single-plane square-subset rotations.
+              The complete solver for this level is {preferredAlgorithmForSystem(moveSystem, level)}.
+              Historical-system results use a different move alphabet and must be compared separately.
             </p>
           )}
           {algorithm && (

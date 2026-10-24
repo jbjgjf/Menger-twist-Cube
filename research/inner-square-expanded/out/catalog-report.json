@@ -1,0 +1,36 @@
+{
+  "maxLevel": 4,
+  "reports": [
+    {
+      "level": 2,
+      "complete": true,
+      "exactCollisionWitnesses": true,
+      "exactRejectionWitnessChecks": 1956,
+      "additionalTargets": 18,
+      "additionalAtoms": 54,
+      "exactProfileAtomChecks": 12,
+      "judgeOnly": 0
+    },
+    {
+      "level": 3,
+      "complete": true,
+      "exactCollisionWitnesses": true,
+      "exactRejectionWitnessChecks": 73818,
+      "additionalTargets": 690,
+      "additionalAtoms": 1974,
+      "exactProfileAtomChecks": 274,
+      "judgeOnly": 0
+    },
+    {
+      "level": 4,
+      "complete": true,
+      "exactCollisionWitnesses": true,
+      "exactRejectionWitnessChecks": 3874567,
+      "additionalTargets": 16470,
+      "additionalAtoms": 46818,
+      "exactProfileAtomChecks": 3836,
+      "judgeOnly": 0
+    }
+  ],
+  "catalogSha256": "7f6c9247ab48be2a6813db4c9a63ba6d59057d61100d90c6e469fae166dac841"
+}

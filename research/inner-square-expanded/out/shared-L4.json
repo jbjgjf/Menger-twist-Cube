@@ -1,0 +1,27 @@
+{
+  "level": 4,
+  "setupAndToolIds": [
+    [
+      "f:X_-40:90"
+    ],
+    [
+      "e:extension:d4:p000.000.000:s001:90"
+    ],
+    [
+      "e:extension:d4:p000.000.001:s001:90"
+    ],
+    [
+      "e:extension:d4:p000.000.002:s001:90"
+    ],
+    [
+      "e:extension:d4:p000.000.010:s010:90"
+    ]
+  ],
+  "independentCorrections": 4,
+  "separateAtoms": 16,
+  "sharedAtoms": 10,
+  "savedAtoms": 6,
+  "affectedSites": 8,
+  "affectedLeafBlocks": 8,
+  "verified": "full integer action including orientations; overlap negative control"
+}

@@ -1,0 +1,23 @@
+{
+  "complete": true,
+  "geometryLevels": [
+    2,
+    3,
+    4
+  ],
+  "groupLevels": [
+    3,
+    4
+  ],
+  "checked": [
+    "production tools",
+    "catalog hash",
+    "group-order integer hash",
+    "orbit census",
+    "independent image",
+    "complete cycle transport coverage",
+    "all orientation tools and negative controls",
+    "all macro inner lifts",
+    "shared setup examples"
+  ]
+}

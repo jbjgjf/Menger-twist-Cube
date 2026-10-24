@@ -1,0 +1,28 @@
+{
+  "level": 3,
+  "moveSystem": "inner-square",
+  "completeGroupOrderCertificate": true,
+  "completeSolverCertificate": true,
+  "atoms": 5565,
+  "orbits": 116,
+  "pureCycleOrbits": 116,
+  "pairGenerators": 15,
+  "basis": {
+    "dimension4": 127,
+    "dimension3": 4,
+    "rows4": 36,
+    "rows3": 0,
+    "imageOrder": "8796093022208",
+    "generatorsChecked": 5565
+  },
+  "groupOrderDigits": 14105,
+  "positionalOrderDigits": 13558,
+  "restorationDiameterLowerBound": 3241,
+  "rigidCosetsLowerBoundDigits": 12137,
+  "groupOrderSha256": "eb5a6bbceda438c38ec57565c0f460cf7f7a97113914fb09c47615c5e5a796a3",
+  "countingDiameterLowerBound": 3766,
+  "oldToolDataSha256": "aeac50e97f045a15ee6a88bad1f7349b2cc1f76d19bf02da7dc39cc6f76bbd30",
+  "oldOrbitPairStateBound": 147456,
+  "catalogFileSha256": "97079907e00aec227ef3214f1abdaceca5151117bf4f9d9246a4c4e8f01d22c9",
+  "toolDataSha256": "54a88c2dd9133dd74051084f6b44ee562bb9159e46b7b54219c0aeb6fb4b3d34"
+}

@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-24T15:35:47.423Z",
+  "level": 4,
+  "length": 100,
+  "seed": 11,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 36,
+    "extension": 40,
+    "inner": 24
+  },
+  "displaced": 120742,
+  "inputSha256": "5522f18a03bee1832bc27bb8bb4b0a8b9e969a90156755f77cb0f64995cc8af9",
+  "wordSha256": "75d9d9cedb56af0ccdb225524fb80002ec413e8aafdcb5abd951436b6b6a3ee6",
+  "poolSizes": [
+    1080,
+    43704,
+    46818
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through orbit size 1536; bidirectional for larger orbits",
+  "implementationSha256": "05405bb54706224fb4ac113655ec7026c427edd41ffe45aac15e1a06cee40fbd",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 16598299,
+    "ms": 253191.304875,
+    "success": true,
+    "explanation": [
+      "{\"placements\":62098,\"setupNodes\":57407874,\"selectedEntries\":62168173207}"
+    ]
+  },
+  "D": {
+    "moves": 16387463,
+    "optimizationMs": 281472.82308400003,
+    "verifiedSelectedEntries": 61818461251
+  },
+  "restoration": {
+    "moves": 16387463,
+    "ms": 789658.677333,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":41486,\"bestDefect\":41486,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":11,\"maxDefectChange\":4096,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":16598299,\"selectedEntries\":61818461251}",
+      "{\"placements\":62098,\"setupNodes\":57407874,\"selectedEntries\":62168173207}"
+    ]
+  }
+}

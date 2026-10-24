@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-10-24T15:52:27.800Z",
+  "level": 3,
+  "length": 100,
+  "seed": 102,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 34,
+    "extension": 38,
+    "inner": 28
+  },
+  "displaced": 6611,
+  "inputSha256": "34944aa4e5e4679e0559a15c84827a76c8a9252a5ad1fcecfcd9eb4dad5c5624",
+  "wordSha256": "8b16f7b33f74e5693783f30f8994e49d16b8cf143deaf846b4d507a72e490abd",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "First three guarantee all families; subsequent families uniform, then uniform legal atom within family. Not uniform group states.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "restoration",
+    "certified"
+  ],
+  "transportPolicy": "dense through 1536 sites; old-orbit quotient and bounded old-fiber pair graphs for larger merged orbits",
+  "implementationSha256": "7bb24cbb3ffcdfbda4571cf2021adb3e0b28605d704dee1d79a2577be4786f9a",
+  "jointLibraryPrewarmed": true,
+  "restoration": {
+    "moves": 841674,
+    "ms": 5419.143583,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":4996,\"bestDefect\":4996,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":10,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":877829,\"selectedEntries\":286230813}",
+      "{\"placements\":3262,\"setupNodes\":2119216,\"selectedEntries\":298563817}"
+    ],
+    "notes": "Search is heuristic. Completeness is inherited at fixed Levels 3 and 4; no general-level completeness or diameter bound is claimed."
+  },
+  "certified": {
+    "moves": 877829,
+    "ms": 3492.3023330000005,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3262,\"setupNodes\":2119216,\"selectedEntries\":298563817}"
+    ],
+    "notes": "Exactly solved with the full square-subset move system; solution length is not optimal."
+  },
+  "D": {
+    "moves": 841674,
+    "optimizationMs": 501.4925000000003,
+    "verifiedSelectedEntries": 286230813
+  }
+}

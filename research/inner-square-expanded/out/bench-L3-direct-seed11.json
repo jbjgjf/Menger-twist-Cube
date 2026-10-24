@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-10-24T15:12:58.104Z",
+  "level": 3,
+  "length": 0,
+  "seed": 11,
+  "system": "inner-square",
+  "familyCounts": {
+    "slice": 0,
+    "extension": 0,
+    "inner": 0
+  },
+  "displaced": 7873,
+  "inputSha256": "1c71908b10d5d19cec55394ba9b21e8fd72f16f5a0d3ff7b33b3079bf6d6f2a3",
+  "wordSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "poolSizes": [
+    351,
+    3240,
+    1974
+  ],
+  "sampling": "Parametrized full-group state: uniform kernel and uniform signature section under ideal independent draws; seeded LCG in experiments. No random-walk mixing claim.",
+  "restorationIncludesD": true,
+  "runOrder": [
+    "certified",
+    "restoration"
+  ],
+  "transportPolicy": "dense through orbit size 1536; bidirectional for larger orbits",
+  "implementationSha256": "40e17a94e52820188dc4a912027cba0373a1741fea7bcfbd5722ddcd7e4cccb6",
+  "jointLibraryPrewarmed": true,
+  "certified": {
+    "moves": 1158152,
+    "ms": 3376.495083,
+    "success": true,
+    "explanation": [
+      "{\"placements\":3838,\"setupNodes\":2119768,\"selectedEntries\":392159135}"
+    ]
+  },
+  "D": {
+    "moves": 1090195,
+    "optimizationMs": 1609.9237090000006,
+    "verifiedSelectedEntries": 369654327
+  },
+  "restoration": {
+    "moves": 1090195,
+    "ms": 5915.789917,
+    "success": true,
+    "explanation": [
+      "{\"atoms\":0,\"restored\":false,\"initialDefect\":7209,\"bestDefect\":7209,\"expanded\":0,\"blockEvaluations\":0,\"distanceLowerBound\":15,\"maxDefectChange\":512,\"certifiedDepthRejection\":true,\"quotient\":false,\"fallback\":true,\"beforeShortening\":1158152,\"selectedEntries\":369654327}",
+      "{\"placements\":3838,\"setupNodes\":2119768,\"selectedEntries\":392159135}"
+    ]
+  }
+}

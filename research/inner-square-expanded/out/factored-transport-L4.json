@@ -1,0 +1,78 @@
+{
+  "level": 4,
+  "allEdgeWitnessesVerified": true,
+  "records": [
+    {
+      "orbit": 4,
+      "kind": "cycle",
+      "sites": 3216,
+      "fibers": 71,
+      "states": 5041,
+      "maxDistance": 6
+    },
+    {
+      "orbit": 4,
+      "kind": "C4",
+      "sites": 3216,
+      "fibers": 71,
+      "states": 5041,
+      "maxDistance": 10
+    },
+    {
+      "orbit": 4,
+      "kind": "flip",
+      "sites": 3216,
+      "fibers": 71,
+      "states": 5041,
+      "maxDistance": 8
+    },
+    {
+      "orbit": 41,
+      "kind": "cycle",
+      "sites": 25248,
+      "fibers": 407,
+      "states": 165649,
+      "maxDistance": 11
+    },
+    {
+      "orbit": 536,
+      "kind": "cycle",
+      "sites": 15168,
+      "fibers": 416,
+      "states": 173056,
+      "maxDistance": 13
+    },
+    {
+      "orbit": 538,
+      "kind": "cycle",
+      "sites": 2496,
+      "fibers": 62,
+      "states": 3844,
+      "maxDistance": 7
+    },
+    {
+      "orbit": 539,
+      "kind": "cycle",
+      "sites": 6144,
+      "fibers": 52,
+      "states": 2704,
+      "maxDistance": 6
+    },
+    {
+      "orbit": 600,
+      "kind": "cycle",
+      "sites": 3744,
+      "fibers": 87,
+      "states": 7569,
+      "maxDistance": 6
+    },
+    {
+      "orbit": 649,
+      "kind": "cycle",
+      "sites": 2496,
+      "fibers": 62,
+      "states": 3844,
+      "maxDistance": 7
+    }
+  ]
+}
