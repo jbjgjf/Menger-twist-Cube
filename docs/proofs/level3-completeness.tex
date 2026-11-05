@@ -1,605 +1,448 @@
-\documentclass[a4paper,11pt]{ltjsarticle}
-\input{preamble}
+\documentclass[a4paper,11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,booktabs}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{certcheck}{Check}
+\renewcommand{\thecertcheck}{C\arabic{certcheck}}
+\newcommand{\Alt}{\operatorname{Alt}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\code}[1]{\path{#1}}
 
-\title{メンガー・ツイスト・キューブ Level 3 の\\構成的可解性}
-\author{Menger Cube プロジェクト}
-\date{2026年10月10日}
+\title{Constructive Solvability of the Level 3 Menger Twist Cube}
+\author{Menger Cube Project}
+\date{October 10, 2026}
 
 \begin{document}
 \maketitle
-
 \begin{abstract}
-Level 3 のメンガー・ツイスト・キューブ（8,000セル）について，現行の衝突判定を通る3,591個の合法原子手から到達可能な任意の状態を，
-実装 \code{level3-slice-reduction} が有限個の合法原子手で完成状態へ戻すことを証明する．
-証明は，位置軌道の分解，各軌道が交代群を含むこと，全軌道の純粋な3-cycle，軌道偶奇の正規化，向きの不変量と二点工具，からなる．
-あわせて，到達可能な状態を不変量で完全に特徴づけ，$G_3$ の位数を決定する（定理\ref{thm:structure}）．
-2026年10月10日の改訂で，旧版の位置の補題と向きの補題にあった論理の飛躍を埋めた（第\ref{sec:revision}節）．
+The Level 3 Menger Twist Cube has 8,000 labeled cells. We show that the
+\code{level3-slice-reduction} implementation returns every state reachable
+under its 3,591 legal atomic moves to the solved state in finitely many moves.
+The proof combines orbit decomposition, alternating-group actions,
+orbit-local 3-cycles, parity normalization, and orientation invariants.
+We characterize the reachable states and determine the order of the move group.
 \end{abstract}
-
 \tableofcontents
 
-\section{設定}
-
-\subsection{位置，向き，状態}
-
-Level $n$ の格子の一辺は $3^n$ である．各位置は
+\section{Model}
+A Level $n$ grid has side length $3^n$. Write each position uniquely in
+balanced ternary as
 \[
-p=\sum_{j=0}^{n-1}3^jd_j,\qquad d_j\in\{-1,0,1\}^3
+p=\sum_{j=0}^{n-1}3^j d_j,\quad d_j\in\{-1,0,1\}^3,\qquad
+P_n=\{p:z(d_j)\le1\text{ for every }j\},
 \]
-と一意に書ける．ベクトル $d$ の零成分の数を $z(d)$ とし，メンガー位置集合を
-\[
-P_n=\{\,p:\ z(d_j)\le1\ (0\le j<n)\,\}
-\]
-と定める．$|P_n|=20^n$ であり，$|P_3|=8000$ である．Level 3 では $p=9B+3b+o$ と書く．
+where $z(d)$ counts the zero coordinates. Thus $|P_n|=20^n$. At Level 3
+write $p=9B+3b+o$.
+Let $C$ be the 24-element rotation group of the cube. A state
+$s=(\sigma,\rho)$ assigns each cell, labeled by its home $x\in P_3$,
+a position $\sigma(x)$ and an orientation $\rho(x)\in C$.
+The solved state has $\sigma=\mathrm{id}$ and $\rho(x)=I$.
 
-立方体の回転群を $C$ と書く（$|C|=24$）．セルを完成位置で識別し，状態を $(\sigma,\rho)$ で表す．
-$\sigma\colon P_3\to P_3$ はセルの現在位置，$\rho\colon P_3\to C$ は向きである．完成状態は $\sigma=\mathrm{id}$，$\rho\equiv I$ である．
-
-\subsection{原子手と合法性}
-
-回転対象 $D\subseteq P_n$，回転軸 $a$，軸上の基準点 $c$，角度 $\theta\in\{90^\circ,-90^\circ,180^\circ\}$ の組を原子手という．
-$D$ 上で $p\mapsto c+R_{a,\theta}(p-c)$ を作用させ，向きには左から $R_{a,\theta}$ を掛ける．
-
-原子手は，各セルを閉じた単位立方体とみたとき，回転の途中で回転対象と固定セルが正の体積で重ならない場合に合法であるという．境界での接触は許す．
-
-Level 3 の候補対象は5,925個で，そのうち合法なものは1,197個である（表\ref{tab:families}）．
-各対象に三つの角度があるので，合法原子手は $1197\times3=3591$ 個である．この集合を $S_3$，生成される群を $G_3$ と書く．
-本稿で「到達可能」とは，完成状態から $S_3$ の語で得られることをいう．
+An atomic move specifies a target $D\subseteq P_n$, an axis $a$, a point
+$c$ on the axis, and an angle $\theta\in\{90^\circ,-90^\circ,180^\circ\}$.
+On selected cells it sends $p$ to $c+R_{a,\theta}(p-c)$ and multiplies
+orientations on the left by $R_{a,\theta}$. Cells are closed unit cubes.
+The collision test permits boundary contact and excludes positive-volume
+overlap between moving and stationary cells during the rotation.
 
 \begin{table}[ht]
 \centering
-\caption{Level 3 の回転対象．}\label{tab:families}
+\caption{Level 3 targets in the standard move system.}
 \begin{tabular}{lrrl}
 \toprule
-族 & 候補 & 合法 & 意味 \\
+Family & Candidates & Legal & Description\\
 \midrule
-フレーム（スケール1） & 81 & 81 & 一セル厚の層 \\
-フレーム（スケール3） & 27 & 27 & 三セル厚の層 \\
-フレーム（スケール9） & 9 & 9 & 九セル厚の層 \\
-拡張（深さ1） & 12 & 12 & 最外の辺ブロック \\
-薄板（深さ1.5） & 36 & 36 & その薄板 \\
-拡張（深さ2） & 240 & 72 & 中ブロック \\
-薄板（深さ2.5） & 720 & 216 & 中ブロックの薄板 \\
-拡張（深さ3） & 4800 & 744 & 一セル回転 \\
+Frame (scale 1) &81&81& One-cell-thick slice\\
+Frame (scale 3) &27&27& Three-cell-thick slice\\
+Frame (scale 9) &9&9& Nine-cell-thick slice\\
+Extension (depth 1) &12&12& Outermost edge block\\
+Slab (depth 1.5) &36&36& Slab of an outer block\\
+Extension (depth 2) &240&72& Middle block\\
+Slab (depth 2.5) &720&216& Slab of a middle block\\
+Extension (depth 3) &4800&744& Single-cell turn\\
 \midrule
-合計 & 5925 & 1197 & \\
+Total&5925&1197&\\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{記法}
+The three angles for each legal target give $|S_3|=1197\cdot3=3591$
+atomic moves. Let $G_3=\langle S_3\rangle$. Reachability means
+reachability from the solved state by a word in $S_3$. We apply words
+from left to right. For example, $uTu^{-1}$ transports the support of $T$
+back through $u$. A commutator $ABA^{-1}B^{-1}$ is even because the sign
+map is multiplicative.
 
-二つの操作 $A,B$ の交換子を $[A,B]=ABA^{-1}B^{-1}$，$T$ の $U$ による共役を $UTU^{-1}$ と書く．
+The scope is the standard generator set. For example, rotating the four
+cells $(\pm5,\pm5,0)$ about the $z$ axis through the origin passes the
+collision test but is outside $S_3$.
 
-\begin{lemma}[交換子の偶奇]\label{lem:comm}
-有限集合上の任意の置換 $A,B$ に対して $[A,B]$ は偶置換である．
-\end{lemma}
-\begin{proof}
-$\sgn([A,B])=\sgn(A)^2\sgn(B)^2=1$．
-\end{proof}
-
-\begin{lemma}[共役による支持の運搬]\label{lem:conj}
-$T$ が点集合 $S$ の外を固定するなら，$UTU^{-1}$ は $U(S)$ の外を固定する．
-\end{lemma}
-\begin{proof}
-$x\notin U(S)$ なら $U^{-1}(x)\notin S$ なので $T(U^{-1}(x))=U^{-1}(x)$，したがって $UTU^{-1}(x)=x$．
-\end{proof}
-
-\section{主定理}
-
-\begin{theorem}[Level 3 の構成的可解性]\label{thm:main}
-完成状態から $G_3$ の作用で到達可能な任意の状態に対し，\code{level3-slice-reduction} は，有限個の合法原子手からなる完成状態への語を構成する．
-ただし，有限探索を実行する計算機がメモリ不足などの資源障害を起こさないものとする．
+\section{Main results}
+\begin{theorem}[Constructive solvability]\label{thm:main}
+For every reachable Level 3 state, \code{level3-slice-reduction} constructs
+a finite word of legal atomic moves that solves it, provided that the
+computer has sufficient resources for the finite searches.
 \end{theorem}
 
-これは「有限手の解が存在する」だけでなく，実装がその手列を構成するという主張である．
-
-\begin{theorem}[到達可能状態の決定]\label{thm:structure}
-状態 $s=(\sigma,\rho)$ が到達可能であるための必要十分条件は，次の四つがすべて成り立つことである．
-記号 $H(\Omega)$，$\tau_s$，$\chi$，$\varphi$ は第\ref{sec:orientation}節で，$V$ は第\ref{sec:parity}節で定義する．
+\begin{theorem}[Reachability and group order]\label{thm:structure}
+A state is reachable if and only if it meets all four conditions below.
+The orientation coordinates and maps are defined in Section~\ref{sec:ori}.
 \begin{enumerate}
-\item（許容）$\sigma$ は各軌道を保ち，すべてのセル $x$ について $\tau_s(x)\in H(\Omega)$ である（$\Omega$ は $x$ の軌道）．
-\item（軌道偶奇）$\varepsilon(\sigma)\in V$．ここで $V\subseteq\F_2^{164}$ は原子手の偶奇ベクトルが張る15次元の部分空間である．
-\item（ねじれ和）$H(\Omega)\cong C_3$ である四つの軌道のそれぞれで $\sum_{x\in\Omega}\chi(\tau_s(x))=0$（$\Z/3$ において）．
-\item（反転偶奇）$H(\Omega)\cong D_4$ である一つの軌道で $\sum_{x\in\Omega}\varphi(\tau_s(x))=0$（$\Z/2$ において）．
+\item The position permutation preserves every orbit $\Omega$, and
+$\tau_s(x)\in H(\Omega)$ for each $x\in\Omega$.
+\item The orbit parity vector $\varepsilon(\sigma)$ lies in the
+15-dimensional subspace $V\subseteq\mathbb F_2^{164}$ spanned by the
+atomic move parity vectors.
+\item On each of the four $C_3$ orbits, $\sum_{x\in\Omega}\chi(\tau_s(x))=0$
+in $\mathbb Z/3$.
+\item On the single $D_4$ orbit, $\sum_{x\in\Omega}\varphi(\tau_s(x))=0$
+in $\mathbb Z/2$.
 \end{enumerate}
-したがって，位置への作用の像は $P=\{\pi\in\prod_i\Sym(\Omega_i):\varepsilon(\pi)\in V\}$ であり，
+The position image is
+$P=\{\pi\in\prod_i\Sym(\Omega_i):\varepsilon(\pi)\in V\}$, and
 \[
-|G_3|=\underbrace{2^{15}\prod_{i=1}^{164}\frac{|\Omega_i|!}{2}}_{|P|}\cdot\underbrace{3^{28}\cdot4^{552}\cdot\frac{8^{192}}{2}}_{\text{向き}},
-\qquad \log_{10}|G_3|\approx11918.138
+|G_3|=\left(2^{15}\prod_{i=1}^{164}\frac{|\Omega_i|!}{2}\right)
+       3^{28}4^{552}\frac{8^{192}}2,\qquad
+\log_{10}|G_3|\approx11918.138.
 \]
-である．
 \end{theorem}
 
-条件3と4は，ルービックキューブの「角のねじれの和は $0$」「辺の反転は偶数個」に当たる同時制約である．
-セルごとの向きの自由度 $H(\Omega)$ だけからは見えず，旧版では扱っていなかった．
-
-\paragraph{適用範囲．}
-定理は $S_3$ が生成する $G_3$ についてのものである．
-候補生成の外にある一層の正方形断面の回転（例：$z=0$ 面の四つのセル $(\pm5,\pm5,0)$ を原点を通る Z 軸まわりに回す操作）は合法性の判定を通るが，$S_3$ には含まれない．
-それらを加えた群に対する可解性は，この定理からは得られない．
-
-\section{証明の設計}
-
-状態 $(\sigma,\rho)$ を解く問題を，(1) 位置軌道，(2) 軌道ごとの偶奇，(3) 軌道内部の位置，(4) 位置を固定した後の向き，の四段階に分ける．
-
-\begin{lemma}[軌道]\label{lem:orbit}
-$P_3$ を頂点集合とし，ある $s\in S_3$ について $s(x)\ne x$ となるとき $x$ と $s(x)$ を辺で結んだ無向グラフの連結成分は，$G_3$ の位置軌道と一致する．
-\end{lemma}
-\begin{proof}
-同じ連結成分にある二点は，各辺の生成元またはその逆元を順に施して移り合う．
-逆に，群の元は生成元と逆元の積なので，移り合う二点の間には対応する道がある．
-\end{proof}
-
-軌道を $\Omega_1,\dots,\Omega_r$ とし，偶奇写像を
-\[
-\varepsilon\colon G_3\to\F_2^r,\qquad
-\varepsilon(g)_i=\begin{cases}0&(g|_{\Omega_i}\text{ が偶})\\1&(g|_{\Omega_i}\text{ が奇})\end{cases}
-\]
-と定める．符号の乗法性から $\varepsilon(gh)=\varepsilon(g)+\varepsilon(h)$ である．
-
-\begin{definition}[純粋位置工具]
-軌道 $\Omega$ の純粋位置工具とは，$T\in G_3$ で次を満たすものをいう．
-\begin{enumerate}
-\item $\Omega$ の外では位置も向きも変えない．
-\item $\Omega$ の中でも，位置を固定するセルの向きを変えない．
-\item $\Omega$ の少なくとも三点を非自明に置換する．
-\end{enumerate}
-\end{definition}
-
-\begin{lemma}[3-cycle への分解]\label{lem:threecycles}
-任意の有限偶置換は3-cycleの積で表せる．
-\end{lemma}
-\begin{proof}
-置換を巡回置換に分解する．長さ3以上の巡回置換は，先頭の点を共有する3-cycleで順に短くできる．
-残る互換は偶数個であり，二つずつまとめて高々二個の3-cycleで表せる．
-\end{proof}
-
-\section{位置軌道}
-
-\begin{proposition}[軌道分解]
-3,591個の原子手の位置への作用から補題\ref{lem:orbit}のグラフを作ると，8,000個の位置は164個の軌道に分かれる（表\ref{tab:orbitsizes}）．
-\end{proposition}
-
-\begin{table}[ht]
-\centering
-\caption{軌道の大きさ．}\label{tab:orbitsizes}
+\section{Position orbits and local generators}
+Connect $x$ to $a(x)$ for every $a\in S_3$. The connected components
+are the position orbits: edges can be followed using generators or their
+inverses, and every word traces such a path.
+Enumerating the atomic actions gives the following decomposition.
+\begin{center}
 \begin{tabular}{rrr}
 \toprule
-軌道の大きさ & 軌道数 & セル数 \\
+Orbit size & Orbits & Cells\\
 \midrule
-8 & 4 & 32 \\
-24 & 112 & 2688 \\
-96 & 45 & 4320 \\
-192 & 1 & 192 \\
-384 & 2 & 768 \\
+8&4&32\\24&112&2688\\96&45&4320\\192&1&192\\384&2&768\\
 \midrule
-合計 & 164 & 8000 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-三つの桁 $B,b,o$ のそれぞれを C（零成分なし）または E（零成分一つ）に分類し，E が二つ以上あるときは零成分の軸が一致するかどうかも記録する．
-例えば EEE/$Bbo$ は三桁の零軸がすべて一致し，EEE/$Bb|o$ は $B,b$ が一致して $o$ が異なることを表す．
-この15クラスは座標回転で保たれる．クラスごとの軌道数は表\ref{tab:classes}のとおりである．
-同じクラスの中でも軌道は分かれるので，以下の証明の単位は軌道である．164軌道の一覧は wiki の付録A（\code{wiki/Level-3-Orbit-Catalogue.md}）にある．
-
-\begin{table}[ht]
-\centering
-\caption{15クラスと軌道．}\label{tab:classes}
-\begin{tabular}{lrrl}
-\toprule
-クラス & セル数 & 軌道数 & 軌道の大きさ \\
-\midrule
-CCC & 512 & 24 & $8\times4,\ 24\times20$ \\
-CCE & 768 & 32 & $24\times32$ \\
-CEC & 768 & 26 & $24\times24,\ 96\times2$ \\
-CEE/$bo$ & 384 & 13 & $24\times12,\ 96\times1$ \\
-CEE/$b|o$ & 768 & 26 & $24\times24,\ 96\times2$ \\
-ECC & 768 & 8 & $96\times8$ \\
-ECE/$Bo$ & 384 & 4 & $96\times4$ \\
-ECE/$B|o$ & 768 & 8 & $96\times8$ \\
-EEC/$Bb$ & 384 & 1 & $384\times1$ \\
-EEC/$B|b$ & 768 & 8 & $96\times8$ \\
-EEE/$Bbo$ & 192 & 1 & $192\times1$ \\
-EEE/$Bb|o$ & 384 & 1 & $384\times1$ \\
-EEE/$Bo|b$ & 384 & 4 & $96\times4$ \\
-EEE/$B|bo$ & 384 & 4 & $96\times4$ \\
-EEE/$B|b|o$ & 384 & 4 & $96\times4$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\section{各軌道が交代群を含むこと}
-
-軌道 $\Omega$ 上に $G_3$ が誘導する置換群を $G_3^\Omega$ と書く．
-
-\begin{lemma}\label{lem:alt}
-164個の軌道すべてについて $\Alt(\Omega)\le G_3^\Omega$ である．
-\end{lemma}
-
-\begin{proof}[計算機による証明]
-大きさ8の四つの軌道では，生成される群を閉包まで列挙し，位数が $8!=40320$ であること，すなわち $\Sym(8)$ と一致することを確認した．
-
-大きさ24以上の各軌道では，次の三点を証明書として検査した．
-\begin{enumerate}
-\item 作用が原始的である．すなわち生成元が保つ非自明なブロック系が存在しない．
-任意の二点を同じブロックに入れた最小の合同関係を閉包し，常に全体分割しか得られないことで判定する．
-\item ある生成元の語 $g$ とその冪 $g^K$ について，$g^K$ の支持がちょうど素数 $p$ 個の点からなる一つの巡回置換である．これを直接検査する．
-\item $p\le|\Omega|-3$ である．
-\end{enumerate}
-原始的な有限置換群が，$p\le n-3$ を満たす素数長 $p$ の巡回置換を含めば交代群を含む（Jordan の定理）ので，結論が従う．
-乱数は証明書の候補 $g$ を探すためにだけ使い，最終的な判定は得られた具体的な置換の検査による．
-\end{proof}
-
-\section{純粋工具}
-
-\begin{lemma}\label{lem:tools}
-各軌道 $\Omega_i$ に対し，$\Omega_i$ の外の全セルの位置と向きを固定する非自明な偶置換の工具 $T_i\in G_3$ が存在する．
-\end{lemma}
-
-工具の支持の大きさの分布は，3点が133軌道，4点が17軌道，6点が14軌道である．
-117個の工具は，支持の小さい二つの交換子の組み合わせから得た．
-残る47個は，工具 $T$ とその共役 $gTg^{-1}$ の交換子によって軌道の外の共通の作用を打ち消す方法（共役分離）で得た．
-各工具の語は16--84原子手（中央値16）である．
-
-\begin{proof}[計算機による証明]
-保存された工具データを読み込むとき，全8,000位置について次を再検査する．
-\begin{itemize}
-\item 語のすべての原子手が，現行の合法原子手に解決される．
-\item 動く位置が宣言された軌道の中だけである．
-\item 位置を固定するセルの向きが変わらない．
-\item 支持の大きさが3以上である．
-\end{itemize}
-独立の監査の結果は，164個中164個が合格，軌道の外への作用0件，固定セルのねじれ0件，退化した工具0件である．
-\end{proof}
-
-軌道のちょうど三点を巡回させる純粋位置工具を，\emph{純粋な3-cycle}と呼ぶ．
-
-\begin{lemma}[純粋な3-cycle，検査 C5]\label{lem:purecycle}
-164個の軌道のそれぞれに，純粋な3-cycleが具体的な語として存在する．
-\end{lemma}
-\begin{proof}[計算機による証明]
-133軌道では，保存された工具そのものが純粋な3-cycleである．
-残る31軌道の工具は，二つの互換の積（17軌道）または二つの3-cycleの積（14軌道）である．
-これらの軌道では，工具の二つの共役 $A,B$ で積 $AB$ がちょうど三点を動かすものを，準備の語の長さについての幅優先探索で求め，語として保存した
-（\code{level3SliceReductionCertifiedData.ts}，42--170原子手）．
-164個の語すべてについて，全8,000セルの位置と向きへの作用を計算し，宣言された軌道の三点を巡回させ，それ以外を何も変えないことを確認した．
-\end{proof}
-
-\begin{lemma}[交代群の純粋な実現]\label{lem:purealt}
-$\Omega$ を軌道とする．
-\begin{enumerate}
-\item $\Omega$ の相異なる任意の三点 $x,y,z$ に対し，$x\to y\to z\to x$ と巡回させる純粋な3-cycleが $G_3$ に存在する．
-\item 任意の $\alpha\in\Alt(\Omega)$ に対し，$\Omega$ の外の位置と向きを固定し，$\Omega$ の位置に $\alpha$ として作用する $g\in G_3$ が存在する．
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-補題\ref{lem:purecycle}の純粋な3-cycleを $T$，それが巡回させる三点を順に $(t_0,t_1,t_2)$ とする．
-補題\ref{lem:alt}により $\Alt(\Omega)\le G_3^\Omega$ であり，$|\Omega|\ge8$ なので $\Alt(\Omega)$ は $\Omega$ の相異なる三点の順序付き組の上に推移的に作用する．
-よって $(x,y,z)$ を $(t_0,t_1,t_2)$ へ運ぶ $u\in G_3$ がある．
-語 $u\,T\,u^{-1}$（$u$，$T$，$u^{-1}$ の順に施す）は，補題\ref{lem:conj}により $\{x,y,z\}$ の外の位置を固定し，$x\to y\to z\to x$ と巡回させる．
-動かないセルは $u$ で $T$ の支持の外へ運ばれ，そこで $T$ は向きも変えないので，$u^{-1}$ で元の位置と向きに戻る．
-したがって $u\,T\,u^{-1}$ は純粋な3-cycleである．これで1が示された．
-2は，補題\ref{lem:threecycles}により $\alpha$ を3-cycleの積に分解し，各3-cycleを1で実現すればよい．
-\end{proof}
-
-\begin{remark}
-補題\ref{lem:alt}だけからは補題\ref{lem:purealt}は出ない．
-補題\ref{lem:alt}は $G_3$ が $\Omega$ に誘導する置換群についての主張であり，$\Omega$ に3-cycleとして作用する元が $\Omega$ の外を乱さないことは保証しない．
-群論の言葉では次のとおりである．$\Omega$ の外の位置と向きを固定する元の全体 $K_\Omega$ は，$\Omega$ が $G_3$ で不変なので $G_3$ の正規部分群であり，
-その像は $G_3^\Omega$ の正規部分群である．補題\ref{lem:purecycle}によりこの像は自明でなく，
-$|\Omega|\ge8$ のとき $\Alt(\Omega)$ を含む群の自明でない正規部分群は $\Alt(\Omega)$ を含む．
-\end{remark}
-
-\section{偶奇の正規化}\label{sec:parity}
-
-状態 $s\in G_3$ の164ビットの偶奇ベクトルを $\varepsilon(s)$ とする．
-3,591個の原子手が与える非零ベクトルは20種類あり，その張る空間 $V=\Span\{\varepsilon(a):a\in S_3\}$ の次元は15である（検査 C4）．
-
-\begin{lemma}\label{lem:parity}
-任意の到達可能状態の軌道偶奇は，高々15個の原子手ですべて偶に正規化できる．
-\end{lemma}
-\begin{proof}
-$s\in\langle S_3\rangle$ なので，$\varepsilon(s)$ は $\{\varepsilon(a):a\in S_3\}$ の張る空間に属する．
-次元15の基底に対して掃き出し法を行えば，$\varepsilon(s)$ を表す基底ベクトルの和が得られる．
-各基底ベクトルに対応する原子手を逆向きに施せば $0$ になる．基底の元は15個以下なので，必要な手数も15以下である．
-\end{proof}
-
-以後に使う純粋工具は交換子から作られ，補題\ref{lem:comm}により各軌道で偶なので，正規化した偶奇を壊さない．
-
-\section{位置の解法}
-
-各軌道 $\Omega$ を，次の二段階で順に処理する．工具はすべて補題\ref{lem:purecycle}の純粋な3-cycleの共役である．
-\begin{description}
-\item[貪欲段階（発見的）] 未完成のセルが32個より多い間，完成済みのセルを壊す数より多くのセルを完成させる共役を，
-順序付き二点 $(x,y)\in\Omega^2$（$x\ne y$）の有限グラフの幅優先探索で探して施す．見つからなければ厳密段階へ移る．
-\item[厳密段階] 残りの置換を補題\ref{lem:threecycles}の手順で3-cycleへ分解し，各3-cycleを，
-目的の三点の側と保存された3-cycleの三点の側からの双方向の幅優先探索で構成する．
-\end{description}
-貪欲段階は語を短くするためのもので，完全性には寄与しない．
-
-\begin{lemma}\label{lem:position}
-偶奇の正規化の後，位置の解法は有限回で $\sigma=\mathrm{id}$ に到達する．
-\end{lemma}
-\begin{proof}
-一つの軌道 $\Omega$ を考える．
-貪欲段階の一回は完成セルの数を真に増やすので，高々 $|\Omega|$ 回で終わる．
-そこで使う語は純粋な3-cycleの共役であり，$\Omega$ の外を変えず，$\Omega$ 上では偶である．
-したがって厳密段階の開始時に，$\Omega$ 上の残りの置換は偶であり，$\Omega$ の外は処理前のままである．
-
-厳密段階の一回は，長さ3以上の巡回があればその先頭の三点上の3-cycleを一つ施して二つ以上のセルを完成させ，
-なければ二つの互換を二つの3-cycleで消して四つのセルを完成させる．
-残りが偶置換なので，互換が一つだけ残ることはない．よって高々 $|\Omega|$ 回で $\Omega$ が完成する．
-
-必要な3-cycleが必ず構成できることを示す．
-相異なる三点の順序付き組を頂点とし，原子手の作用を辺とする有限グラフを考える．
-補題\ref{lem:alt}により $G_3^\Omega$ は三点の順序付き組の上に推移的なので，このグラフは連結である．
-探索に深さや頂点数の打ち切りはないので，目的の三点から保存された3-cycleの三点への道 $u$ が必ず見つかり，
-補題\ref{lem:purealt}の証明のとおり $u\,T\,u^{-1}$ が目的の純粋な3-cycleになる．
-
-工具は軌道の外を固定するので，完成済みの軌道を壊さない．164軌道を順に処理すれば全位置が完成する．
-\end{proof}
-
-\section{向き}\label{sec:orientation}
-
-\subsection{ねじれ座標}
-
-各軌道 $\Omega$ に基点 $x_\Omega$ を一つ固定する．
-基点のセルが完成状態から原子手の列で位置 $y\in\Omega$ に来たときに取り得る向きの集合を $Q_y\subseteq C$ とし，$H(\Omega)=Q_{x_\Omega}$ とおく．
-$Q_y$ は，一つのセルの（位置，向き）の遷移を表す $\Omega\times C$ 上のオートマトンの全探索で求まる．
-
-\begin{lemma}[検査 C3]\label{lem:coset}
-すべての軌道 $\Omega$ について $H(\Omega)$ は $C$ の部分群であり，各 $y\in\Omega$ について，$r_y\in Q_y$ を一つ選ぶと $Q_y=r_yH(\Omega)$ である．
-$H(\Omega)$ は148軌道（7,224セル）で自明であり，残る16軌道（776セル）では表\ref{tab:freedom}のとおりである．
-\end{lemma}
-
-\begin{table}[ht]
-\centering
-\caption{向きの自由度が非自明な軌道と，その同時制約．}\label{tab:freedom}
-\begin{tabular}{crrll}
-\toprule
-$H(\Omega)$ & 軌道数 & セル数 & 一セル回転 & 軌道全体の制約 \\
-\midrule
-$C_3$ & 4 & 32 & なし & ねじれ和が $0$ \\
-$C_4$ & 11 & 552 & 全セルにあり & なし \\
-$D_4$ & 1 & 192 & 全セルにあり（回転部分） & 反転が偶数個 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{definition}[ねじれ座標]
-状態 $s=(\sigma,\rho)$ と家 $x\in\Omega$ のセルについて $\tau_s(x)=r_{\sigma(x)}^{-1}\,\rho(x)\,r_x$ と定める．
-原子手 $a$ と位置 $p\in\Omega$ については，$a$ が $p$ を選ぶとき $R_a(p)=R_a$，選ばないとき $R_a(p)=I$ として
-\[
-\delta(a,p)=r_{\pi_a(p)}^{-1}\,R_a(p)\,r_p
-\]
-と定める．ここで $\pi_a$ は $a$ の位置への作用である．
-\end{definition}
-
-\begin{lemma}\label{lem:delta}
-$\delta(a,p)\in H(\Omega)$ であり，状態 $s$ で位置 $p$ にあるセル $x$ について $\tau_{s\cdot a}(x)=\delta(a,p)\,\tau_s(x)$ が成り立つ．
-特に到達可能な状態 $s$ では，すべての $x$ について $\tau_s(x)\in H(\Omega)$ である．
-語 $g=a_1\cdots a_k$ に対して $\delta(g,p)=\delta(a_k,p_{k-1})\cdots\delta(a_1,p_0)$（$p_0=p$，$p_j=\pi_{a_j}(p_{j-1})$）とおくと，
-同じ式が $g$ について成り立ち，$\delta(g^{-1},\pi_g(p))=\delta(g,p)^{-1}$ である．
-\end{lemma}
-\begin{proof}
-$R_a(p)\,r_p$ は，向き $r_p$ で位置 $p$ にある基点のセルに $a$ を施した後の向きなので $Q_{\pi_a(p)}=r_{\pi_a(p)}H(\Omega)$ に属する．よって $\delta(a,p)\in H(\Omega)$．
-$\sigma(x)=p$ とすると $\tau_{s\cdot a}(x)=r_{\pi_a(p)}^{-1}R_a(p)\rho(x)r_x=\delta(a,p)\,\tau_s(x)$．
-完成状態で $\tau\equiv I$ なので，到達可能な状態では $\tau_s(x)\in H(\Omega)$ となる．語についての主張は原子手の場合の繰り返しである．
-\end{proof}
-
-位置をすべて固定する元の全体を $K=\{g\in G_3:\pi_g=\mathrm{id}\}$ と書く．
-$g\in K$ と任意の $u\in G_3$ について，語 $u\,g\,u^{-1}$ は再び $K$ に属し，補題\ref{lem:delta}から
-\begin{equation}\label{eq:conj}
-\delta(u\,g\,u^{-1},p)=\delta(u,p)^{-1}\,\delta(g,\pi_u(p))\,\delta(u,p)
-\end{equation}
-である．すなわち共役は，ねじれを位置 $\pi_u(p)$ から $p$ へ運び，$H(\Omega)$ の中で共役する．
-
-\subsection{不変量}
-
-$H(\Omega)\cong C_3$ の軌道では，生成元を一つ選んで同型 $\chi\colon H(\Omega)\to\Z/3$ を固定する．
-$H(\Omega)\cong D_4$ の軌道では，位数4の元が生成する巡回部分群を $C(\Omega)$ とし，$\varphi\colon H(\Omega)\to H(\Omega)/C(\Omega)\cong\Z/2$ を商写像とする．
-$\varphi(h)=1$ である $h$ を\emph{反転}と呼ぶ．$C_4$ の軌道では $C(\Omega)=H(\Omega)$ とおく．
-
-\begin{lemma}[不変性，検査 C6]\label{lem:invariance}
-すべての原子手 $a\in S_3$ について，$C_3$ の各軌道で $\sum_{p\in\Omega}\chi(\delta(a,p))=0$，$D_4$ の軌道で $\sum_{p\in\Omega}\varphi(\delta(a,p))=0$ である．
-したがって，条件1を満たす任意の状態 $s$ と任意の語 $g$ について
-\[
-\sum_{x\in\Omega}\chi(\tau_{s\cdot g}(x))=\sum_{x\in\Omega}\chi(\tau_s(x)),\qquad
-\sum_{x\in\Omega}\varphi(\tau_{s\cdot g}(x))=\sum_{x\in\Omega}\varphi(\tau_s(x))
-\]
-が成り立ち，特に到達可能な状態では両方とも $0$ である．
-\end{lemma}
-\begin{proof}
-前半は3,591個の原子手すべてについて計算機で確認した．
-後半は，$\chi$，$\varphi$ が準同型で，$x\mapsto\sigma(x)$ が $\Omega$ の全単射であることから，
-$\sum_x\chi(\tau_{s\cdot a}(x))=\sum_p\chi(\delta(a,p))+\sum_x\chi(\tau_s(x))$ となることによる．$\varphi$ も同様である．
-\end{proof}
-
-\subsection{工具}
-
-\begin{proposition}[一セル回転，検査 C7]\label{prop:rolls}
-$C_4$ の11軌道と $D_4$ の軌道の全744セル $y$ について，$y$ だけを選び位置を動かさない原子手（深さ3の拡張）の回転の全体は，
-$r_y\,C(\Omega)\,r_y^{-1}$ の単位元以外の三つの元と一致する．
-\end{proposition}
-
-\begin{proposition}[二点工具，検査 C8]\label{prop:pairtools}
-\begin{enumerate}
-\item $C_3$ の各軌道 $\Omega$ に，全8,000セルの位置を固定し，$\Omega$ の二つのセル以外の向きを変えず，
-その二つのセルのねじれ座標に $\chi$ の値で $c$ と $-c$（$c\ne0$）を掛ける語 $P_\Omega$ がある（68原子手）．
-\item $D_4$ の軌道に，全8,000セルの位置を固定し，その軌道の二つのセル以外の向きを変えず，その二つのセルにはどちらも反転を掛ける語 $F$ がある（32原子手）．
-\end{enumerate}
-\end{proposition}
-
-$P_\Omega$ は，純粋な3-cycle $T$ と，$T$ の三点を巡回的に自分自身へ写す語 $u$ から $T\cdot u\,T^{-1}u^{-1}$ として得た．
-$F$ は旧版から保存されていた13個の $D_4$ 用の語の一つである．
-
-\subsection{位置を固定する部分群}
-
-\begin{lemma}\label{lem:kernel}
-$g\in K$ をねじれ座標の族 $(\delta(g,x))_x$ と同一視すると，
-\[
-K=\prod_{H(\Omega)\cong C_3}\Bigl\{t\in H(\Omega)^{\Omega}:\sum_x\chi(t_x)=0\Bigr\}\times\prod_{H(\Omega)\cong C_4}H(\Omega)^{\Omega}
-\times\Bigl\{t\in H(\Omega)^{\Omega}:\sum_x\varphi(t_x)=0\Bigr\}_{H(\Omega)\cong D_4}
-\]
-であり，$|K|=3^{28}\cdot4^{552}\cdot8^{192}/2$ である．
-\end{lemma}
-\begin{proof}
-左辺が右辺に含まれることは補題\ref{lem:delta}と補題\ref{lem:invariance}による（$H(\Omega)$ が自明な軌道では $\delta\equiv I$）．
-逆を軌道ごとに示す．以下の元はどれも一つの軌道の中だけを変えるので，軌道ごとに示せば積についても従う．
-
-$C_4$ の軌道：命題\ref{prop:rolls}の一セル回転が，各セルで $H(\Omega)$ の全体を与える．
-
-$C_3$ の軌道：$y\ne y'$ を $\Omega$ の任意の二点とする．補題\ref{lem:alt}により $G_3^\Omega$ は順序付き二点の上に推移的なので，$(y,y')$ を $P_\Omega$ の二つのセルへ運ぶ $u$ がある．
-式\eqref{eq:conj}と $H(\Omega)$ が可換であることから，$u\,P_\Omega\,u^{-1}$ は $y$ に $c$，$y'$ に $-c$ を掛け，他を変えない．
-このような元は和が $0$ の族の全体を生成する．
-
-$D_4$ の軌道：一セル回転が各セルで $C(\Omega)$ の全体を与える．
-任意の二点 $y\ne y'$ について，同様に $u\,F\,u^{-1}$ は $y$ と $y'$ だけを変え，式\eqref{eq:conj}と $\varphi(hfh^{-1})=\varphi(f)$ から，どちらにも反転を掛ける．
-反転が偶数個の族は，このような元を掛けて反転をなくし，残りを一セル回転で消せるので，すべて $K$ に属する．
-\end{proof}
-
-\begin{proof}[定理\ref{thm:structure}の証明]
-必要性．条件1は補題\ref{lem:orbit}と補題\ref{lem:delta}，条件2は $\varepsilon$ が準同型であること，条件3と4は補題\ref{lem:invariance}による．
-
-十分性．$s=(\sigma,\rho)$ が四条件を満たすとする．
-$\varepsilon(\sigma)\in V$ なので，原子手の積 $g_0$ で $\varepsilon(g_0)=\varepsilon(\sigma)$ となるものがある．
-$\sigma\circ\pi_{g_0}^{-1}$ は各軌道で偶なので，補題\ref{lem:purealt}によりこれを位置への作用とする $g_1\in G_3$ がある．
-よって $\pi_g=\sigma$ となる $g\in G_3$ がある．
-状態 $s\cdot g^{-1}$ は位置がすべて完成しており，補題\ref{lem:delta}と補題\ref{lem:invariance}により条件1，3，4を満たす．
-補題\ref{lem:kernel}によりこれは $K$ の元，すなわち到達可能な状態である．したがって $s$ も到達可能である．
-
-位数．位置への作用の像は，上の議論から $P=\{\pi\in\prod_i\Sym(\Omega_i):\varepsilon(\pi)\in V\}$ であり，$|P|=|V|\cdot\prod_i|\Alt(\Omega_i)|=2^{15}\prod_i|\Omega_i|!/2$．
-核は $K$ なので $|G_3|=|P|\cdot|K|$ である．
-\end{proof}
-
-\subsection{向きの解法}
-
-位置が完成した後，実装は次の二段階で向きを完成させる．
-\begin{description}
-\item[降下段階（発見的）] 一セル回転，同じ位置作用を持つ二つの純粋工具の差，$[R,T]$ 型の交換子，$D_4$ 用の語から位置を固定するねじり工具を作る．
-各セルの完成の向きまでの距離の和を $\Phi$ とし，$\Phi$ を真に減らす共役を探して施す．見つからなければ完了段階へ移る．
-\item[完了段階]
-\begin{enumerate}
-\item 全セルについて，そのセルの向きを直す一セル回転があれば施す．
-\item $C_3$ の各軌道で，ねじれたセルが二つ以上ある間，その二つ $y,y'$ を $P_\Omega$ の二つのセルへ運ぶ $u$ を順序付き二点のグラフの幅優先探索で求め，
-$u\,P_\Omega\,u^{-1}$ を一回または二回施して $y$ のねじれを消す．
-\item $D_4$ の軌道で，向きの合わないセルが二つ以上ある間，その二つについて $u\,F\,u^{-1}$ を施し，続けて手順1を行う．
-\end{enumerate}
-\end{description}
-
-\begin{lemma}\label{lem:orientation}
-位置が完成した後の任意の到達可能な向きの状態は，有限回で完成する．
-\end{lemma}
-\begin{proof}
-降下段階は，$\Phi$ が非負整数で毎回真に減るので，有限回で完成するか，降下が見つからずに終わる．
-その語は位置を固定するので，完了段階の開始時の状態も位置が完成した到達可能な状態であり，補題\ref{lem:invariance}の二つの和は $0$ である．
-
-手順1の後，命題\ref{prop:rolls}により，$C_4$ の軌道のセルはすべて完成し，$D_4$ の軌道で向きの合わないセルは $\varphi(\tau)=1$ のものだけになる．
-
-手順2．$u$ は補題\ref{lem:alt}（二点の順序付き組の上の推移性）により存在し，探索に打ち切りがないので見つかる．
-$u\,P_\Omega\,u^{-1}$ は $y$ に位数3の群 $H(\Omega)$ の単位元でない元を掛けるので，一回または二回で $y$ のねじれが消える．変わるのは $y$ と $y'$ だけなので，ねじれたセルの数は毎回1以上減る．
-ねじれたセルが一つだけ残ることはない．和が $0$ でなくなるからである．よって有限回でこの軌道が完成する．
-
-手順3．反転したセルの数は補題\ref{lem:invariance}により偶数である．$u\,F\,u^{-1}$ は選んだ二つのセルの $\varphi$ を $0$ にし，他を変えない．続く一セル回転でその二つは完成する．
-反転したセルの数は毎回2減るので，有限回で完成する．
-\end{proof}
-
-入力が到達可能でない場合，実装は条件2，3，4のどれが破れているかを報告して失敗する．
-
-\section{主定理の証明}
-
-\begin{proof}[定理\ref{thm:main}の証明]
-入力の状態は到達可能なので，補題\ref{lem:parity}により軌道偶奇を正規化できる．
-補題\ref{lem:position}により全セルの位置を有限回で完成できる．
-補題\ref{lem:orientation}により，位置を固定したまま全セルの向きを有限回で完成できる．
-使う語は現行の合法原子手だけからなる．したがって構成された有限の語は入力を完成状態へ移す．
-\end{proof}
-
-\section{健全性の境界検査}
-
-探索の本体は疎な整数シミュレータを使うが，成功の判定はそれに依存しない．
-入力の状態を複製し，出力を一手ずつ実エンジンに施す．各手の直前に合法性を検査し，最後に全8,000セルの位置と向きの完全な一致を要求する．
-一手でも違法であるか，一セルでも一致しなければ，結果は失敗となる．
-したがって，仮に探索のシミュレータに実装の差があっても，誤った成功は境界で拒否される．
-さらに，疎なシミュレータと実エンジンは，6試行 $\times$ 40合法原子手 $\times$ 8,000セルについて，位置と向きの差分検査を通過している．
-
-\section{手数}\label{sec:moves}
-
-七つの検証例では，解は111,830--424,519手，求解時間は112.1--284.2秒であった．これは最短手数ではない．
-
-一手を合法原子手一回と数えると，長さ $d$ 以下の語の数は高々
-\[
-1+M+\cdots+M^d=\frac{M^{d+1}-1}{M-1},\qquad M=3591
-\]
-である．一方，位置の部分だけでも
-\[
-\prod_{i=1}^{164}\frac{|\Omega_i|!}{2}
-\]
-個以上の状態があり，その常用対数は約 $11394.834$ である．
-したがって，最悪の状態を解くのに必要な手数（God's number）は $3206$ 以上である．
-これが旧版の評価である．定理\ref{thm:structure}を使うと，これは次のように上がる（検査 C9）．
-\begin{center}
-\begin{tabular}{lrr}
-\toprule
-数える状態 & $\log_{10}$ & 手数の下界 \\
-\midrule
-$\prod_i\Alt(\Omega_i)$（旧版） & $11394.834$ & $3206$ \\
-位置群 $P$ & $11399.349$ & $3207$ \\
-$G_3$ 全体 & $11918.138$ & $3353$ \\
+Total&164&8000\\
 \bottomrule
 \end{tabular}
 \end{center}
-したがって God's number は $3353$ 以上である．
-現在の解は最適でない解法の出力であり，その手数は God's number の評価としては意味を持たない．
+Each of $B,b,o$ is of type C (no zero coordinate) or E (one zero
+coordinate). The coincidence pattern of the E axes refines these types.
+Coordinate rotations preserve the resulting 15 classes.
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+Class&Cells&Orbits&Size by multiplicity\\
+\midrule
+CCC&512&24&$8\times4,\ 24\times20$\\
+CCE&768&32&$24\times32$\\
+CEC&768&26&$24\times24,\ 96\times2$\\
+CEE/$bo$&384&13&$24\times12,\ 96\times1$\\
+CEE/$b|o$&768&26&$24\times24,\ 96\times2$\\
+ECC&768&8&$96\times8$\\
+ECE/$Bo$&384&4&$96\times4$\\
+ECE/$B|o$&768&8&$96\times8$\\
+EEC/$Bb$&384&1&$384\times1$\\
+EEC/$B|b$&768&8&$96\times8$\\
+EEE/$Bbo$&192&1&$192\times1$\\
+EEE/$Bb|o$&384&1&$384\times1$\\
+EEE/$Bo|b$&384&4&$96\times4$\\
+EEE/$B|bo$&384&4&$96\times4$\\
+EEE/$B|b|o$&384&4&$96\times4$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The catalogue lists individual orbits in \code{wiki/Level-3-Orbit-Catalogue.md}.
 
-\section{検証と再現}
+\begin{lemma}\label{lem:alt}
+The induced position group $G_3^\Omega$ contains $\Alt(\Omega)$ on
+every orbit $\Omega$.
+\end{lemma}
+\begin{proof}[Computer-assisted proof]
+For the four size-eight orbits, closure enumeration yields $8!=40320$
+elements. On each larger orbit, verify primitivity by closing the
+smallest generator-invariant equivalence relation identifying each pair
+of distinct points. Each closure has one class. Then verify a word $g$
+and an exponent $k$ such that $g^k$ acts as a single prime-length
+$p$-cycle with $p\le|\Omega|-3$. Jordan's theorem gives the conclusion.
+Randomness is used to find candidate words. The final check evaluates
+the actual permutations.
+\end{proof}
 
+Call a word pure on an orbit if it fixes positions and orientations
+outside the orbit and leaves orientations unchanged at every site it
+fixes. The stored nontrivial even tools have support sizes 3, 4, and 6
+on 133, 17, and 14 orbits respectively. Of these, 117 were obtained by
+combining small-support commutators and 47 by commutators with conjugates.
+The words have lengths 16--84, with median 16. All 164 passed an audit
+of move legality, support, and orientation at fixed sites.
+
+\begin{lemma}[Pure 3-cycles]\label{lem:pure}
+Every orbit has a pure 3-cycle given by an explicit legal word.
+Every ordered triple of distinct sites on that orbit can be cycled
+by a pure word.
+\end{lemma}
+\begin{proof}
+The stored size-three tools cover 133 orbits. On the other 31,
+the original tool is a double transposition or a product of two
+3-cycles. Breadth-first search over setup words found two conjugates
+whose product has support exactly three. The resulting 42--170 move
+words are stored in \code{level3SliceReductionCertifiedData.ts}.
+Check C5 evaluates all 164 words on all 8,000 positions and orientations.
+
+By Lemma~\ref{lem:alt} and $|\Omega|\ge8$, the induced group acts
+transitively on ordered triples of distinct sites. Choose $u$ sending
+the desired triple to the stored one, apply the stored cycle $T$, and
+undo $u$. Outside the three chosen sites, $T$ acts trivially after
+transport, and $u^{-1}$ restores both position and orientation.
+\end{proof}
+Every even permutation is a product of 3-cycles: shorten long
+cycles using triples sharing their first point and express each
+remaining pair of transpositions as at most two 3-cycles.
+Lemma~\ref{lem:pure} therefore realizes any even permutation of
+one orbit without disturbing other orbits. Containment of
+$\Alt(\Omega)$ in the induced group alone gives no such independence.
+
+\section{Parity normalization and position solving}
+The signs on the 164 orbits define a homomorphism
+$\varepsilon:G_3\to\mathbb F_2^{164}$, with bit one for odd sign.
+The atomic move vectors give 20 distinct nonzero vectors of rank 15.
+Gaussian elimination selects at most 15 atomic moves whose vectors
+sum to the input parity. Applying their inverses makes each orbit even.
+
+The solver processes one orbit at a time. While more than 32 sites
+remain misplaced, it uses a breadth-first search on ordered pairs
+to find a conjugate of a pure 3-cycle that increases the number of
+correct sites. It switches to the exact phase when no improvement is
+found. The number of correct sites bounds the number of greedy steps.
+In the exact phase, the solver decomposes the remaining even
+permutation into 3-cycles. It constructs each required conjugate by
+bidirectional breadth-first search on ordered triples, from the
+requested triple and the stored one. Lemma~\ref{lem:pure} supplies
+a path, and exhaustive search of this finite graph terminates.
+Each shortening step solves at least two sites, or four sites when
+removing a pair of disjoint transpositions. Every completed orbit
+stays solved in position.
+
+\section{Orientation}\label{sec:ori}
+\subsection{Local coordinates}
+Fix a base site $x_\Omega$ in each orbit. Let $Q_y$ be the set of
+orientations the base cell can have at $y$ and put
+$H(\Omega)=Q_{x_\Omega}$. The latter is a subgroup of $C$ by
+composition and inversion of loops. Choose $r_y\in Q_y$. Following
+a reference path to $y$ after a loop gives $r_yH(\Omega)$.
+Returning along the reference path shows the reverse inclusion, so
+$Q_y=r_yH(\Omega)$. Exhaustive search on $\Omega\times C$ computes
+these sets.
+\begin{center}
+\begin{tabular}{lrrll}
+\toprule
+$H(\Omega)$ & Orbits & Cells & Single-cell turns & Constraint\\
+\midrule
+Trivial&148&7224& None & Trivial orientation\\
+$C_3$&4&32& None & Zero twist sum\\
+$C_4$&11&552& Every site & None\\
+$D_4$&1&192& Rotation subgroup & Even flip count\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Write $\pi_a$ for the position action and $R_a(p)$ for the applied
+rotation at $p$ (identity when $p$ is unselected). Define
+\[
+\tau_s(x)=r_{\sigma(x)}^{-1}\rho(x)r_x,\qquad
+\delta(a,p)=r_{\pi_a(p)}^{-1}R_a(p)r_p .
+\]
+Since $R_a(p)r_p\in Q_{\pi_a(p)}$, we have $\delta(a,p)\in H(\Omega)$.
+Substitution gives $\tau_{s\cdot a}(x)=\delta(a,\sigma(x))\tau_s(x)$.
+Starting from the solved state gives $\tau_s(x)\in H(\Omega)$ for
+every reachable state. For a word $g$, multiply the successive
+increments in reverse chronological order to obtain $\delta(g,p)$.
+In particular $\delta(g^{-1},\pi_g(p))=\delta(g,p)^{-1}$.
+If $g$ fixes every position, applying $u$, then $g$, then $u^{-1}$ gives
+\[
+\delta(ugu^{-1},p)=
+\delta(u,p)^{-1}\delta(g,\pi_u(p))\delta(u,p).
+\]
+Thus transport conjugates the increment within $H(\Omega)$.
+
+\subsection{Invariants and orientation tools}
+On a $C_3$ orbit fix an isomorphism $\chi:H(\Omega)\to\mathbb Z/3$.
+On the $D_4$ orbit let $C(\Omega)$ be the order-four rotation subgroup
+and let $\varphi:H(\Omega)\to H(\Omega)/C(\Omega)\cong\mathbb Z/2$ be
+the quotient map. For each atomic move, Check C6 verifies that the
+sum of its local increments under $\chi$ or $\varphi$, as appropriate,
+is zero. Because the maps are homomorphisms and $\sigma$ permutes
+each orbit, applying a move changes the sum by exactly the sum of
+its increments. Thus the sums are invariant and vanish in reachable states.
+
+Check C7 verifies that on all 744 sites in the $C_4$ and $D_4$ orbits,
+single-cell turns realize all three nonidentity rotations in the
+local rotation subgroup. Check C8 verifies these additional words:
 \begin{itemize}
-\item \code{npm run prove:l3}：下の検査 C1--C9（\code{research/level3-completeness/certify.ts}，乱数なし，数秒）．
-結果は \code{research/level3-completeness/out/certificate.json}．
-\item \code{npm run test:l3}：検査に加え，定理\ref{thm:structure}の四条件を満たす状態を原子手を使わずに直接構成して解く試験と，条件3，4を一つずつ破った状態が拒否される試験．
-解く試験は，通常の動作と，発見的な段階を止めて厳密段階・完了段階だけで解く動作の両方で行う．
-\item \code{npm run verify:l3}：保存済みの純粋工具の監査（\code{research/scratch/l3-audit-tooldata.ts}），
-疎なシミュレータと実エンジンの比較（\code{l3-sim-vs-engine.ts}），軌道の置換群の証明書の検査（\code{l3-orbit-groups.ts}，補題\ref{lem:alt}）．
-\item \code{npm run bench -- --algorithm=level3-slice-reduction --level=3 --seeds=6 --length=100}：一回の求解の再現（数分かかる）．
-\item 工具データ：\code{packages/solver-core/src/algorithms/level3SliceReductionToolData.ts}（純粋工具と $D_4$ 用の語），
-\code{level3SliceReductionCertifiedData.ts}（31軌道の3-cycle，$P_\Omega$，$F$．\code{research/level3-completeness/find-tools.ts} が生成する）．
-\item 実装：\code{packages/solver-core/src/algorithms/level3SliceReductionSolver.ts}．
+\item On each $C_3$ orbit a 68-move word $P_\Omega$ fixes every position
+and adds opposite nonzero twists at two sites, leaving all other
+orientations fixed. It is obtained as $T u T^{-1}u^{-1}$, where $T$
+is a pure cycle and $u$ cyclically permutes its support.
+\item On the $D_4$ orbit a 32-move word $F$ fixes every position and
+flips two orientations while leaving the rest fixed. This word is
+one of 13 previously stored $D_4$ tools.
 \end{itemize}
 
-\begin{check}原子手が3,591個で，逆について閉じている．\end{check}
-\begin{check}位置軌道が164個で，大きさが表\ref{tab:orbitsizes}のとおりである．\end{check}
-\begin{check}各軌道の（位置，向き）オートマトンを全探索し，$Q_y=r_yH(\Omega)$ と $H(\Omega)$ の同型類を確認する（補題\ref{lem:coset}）．\end{check}
-\begin{check}偶奇ベクトルの張る空間の次元が15である．\end{check}
-\begin{check}164軌道のすべてに純粋な3-cycleの語がある（補題\ref{lem:purecycle}）．\end{check}
-\begin{check}全原子手で，$C_3$ の各軌道のねじれ和と $D_4$ の軌道の反転の数の偶奇が $0$ である（補題\ref{lem:invariance}）．\end{check}
-\begin{check}$C_4$，$D_4$ の軌道の全744セルに，回転部分のすべてを与える一セル回転がある（命題\ref{prop:rolls}）．\end{check}
-\begin{check}$P_\Omega$ と $F$ が命題\ref{prop:pairtools}のとおりに作用する．\end{check}
-\begin{check}位数の計算と，手数の下界．\end{check}
+\subsection{The orientation kernel}
+Let $K$ be the kernel of the position action. The local orientation
+condition and the sums above constrain $K$ to the product, over orbits,
+of the zero-sum $C_3$ vectors, all $C_4$ vectors, the even-flip $D_4$
+vectors, and the trivial factors.
 
-\section{2026年10月10日の改訂}\label{sec:revision}
+For the reverse inclusion, single-cell turns generate the $C_4$
+factors. On a $C_3$ orbit, the induced group is transitive on ordered
+pairs by Lemma~\ref{lem:alt}. Transport $P_\Omega$ to any ordered pair.
+Conjugation preserves its increments since $C_3$ is abelian.
+Such transfers generate every zero-sum vector. On the $D_4$ orbit,
+transport $F$ to any pair. Conjugation preserves its flip bits because
+$\varphi$ has abelian image. Pair the nonzero flip bits, cancel them,
+and use single-cell rotations for the residual orientations.
+Each of these words acts within its orbit, so the factors can be
+generated independently. Consequently
+\[
+|K|=3^{32-4}4^{552}\frac{8^{192}}2 .
+\]
 
-旧版（2026年10月4日）には，結論は正しいが証明が閉じていない箇所が二つあった．
-\begin{enumerate}
-\item \textbf{向き（補題\ref{lem:orientation}）．}
-旧版は，セルごとの自由度 $H(\Omega)$ だけを求め，「$\Phi$ を減らす操作が必ず見つかる」ことを前提にしていた．
-軌道全体にかかる同時制約は求めておらず，実装には降下が見つからないときの失敗の分岐があった．
-本版は，同時制約（補題\ref{lem:invariance}）と位置を固定する部分群（補題\ref{lem:kernel}）を決定し，
-その構造に沿って必ず終わる完了段階を実装に加えた．降下段階は語を短くするための発見的な前処理として残している．
-\item \textbf{位置（補題\ref{lem:position}）．}
-旧版は，必要な3-cycleの共役の存在を補題\ref{lem:alt}から直接引いていたが，補題\ref{lem:alt}は軌道の外を乱さない元の存在を与えない．
-本版は補題\ref{lem:purealt}を挟んだ．また，支持が4点または6点の工具しかない31軌道の3-cycleは，旧版では求解のたびに探索で導いており，
-見つからない場合と貪欲法が行き詰まる場合に失敗の分岐があった．本版は3-cycleを語として保存し（補題\ref{lem:purecycle}），貪欲法が行き詰まったら厳密段階に移るようにした．
-\end{enumerate}
-この改訂で実装の出力は変わり得る．第\ref{sec:moves}節の手数と時間は旧版の実装で測ったものである．
+\begin{proof}[Proof of Theorem~\ref{thm:structure}]
+Necessity follows from the orbit decomposition, parity homomorphism,
+local coordinate condition, and two invariant sums.
+For sufficiency, choose a legal word whose parity equals that of the
+input. The residual position permutation is even on each orbit, so
+Lemma~\ref{lem:pure} realizes it independently on every orbit.
+Together these words give a group element with the same position
+permutation as the input. Applying its inverse to the input fixes the
+positions and preserves the orientation conditions. By the kernel
+description the residual state lies in $K$, so the input is reachable.
 
-\section{Level 2 の文書との関係}
+The same position argument identifies $P$. Each parity vector in
+$V$ has a fiber of size $\prod_i|\Alt(\Omega_i)|$, giving the stated
+order of $P$. Multiplying by $|K|$ gives the order of $G_3$.
+\end{proof}
 
-Level 2 の文書（\code{level2-completeness.tex}）は，到達可能な状態の集合を不変量で完全に特徴づけ，群の位数を決定している．
-本稿の定理\ref{thm:structure}は，同じ方法（ねじれ和と反転偶奇の不変量，純粋な3-cycle，二点工具）で得た Level 3 の対応物である．
-違いは，Level 2 では順序付き三点組の上の推移性を全探索で確認しているのに対し，
-Level 3 では軌道が大きいので，原始性と Jordan の定理による補題\ref{lem:alt}から推移性を導いている点である．
+\subsection{Constructive orientation correction}
+Once positions are solved, the heuristic phase searches conjugates
+of position-fixing tools, including single-cell turns, differences
+of tools with identical position action, commutators, and stored
+$D_4$ words. It accepts only moves that strictly decrease the sum of
+orientation distances to the solved state. This nonnegative integer
+potential ensures termination, even if the heuristic stalls.
+
+The completion phase first applies available single-cell corrections.
+This solves the $C_4$ orbits and leaves only flipped sites on the
+$D_4$ orbit. On each $C_3$ orbit, choose two twisted sites and use
+breadth-first search on ordered pairs to transport $P_\Omega$ to them.
+One or two applications solve the first site, and the number of
+twisted sites strictly decreases. The zero-sum constraint excludes
+a final lone twist. On the $D_4$ orbit, pair the flipped sites and
+transport $F$ to cancel each pair of flips. Single-cell rotations
+then solve the pair. The number of flipped sites decreases by two
+each time. All these words fix positions.
+The implementation reports violations of the parity or orientation
+sum conditions when encountered.
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Normalize orbit parity, solve positions orbit by orbit, and solve the
+remaining orientations by the terminating completion procedure.
+Every phase outputs legal atomic moves, so their concatenation solves
+the input.
+\end{proof}
+
+\section{Replay and move counts}
+Search uses a sparse integer simulator. The solver replays its output
+in the puzzle engine from a copy of the input, checks legality before
+each move, and verifies the final positions and orientations of all
+8,000 cells. Any mismatch or illegal move fails replay.
+A separate comparison checked the sparse simulator against the engine
+over six trials of 40 legal moves, checking all 8,000 cells.
+
+Seven runs with the earlier implementation produced solutions of
+111,830--424,519 moves in 112.1--284.2 seconds. For the worst-case
+shortest solution length, the number of words of length at most $d$ is
+\[
+1+M+\cdots+M^d=\frac{M^{d+1}-1}{M-1},\qquad M=3591.
+\]
+If this count is smaller than the number of states being counted,
+some state requires more than $d$ moves.
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+States counted & $\log_{10}$ of count & Lower bound\\
+\midrule
+$\prod_i\Alt(\Omega_i)$ (earlier bound)&11394.834&3206\\
+Position group $P$&11399.349&3207\\
+Full group $G_3$&11918.138&3353\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus God's number in the standard atomic-move metric is at least
+3,353. The measured solver outputs are individual solutions of
+unknown optimality.
+
+\section{Verification and reproduction}
+\begin{itemize}
+\item \code{npm run prove:l3} runs checks C1--C9 deterministically via
+\code{research/level3-completeness/certify.ts} and writes
+\code{research/level3-completeness/out/certificate.json}.
+\item \code{npm run test:l3} also solves directly constructed states
+satisfying the four reachability conditions, in both normal mode and
+with the heuristic phases disabled. It tests rejection of states
+violating each orientation sum separately.
+\item \code{npm run verify:l3} audits stored tools, compares simulators,
+and checks the orbit group certificates. The corresponding scripts
+under \code{research/scratch/} are \code{l3-audit-tooldata.ts},
+\code{l3-sim-vs-engine.ts}, and \code{l3-orbit-groups.ts}.
+\item To reproduce a solve, run the following command:
+\begin{quote}\small
+\verb|npm run bench -- --algorithm=level3-slice-reduction|\\
+\verb|  --level=3 --seeds=6 --length=100|
+\end{quote}
+Join the two lines into one command. The run takes several minutes.
+\item The solver and tool data are under
+\code{packages/solver-core/src/algorithms/}.
+\code{level3SliceReductionSolver.ts} implements the solver.
+\code{level3SliceReductionToolData.ts} contains the original pure tools
+and $D_4$ words. \code{level3SliceReductionCertifiedData.ts} contains the
+additional 31 pure cycles and orientation tools, generated by
+\code{research/level3-completeness/find-tools.ts}.
+\end{itemize}
+
+\begin{certcheck}There are 3,591 atomic moves, closed under inversion.\end{certcheck}
+\begin{certcheck}The 164 position orbits have the listed sizes.\end{certcheck}
+\begin{certcheck}Exhaust the position-orientation automata and verify the
+cosets $Q_y=r_yH(\Omega)$ and the types of $H(\Omega)$.\end{certcheck}
+\begin{certcheck}The orbit parity space has dimension 15.\end{certcheck}
+\begin{certcheck}Every orbit has a verified pure 3-cycle.\end{certcheck}
+\begin{certcheck}Every generator has zero $C_3$ twist sum on each relevant
+orbit and even $D_4$ flip parity.\end{certcheck}
+\begin{certcheck}All 744 applicable sites admit each nonidentity
+single-cell turn in their rotation subgroup.\end{certcheck}
+\begin{certcheck}The words $P_\Omega$ and $F$ have the stated actions.\end{certcheck}
+\begin{certcheck}Verify the group order and move-count lower bounds.\end{certcheck}
+
+\section{October 10, 2026 revision}
+The October 4 draft left two gaps. For orientations it computed the
+single-cell freedom groups, then assumed a descending move would always
+be available. The new argument establishes the joint constraints and the
+orientation kernel, and implements a terminating completion phase.
+For positions the draft inferred the required pure conjugates directly
+from the induced alternating groups. The revised proof verifies
+orbit-local 3-cycles separately. It stores the derived cycles for the 31
+orbits and falls back to exact search when greedy progress stops.
+The timing and move counts above were measured on the earlier implementation.
+
+\section{Relationship to Level 2}
+The companion document \code{level2-completeness.tex} characterizes
+reachable Level 2 states and gives the group order using corresponding
+parity and orientation invariants, pure cycles, and two-site tools.
+For Level 2, transitivity on ordered triples is checked by exhaustive
+search. For Level 3, primitivity and Jordan's theorem give transitivity
+through the alternating group.
 
 \end{document}
