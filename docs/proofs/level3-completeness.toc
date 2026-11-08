@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}Model}{2}{section.1}%
+\contentsline {section}{\numberline {2}Main results}{3}{section.2}%
+\contentsline {section}{\numberline {3}Position orbits and local generators}{3}{section.3}%
+\contentsline {section}{\numberline {4}Parity normalization and position solving}{5}{section.4}%
+\contentsline {section}{\numberline {5}Orientation}{5}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Local coordinates}{5}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Invariants and orientation tools}{6}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}The orientation kernel}{7}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Constructive orientation correction}{7}{subsection.5.4}%
+\contentsline {section}{\numberline {6}Replay and move counts}{8}{section.6}%
+\contentsline {section}{\numberline {7}Verification and reproduction}{8}{section.7}%
+\contentsline {section}{\numberline {8}October 10, 2026 revision}{9}{section.8}%
+\contentsline {section}{\numberline {9}Relationship to Level 2}{10}{section.9}%
