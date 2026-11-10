@@ -1,6 +1,8 @@
 import type { Cubie, MoveSystem } from '@menger/engine';
 import type { BenchmarkRunResult, BenchmarkRunSpec, SolverRunResult } from '@menger/solver-core';
 import type {
+  CompareRun,
+  CompareSpec,
   SerializedCubieState,
   SolverWorkerRequest,
   SolverWorkerResponse,
@@ -63,6 +65,42 @@ export const benchmarkInWorker = (
   'benchmark-result',
   onDebug,
 );
+
+export interface RunningComparison {
+  done: Promise<void>;
+  /** Terminates the worker; `done` rejects with a cancellation error. */
+  cancel(): void;
+}
+
+/** Streams one `CompareRun` per (seed, solver) as soon as it finishes. */
+export const compareInWorker = (
+  spec: CompareSpec,
+  moveSystem: MoveSystem,
+  onRun: (run: CompareRun) => void,
+  onDebug?: (message: string) => void,
+): RunningComparison => {
+  const worker = new Worker(new URL('./solverWorker.ts', import.meta.url), { type: 'module' });
+  let fail: (error: Error) => void = () => {};
+  const done = new Promise<void>((resolve, reject) => {
+    fail = (error) => {
+      worker.terminate();
+      reject(error);
+    };
+    worker.onerror = (event) => fail(new Error(event.message || 'Solver worker crashed.'));
+    worker.onmessage = (event: MessageEvent<SolverWorkerResponse>) => {
+      const response = event.data;
+      if (response.kind === 'debug') onDebug?.(`[${response.event.source}] ${response.event.message}`);
+      else if (response.kind === 'compare-run') onRun(response.run);
+      else if (response.kind === 'error') fail(new Error(response.message));
+      else if (response.kind === 'compare-done') {
+        worker.terminate();
+        resolve();
+      }
+    };
+  });
+  worker.postMessage({ kind: 'compare', moveSystem, spec } satisfies SolverWorkerRequest);
+  return { done, cancel: () => fail(new Error('Comparison cancelled.')) };
+};
 
 export const scrambleInWorker = (
   algorithmId: string, level: number, seed: number, length: number,

@@ -29,6 +29,8 @@ import {validateTurnTargetRotation} from '@menger/engine';
 const pools=new WeakMap<SparseGroup,SolverMove[]>();
 export const createInnerSquareCertifiedAlgorithm=(level:3|4):SolverAlgorithm<MengerPuzzleState,SolverMove>=>({
  moveSystemsSupported:['inner-square'],
+ // Constructive proof: docs/proofs/inner-square-completeness.md.
+ completeIn:['inner-square'],
  id:`level${level}-inner-square-certified`,name:`Level ${level} complete inner-square reduction`,version:'0.1.0',levelsSupported:[level],
  async solve(model,state):Promise<SolverRunResult>{
   const start=performance.now();const input_state={level:state.level,cubieCount:state.cubies.length,stateKey:stateKey(state.cubies,false),progress:progressForCubies(state.cubies)};

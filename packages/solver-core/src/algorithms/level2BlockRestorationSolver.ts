@@ -144,6 +144,8 @@ export function shortenLevel2Word(group: SparseGroup, input: readonly SolverMove
 
 export const level2BlockRestorationAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   moveSystemsSupported: ['standard', 'inner-square'],
+  // Anything the restoration search leaves goes to the complete level2-certified.
+  completeIn: ['standard', 'inner-square'],
   id: 'level2-block-restoration', name: 'Level 2 block restoration with certified completion',
   version: '0.1.0', levelsSupported: [2],
   async solve(model: PuzzleModel<MengerPuzzleState, SolverMove>, state: MengerPuzzleState) {

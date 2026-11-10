@@ -85,4 +85,6 @@ const scrambleMovePool = (_model: PuzzleModel<MengerPuzzleState, SolverMove>, st
 
 export const level4SliceReductionAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   id, name, version, levelsSupported: [4], solve, scrambleMovePool,
+  // Proved in docs/proofs/level4-completeness.md.
+  completeIn: ['standard'],
 };

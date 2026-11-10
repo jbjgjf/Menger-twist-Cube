@@ -86,6 +86,8 @@ export function createHigherBlockRestorationAlgorithm(level: 3 | 4, options: Blo
   const fallback = level === 3 ? level3SliceReductionAlgorithm : level4SliceReductionAlgorithm;
   return {
     moveSystemsSupported: ['standard', 'inner-square'],
+    // The residual always goes to the complete solver of the same system.
+    completeIn: ['standard', 'inner-square'],
     id: `level${level}-block-restoration`, name: `Level ${level} hierarchical block restoration`, version: '0.1.0', levelsSupported: [level],
     scrambleMovePool(model,state) { return (state.moveSystem === 'inner-square' ? createInnerSquareCertifiedAlgorithm(level) : fallback).scrambleMovePool!(model,state); },
     async solve(model: PuzzleModel<MengerPuzzleState, SolverMove>, input: MengerPuzzleState): Promise<SolverRunResult> {

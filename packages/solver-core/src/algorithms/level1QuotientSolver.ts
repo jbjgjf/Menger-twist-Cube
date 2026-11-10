@@ -796,6 +796,10 @@ const solve = async (
 
 export const level1QuotientAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   moveSystemsSupported: ['standard', 'inner-square'],
+  // The frame-quotient search is complete for valid Level 1 quotient states and
+  // extension normalization clears every remaining edge roll; Level 1 has no
+  // inner-square targets, so both systems are the same group.
+  completeIn: ['standard', 'inner-square'],
   id: solverId,
   name: solverName,
   version: solverVersion,

@@ -1480,6 +1480,8 @@ const scrambleMovePool = (
   ];
 };
 
+// No `completeIn`: placement searches are budgeted and completeness is unproved
+// (level2-certified is the proved Level 2 solver).
 export const level2SliceReductionAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   id: solverId,
   name: solverName,

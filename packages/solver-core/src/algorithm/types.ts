@@ -81,6 +81,14 @@ export interface SolverAlgorithm<TState = unknown, TMove = unknown> {
   readonly levelsSupported: readonly number[];
   /** Omitted means the historical standard system only. */
   readonly moveSystemsSupported?: readonly MoveSystem[];
+  /**
+   * Move systems in which this algorithm solves every reachable state of each
+   * level it supports, by a proof or a construction whose searches run to
+   * exhaustion. Omitted means no such claim: the algorithm only covers a
+   * generator subset, or depends on bounded heuristic search. The Lab lists
+   * only complete algorithms; the CLI still runs every registered one.
+   */
+  readonly completeIn?: readonly MoveSystem[];
   solve(model: PuzzleModel<TState, TMove>, state: TState): Promise<SolverRunResult>;
   /**
    * Optional: the move generator set this algorithm is designed to invert.

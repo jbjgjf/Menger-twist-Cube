@@ -1661,6 +1661,9 @@ const scrambleMovePool = (
 };
 
 export const level3SliceReductionAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  // Complete for the fixed Level 3 standard group: every search runs to
+  // exhaustion (docs/research/level3-solver-completion-audit.md).
+  completeIn: ['standard'],
   id: solverId,
   name: solverName,
   version: solverVersion,

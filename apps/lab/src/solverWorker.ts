@@ -7,8 +7,8 @@ import {
   createSeededRng,
   scrambleState,
 } from '@menger/solver-core';
-import type { Cubie } from '@menger/engine';
-import type { SolverWorkerRequest, SolverWorkerResponse } from './solverWorkerProtocol';
+import type { Cubie, MoveSystem } from '@menger/engine';
+import type { CompareSpec, SolverWorkerRequest, SolverWorkerResponse } from './solverWorkerProtocol';
 
 const send = (message: SolverWorkerResponse): void => self.postMessage(message);
 const maxTransferredPlaybackMoves = 10_000;
@@ -28,14 +28,68 @@ const restoreCubies = (canonical: Cubie[], serialized: Extract<SolverWorkerReque
   });
 };
 
+const supportedAlgorithm = (algorithmId: string, moveSystem: MoveSystem) => {
+  const algorithm = getAlgorithm(algorithmId);
+  if (!algorithm) throw new Error(`Unknown solver algorithm: ${algorithmId}`);
+  if (!(algorithm.moveSystemsSupported ?? ['standard']).includes(moveSystem)) {
+    throw new Error(`${algorithmId} does not support the selected move system.`);
+  }
+  return algorithm;
+};
+
+/**
+ * Every solver solves the same scrambles, one seed at a time. Each solver
+ * first solves the solved cube once, untimed, so one-time library builds and
+ * caches are not charged to whichever solver happens to run first. The solver
+ * order rotates per seed for the same reason.
+ */
+const runComparison = async (moveSystem: MoveSystem, spec: CompareSpec): Promise<void> => {
+  const model = createMengerPuzzleModel(moveSystem);
+  const algorithms = spec.algorithmIds.map((id) => supportedAlgorithm(id, moveSystem));
+  const reference = supportedAlgorithm(spec.scrambleAlgorithmId, moveSystem);
+  const solved = model.createState(spec.level);
+
+  for (const algorithm of algorithms) {
+    try {
+      await algorithm.solve(model, model.cloneState(solved));
+    } catch {
+      // A broken solver surfaces as failed timed runs below.
+    }
+  }
+
+  const pool = reference.scrambleMovePool
+    ? (state: typeof solved) => reference.scrambleMovePool!(model, state)
+    : undefined;
+  for (const [seedIndex, seed] of spec.seeds.entries()) {
+    const { state } = scrambleState(model, solved, createSeededRng(seed), spec.length, pool);
+    for (let offset = 0; offset < algorithms.length; offset += 1) {
+      const algorithm = algorithms[(seedIndex + offset) % algorithms.length]!;
+      const input = model.cloneState(state);
+      const started = performance.now();
+      let run: { success: boolean; moveCount: number; notes: string };
+      try {
+        const result = await algorithm.solve(model, input);
+        run = { success: result.success, moveCount: result.success ? result.move_count : 0, notes: result.notes };
+      } catch (cause) {
+        run = { success: false, moveCount: 0, notes: cause instanceof Error ? cause.message : String(cause) };
+      }
+      send({ kind: 'compare-run', run: { algorithmId: algorithm.id, seed, wallMs: performance.now() - started, ...run } });
+    }
+  }
+  send({ kind: 'compare-done' });
+};
+
 self.onmessage = (event: MessageEvent<SolverWorkerRequest>): void => {
   void (async () => {
     try {
       const request = event.data;
+      if (request.kind === 'compare') {
+        await runComparison(request.moveSystem, request.spec);
+        return;
+      }
+
       const model = createMengerPuzzleModel(request.moveSystem);
-      const algorithm = getAlgorithm(request.algorithmId);
-      if (!algorithm) throw new Error(`Unknown solver algorithm: ${request.algorithmId}`);
-      if (!(algorithm.moveSystemsSupported ?? ['standard']).includes(request.moveSystem)) throw new Error('Algorithm does not support the selected move system.');
+      const algorithm = supportedAlgorithm(request.algorithmId, request.moveSystem);
 
       if (request.kind === 'scramble') {
         const canonical = model.createState(request.level);

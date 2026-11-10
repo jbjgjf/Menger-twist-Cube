@@ -7,6 +7,29 @@ export interface SerializedCubieState {
   orientation: [number, number, number, number];
 }
 
+/**
+ * A moves-vs-compute comparison: every listed solver solves the identical
+ * scramble of every seed, so their points on the trade-off chart are paired.
+ */
+export interface CompareSpec {
+  level: number;
+  algorithmIds: string[];
+  /** Whose generator set scrambles the shared inputs (the level's reference solver). */
+  scrambleAlgorithmId: string;
+  seeds: number[];
+  length: number;
+}
+
+export interface CompareRun {
+  algorithmId: string;
+  seed: number;
+  /** Wall-clock time of one `solve` call in the worker, after a warm-up solve. */
+  wallMs: number;
+  moveCount: number;
+  success: boolean;
+  notes: string;
+}
+
 export type SolverWorkerRequest =
   | {
       kind: 'scramble';
@@ -28,6 +51,11 @@ export type SolverWorkerRequest =
       algorithmId: string;
       moveSystem: MoveSystem;
       spec: BenchmarkRunSpec;
+    }
+  | {
+      kind: 'compare';
+      moveSystem: MoveSystem;
+      spec: CompareSpec;
     };
 
 export type SolverWorkerResponse =
@@ -35,4 +63,6 @@ export type SolverWorkerResponse =
   | { kind: 'scramble-result'; result: { cubies: SerializedCubieState[]; moveCount: number } }
   | { kind: 'solve-result'; result: SolverRunResult }
   | { kind: 'benchmark-result'; result: BenchmarkRunResult }
+  | { kind: 'compare-run'; run: CompareRun }
+  | { kind: 'compare-done' }
   | { kind: 'error'; message: string; stack?: string };

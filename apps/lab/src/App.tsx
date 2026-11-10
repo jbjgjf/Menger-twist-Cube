@@ -11,6 +11,7 @@ import {
   scrambleState,
   summarizeBenchmarkRecords,
   type BenchmarkRunResult,
+  type SolverAlgorithm,
   type SolverBenchmarkRecord,
   type SolverRunResult,
 } from '@menger/solver-core';
@@ -18,8 +19,10 @@ import CubeView from './components/CubeView';
 import ExplanationTimeline from './components/ExplanationTimeline';
 import { useIsDesktop } from './useIsDesktop';
 import ResultsTable from './components/ResultsTable';
+import TradeoffChart from './components/TradeoffChart';
 import { useSolvePlayback } from './playback/useSolvePlayback';
-import { benchmarkInWorker, scrambleInWorker, solveInWorker } from './runSolverWorker';
+import { benchmarkInWorker, compareInWorker, scrambleInWorker, solveInWorker, type RunningComparison } from './runSolverWorker';
+import type { CompareRun, CompareSpec } from './solverWorkerProtocol';
 
 const numberInputClass =
   'w-full rounded border border-slate-700 bg-slate-950/60 px-2 py-1 text-sm text-slate-100 outline-none focus:border-cyan-500';
@@ -49,10 +52,21 @@ const moveSystemLabels: Record<MoveSystem, string> = {
   standard: 'Historical system (without inner rotations)',
   'inner-square': 'Inner square rotations (primary system)',
 };
-const preferredAlgorithmForSystem = (system: MoveSystem, level: number): string | undefined => system === 'inner-square' ? (level === 1 ? 'level1-quotient' : level === 2 ? 'level2-certified' : `level${level}-inner-square-certified`) : undefined;
+// The complete solver each (system, level) is anchored to: the default pick,
+// and the generator set that scrambles the shared inputs of a comparison.
+const referenceAlgorithmFor = (system: MoveSystem, level: number): string => {
+  if (level === 1) return 'level1-quotient';
+  if (level === 2) return 'level2-certified';
+  return system === 'inner-square' ? `level${level}-inner-square-certified` : `level${level}-slice-reduction`;
+};
+
+const isCompleteFor = (candidate: SolverAlgorithm, system: MoveSystem, level: number): boolean =>
+  candidate.levelsSupported.includes(level) && (candidate.completeIn ?? []).includes(system);
 
 export default function App() {
-  const algorithms = useMemo(() => listAlgorithms(), []);
+  // Only solvers that solve every reachable state of some system are shown.
+  // Generator-subset and budgeted-search solvers stay available to the CLI.
+  const algorithms = useMemo(() => listAlgorithms().filter((candidate) => (candidate.completeIn?.length ?? 0) > 0), []);
   const solverLevels = useMemo(
     () => [...new Set(algorithms.flatMap((algorithm) => [...algorithm.levelsSupported]))].sort((a, b) => a - b),
     [algorithms],
@@ -63,8 +77,9 @@ export default function App() {
   const [moveSystem, setMoveSystem] = useState<MoveSystem>('inner-square');
   const puzzleModel = useMemo(() => createMengerPuzzleModel(moveSystem), [moveSystem]);
   const systemLevels = useMemo(
-    () => solverLevels.filter((candidate) => isMoveSystemAvailable(moveSystem, candidate)),
-    [solverLevels, moveSystem],
+    () => solverLevels.filter((candidate) => isMoveSystemAvailable(moveSystem, candidate)
+      && algorithms.some((algorithm) => isCompleteFor(algorithm, moveSystem, candidate))),
+    [solverLevels, moveSystem, algorithms],
   );
   const [level, setLevel] = useState(solverLevels[0] ?? 1);
 
@@ -74,8 +89,8 @@ export default function App() {
     if (!isMoveSystemAvailable(next, level)) {
       setLevel(solverLevels.find((candidate) => isMoveSystemAvailable(next, candidate)) ?? level);
     }
-    const preferred = preferredAlgorithmForSystem(next, level);
-    if (preferred && algorithms.some((candidate) => candidate.id === preferred)) setAlgorithmId(preferred);
+    const preferred = referenceAlgorithmFor(next, level);
+    if (algorithms.some((candidate) => candidate.id === preferred)) setAlgorithmId(preferred);
   };
 
   // A Level 3 run scrambles 8,000 cells, solves for minutes, and replays
@@ -100,7 +115,12 @@ export default function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
   const [isScrambling, setIsScrambling] = useState(false);
-  const isBusy = isRunning || isSolving || isScrambling;
+  const [compareSeedCount, setCompareSeedCount] = useState(5);
+  const [compareSpec, setCompareSpec] = useState<(CompareSpec & { moveSystem: MoveSystem }) | null>(null);
+  const [compareRuns, setCompareRuns] = useState<CompareRun[]>([]);
+  const [isComparing, setIsComparing] = useState(false);
+  const comparisonRef = useRef<RunningComparison | null>(null);
+  const isBusy = isRunning || isSolving || isScrambling || isComparing;
   const [error, setError] = useState<string | null>(null);
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -122,6 +142,13 @@ export default function App() {
   // reach the engine, which throws on it.
   const effectiveLevel = isMoveSystemAvailable(moveSystem, level) ? level : (systemLevels[0] ?? level);
   const basePuzzle = useMemo(() => puzzleModel.createState(effectiveLevel), [puzzleModel, effectiveLevel]);
+  const visibleAlgorithms = useMemo(
+    () => algorithms.filter((candidate) => isCompleteFor(candidate, moveSystem, effectiveLevel)),
+    [algorithms, moveSystem, effectiveLevel],
+  );
+  const visibleAlgorithmIds = useMemo(() => visibleAlgorithms.map((candidate) => candidate.id), [visibleAlgorithms]);
+
+  useEffect(() => () => comparisonRef.current?.cancel(), []);
 
   // Level change resets the bench: solved cube, no moves, level-appropriate
   // algorithm preselected (a level/algorithm mismatch previously produced an
@@ -130,12 +157,15 @@ export default function App() {
     setScrambledCubies(null);
     setScrambledSeed(null);
     setSolveResult(null);
+    setCompareSpec(null);
+    setCompareRuns([]);
     loadPlayback([basePuzzle.cubies], []);
     setAlgorithmId((current) => {
       const selected = algorithms.find((candidate) => candidate.id === current);
-      if (selected?.levelsSupported.includes(level) && (selected.moveSystemsSupported ?? ['standard']).includes(moveSystem)) return current;
-      const preferred = preferredAlgorithmForSystem(moveSystem, level);
-      const fallback = algorithms.find(candidate => candidate.id === preferred) ?? algorithms.find((candidate) => candidate.levelsSupported.includes(level) && (candidate.moveSystemsSupported ?? ['standard']).includes(moveSystem));
+      if (selected && isCompleteFor(selected, moveSystem, level)) return current;
+      const preferred = referenceAlgorithmFor(moveSystem, level);
+      const fallback = algorithms.find((candidate) => candidate.id === preferred && isCompleteFor(candidate, moveSystem, level))
+        ?? algorithms.find((candidate) => isCompleteFor(candidate, moveSystem, level));
       return fallback?.id ?? current;
     });
   }, [level, basePuzzle, algorithms, loadPlayback, moveSystem]);
@@ -258,6 +288,35 @@ export default function App() {
     }
   };
 
+  const runComparison = async () => {
+    if (blockedOnThisDevice || visibleAlgorithmIds.length === 0) return;
+    const spec: CompareSpec = {
+      level: effectiveLevel,
+      algorithmIds: visibleAlgorithmIds,
+      scrambleAlgorithmId: referenceAlgorithmFor(moveSystem, effectiveLevel),
+      seeds: Array.from({ length: Math.max(1, compareSeedCount) }, (_, index) => index + 1),
+      length: scrambleLength,
+    };
+    setError(null);
+    setCompareSpec({ ...spec, moveSystem });
+    setCompareRuns([]);
+    setIsComparing(true);
+    log(`compare: ${spec.algorithmIds.join(', ')} — level ${spec.level}, ${spec.seeds.length} seeds, length ${spec.length}, scrambles from ${spec.scrambleAlgorithmId}`);
+    const running = compareInWorker(spec, moveSystem, (run) => setCompareRuns((previous) => [...previous, run]), log);
+    comparisonRef.current = running;
+    try {
+      await running.done;
+      log('compare: done');
+    } catch (cause) {
+      const message = cause instanceof Error ? cause.message : 'Comparison failed.';
+      if (message !== 'Comparison cancelled.') setError(message);
+      log(`compare: ${message}`);
+    } finally {
+      comparisonRef.current = null;
+      setIsComparing(false);
+    }
+  };
+
   const handleImportFile = async (file: File | undefined) => {
     if (!file) return;
     setError(null);
@@ -358,10 +417,9 @@ export default function App() {
                 disabled={isBusy}
                 onChange={(event) => setAlgorithmId(event.target.value)}
               >
-                {algorithms.map((candidate) => (
+                {visibleAlgorithms.map((candidate) => (
                   <option key={candidate.id} value={candidate.id}>
                     {candidate.id}
-                    {candidate.levelsSupported.includes(level) ? '' : ' (unsupported level)'}
                   </option>
                 ))}
               </select>
@@ -416,7 +474,7 @@ export default function App() {
           {moveSystem === 'inner-square' && (
             <p className="mt-2 rounded border border-cyan-700/50 bg-cyan-950/30 px-3 py-2 text-xs leading-5 text-cyan-100">
               Includes slice, extension and all audited single-plane square-subset rotations.
-              The complete solver for this level is {preferredAlgorithmForSystem(moveSystem, level)}.
+              The reference solver for this level is {referenceAlgorithmFor(moveSystem, effectiveLevel)}.
               Historical-system results use a different move alphabet and must be compared separately.
             </p>
           )}
@@ -424,6 +482,7 @@ export default function App() {
             <p className="mt-2 text-xs text-slate-500">
               {algorithm.name}@{algorithm.version} — supports level(s) {algorithm.levelsSupported.join(', ')}
               {algorithm.scrambleMovePool ? ' · scrambles use its declared generator set' : ''}
+              {' · '}only solvers that solve every reachable state of this system are listed
             </p>
           )}
         </section>
@@ -591,6 +650,60 @@ export default function App() {
             {maxMaterializedPlaybackMoves.toLocaleString()}-move browser safety limit.
           </p>
         )}
+
+        <section className="rounded-lg border border-slate-700 bg-slate-900/60 p-3">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="max-w-3xl">
+              <h2 className="text-sm font-semibold text-slate-100">Moves vs. compute</h2>
+              <p className="mt-1 text-xs leading-5 text-slate-400">
+                Every complete solver for this level and move system solves the same seeded scrambles. A solver is on the
+                Pareto front when no other solver is at least as fast and as short, and strictly better in one of the two.
+                Times are wall-clock in one worker on this device, after one untimed warm-up solve per solver; they describe
+                this run and are not a performance claim.
+              </p>
+            </div>
+            <div className="flex items-end gap-2">
+              <label className="text-xs text-slate-400">
+                Seeds
+                <input
+                  className={`${numberInputClass} w-20`}
+                  type="number"
+                  min={1}
+                  value={compareSeedCount}
+                  disabled={isComparing}
+                  onChange={(event) => setCompareSeedCount(Number(event.target.value))}
+                />
+              </label>
+              {isComparing ? (
+                <button className={buttonClass} onClick={() => comparisonRef.current?.cancel()}>
+                  Stop
+                </button>
+              ) : (
+                <button
+                  className={`${buttonClass} border-cyan-500/60 bg-cyan-900/40 hover:bg-cyan-800/50`}
+                  onClick={() => void runComparison()}
+                  disabled={isBusy || blockedOnThisDevice || visibleAlgorithms.length === 0}
+                >
+                  Compare {visibleAlgorithms.length} solver{visibleAlgorithms.length === 1 ? '' : 's'}
+                </button>
+              )}
+            </div>
+          </div>
+          <p className="mt-2 font-mono text-[11px] leading-5 text-slate-500">
+            {compareSpec
+              ? `Level ${compareSpec.level} · ${compareSpec.moveSystem} · scramble length ${compareSpec.length} · seeds 1–${compareSpec.seeds.length} · scrambles from the ${compareSpec.scrambleAlgorithmId} generator set · ${compareRuns.length}/${compareSpec.seeds.length * compareSpec.algorithmIds.length} runs${isComparing ? ' · running' : ''}`
+              : `Will compare ${visibleAlgorithmIds.join(', ') || 'no solver'} on Level ${effectiveLevel}, scramble length ${scrambleLength}.`}
+            {effectiveLevel >= 4 && ' Level 4 solves take minutes each; start with one or two seeds.'}
+            {visibleAlgorithms.length === 1 && ' Only one complete solver exists here, so the plot has a single series.'}
+          </p>
+          <div className="mt-3">
+            <TradeoffChart
+              algorithmIds={compareSpec?.algorithmIds ?? visibleAlgorithmIds}
+              runs={compareRuns}
+              seedCount={compareSpec?.seeds.length ?? compareSeedCount}
+            />
+          </div>
+        </section>
 
         <ResultsTable
           title="Recent solve records (persisted locally)"

@@ -204,6 +204,7 @@ const solve = async (
 /**
  * No `scrambleMovePool`: benchmarks scramble with the model's full legal move
  * set, which under the inner-square model includes the 54 ring atoms.
+ * No `completeIn`: it inherits the unproved completeness of level2-slice-reduction.
  */
 export const level2InnerSquareCosetAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   moveSystemsSupported: ['inner-square'],

@@ -636,6 +636,8 @@ const solve = async (
  */
 export const level2CertifiedAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   moveSystemsSupported: ['standard', 'inner-square'],
+  // Proved in docs/proofs/level2-completeness.tex for both systems.
+  completeIn: ['standard', 'inner-square'],
   id: solverId,
   name: solverName,
   version: solverVersion,
