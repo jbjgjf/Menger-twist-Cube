@@ -1,56 +1,56 @@
-# Level2のブロック復元と操作列短縮
+# Level 2 Block Restoration and Move-Sequence Shortening
 
-**操作系についての注意:** 本資料の旧実験は内面回転なしの履歴です。正式な内面回転込みの定義・完全方式・比較は [内面回転研究](inner-square-study.md) を参照してください。
+**Note on move systems:** The earlier experiments in this document represent historical work without inner-square rotations. For the formal definitions, complete algorithms, and comparisons including inner-square rotations, see the [Inner-Square Rotation Study](inner-square-study.md).
 
-更新: 2026-10-24。実装済みの実験方式。一般のLevelに対する復元手順・計算量の定理は今後の課題。
+Updated: 2026-10-24. Implemented experimental method. Restoration procedures and complexity theorems for general Levels remain future work.
 
-## 現方式との関係
+## Relationship to Existing Methods
 
-Level1は通常のキューブに相当する商状態を探索して解き、残る回転を直す。
-Level2以降にはブロック商への還元と、軌道ごとの位置・向きを直す方式がある。
-証明済み方式は偶奇を調整し、純粋な3点交換を運んで位置を直し、向きを完成させる。
-準備操作とその逆を修正ごとに払うため、正しさを保証できても長い解答になり得る。
+Level 1 searches and solves the quotient state corresponding to an ordinary Rubik's Cube, then resolves the remaining orientations.
+For Level 2 and above, existing approaches include reduction to the block quotient and orbit-by-orbit restoration of positions and orientations.
+The certified method normalizes parity, transports pure 3-cycles to restore positions, and completes orientations.
+Because it pays the cost of a setup move sequence and its inverse for each individual correction, it guarantees correctness at the expense of potentially long solutions.
 
-## 実装
+## Implementation
 
-登録ID: `level2-block-restoration`。LabとCLIの既存レジストリから選択可能。
-入力の現在状態だけを使い、操作履歴は参照しない。
+Registered ID: `level2-block-restoration`. Selectable from the existing registries in the Lab and CLI.
+Uses only the current input state and does not reference move history.
 
-- [ソルバー](../../packages/solver-core/src/algorithms/level2BlockRestorationSolver.ts)
-- [比較実験](../../research/block-restoration/compare.ts)
-- [保存結果](../../research/results/level2-block-restoration.json)
+- [Solver](../../packages/solver-core/src/algorithms/level2BlockRestorationSolver.ts)
+- [Comparison experiment](../../research/block-restoration/compare.ts)
+- [Saved results](../../research/results/level2-block-restoration.json)
 
-各ホームブロックの20部品について、移動先20領域×24回転の各剛体配置に一致する部品数を数える。
-各ホームブロックの最大一致数を合計し、400から引いた値を欠損とする。
-欠損0は、全ブロックが位置について剛体として復元された状態である。完成位置への配置は要求しない。
-向きはこの評価から除外し、後段で処理する。この値を最短距離の下界とは扱わない。
+For the 20 cubies belonging to each home block, we count how many cubies match each rigid placement across the 20 destination regions × 24 orientations.
+We sum the maximum match count over all home blocks and subtract this sum from 400 to define the *defect*.
+A defect of 0 means every block has been restored as a rigid body with respect to position; placement into its solved home block is not required.
+Individual cubie orientations are excluded from this evaluation and handled in a subsequent stage. This defect value is not treated as a lower bound on the shortest move distance.
 
-位置を変える全合法操作を候補に、深さ4・ビーム幅12・最大10000候補展開の探索を行う。
-位置状態を重複除去するため、向きの異なる経路のうち最良の解答を選ぶ保証はない。
-探索関数は深さ・幅・展開数を変更できる。深さ4以内の全解を発見する保証もない。
-欠損0に到達すれば修復列を実行し、既存のLevel2ブロック商ソルバーへ渡す。
-位置だけ復元しても向きが商方式の対象外なら、修復後の状態を証明済みソルバーで完成させる。
-探索失敗時は部分的な修復列を破棄し、元の状態を証明済みソルバーへ渡す。
-inner-square系ではこの標準系用探索を使わず、対応する証明済み方式へ直接渡す。
-最終操作列は元の入力から実エンジンで合法性と完成を確認して返す。
+Taking all position-changing legal moves as candidates, we run a beam search with depth 4, beam width 12, and a maximum of 10,000 candidate expansions.
+Because positional states are deduplicated, there is no guarantee of selecting the best solution among paths that differ only in orientation.
+The search function allows configuring depth, width, and expansion limits. Nor is it guaranteed to find all solutions within depth 4.
+If a defect of 0 is reached, the restoration sequence is applied and the resulting state is passed to the existing Level 2 block-quotient solver.
+If restoring positions alone leaves orientations outside the scope of the quotient solver, the post-restoration state is completed by the certified solver.
+If the search fails, the partial restoration sequence is discarded and the original state is passed directly to the certified solver.
+In the `inner-square` move system, this standard-system search is bypassed and the state is passed directly to the corresponding certified method.
+The final move sequence is replayed from the original input through the real engine to verify legality and exact completion before returning.
 
-## 修正を共有できる条件
+## Conditions for Sharing Corrections
 
-空間上の各ブロックを別のブロックへ剛体として写す操作は、任意の位置的ブロック剛体状態を保つ。
-`level2RigidityPreservingMoves()`は、この条件を全400位置について調べる。
-標準系468操作中279操作が条件を満たした。これは位置の条件であり、商状態の向きの到達可能性は別に確認する。
+Any move that maps each spatial block rigidly onto another block preserves any positionally block-rigid state.
+`level2RigidityPreservingMoves()` checks this condition across all 400 positions.
+Out of 468 moves in the standard system, 279 satisfy this condition. This is a positional condition; reachability of quotient orientations is checked separately.
 
-案Dとして、選択位置集合が互いに素な操作は向きの作用も含めて可換であることを利用する。
-この条件を満たす操作だけをまたいで同一対象の回転をまとめ、逆回転を消す。
-探索窓は直前64操作。全可換関係や全短縮を見つけるものではない。
+As Option D, we exploit the fact that moves whose selected position sets are mutually disjoint commute, including their action on orientations.
+Across intermediate moves that satisfy this disjointness condition, rotations of the same target are combined and inverse rotations cancel.
+The lookback window is the preceding 64 moves. This procedure does not find all commutation relations or all possible reductions.
 
-探索中の一操作が複数領域を動かした件数を`multiRegionMoves`に記録する。
-この件数だけでは複数の修正を同時に達成した証拠にならない。
-Level3・4で有用な一括処理を主張するには、複数領域の改善と副作用を調べ、作用を一般化する必要がある。
+The number of search moves that displaced multiple regions simultaneously is recorded in `multiRegionMoves`.
+This count alone is not evidence that multiple corrections were achieved simultaneously.
+To claim useful batch processing at Levels 3 and 4, one must analyze multi-region improvements and side effects and generalize the group action.
 
-## 比較実験
+## Comparison Experiments
 
-実行:
+Execution:
 
 ```sh
 node --import tsx --test research/block-restoration/restoration.test.ts
@@ -59,64 +59,59 @@ npm run test:l2
 npm run typecheck
 ```
 
-各系列はseed 1〜3。まず大きい層の操作を3回適用し、その後に細かい層を0/1/2回、
-または位置を変える全合法操作から6/30回追加した。同じ入力で証明済み方式、
-その解答の案D短縮、新方式を比較する。全方式の解答を実エンジンで検証する。
-これは設計した浅い崩れを含む分布で、到達可能状態の一様標本ではない。
+Each series uses seeds 1–3. First, 3 coarse-layer moves are applied, followed by 0, 1, or 2 fine-layer moves, or by 6 or 30 moves drawn from all position-changing legal moves. On the exact same inputs, we compare the certified method, Option D shortening applied to the certified solution, and the new restoration method. Every output solution is verified on the real engine.
+This benchmark reflects a designed distribution containing shallow perturbations, not a uniform sample over reachable states.
 
-| 入力系列 | 復元成功 | 証明済み方式の手数 | 案Dのみ | 新方式 |
+| Input series | Restoration success | Certified method moves | Option D only | New method |
 | --- | ---: | ---: | ---: | ---: |
-| 剛体ブロック | 3/3 | 3291–4155 | 3241–4056 | 7–18 |
-| 細かい層1回 | 3/3 | 3213–3789 | 3166–3691 | 8–19 |
-| 細かい層2回 | 3/3 | 3152–3592 | 3111–3495 | 9–21 |
-| 混合6回 | 2/3 | 3114–4119 | 3061–4042 | 11–3061 |
-| 混合30回 | 0/3 | 3801–4158 | 3746–4094 | 3746–4094 |
+| Rigid blocks | 3/3 | 3291–4155 | 3241–4056 | 7–18 |
+| 1 fine-layer move | 3/3 | 3213–3789 | 3166–3691 | 8–19 |
+| 2 fine-layer moves | 3/3 | 3152–3592 | 3111–3495 | 9–21 |
+| 6 mixed moves | 2/3 | 3114–4119 | 3061–4042 | 11–3061 |
+| 30 mixed moves | 0/3 | 3801–4158 | 3746–4094 | 3746–4094 |
 
-新方式の復元成功は11/15入力。案Dは全15入力で手数を削減した。
-混合30回では既存方式が約51〜56ms、新方式が約399〜501msとなり、探索で遅くなった。
-剛体入力では既存のブロック商ソルバーも使えるため、その短い解答を新規復元の成果として数えない。
-初期実行にはキャッシュ構築が含まれ、比較コードは探索を先に実行してライブラリを温めている。
-新方式の時間には実エンジンの最終再生を含む。案Dの時間は短縮処理のみ。
-少数seed・異なる検証コストによる観測なので、統計的な速度優位は主張しない。
+The new method succeeded in block restoration on 11/15 inputs. Option D reduced move counts on all 15 inputs.
+On the 30-mixed-move inputs, the existing certified method took roughly 51–56 ms while the new method took roughly 399–501 ms, slowed down by the unsuccessful search.
+For rigid-block inputs, the existing block-quotient solver is already applicable, so those short solutions are not counted as novel restoration achievements.
+Initial runs include cache construction; the comparison script runs the search first, which warms up the libraries.
+Timings for the new method include final replay on the real engine, whereas Option D timings measure only the shortening pass.
+Because these observations use a small number of seeds and different verification costs, no statistical runtime advantage is claimed.
 
-## 次の研究
+## Next Research Steps
 
-1. ブロック復元の比較対象に既存ブロック商方式も加え、復元部分だけのコストを記録する。
-2. 同じ入力を使い、幅・深さ・候補展開数と成功率の関係を測る。探索費用を予測する停止基準を検討する。
-3. 複数領域で同じ循環を実現するマクロを探し、準備操作を共有する。単なる可換相殺との効果を比較する。
-4. Level3・4へ拡張する前に、ブロック所属と内部相対配置の抽象座標・距離表を検討する。
-5. 一般のLevelで復元コストを抑える再帰構成を証明する。経験的な短い解答と最悪手数上界を区別する。
+1. Add the existing block-quotient solver as a baseline in block-restoration comparisons to isolate the cost of the restoration phase itself.
+2. Measure the relationship between beam width, depth, expansion budget, and success rate on identical inputs, and investigate stopping criteria that predict search cost.
+3. Search for macros that realize simultaneous cycles across multiple regions to share setup moves, comparing their effect against simple commutative cancellation.
+4. Before scaling to Levels 3 and 4, investigate abstract coordinates and distance tables for block membership and internal relative configurations.
+5. Prove a recursive construction that bounds restoration cost at general Levels, distinguishing empirical short solutions from worst-case upper bounds.
 
-別候補は抽象状態の探索、広い循環テンプレート、準備操作の共同最適化。
-最終的な研究目標は、全到達可能状態への構成法と、その手数上界を得ること。
-短い入力を短く解く結果だけからGod's numberの上界改善は導けない。
+Other directions include abstract-state search, wide cycle templates, and joint optimization of setup sequences.
+The ultimate research goal is to obtain a constructive algorithm for all reachable states together with an upper bound on its move count.
+Solving short scrambles in few moves does not imply an improved upper bound on God's number.
 
-参考: [Kociembaの二段階法](https://www.kociemba.org/twophase.htm)、
-[Demaineらの大型キューブの一括処理](https://arxiv.org/abs/1106.5736)。
-後者の計算量をMenger構造へ直接移せることは示していない。
+References: [Kociemba's two-phase algorithm](https://www.kociemba.org/twophase.htm),
+[Demaine et al. on batch solving large Rubik's Cubes](https://arxiv.org/abs/1106.5736).
+We do not claim that the asymptotic complexity of the latter transfers directly to the Menger sponge geometry.
 
-## Level3・4への拡張 (2026-10-24)
+## Extension to Levels 3 and 4 (2026-10-24)
 
-登録ID `level3-block-restoration` と `level4-block-restoration` を追加した。
-[共通の差分探索](../../packages/solver-core/src/algorithms/mengerBlockRestoration.ts)は
-N²対応表を使わず、操作の影響を受けるホームブロックのみ再評価する。
-[階層ソルバー](../../packages/solver-core/src/algorithms/higherBlockRestorationSolver.ts)は
-下位の復元ソルバーを再帰的に呼び、実際に使うマクロ手の持上げを全セルで照合する。
-独立ロールで直らない残差や、探索・商への還元の失敗は既存の完全方式で処理する。
-Level4の疎な操作ライブラリは完全方式と共有し、大規模な写像の二重保持を避ける。
+Added registered solver IDs `level3-block-restoration` and `level4-block-restoration`.
+The [shared incremental search](../../packages/solver-core/src/algorithms/mengerBlockRestoration.ts) avoids an $N^2$ correspondence table and re-evaluates only the home blocks affected by a candidate move.
+The [hierarchical solver](../../packages/solver-core/src/algorithms/higherBlockRestorationSolver.ts) recursively invokes the lower-level restoration solver and verifies the lifted action of each macro move across all cells.
+Residuals that cannot be fixed by independent rolls, as well as failures in search or quotient reduction, fall back to the existing certified solver.
+At Level 4, the sparse move library is shared with the certified solver to avoid duplicating large permutation tables in memory.
 
-Level3/4とも、粗いY層回転＋細かいX層回転（3例目はY層も追加）＋単セル回転の
-設計入力3例を用意した。いずれも履歴を読まずに復元し、解答を実エンジンで再生して完成した。
+For both Levels 3 and 4, we prepared 3 designed test inputs consisting of coarse Y-layer rotations + fine X-layer rotations (with an additional Y-layer rotation in the 3rd case) + single-cell rotations. In all cases, the solver restored the blocks without reading move history and replayed the final solution on the real engine to exact completion.
 
-| Level | 出力手数（3例） | 位置復元手数 | 候補展開数（3例） |
+| Level | Output moves (3 cases) | Position restoration moves | Candidate expansions (3 cases) |
 | --- | --- | --- | --- |
 | 3 | 3, 18, 4 | 1, 1, 2 | 2, 5, 2723 |
 | 4 | 3, 18, 4 | 1, 1, 2 | 2, 5, 22037 |
 
-Level4の2手復元例は1,023,229ブロック評価、最終解答4手の疎再生は72,193位置更新だった。
-粗い回転を含むだけで深く混ざった入力とは言えず、一様標本や平均性能の証拠にはならない。
-実行時間はライブラリを事前構築したプロセスで測り、下位Levelの初回キャッシュ費用は含む。
-新旧方式の統計的な速度比較はここでは行っていない。
+In the 2-move restoration case at Level 4, the search performed 1,023,229 block evaluations, and sparse replay of the 4-move final solution updated 72,193 positions.
+Because these inputs consist of coarse rotations with shallow perturbations rather than deeply mixed scrambles, they do not constitute a uniform sample or evidence of average-case performance.
+Execution times were measured in a process with prebuilt libraries, though initial cache construction costs for lower Levels are included.
+No statistical runtime comparison between old and new methods is made here.
 
 ```sh
 node --import tsx research/block-restoration/higher-level.ts 3
@@ -125,12 +120,10 @@ node --import tsx --test research/block-restoration/generalization.test.ts
 node --import tsx research/block-restoration/counting-bound.ts
 ```
 
-[一般化の証明](../proofs/block-restoration.md)では、位置的ブロック復元目標が部分群になること、
-欠損0の必要十分性、差分評価の正しさ、条件付き再帰還元を示した。
-さらに既存の位置群位数から、任意の剛体配置へ戻すだけでも、最悪の場合は
-Level3で少なくとも2807手、Level4で少なくとも42809手が必要と分かった。
-浅い崩れの復元実績から、任意の状態への低コストな復元を推論しないための下界である。
-効率的な一般nの復元上界、剛体部分群の正確な指数、全剛体状態の下位群への投影可能性は未解決。
+In the [generalization proof](../proofs/block-restoration.md), we proved that the positional block-restoration target forms a subgroup, established the necessity and sufficiency of defect 0, verified the correctness of incremental defect evaluation, and proved conditional recursive reduction.
+Furthermore, counting cosets from the established position-group orders shows that merely restoring an arbitrary state into *any* rigid-block configuration requires at least 2,807 moves in the worst case at Level 3, and at least 42,809 moves at Level 4.
+This lower bound prevents extrapolating low-cost restoration of arbitrary states from empirical success on shallow perturbations.
+An efficient general-$n$ restoration upper bound, the exact index of the rigid-block subgroup, and projectability of all rigid states onto the lower-level group remain open problems.
 
-検証用まとめコマンド: `npm run test:block-restoration`、`npm run prove:block-restoration`。
-数値下界の軌道数・合法手数・パリティ階数は実際の疎な操作群の再構築でも照合する。
+Summary verification commands: `npm run test:block-restoration`, `npm run prove:block-restoration`.
+The orbit counts, legal move counts, and parity ranks used in the numerical lower bounds are cross-checked against actual reconstructions of the sparse move groups.

@@ -85,6 +85,6 @@ See [block restoration](block-restoration.md) for the implemented Level2 fast pa
 word-shortening baseline, reproducible comparisons and limits. This is a bounded
 heuristic with certified completion, not yet a general-level block-restoration theorem.
 
-Level3/4の登録済み階層復元方式と一般命題・中間目標への手数下界を追加した。
-[研究記録](block-restoration.md)と
-[証明](../proofs/block-restoration.md)を参照。全状態に効率的な一般n再帰解法は未証明。
+Added registered hierarchical restoration solvers for Levels 3 and 4, along with general propositions and move-count lower bounds for intermediate restoration targets.
+See the [research notes](block-restoration.md) and
+[proofs](../proofs/block-restoration.md). An efficient general-$n$ recursive restoration algorithm for all states remains unproved.

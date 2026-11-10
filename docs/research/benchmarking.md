@@ -20,7 +20,7 @@ npm run bench -- --help
 
 The same `runBenchmark()` call also backs `apps/lab`'s "Run benchmark" button (in-browser, no file output). The lab's single-solve flow runs the same algorithm/model pair against its seeded scramble and persists each run's record to `localStorage`, so interactive runs stay comparable with CLI output.
 
-The lab lists only algorithms that declare `completeIn` for the selected move system, meaning they solve every reachable state of it. Generator-subset solvers (`level2-block-quotient`, `level3-block-quotient`) and budgeted-search solvers whose completeness is unproved (`level2-slice-reduction`, `level2-inner-square-coset`) remain available to the CLI only.
+The lab lists only algorithms that declare `completeIn` for the selected move system, meaning they solve every reachable state of it. `level2-slice-reduction` is listed for standard and `level2-inner-square-coset` for inner-square because both have a certified fallback. Generator-subset solvers (`level2-block-quotient`, `level3-block-quotient`) remain available through the CLI.
 
 Its "Moves vs. compute" panel compares every listed solver for one level and move system on identical seeded scrambles. The scrambles come from the reference solver's generator set. It plots the median wall time (log scale) against the median solution length with per-seed points, and marks the Pareto front: the solvers that no other solver beats on both axes. Each solver gets one untimed warm-up solve first, and the solver order rotates per seed. Times come from one browser worker on one device, so they are descriptive and not a performance claim.
 

@@ -1,257 +1,242 @@
-# 内面回転を含む系：候補の網羅性、到達可能性、完全解法
+# The Inner-Square Move System: Candidate Completeness, Reachability, and Constructive Solvability
 
-対象はラベル付きセルの位置と24向き。各合法対象の90度・逆90度・180度を1手と数える。
-従来の `standard` は比較用に保持する。ここでいう `inner-square` は、従来のsliceと再帰的extensionに、
-一層内の正方形外接箱を持つ任意のセル部分集合の合法回転を追加した系である。
-多層厚みの任意部分集合、斜め軸、正方形でない外接箱の新しい180度回転は追加モデルの対象外。
-従来の合法extension/slabは保持する。
+We track the positions and 24 cube orientations of labeled cells. Each $90^\circ$, $-90^\circ$, and $180^\circ$ turn of a legal target counts as 1 atomic move.
+The legacy `standard` move system is retained for comparison. The `inner-square` move system studied here augments the standard slices and recursive extensions with all legal rotations of cell subsets that lie within a single layer and have a square axis-aligned bounding box.
+Arbitrary multi-layer subsets, oblique rotation axes, and new $180^\circ$-only turns with non-square bounding boxes are outside the candidate model.
+All legal extensions and slabs from the standard move system are retained.
 
-実装・検査: `research/inner-square-expanded/`。
-具体的な数値の状態は `out/certificate-L<n>.json` と `out/catalog-report.json` を参照。
-証明書が存在しないLevelについて、本書の条件付き定理から検証完了を推論してはいけない。
+Implementation and verification scripts reside in `research/inner-square-expanded/`.
+For exact numerical certificates, see `out/certificate-L<n>.json` and `out/catalog-report.json`.
+For any level where a certificate file has not been generated, verification completion must not be inferred from the conditional theorems in this document.
 
-## A. 全平面を2^n個の占有形状へ還元する
+## A. Reduction of All Planes to $2^n$ Occupancy Profiles
 
-座標を平衡三進表示する。軸方向座標の各桁が零なら、面内二座標はその桁でいずれも非零。
-軸方向桁が非零なら、面内二座標の両方が零であることだけが禁止される。
-従って、軸方向の符号を除いた零・非零パターンnビットが平面の全占有位置を決める。
-各パターンの代表は、非零桁を+1とした座標 `sum(3^d)` でよい。
+Represent cell coordinates in balanced ternary. Whenever a digit of the axial coordinate is zero, both in-plane coordinates must be nonzero at that digit.
+Whenever the axial digit is nonzero, the only forbidden in-plane digit pair is $(0, 0)$.
+Consequently, the $n$-bit zero/nonzero pattern of the axial coordinate (ignoring signs) uniquely determines the in-plane occupancy profile of the layer.
+Each profile can be represented by the canonical coordinate `sum(3^d)` obtained by setting every nonzero axial digit to $+1$.
 
-一層の回転はその軸方向区間を変えない。異なる整数層の単位立方体とは境界接触しか起こらず、
-正の体積の衝突は同じ層の静止セルだけを調べればよい。
-軸X/Y/Zの違いは正の巡回座標置換で移せる。
-従って3·3^n平面を個別監査せず、2^n代表の全中心・全閉集合を監査し、各実平面へ写せば完全。
-この対称性はn一般の命題であり、有限Levelの測定値からの外挿ではない。
+Rotating a single layer leaves its axial coordinate interval invariant. Because unit cubes in different integer layers can meet only along their boundaries, positive-volume collisions can occur only against stationary cells within the same layer.
+Differences among the $X$, $Y$, and $Z$ axes are related by positive cyclic permutations of the coordinates.
+Therefore, instead of auditing all $3 \cdot 3^n$ planes individually, it suffices to audit all candidate centers and closed subsets on the $2^n$ canonical representative layers and map the resulting legal targets to every concrete plane.
+This symmetry reduction is an exact proposition for general $n$, not an extrapolation from finite-level measurements.
 
-中心候補は整数・半整数の両座標からなり、選択集合の外接箱中心で決まる。
-中心の一方だけが半整数の場合、格子閉包と正方形外接箱条件を同時に満たせない。
-各中心・角度について、閉包する回転軌道の和だけを選ぶ。
-閉包不能セルを静止障害物とし、衝突含意を強連結成分にまとめ、そのDAGの全閉集合を列挙する。
-外接箱が中心付き正方形となる集合を全てエンジンで検査する。
-閉集合上限に達した場合は、その代表を未完了として停止し、カタログの出力を禁止する。
+Candidate centers have either integer or half-integer coordinates and are determined by the bounding-box center of the selected subset.
+If only one in-plane coordinate of the center were a half-integer, lattice closure under $90^\circ$ rotation and the square bounding-box condition could not hold simultaneously.
+For each center and angle, we select unions of closed rotational orbits.
+Cells whose rotational orbit is incomplete are treated as stationary obstacles; collision implications are condensed into strongly connected components, and all closed subsets of the resulting condensation DAG are enumerated.
+Every closed subset whose bounding box is a square centered at the rotation axis is tested against the puzzle engine.
+If the closed-subset enumeration hits a safety cap, that representative layer is marked incomplete and catalog export is aborted.
 
-`enumerate.ts`の高速衝突oracleは別の幾何モデルではなく、エンジンと同一の二立方体連続衝突関数を呼ぶ。
-棄却に使った各正の衝突判定は、`t=tan(θ/2)` の有理数近似から作る有理回転で、四つの分離軸の厳密な重なり不等式をBigIntで再確認する。浮動小数点CCDは証拠の候補角度だけを提案する。90度の範囲では |t|≤1、回転の符号も確認する。
-受理された追加手には、`exact-sweep-certificate.ts`の整数二乗半径による十分分離証明も要求する。
-エンジンが合法としても、この厳密な分離証明が得られない手が一つでもあればエクスポートしない。
-Level2では既存網羅監査の18対象・54原子手を正確に再現する。
-以上の網羅性は、本リポジトリの合法性判定規約と上記の候補モデルに対しての主張である。
+The fast collision oracle in `enumerate.ts` does not use a separate geometric approximation; it calls the exact same two-cube continuous collision detection (CCD) function as the core engine.
+Every positive collision witness used to reject a candidate is re-verified in exact `BigInt` arithmetic using a rational rotation parameterized by a rational approximation to $t = \tan(\theta / 2)$, checking strict overlap inequalities across all four separating axes. Floating-point CCD serves only to propose candidate witness angles; we also verify $|t| \le 1$ (for the $90^\circ$ range) and the sign of the rotation.
+Every accepted additional move must also pass an exact integer squared-radius separation certificate in `exact-sweep-certificate.ts`.
+Even if the engine reports a move as legal, export is refused if any accepted move lacks this exact separation certificate.
+At Level 2, this procedure reproduces the exact 18 targets and 54 atomic moves found by the earlier exhaustive audit.
+Completeness of the catalog is claimed with respect to this repository's legality conventions and the candidate model defined above.
 
-## B. 位置・向きの共通表現
+## B. Joint Representation of Positions and Orientations
 
-位置の軌道をO、セル数をmとする。単一セルの「位置×24向き」オートマトンから、
-基点の安定化向き群Hと、各位置sへの到達回転t_sを求める。
-部品がsからuへ回転rで移る辺の局所座標を
+Let $O$ be a position orbit of size $m$. From the single-cell "position $\times$ 24 orientations" automaton, we compute the stabilizer orientation group $H$ at a base site and a reference transport rotation $t_s$ reaching each site $s \in O$.
+For any transition that moves a piece from $s$ to $u$ with world rotation $r$, define its local orientation coordinate by
 
 \[
- \tau_s=t_u^{-1} r t_s\in H
+ \tau_s=t_u^{-1} r t_s\in H.
 \]
 
-とする。位置が変わっても、局所向きは同じ有限群Hの元で表せる。
-検証済みの実行条件ではHは自明群、C3、C4、D4のいずれか。
-それ以外のHが出れば現行解法・位数公式の対象外として停止する。
+Even when a piece changes position, its local orientation increment lies in the same finite group $H$.
+Across all verified levels, $H$ is one of the trivial group, $C_3$, $C_4$, or $D_4$.
+If any other group $H$ were encountered, the current solver and group-order formula would halt as out of scope.
 
-各軌道の位置偶奇εと、局所向きのアーベル化の和をまとめる。
-C3では三進ねじれ和、C4では四進ロール和、D4では回転指数の偶奇と反転偶奇である。
-D4=〈r,f | r^4=f^2=1, frf=r^{-1}〉ならアーベル化はC2×C2、交換子部分群は{1,r²}。
+For each orbit, we record the position permutation sign $\varepsilon_O$ together with the sum of abelianized local orientation increments:
+for $C_3$ the ternary twist sum, for $C_4$ the quaternary roll sum, and for $D_4$ the rotation-exponent parity and reflection parity.
+Presenting $D_4 = \langle r, f \mid r^4 = f^2 = 1,\, frf = r^{-1} \rangle$, its abelianization is $C_2 \times C_2$ and its commutator subgroup is $\{1, r^2\}$.
+Define the joint signature map
 
 \[
  \Psi(g)=\bigl(\varepsilon_O(g),\;\sum_{s\in O}[\tau_s(g)]\bigr)_O.
 \]
 
-**補題.** Ψは群準同型。
-合成で局所回転が掛かり、アーベル化では加算になる。
-和の添字は位置置換で並び替わるだけなので全和は加法的。偶奇も加法的。□
+**Lemma.** $\Psi$ is a group homomorphism.
 
-F2座標をZ4の0/2へ埋め込み、真正のC4座標と同じZ4ベクトルとして扱う。
-合法原子手のΨ像が張る部分群Vを、Z4上の消去と直線プログラム（SLP）で構成する。
-偶数ピボット行の二倍を必ず後続行へ挿入し、体上のGaussian消去で代用しない。
-行ベクトルとSLPの一致、全生成元の所属、二倍に関する閉包を再検査する。
-独立な二つのビット平面による実装でも|V|を照合する。
+*Proof.* Under composition, local orientation increments multiply along the trajectory, which becomes addition in the abelianization.
+Because the summation index $s \in O$ is merely permuted by the position action, the total sum over $O$ is additive. The permutation sign $\varepsilon_O$ is likewise additive. $\square$
 
-各原子手の位数は2または4なので、C3への準同型像は0。
-入力の非零C3和は到達不能であり、合法語で修正する対象ではない。
+We embed $\mathbb{F}_2$ coordinates into $\{0, 2\} \subset \mathbb{Z}_4$ so that all 2-primary components are treated uniformly as $\mathbb{Z}_4$ vectors alongside genuine $C_4$ coordinates.
+The subgroup $V$ spanned by the $\Psi$-images of all legal atomic moves is constructed via $\mathbb{Z}_4$ row reduction paired with a straight-line program (SLP).
+Whenever a pivot row has an even pivot, twice that row is explicitly inserted into the subsequent elimination stream; we do not substitute field Gaussian elimination over $\mathbb{F}_2$.
+We re-verify agreement between every basis row vector and its SLP evaluation, membership of all generator images, and closure under multiplication by 2.
+The order $|V|$ is also cross-checked against an independent two-bit-plane implementation.
 
-## C. 計算証明で要求する条件
+Because every atomic move has order 2 or 4, its homomorphism image in any $C_3$ component is identically 0.
+Any input state with a nonzero $C_3$ twist sum is therefore unreachable and is rejected rather than corrected by legal words.
 
-各Levelについて以下を全件確認する。
+## C. Conditions Required by the Computational Certificate
 
-1. 実際の全合法原子手から位置軌道とHを求め、逆手が存在する。
-2. 各軌道に、その軌道内の3位置だけを循環させ、軌道外を位置・向きとも固定する語がある。
-3. その3点工具の共役支持超グラフが連結。よってその軌道に独立な交代群の位置作用を生成する。
-4. C3軌道には、二点を位置固定で反対にねじる語がある。
-5. C4軌道には、第一点の局所回転が位数4の、位置固定二点工具がある。
-6. D4軌道には、第一点が位数4の二点工具と、第一点が〈r〉外にある二点工具がある。
-7. 上記全工具のΨ像が0である。
-8. Ψの全生成元像を含み、実際の合法語で実現されるVの位数が二方式で一致する。
-9. 各軌道は少なくとも5点。出荷実装の三第三点アンカーと全順序対表を構築して連結性を検査する。大軌道では旧群の輸送証明と色組の全辺検査を行う。向き工具の表も全工具を用いた機能検査で構築する。
+For each certified level, the verification suite exhaustively checks the following conditions:
 
-2の「純粋」は支持外に向きの副作用がないことを意味する。
-3点工具自身の向き作用を恒等と仮定せず、7と最終向き相で処理する。
-旧軌道が合流しても、旧工具の支持は新軌道内に残る。
-ただし合流だけで交代群を仮定してはならず、3の正規閉包連結性を再確認する。
+1. Position orbits and local groups $H$ are computed from the full set of legal atomic moves, and every generator has a legal inverse move.
+2. Every orbit admits a pure 3-cycle word that cyclically permutes exactly 3 sites in that orbit while fixing both positions and orientations of all sites outside the orbit.
+3. The conjugate support hypergraph of that 3-cycle tool is connected on the orbit, so its normal closure generates the full alternating group $\operatorname{Alt}(O)$ independently on that orbit's positions.
+4. Every $C_3$ orbit admits a position-fixing word that applies opposite nonzero twists to exactly two sites.
+5. Every $C_4$ orbit admits a position-fixing two-site tool whose local rotation at the first site has order 4.
+6. Every $D_4$ orbit admits a position-fixing two-site tool whose action at the first site has order 4, and a second two-site tool whose action at the first site lies outside $\langle r \rangle$.
+7. Every tool in Conditions 2–6 has $\Psi$-image equal to 0.
+8. The subgroup $V$ contains the $\Psi$-images of all generators, is realized by explicit legal words, and its order agrees across both independent elimination methods.
+9. Every orbit has at least 5 sites. Connectivity is verified by constructing the shipped three third-point anchors and exhaustive ordered-pair tables (or, on large orbits, the legacy-group transport certificate and exhaustive color-pair edge audit). Orientation tool tables are likewise constructed and functionally verified using the certified tools.
 
-工具探索に使う有限候補数は発見用である。発見済みの語を全作用で検査してから証明書を発行する。
-発見用予算を一般nの成功保証として扱わない。
+In Condition 2, "pure" means having no position or orientation side effects outside the orbit.
+We do not require the 3-cycle tool to act trivially on orientations within its own orbit; because its $\Psi$-image vanishes by Condition 7, any internal orientation side effects are corrected during the final orientation phase.
+When legacy orbits merge under the expanded move set, the support of a legacy tool remains contained within the merged orbit.
+However, we never assume that orbit merging automatically yields the alternating group; Condition 3 explicitly re-verifies connectivity of the normal-closure hypergraph on every merged orbit.
 
-## D. 条件付き完全性定理と構成
+Finite candidate budgets used during tool search serve only for discovery; once discovered, every stored tool word is audited across its full action on all cells before a certificate is issued.
+Discovery budgets are never treated as theoretical guarantees for general $n$.
 
-**定理.** 条件Cが成立する有限Levelでは、単一セル到達条件とΨ(x)∈Vが到達可能性の必要十分条件である。
-以下のアルゴリズムは到達可能な全状態で終了する。
+## D. Conditional Completeness Theorem and Constructive Algorithm
 
-(1) SLP付き基底で入力Ψを打ち消す合法語を実行する。全軌道偶奇と全アーベル向き和が零になる。
+**Theorem.** At any finite level where Condition C holds, a state $x$ is reachable if and only if it satisfies the single-cell reachability conditions ($x$ preserves every orbit $O$ and has local orientations in $H_O$) and $\Psi(x) \in V$.
+Moreover, the following constructive algorithm terminates and solves every reachable state:
 
-(2) 各軌道の偶置換を3点交換に分解する。交代群が2重推移的なので、必要な有向辺を
-工具の基点辺へ運ぶ順序対探索が必ず終了する。
-同じ有向辺を共有し第三点が異なる3工具を使えば、禁止された二点を全て回避できる。
-二つの3点交換が一点だけで交わる交換子により、任意の指定3点交換を実現する。
-固定点になった残り二点では互いの逆作用が相殺され、向きの余分な支持も残らない。
-各位置修正は未完成置換を短くするので有限回で終わる。
-全工具がΨ=0なので、向き相に渡る全和も零のまま。
+(1) Evaluate the basis SLP to apply a legal word canceling $\Psi(x)$. Afterward, every orbit permutation is even and every abelianized orientation sum vanishes.
 
-(3) C3とC4では、一点を最後のアンカーとし、二点工具で他の点を順に完成させる。
-輸送した第一点の生成元はHの内部共役なので、その位数を保つ。
-最後の点は全和零から自動的に完成する。
+(2) Decompose the remaining even permutation on each orbit into 3-cycles. Because $\operatorname{Alt}(O)$ is 2-transitive (for $|O| \ge 5$), ordered-pair search transporting any required directed edge to the base edge of the stored tool is guaranteed to terminate.
+Using three stored tools sharing the same directed base edge but having three distinct third points allows the solver to avoid any two forbidden sites.
+Taking the commutator of two 3-cycles whose supports intersect in a single site realizes any specified 3-cycle: at the two sites fixed by the commutator, the inverse actions cancel, leaving no residual orientation support outside the 3-cycle.
+Each position-correction step reduces the number of misplaced sites, terminating in finitely many steps.
+Because every tool satisfies $\Psi = 0$, all abelianized orientation sums remain zero entering the orientation phase.
 
-(4) D4では、位数4生成元と反転生成元がHを生成する。
-同じ二点上へ運んだ工具の第一点作用に対し、8状態の有限探索で第一点を恒等へ戻す。
-アンカー以外を終えると、残るアンカーの局所回転は[H,H]={1,r²}に属する。
-残差r²なら、アンカーと別々の二補助点へ運んだ回転工具・反転工具の交換子を実行する。
-支持の交点はアンカーだけなので、補助点では作用が相殺され、アンカーだけがr²回転する。
-従ってアンカーも完成する。
+(3) On $C_3$ and $C_4$ orbits, designate one site as a final anchor and solve all other sites one by one using transported two-site tools.
+Because the transported action at the first site is an internal conjugate within $H_O$, it preserves the element's order.
+Once all non-anchor sites are solved, the anchor site is automatically solved because the total orientation sum over the orbit is zero.
 
-(5) 元入力から全生原子手を独立に再生し、全部品の位置・向きが恒等であることを確認する。
+(4) On $D_4$ orbits, the order-4 generator and the reflection generator together generate $H_O = D_4$.
+Transporting both two-site tools to the same pair of sites (the target site and the anchor), an 8-state finite search over their first-site actions reduces the target site's orientation to the identity.
+Once all non-anchor sites are solved, the remaining local orientation at the anchor lies in the commutator subgroup $[H_O, H_O] = \{1, r^2\}$.
+If the residual at the anchor is $r^2$, execute the commutator of the rotation tool and reflection tool transported to the anchor paired with two distinct auxiliary sites.
+Because the supports of the two transported tools intersect only at the anchor, their actions cancel at both auxiliary sites and multiply to $r^2$ at the anchor alone, completing the anchor.
 
-以上で十分性が構成的に示される。必要性は単一セル到達群と準同型像の定義から従う。□
+(5) Replay the complete sequence of output atomic moves independently from the original input state and verify that every piece reaches the identity position and orientation.
 
-### D.1 旧軌道の独立性を使った輸送
+This constructively establishes sufficiency; necessity follows immediately from the definition of the single-cell stabilizer groups and the homomorphism $\Psi$. $\square$
 
-新軌道が1,536点以下なら、全ての相異なる順序対を覆う密な表を使う。
-大きい新軌道では旧軌道を「色」とし、二点の色の組だけを表にする。
-旧完全性証明の独立な交代群により、異なる二色内の点は独立に、同色の異なる二点は2重推移性により、任意の証拠点へ移せる。
-新生成元が色の組を変える各辺に、その移動を実現する相異なる二証拠点を付ける。
-同色の辺にも対応するため、同じ移動先色の証拠点は二つまで保持する。
+### D.1 Transport Using Legacy Orbit Independence
 
-全ての色組から対角（サイクル用）、又は二点工具の色組（向き用）への逆BFSを行い、各辺の証拠と距離減少を全件検査する。
-一段ごとに旧群で現在の二点を証拠へ移し、新生成元を一つ実行する。
-対角に着いたサイクルでは、その旧軌道の純粋3点工具を使い、工具の色組に着いた向き相では、旧群で工具の正確な支持点へ移す。
-禁止点も輸送語で移すため、三つの異なる第三点のうち二点以下の禁止を回避できる性質が維持される。
+For any new orbit of size at most 1,536, the solver precomputes a dense breadth-first search table covering all ordered pairs of distinct sites.
+For larger merged orbits, we treat the constituent legacy orbits as "colors" and tabulate transitions only over ordered pairs of colors.
+By the independent alternating-group action established in the legacy completeness proof, two sites of different colors can be moved independently to any desired witness sites of those colors, and two distinct sites of the same color can be moved simultaneously to any two distinct witness sites of that color by 2-transitivity.
+Every directed edge in the color-pair graph induced by a new generator is annotated with two distinct witness sites realizing that color-pair transition.
+To handle same-color transitions without collision, up to two witness transitions per destination color pair are stored.
 
-Level4最大軌道25,248点には407旧軌道が含まれる。全位置対637,461,504ではなく、165,649色組を扱う。
-全Level4の色組表の最大状態数は173,056。旧群内の二点探索は高々1,536²=2,359,296状態である。
-この方法は旧群の完全性証明を明示的に使う。`certify.ts` は旧工具データの一致と全作用を再確認し、`factored-audit.ts` は全色組辺を検査する。
-経験的な深さ・ノード数による完全相の打切りはない。巨大な解答の出力・独立再生は依然として高コスト。
+We run a reverse BFS from the diagonal color pairs (for 3-cycle transport) or from the tool's color pair (for orientation transport) across all color pairs, exhaustively verifying the witness sites and strict distance decrease along every edge.
+Each transport step moves the current pair of sites to the edge's witness sites using pure legacy-group words and then applies a single new generator.
+Upon reaching the diagonal in the position phase, the solver applies the pure 3-cycle tool of that legacy orbit; upon reaching the orientation tool's color pair in the orientation phase, it uses the legacy group to move the two sites onto the exact support sites of the orientation tool.
+Because forbidden sites are tracked through the transport words, the guarantee that at least one of the three distinct third-point anchors avoids up to two forbidden sites is preserved.
 
-## E. 正確な群位数と手数下界
+At Level 4, the largest merged orbit has 25,248 sites partitioned into 407 legacy orbits. Instead of $25{,}248 \times 25{,}247 = 637{,}436{,}256$ (or $25{,}248^2 = 637{,}461{,}504$) site pairs, the table tracks only $407^2 = 165{,}649$ color pairs.
+Across all Level 4 orbits, the largest color-pair table has 173,056 states, and legacy within-color two-point search visits at most $1{,}536^2 = 2{,}359{,}296$ states.
+This factored transport explicitly relies on the legacy group's completeness proof: `certify.ts` re-verifies consistency and full actions of the legacy tool data, and `factored-audit.ts` exhaustively audits every color-pair edge.
+There are no empirical depth limits or node-count cutoffs in the exact completion phases, though emitting and independently replaying multi-million-move solutions remains computationally expensive.
 
-条件Cによりker Ψの位置像は軌道ごとの交代群の直積である。
-位置を固定したker Ψは、各軌道のH^mのアーベル全和零部分を含み、上の構成で全て生成できる。
-各軌道の工具が支持外を固定するので、軌道間の独立性も保証される。
-よって
+## E. Exact Group Order and Move-Count Lower Bounds
+
+By Condition C, the position image of $\ker \Psi$ is the direct product of the alternating groups $\operatorname{Alt}(O)$ over all orbits $O$.
+The position-fixing subgroup of $\ker \Psi$ contains the zero-abelian-sum subgroup of $H_O^{m_O}$ on each orbit $O$, and the constructive algorithm above shows that these generate the entire kernel.
+Because the tools for each orbit fix all positions and orientations outside that orbit, the orbits act independently.
+Consequently, the exact order of the move group $G$ is
 
 \[
- |G|=|V|\prod_O\left(\frac{m_O!}{2}\frac{|H_O|^{m_O}}{|H_O/[H_O,H_O]|}\right).
+ |G|=|V|\prod_O\left(\frac{m_O!}{2}\frac{|H_O|^{m_O}}{|H_O/[H_O,H_O]|}\right),
 \]
 
-自明群の分母は1、C3は3、C4は4、D4は4。
-この公式は軌道への射影の位数を単に掛けたものではなく、独立な核の構成とΨ像から得られる。
+where the abelianization order $|H_O / [H_O, H_O]|$ in the denominator is 1 for the trivial group, 3 for $C_3$, 4 for $C_4$, and 4 for $D_4$.
+This formula is not a naive product of single-orbit projection orders; it follows from the independent generation of the kernel factors combined with the exact image $V$ of the joint homomorphism $\Psi$.
 
-合法原子手数Mに対し、(M^(d+1)−1)/(M−1)<|G|なら最悪最短手数はdより大きい。
-整数の階乗・群位数・幾何級数で両側を確認し、浮動小数点対数の丸めで下界を決めない。
-観測された解答の長さは最悪上界でも最短距離でもない。
+With $M$ legal atomic moves, whenever $(M^{d+1} - 1)/(M - 1) < |G|$, the worst-case shortest solution length exceeds $d$.
+Both sides of the inequality are checked in exact big-integer arithmetic (factorials, group order, and geometric series) without relying on rounded floating-point logarithms.
+Observed solver move counts are upper-bound witnesses for individual states, neither worst-case upper bounds nor shortest-path distances.
 
-## F. 深さ付き復元探索を安全に省略する一般nの下界
+## F. General-$n$ Lower Bound for Safely Skipping Depth-Bounded Restoration Search
 
-復元欠損Dは[ブロック復元の証明](block-restoration.md)の最大剛体一致数で定義する。
-位置的ブロック置換群Wの右作用は、配置候補(c,R)を(c′,Q_c R)へ全単射で写す。
-従って、既に崩れた入力も含めてD(xw)=D(x)（w∈W）。
+Let $D$ be the block-restoration deficit defined via maximum rigid-block agreements in the [block restoration proof](block-restoration.md).
+Right multiplication by any element $w$ of the positional block-permutation group $W$ bijectively maps candidate placements $(c, R)$ to $(c', Q_c R)$.
+Therefore, $D(xw) = D(x)$ for every $w \in W$, even when $x$ is an already scrambled state.
 
-一つの原子手でk部品の位置が変わるなら、各ブロックの最大一致数の変化は、そのブロックの
-移動部品数以下。従って|D(xa)−D(x)|≤k。
+If a single atomic move $a$ changes the positions of $k$ pieces, the maximum agreement count in each home block changes by at most the number of displaced pieces belonging to that block, so $|D(xa) - D(x)| \le k$.
 
-一般nの一層のセル数は最大8^n。太いslice、及び辺長・厚みが3以上の再帰的extension/slabは
-最小20セルブロックの和を選ぶ。選択境界は三進格子に整列し、横断面中心は3の倍数なのでWに属する。
-最小slabは一層で最大8セル、単セルrollは位置を変えない。
-追加する内面回転も一層内なので最大8^nセルしか動かさない。
-よって、このモデルの全原子手について
+At general level $n$, any single layer contains at most $8^n$ cells. Thick slices and recursive extensions or slabs of side length and thickness divisible by 3 select unions of complete 20-cell leaf blocks; their selection boundaries align with the ternary grid and their in-plane centers are multiples of 3, so they belong to $W$.
+Minimal slabs displace at most 8 cells per layer, and single-cell rolls displace 0 cells.
+Every additional inner-square turn acts within a single layer and therefore displaces at most $8^n$ cells.
+Thus, for every atomic move $a$ in the expanded move system,
 
 \[
  |D(xa)-D(x)|\le8^n,\qquad
  d(x,W)\ge\left\lceil D(x)/8^n\right\rceil.
 \]
 
-より強いデータ依存の定数Kも使える。実装では、全20点が同じ移動先ブロックと回転に一致する手を
-W所属として認証し、それ以外の全手の移動点数の最大値Kを取る。
-認証したW手はDを変えず、未認証手には移動点数の上界があるため安全。
-D>L·Kなら深さL以内の復元語は存在しない。探索を省略しても、深さL以内の解は一つも失わない。
+A tighter data-dependent constant $K$ is used in the implementation: we certify each move whose action on every leaf block sends all 20 sites to a common destination block under a single cube rotation as belonging to $W$, and define $K$ as the maximum number of displaced sites among all remaining uncertified moves.
+Certified $W$-moves leave $D$ invariant, while uncertified moves change $D$ by at most $K$.
+Whenever $D(x) > L \cdot K$, no restoration word of length at most $L$ exists, so skipping a depth-$L$ restoration search cannot miss any depth-$\le L$ restoration.
 
-これはビーム探索の完全性を与える命題ではない。
-省略しなかった場合もビームが解を見逃す可能性はあり、全体の完全性はDの完全解法で維持する。
+This proposition justifies safe pruning of depth-bounded search; it does not assert completeness of finite-width beam search when search is run.
+Overall solver completeness is guaranteed by falling back to the exact reduction algorithm of Section D.
 
-## G. マクロ内面回転の持上げ
+## G. Lifting Macro Inner-Square Turns
 
-旧extensionのIDが上下Levelで共通でも、新しい内面回転のIDは共通とは限らない。
-さらに、一層のマクロ内面回転は、上位Levelでは厚み3の三つの細かい平面へ持ち上がる。
-粗いセルの立方体内に小さいMengerセルが含まれるため、粗い回転の衝突のない掃過体は
-細かいセルの掃過体を含む。各細平面間は軸方向に境界接触しかしない。
-従って各細平面を独立に回転でき、その部分集合は中心付き正方形条件を満たす。
-完全な上位カタログには対応する手があり、一つのマクロ手を最大3手で実現できる。
+Whereas legacy extension IDs correspond directly across adjacent levels, new inner-square target IDs do not necessarily match by name across levels.
+Geometrically, a single-layer macro inner-square turn at Level $n-1$ lifts at Level $n$ to three fine layers of total thickness 3.
+Because each coarse cell cube contains its 20 fine Menger subcells, the collision-free swept volume of the coarse rotation contains the swept volumes of all fine subcells, and adjacent fine layers interact only along their shared axial boundary planes.
+Consequently, each of the three fine layers can be rotated independently, and each fine selection satisfies the centered-square bounding-box condition.
+Thus a complete Level $n$ catalog always contains the three corresponding fine moves, realizing a single macro inner-square turn in at most 3 fine atomic moves.
 
-実装はIDだけで持上げを仮定せず、選択集合の一致、選択内の全位置と向きの作用、
-選択外が固定されることを検査する。Level3ではLevel2の全54内面原子手を検査する。
+Rather than trusting target IDs when lifting, the implementation explicitly verifies exact agreement of the lifted selection set, agreement of position and orientation actions on all selected cells, and invariance of all unselected cells. At Level 3, all 54 macro inner-square atomic moves from Level 2 pass this lift verification.
 
+## H. Uniform Group Sampling Independent of Random-Walk Mixing
 
-## H. 歩道の混合性に依存しない全群標本
+Assuming an ideal source of independent uniform random integers, we sample uniformly from the full move group $G$ as follows. On each orbit $O$, generate a uniform permutation via the Fisher–Yates shuffle; if its sign is odd, transpose two fixed sites to obtain a uniform element of $\operatorname{Alt}(O)$.
+Choose the local orientations of the first $m_O - 1$ sites independently and uniformly from $H_O$, and choose the local orientation of the last site uniformly from the coset of $[H_O, H_O]$ that cancels the accumulated abelian sum of the first $m_O - 1$ sites.
+Because all cosets of the commutator subgroup have equal size, this yields a uniform sample from the zero-abelian-sum orientation kernel on $O$. Sampling positions and orientations independently across all orbits produces an exact uniform element of $\ker \Psi$.
 
-理想的な独立一様乱数を仮定する。各軌道でFisher–Yates置換を作り、奇なら固定した二点を交換すれば、交代群上で一様になる。
-最初のm−1点の局所向きをHから独立一様に選ぶ。最後の点は、それまでのアーベル和を打ち消すアーベル化の逆像から一様に選ぶ。
-準同型の各逆像の大きさは等しいため、全和零の向き核上で一様である。位置と向きを独立に選び、ker Ψの一様元を得る。
+Next, order the $\mathbb{Z}_4$ echelon basis rows by pivot and sample coefficients independently and uniformly from $\{0, 1, 2, 3\}$ for order-4 pivots (pivot value 1) and from $\{0, 1\}$ for order-2 pivots (pivot value 2).
+In a triangularized $\mathbb{Z}_4$ basis closed under multiplication by 2, every element of $V$ has a unique canonical expansion of this form, yielding a uniform element of $V$.
+Evaluating the basis SLP on these coefficients produces a coset representative, which we multiply on the right of the kernel sample. Because distinct elements of $V$ define disjoint cosets of $\ker \Psi$ of equal size, the resulting state is distributed uniformly over the entire group $G$.
+In empirical benchmarks, randomness comes from a finite-state seeded PRNG, so we distinguish this ideal algebraic uniformity from PRNG quality.
+Both `sample-state.ts` and `benchmark.ts ... direct` pass only the directly constructed state to the solver, without exposing any scramble word or its inverse.
 
-Z4消去基底をピボット順に並べ、ピボット1の係数を0〜3、ピボット2の係数を0〜1から独立一様に選ぶ。
-二倍行の閉包を含む三角形の基底では、各像は一意なこの標準表示を持つ。よってVの一様元を得る。
-その基底SLPで得た一つの切断を核の標本に右から掛ける。異なる像の剰余類は交わらず、各剰余類への写像は全単射なので、G全体で一様となる。
-実験の乱数は有限のseed付きPRNGなので、この理想的な一様性とPRNGの品質を同一視しない。
-`sample-state.ts` と `benchmark.ts ... direct` はスクランブル語の逆順を解法へ渡さず、直接構成した現在状態のみを渡す。
+## I. Numerical Certificates for Fixed Levels
 
-## I. 固定Levelの数値証明書
-
-| inner-square | Level3 | Level4 |
+| `inner-square` metric / invariant | Level 3 | Level 4 |
 | --- | ---: | ---: |
-| 全原子手 | 5,565 | 91,602 |
-| 追加対象 / 追加原子手 | 690 / 1,974 | 16,470 / 46,818 |
-| 180度のみ合法な追加対象 | 48 | 1,296 |
-| 位置軌道（旧系→新系） | 164→116 | 3,050→1,294 |
-| 最大位置軌道 | 768 | 25,248 |
-| 共同像の位数 | 2^43 | 2^240 |
-| 全群位数の十進桁数 | 14,105 | 403,271 |
-| 最悪最短手数の数え上げ下界 | 3,766 | 81,274 |
-| 葉ブロック復元距離の数え上げ下界 | 3,241 | 71,785 |
+| Total legal atomic moves | 5,565 | 91,602 |
+| Additional targets / additional atomic moves | 690 / 1,974 | 16,470 / 46,818 |
+| Additional targets legal for $180^\circ$ only | 48 | 1,296 |
+| Position orbits (`standard` $\to$ `inner-square`) | 164 $\to$ 116 | 3,050 $\to$ 1,294 |
+| Largest position orbit size | 768 | 25,248 |
+| Order of joint signature image $|V|$ | $2^{43}$ | $2^{240}$ |
+| Decimal digits of full group order $|G|$ | 14,105 | 403,271 |
+| Counting lower bound on worst-case shortest moves | 3,766 | 81,274 |
+| Counting lower bound on leaf-block restoration distance | 3,241 | 71,785 |
 
-下界は、ある入力にそれ以上の最短距離があることを意味する。全入力がこの長さで解けるという上界ではない。
-全群位数の正確な十進整数・SHA256、工具のハッシュ、共同像の独立照合を `out/` に保存する。
-一般nでこの全工具族が存在するという無条件の証明、一般nの効率的完全解法、正確なGod's numberは未解決である。
+A counting lower bound means that there exists at least one reachable state whose shortest solution requires at least that many moves; it is not an upper bound asserting that all states can be solved within that length.
+The exact decimal integer and SHA-256 digest of $|G|$, tool hashes, and independent cross-checks of the joint signature image $V$ are stored in `out/`.
+An unconditional proof that all required tool families exist for general $n$, an efficient complete solver for general $n$, and the exact value of God's number remain open problems.
 
-## J. 共通セットアップを共有できる十分条件（一般n）
+## J. Sufficient Condition for Sharing a Common Setup Word (General $n$)
 
-語を左から実行し、共役C_i=S T_i S^{-1}、A_i=supp(T_i)、B_i=supp(C_i)とする。
-向きも含む非恒等作用の支持を用いる。集合A_i∪B_iがiごとに互いに素なら、異なる添字のTとCは可換である。
-従って
+With words applied from left to right, let $C_i = S T_i S^{-1}$, $A_i = \operatorname{supp}(T_i)$, and $B_i = \operatorname{supp}(C_i)$, where $\operatorname{supp}(\cdot)$ denotes the full support of non-identity action (including both position displacement and orientation change).
+If the combined sets $A_i \cup B_i$ are pairwise disjoint for $i = 1, \dots, k$, then $T_i$ and $C_j$ commute for all $i \ne j$.
+Consequently,
 
 \[
  \prod_{i=1}^{k}(S T_i S^{-1}T_i^{-1})
  =S(T_1\cdots T_k)S^{-1}(T_1\cdots T_k)^{-1}.
 \]
 
-左辺は各独立修正、右辺は共通セットアップを一回だけ使う修正で、位置も向きも同じである。
-未相殺の語長は左が2k|S|+2∑|T_i|、右が2|S|+2∑|T_i|。
-従って2(k−1)|S|手を節約できる。既存の局所相殺後にもこの数だけ改善するとは主張しない。
+The left-hand side applies $k$ individual commutator corrections sequentially, whereas the right-hand side shares the setup word $S$ once across the batch, producing the exact same position and orientation action.
+Before local cancellation, the word length drops from $2k|S| + 2\sum_i |T_i|$ on the left to $2|S| + 2\sum_i |T_i|$ on the right, saving $2(k-1)|S|$ moves (we do not claim that this exact count always survives on top of post-hoc local move cancellation).
 
-この補題はMenger特有の仮定に依らず任意のLevelに適用できる。
-ただし各Levelに必要な工具が存在し、上の支持条件を満たすことは別途確認する。
-`mengerSharedCorrection.ts` は共役の全作用から支持条件を検査し、共有語と個別語の全作用も照合する。
-`shared-check.ts` はLevel3/4それぞれで、異なる最小ブロックに属する四つの二点向き修正を見つけ、
-16原子手を10原子手へ共有（37.5%削減）、8点以外の位置・向きを固定することを確認した。
-同じ工具を重複させた負例は拒否する。
+This lemma is purely group-theoretic and applies at any level $n$ without Menger-specific assumptions, provided that tools satisfying the support disjointness condition exist at that level.
+`mengerSharedCorrection.ts` verifies the support disjointness condition from the full action of the conjugates and cross-checks that the shared word and sequential word have identical actions across all cells.
+At both Level 3 and Level 4, `shared-check.ts` identifies four two-site orientation corrections in distinct leaf blocks, reducing 16 atomic moves to 10 atomic moves (a $37.5\%$ reduction) while fixing all positions and orientations outside the 8 target sites, and properly rejects negative test cases with overlapping tools.
 
-これは具体的な共有可能性の証明と局所実装である。深い入力を解く全還元への自動バッチ化は、
-条件を満たす工具列の探索・順序決定が未実装であり、深い入力の改善値へ加算しない。
+This provides a concrete proof and local implementation of setup sharing. Automatic batching across the full reduction pipeline on deep scrambles—which requires searching for and ordering compatible tool sequences—is not yet implemented and is not credited toward deep-scramble benchmark reductions.

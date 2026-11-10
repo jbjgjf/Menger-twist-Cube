@@ -1,40 +1,39 @@
-# 内面回転を含むMenger系の研究記録
+# Research Notes on the Menger System with Inner-Square Rotations
 
-正式な研究対象は `inner-square`。slice・extension・内面回転を全て含む。
-`standard` は過去の結果との比較用。両系の位数・最悪手数下界・スクランブルを混同しない。
+The primary move system under study is `inner-square`, which includes all `slice`, `extension`, and inner-square rotations.
+The `standard` system is retained for comparison with earlier results. Do not conflate the group orders, worst-case move lower bounds, or scramble distributions of the two systems.
 
-## 研究課題
+## Research Questions
 
-1. 同じセル形状で内面回転を許すと、到達可能状態はどのように変わるか。
-2. その全操作群に対する到達可能性判定と、構成的な完全解法を得られるか。
-3. 階層的復元と可換相殺は、同一の十分に混ざった入力で何を改善するか。
+1. When inner-square rotations are permitted on the same cell geometry, how does the set of reachable states change?
+2. Can we obtain a reachability criterion and a constructive, complete solving algorithm for the full move group?
+3. What do hierarchical restoration and commutative cancellation improve when evaluated on identical, thoroughly mixed inputs?
 
-Level2の内面追加は指数2の拡大だった。しかしLevel3に「軌道は同じで偶奇だけ増える」という
-仮説を適用した検査は失敗した。実際には164軌道が116軌道へ合流し、向き自由度も増えた。
-この反例を受け、旧不変量の流用を止め、全生成元の軌道・単一セル安定化群・共同準同型像を再計算した。
+At Level 2, adding inner-square rotations yielded an index-2 extension. However, testing the hypothesis at Level 3 that "position orbits remain unchanged and only parity rank increases" failed: in reality, 164 position orbits merged into 116 orbits, and single-cell orientation freedoms also expanded.
+In response to this counterexample, we stopped reusing invariants from the `standard` system and recomputed all position orbits, single-cell stabilizers, and joint homomorphism images from scratch across the full generator set.
 
-## 対象と検証の契約
+## Scope and Verification Contract
 
-内面候補は一層内の任意部分集合で、外接箱は軸を中心とする正方形。
-整数・半整数中心と±90/180度を含む。旧slice・再帰的extension/slab/cell操作も保持する。
-任意の多層部分集合・斜め軸は対象外。
-全16平面タイプ等の監査が完了しないLevelを、部分的なリング追加で「完全」とは扱わない。
+An inner-square candidate is an arbitrary subset of cells within a single layer whose bounding box is a square centered on the rotation axis.
+Both integer and half-integer centers with angles $\pm 90^\circ$ and $180^\circ$ are included. Existing `slice` and recursive `extension`/slab/cell moves are preserved.
+Arbitrary multi-layer subsets and non-axis-aligned (diagonal) rotation axes are out of scope.
+A Level whose audit across all 16 plane types (or equivalent layer classes) is incomplete is never treated as "complete" by merely adding a partial set of rings.
 
-[証明](../proofs/inner-square-completeness.md)は、一般命題と固定Levelの計算条件を分けている。
-幾何学的に受理された追加手は厳密整数半径による掃過体分離も確認する。
-純粋3点工具の正規閉包、二点向き工具の全作用、共同Z4像のSLPを検証する。
-共同像の位数は、別実装の二ビット平面消去でも確認する。
+The [completeness proof](../proofs/inner-square-completeness.md) separates general propositions from computational certificates at fixed Levels.
+Every geometrically accepted additional move is also verified for swept-volume clearance using exact integer radii.
+We verify the normal closure of pure 3-cycle tools, the transitive action of two-site orientation tools, and the straight-line program (SLP) for the joint $\mathbf{Z}_4$ homomorphism image.
+The order of the joint image is cross-checked via an independent two-bit plane-elimination implementation.
 
-## 再現手順
+## Reproduction Commands
 
 ```sh
-# 全候補を平面形状ごとに監査。完了したprofileだけ再利用する。
+# Audit all candidates by plane profile. Reuse only profiles marked complete.
 node --import tsx research/inner-square-expanded/enumerate.ts 2
 node --import tsx research/inner-square-expanded/enumerate.ts 3
 node --import tsx research/inner-square-expanded/enumerate.ts 4
 node --import tsx research/inner-square-expanded/export-catalog.ts 4
 
-# 各Levelで実行（3を4に替えて繰り返す）
+# Run at each Level (replace 3 with 4 to repeat)
 node --import tsx research/inner-square-expanded/census.ts 3
 node --import tsx research/inner-square-expanded/find-tools.ts 3
 node --import tsx research/inner-square-expanded/certify.ts 3
@@ -44,97 +43,94 @@ node --import tsx research/inner-square-expanded/functional.ts 3
 node --import tsx research/inner-square-expanded/restoration-check.ts 3
 node --import tsx research/inner-square-expanded/bound-check.ts 3
 node --import tsx research/inner-square-expanded/shared-check.ts 3
-# Level4の大軌道の全色組辺
+# All color-pair edges for large orbits at Level 4
 node --import tsx research/inner-square-expanded/factored-audit.ts 4
 
-# 同じ入力で完全方式、案D、適応的階層復元を比較
+# Compare certified solver, Option D, and adaptive hierarchical restoration on identical inputs
 node --import tsx research/inner-square-expanded/benchmark.ts 3 1000 101
 ```
 
-`profile`に`complete:false`がある場合は計算中か中断状態であり、エクスポート不可。
-列挙上限に達しても部分結果を正式カタログにしない。
-ソルバーは履歴を読まず現在状態のみを受け取る。実験の履歴ハッシュは再現用に別記録する。
+If any `profile` contains `complete:false`, enumeration is still running or was interrupted and cannot be exported.
+Reaching an enumeration cutoff never promotes partial results into the official catalog.
+Solvers receive only the current puzzle state and do not read scramble history. Scramble history hashes are recorded separately for benchmark reproducibility.
 
-## 比較方法
+## Comparison Methodology
 
-各試行の最初の3手でslice・extension・innerを必ず一つずつ使い、残りは族を等確率、
-その族の合法原子手を等確率で選ぶ。180度のみ合法の対象もプールに含む。
-これは全生成元を含む宣言済み分布であり、群上の一様標本ではない。
-長さ100/1000、seedを固定して部品の位置移動数・族別手数を記録する。
+In each trial, the first 3 moves use one `slice`, one `extension`, and one `inner` move, and each subsequent move selects a family uniformly at random and then a legal atomic move uniformly within that family. Targets that are legal only at $180^\circ$ are included in the pool.
+This is a declared scramble distribution covering all generator families, not a uniform sample over the group.
+With fixed scramble lengths of 100 and 1,000 and fixed seeds, we record the number of displaced cubies and move counts per family.
 
-比較は、共同署名の完全方式、同じ解答への案D相殺、案Dを含む適応的階層復元。
-復元方式がDだけと同じ解答なら、構造利用による追加改善とは数えない。
-深さ3では到達不能と下界で分かる場合、復元探索を省略する。
-完全方式・復元方式の実行順はseedの偶奇で入れ替える。
-ライブラリ構築・実エンジン照合・疎な再生など、計時に含む処理を記録する。
+The comparison evaluates the joint-signature certified solver, Option D commutative cancellation applied to that exact solution, and adaptive hierarchical restoration (which includes Option D).
+Whenever the restoration method produces the exact same output as Option D alone, it is not counted as an additional structural improvement.
+When the lower bound proves that restoration is unreachable within depth 3, the restoration search is skipped.
+The execution order of the certified solver and restoration solver alternates according to seed parity.
+All operations included in wall-clock timing—such as library construction, real-engine checks, and sparse replay—are explicitly logged.
 
-seed1〜20は開発・実装修正に使用した。主要な比較は別のseed101〜110（Level2/3）、101〜103（Level4）で行う。正式な事前登録ではなく、集計前に固定した保留seedの比較である。
-主要な[集計結果](inner-square-results.md)とCSV/JSONを合わせて確認する。
-手数は決定的な出力、実行時間は同一機でも他の実験・GC・初回実行の影響を受ける。
-同時実行中の時間から統計的な速度優位を主張しない。
-データは `research/inner-square-expanded/out/bench-*.json` に入力ハッシュと共に保存する。
+Seeds 1–20 were used during development and debugging. Primary benchmark comparisons use held-out seeds 101–110 (Levels 2 and 3) and 101–103 (Level 4). While not a formal external preregistration, these held-out seeds were fixed prior to aggregation.
+Inspect the primary [aggregated results](inner-square-results.md) alongside the raw CSV/JSON outputs.
+Move counts are deterministic outputs, whereas execution times on the same machine are affected by concurrent processes, garbage collection, and cold-start caching.
+We make no claims of statistical runtime superiority from concurrent benchmark timings.
+Benchmark records are saved together with input state hashes in `research/inner-square-expanded/out/bench-*.json`.
 
-大きい解答は全原子手の疎な整数再生で確認する。
-小さい代表例は実エンジンでも逐次再生する。二つの検証方法を一つの表現で混同しない。
+Large solutions are verified by sparse integer replay of every atomic move.
+Smaller representative solutions are also replayed step-by-step on the full engine. These two verification modes are kept distinct and never conflated under a single label.
 
-## 一般化と新しい構造を使った効果
+## Generalization and Impact of Exploiting Group Structure
 
-旧軌道の独立な交代群を内部輸送に使い、新軌道全体の位置対ではなく旧軌道の色組を探索する。
-Level4最大軌道の25,248²状態を407²状態へ減らし、各商グラフ辺の実現語と距離減少を全件検査する。
-旧群を利用する点は、単なるビット配列化や可換相殺とは区別できる構造上の工夫である。
-素朴な新軌道の二点BFSはLevel4でJavaScript Mapの最大サイズに到達した。開発時の失敗として保存する。
+By exploiting the independent alternating groups of the `standard` orbits for internal transport, we search over ordered color-pairs of `standard` sub-orbits rather than ordered site-pairs across the entire merged `inner-square` orbit.
+For the largest orbit at Level 4, this reduces the state space from $25,248^2$ to $407^2$ states, allowing exhaustive verification of the realizing word and distance decrease across every quotient-graph edge.
+Leveraging the subgroup structure of the `standard` move system is a mathematical reduction distinct from low-level bit-packing or local commutative cancellation.
+A naive ordered-pair BFS over the merged orbit at Level 4 exceeded the maximum size of a JavaScript `Map`; this negative result is preserved in the research record.
 
-同じセットアップを使う独立な交換子の支持条件も証明・実装した。
-Level3/4とも、8点に作用する四修正を16→10原子手へ共有できる。
-ただし、深い入力の還元全体へこの共有語を自動配置する実装はまだない。
-一般nについて証明したものは、平面形状の2^n還元、復元距離のD/8^n下界、支持条件付き共有補題、条件付き完全性定理である。
-全nで工具が存在するという無条件の証明は残る。
+We also proved and implemented support-disjointness conditions for independent commutators sharing a common setup word.
+At both Levels 3 and 4, four corrections acting on 8 sites can share a single setup, reducing 16 atomic moves to 10.
+However, automatic scheduling of these shared-setup words across full reductions of deep scrambles is not yet implemented.
+For general Level $n$, our proved results comprise the $2^n$ reduction of distinct layer profiles, the $D / 8^n$ lower bound on block-restoration distance, the shared-correction lemma under support conditions, and the conditional completeness theorem.
+An unconditional proof that pure tools exist for all $n$ remains an open problem.
 
-## ISEFに向けて
+## Toward ISEF
 
-主要な成果候補は、幾何的な操作集合を確定した際に生じる軌道合流・向き自由度の変化、
-共同準同型による完全解法と正確な群位数、整数計算による最悪手数の下界である。
-浅い設計入力を短く解いたことだけを効率の成果にしない。
-「研究課題・方法・実行と解釈・創造性・発表」の観点で、定義・証拠・限界を説明できる資料を作る。
-[公式審査基準](https://www.societyforscience.org/isef/grand-award/criteria/)
+The primary contributions are: the discovery of orbit merging and expanded orientation freedom once the geometric move set is completed; the exact group order and constructive complete solver via the joint homomorphism; and the worst-case move lower bounds established via exact integer arithmetic.
+Solving shallow, hand-crafted scrambles in few moves is not presented as a general efficiency breakthrough.
+Documentation is structured around the ISEF judging criteria—Research Question, Design and Methodology, Execution, Creativity, and Presentation—to clearly communicate definitions, certified evidence, and limitations.
+[Official ISEF Grand Award Judging Criteria](https://www.societyforscience.org/isef/grand-award/criteria/)
 
-Menger形状とRubik型操作を結び付ける発想自体を、新規と断言しない。
-以下の先行研究のモデルとの差を調べる必要がある。
+We do not claim that the general idea of combining Menger sponge geometry with Rubik-style twists is novel in itself.
+Differences between our exact physical model and prior literature must be stated clearly:
 
-- [On Rubik's Cube, KTH（§5.6）](https://people.kth.se/~boij/kandexjobbVT11/Material/rubikscube.pdf)：検索キャッシュでMenger高次キューブへの一般化の節を確認。原本URLは取得時404であり、原本の再取得と精読が必要。
-- [Bizek, The Rubik's-Cube Design Problem, Bridges 2000](https://archive.bridgesmathart.org/2000/bridges2000-347.html)：Rubikキューブの集合によるフラクタル模様の設計。穴を持つ物理操作群を扱う本モデルとの違いを明記する。
-- [Demaineほか, Algorithms for Solving Rubik's Cubes](https://arxiv.org/abs/1106.5736)：通常の大型キューブの一括処理。本モデルへ計算量をそのまま移せない。
+- [On Rubik's Cube, KTH (§5.6)](https://people.kth.se/~boij/kandexjobbVT11/Material/rubikscube.pdf): Search cache confirms a section discussing generalizations to higher-order Menger cubes. The original URL returned 404 at retrieval time; obtaining and closely reading the original text remains necessary.
+- [Bizek, The Rubik's-Cube Design Problem, Bridges 2000](https://archive.bridgesmathart.org/2000/bridges2000-347.html): Designs fractal patterns out of assemblies of standard Rubik's Cubes. We explicitly distinguish that artistic/combinatorial assembly problem from our physical group model of collision-free rotations on a single perforated fractal cube.
+- [Demaine et al., Algorithms for Solving Rubik's Cubes](https://arxiv.org/abs/1106.5736): Batch solving for standard $N \times N \times N$ Rubik's Cubes. Its asymptotic bounds do not transfer directly to perforated Menger sponge move groups.
 
-ここでの計算結果は、文献上の新規性の確定や大会の評価を保証するものではない。
-AI支援で生成・修正したコードと証明案を含む。証明条件、失敗した仮説、独立検査、
-学生本人が検算・説明した部分を研究ノートに記録し、発表時の説明可能性を確保する。
+The computational certificates here do not guarantee literature novelty or competition outcomes.
+This project includes code and proof drafts generated and refined with AI assistance. All proof hypotheses, falsified conjectures, independent verification scripts, and components personally derived, checked, and explained by the student are logged in the research notes to ensure full explainability during presentation.
 
-## 欠損評価の限界も数値化できる
+## Quantifying the Limits of the Defect Heuristic
 
-Level4ではD≤160,000、K=4,096なので、単純なceil(D/K)下界が出せる値は高々40である。
-一方、位置群の剰余類を数えると、最悪の葉ブロック復元距離は71,785手以上となる。
-この大きな差は、局所的な剛体一致数だけでは全体の組合せ的困難さを十分に捉えられないことを示す。
-欠損値は深さ付き探索を省略する証明に役立つが、長距離の復元探索には別の下界・工具構造が必要になる。
+At Level 4, $D \le 160,000$ and the maximum single-move block-defect change is $K = 4,096$, so the naive $\lceil D / K \rceil$ bound can never exceed 40 moves.
+By contrast, counting cosets of the position group proves that worst-case leaf-block restoration requires at least 71,785 moves.
+This wide gap demonstrates that local rigid-block match counts alone cannot capture the global combinatorial difficulty of the group.
+While the defect lower bound is useful for pruning bounded-depth searches, long-range restoration requires stronger structural lower bounds and macro tools.
 
-## 証明の依存関係
+## Proof Dependency Graph
 
 ```mermaid
 flowchart TD
-  G[幾何モデルと全候補列挙] --> A[合法原子手カタログ]
-  A --> O[位置軌道と単一セル向き群]
-  O --> V[共同署名の像とSLP]
-  A --> T[純粋三点工具と二点向き工具の全作用]
-  T --> C[条件付き完全性定理の条件を固定Levelで確認]
+  G["Geometric model & exhaustive candidate enumeration"] --> A["Legal atomic move catalog"]
+  A --> O["Position orbits & single-cell orientation groups"]
+  O --> V["Joint-signature homomorphism image & SLP"]
+  A --> T["Transitive action of pure 3-cycle & 2-site orientation tools"]
+  T --> C["Verify hypotheses of conditional completeness theorem at fixed Level"]
   V --> C
   O --> C
-  P[旧操作部分群の独立交代群証明] --> Q[旧軌道の色組輸送と全辺証拠]
+  P["Independent alternating-group proof for standard subgroup"] --> Q["Standard-orbit color-pair transport & exhaustive edge certificates"]
   Q --> C
-  C --> N[正確な群位数と整数の手数下界]
-  C --> S[完全ソルバー]
-  S --> R[全原子手の独立再生]
-  H[復元下界と共有修正補題] --> E[階層復元と案Dの同一入力比較]
+  C --> N["Exact group order & integer move-count lower bounds"]
+  C --> S["Complete certified solver"]
+  S --> R["Independent replay of all atomic moves"]
+  H["Restoration lower bound & shared-correction lemma"] --> E["Identical-input comparison of hierarchical restoration & Option D"]
   S --> E
 ```
 
-工具の発見予算やランダム試行の成功を完全性の証明へ使わない。
-旧群の証明は新群の試行結果に依存しない。色組輸送も、旧群内での輸送と新手の証拠辺を分けて検査する。
+Tool-discovery search budgets and random scramble successes are never used as evidence in the completeness proof.
+The proof for the `standard` subgroup does not depend on empirical trials in the expanded `inner-square` group. Color-pair transport likewise separates intra-sub-orbit alternating transport from inter-sub-orbit certified bridge edges.

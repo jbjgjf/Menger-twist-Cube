@@ -1,8 +1,8 @@
-# 内面回転系の主要比較結果
+# Primary Comparison Results for the Inner-Square Move System
 
-`python3 research/inner-square-expanded/report.py` で生JSONから再生成する。欠測・失敗を試行数の分母から除かない。
+Regenerated from raw JSON via `python3 research/inner-square-expanded/report.py`. Missing or failed runs are not excluded from the trial denominator.
 
-| Level | 入力長 | 完了/予定 | 完全方式の平均手数 | 案Dの平均手数 | 案Dの平均削減率（seed bootstrap 95%区間） | 階層復元=D |
+| Level | Input length | Completed / Planned | Certified mean moves | Option D mean moves | Option D mean reduction (seed bootstrap 95% CI) | Hierarchical restoration = D |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
 | 2 | 100 | 10/10 | 3,871.4 | 3,814.3 | 1.473% (1.346–1.636%) | 10/10 |
 | 2 | 1000 | 10/10 | 4,019.0 | 3,967.1 | 1.286% (1.105–1.483%) | 10/10 |
@@ -10,16 +10,16 @@
 | 3 | 1000 | 10/10 | 1,054,840.1 | 1,005,477.3 | 4.679% (4.608–4.750%) | 10/10 |
 | 4 | 1000 | 3/3 | 19,553,701.0 | 19,310,855.3 | 1.242% (1.213–1.262%) | 3/3 |
 
-入力はslice・extension・inner全族を含む固定分布。長い歩道を一様群標本とは呼ばない。別の`direct`入力も記録する。
-両方式を同じ入力で比較し、案Dの相殺後も全原子手を整数再生する。時間は同時実行・キャッシュ・GCの影響があるため、速度優位の結論を出さない。
-階層復元がDと同じ場合、階層による追加の手数改善は0である。局所の共有例（16→10手）と深い入力での改善を混同しない。
-区間は少数seedの探索的bootstrap。群上の一様分布、未観測Levelや最適距離への外挿はしない。
+Inputs follow a fixed scramble distribution spanning all `slice`, `extension`, and `inner` move families. Long random walks are not claimed to be uniform group samples. Separate `direct` group-element inputs are recorded below.
+Both methods are evaluated on identical inputs, and every atomic move is replayed via exact integer arithmetic after Option D cancellation. Because wall-clock runtimes are affected by concurrency, caching, and garbage collection, no runtime superiority claims are drawn.
+When hierarchical restoration equals D (`Hierarchical restoration = D`), the additional move reduction attributable to hierarchical search is 0. Local shared-setup examples (16 → 10 moves) must not be conflated with move reductions on deep scrambles.
+Confidence intervals are exploratory bootstraps over a small number of seeds. We do not extrapolate to uniform group distributions, unobserved Levels, or optimal God's-number distances.
 
-## 直接構成した全群状態
+## Directly Constructed Full-Group States
 
-| Level | seed | 完全解答 | 完全方式の手数 | 案D後の手数 | 移動部品 |
+| Level | Seed | Certified solve | Certified moves | Post-Option-D moves | Displaced cubies |
 | --- | ---: | --- | ---: | ---: | ---: |
-| 3 | 101 | 成功 | 1176279 | 1104511 | 7888 |
-| 4 | 104 | 成功 | 26240580 | 25932334 | 158765 |
+| 3 | 101 | Success | 1176279 | 1104511 | 7888 |
+| 4 | 104 | Success | 26240580 | 25932334 | 158765 |
 
-直接構成は理想独立乱数の下で核と共同像の切断から全群を一様化する。実測はseed付きLCGであり、完全な乱数性の証明ではない。Dの欄が未完了なら、短縮出力の検証が計算中の場合もある。
+Under ideal independent randomness, direct construction samples uniformly from the full group via sections of the kernel and the joint homomorphism image. Actual runs use a seeded LCG and do not constitute a proof of cryptographic or perfect randomness. If an Option D entry is incomplete, verification of the shortened output word may still be in progress.

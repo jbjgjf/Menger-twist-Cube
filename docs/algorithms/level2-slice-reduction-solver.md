@@ -2,7 +2,11 @@
 
 Implementation: [`packages/solver-core/src/algorithms/level2SliceReductionSolver.ts`](../../packages/solver-core/src/algorithms/level2SliceReductionSolver.ts). Registered under algorithm id `level2-slice-reduction` (see [`register.ts`](../../packages/solver-core/src/algorithms/register.ts)).
 
-This solver removes the restriction of the [Level 2 block-quotient solver](level2-block-quotient-solver.md): it solves **every reachable Level 2 state**, including scrambles that use single-layer (scale-1) slice turns and depth-1.5 slab twists — the moves that tear 3×3×3 blocks apart. The supported scramble generator set is the *full* Level 2 move set:
+This solver solves **every reachable Level 2 state in the standard move system**, including scrambles that use single-layer (scale-1) slice turns and depth-1.5 slab twists. It first tries the short block-quotient and commutator paths. If neither produces a legal solution that replays to the exact solved state, it restarts from the original input with the proved [Level 2 certified solver](level2-certified-solver.md) in standard mode.
+
+The short searches retain their existing budgets. The [completeness proof](../proofs/level2-completeness.tex) covers the combined algorithm because every standard-reachable input is covered by the certified fallback. The inner-square coset solver uses this same suffix after at most one ring quarter-turn into the standard group.
+
+The standard scramble generator set includes these target families.
 
 | Generator | Count | Effect |
 | --- | --- | --- |

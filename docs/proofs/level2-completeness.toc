@@ -1,32 +1,33 @@
-\contentsline {section}{\numberline {1}序}{2}{section.1}%
-\contentsline {subsection}{\numberline {1.1}問題と結果}{2}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}証明の構成}{2}{subsection.1.2}%
-\contentsline {section}{\numberline {2}設定}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}位置，向き，状態}{3}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}原子手}{3}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}群としての定式化}{4}{subsection.2.3}%
-\contentsline {section}{\numberline {3}位置軌道と向きの自由度}{4}{section.3}%
-\contentsline {subsection}{\numberline {3.1}位置軌道}{4}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}向きの自由度}{4}{subsection.3.2}%
-\contentsline {section}{\numberline {4}不変量}{6}{section.4}%
-\contentsline {subsection}{\numberline {4.1}軌道偶奇}{6}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}ねじれ和と反転数}{6}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}必要条件}{7}{subsection.4.3}%
-\contentsline {section}{\numberline {5}工具}{7}{section.5}%
-\contentsline {subsection}{\numberline {5.1}純粋な3-cycle}{7}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}向き工具}{8}{subsection.5.2}%
-\contentsline {section}{\numberline {6}主定理と解法}{9}{section.6}%
-\contentsline {subsection}{\numberline {6.1}解法 L2-C}{9}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}正しさの証明}{10}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}帰結}{10}{subsection.6.3}%
-\contentsline {section}{\numberline {7}実装の完全性}{11}{section.7}%
-\contentsline {paragraph}{手数．}{12}{section*.2}%
-\contentsline {section}{\numberline {8}計算機検査の一覧}{12}{section.8}%
-\contentsline {paragraph}{回帰テスト．}{12}{section*.3}%
-\contentsline {section}{\numberline {9}証明に至る過程}{13}{section.9}%
-\contentsline {paragraph}{既存解法の扱い．}{13}{section*.4}%
-\contentsline {paragraph}{群の位数を直接数える方法の断念．}{13}{section*.5}%
-\contentsline {paragraph}{不変量の発見．}{13}{section*.6}%
-\contentsline {paragraph}{工具の発見．}{13}{section*.7}%
-\contentsline {paragraph}{拡張系．}{13}{section*.8}%
-\contentsline {section}{\numberline {10}適用範囲と限界}{13}{section.10}%
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Problem and Main Results}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Proof Architecture}{3}{subsection.1.2}%
+\contentsline {section}{\numberline {2}Model and Definitions}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Positions, Orientations, and States}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Atomic Moves}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Group Formulation}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Position Orbits and Orientation Freedom}{4}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Position Orbits}{4}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Orientation Freedom}{5}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Invariants}{6}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Orbit Parity}{6}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Twist Sums and Flip Parity}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Necessary Conditions}{7}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Macro Tools}{8}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Pure 3-Cycles}{8}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Orientation Tools}{9}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Main Theorem and Solving Algorithm}{10}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Algorithm L2-C}{10}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Proof of Correctness}{11}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Corollaries}{12}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Completeness of the Implementation}{13}{section.7}%
+\contentsline {paragraph}{Move Counts.}{13}{section*.2}%
+\contentsline {subsection}{\numberline {7.1}Hybrid Short-Solution Solvers}{13}{subsection.7.1}%
+\contentsline {section}{\numberline {8}Summary of Computational Checks}{14}{section.8}%
+\contentsline {paragraph}{Regression Tests.}{15}{section*.3}%
+\contentsline {section}{\numberline {9}Development Notes}{15}{section.9}%
+\contentsline {paragraph}{Relationship to the Heuristic Solver.}{15}{section*.4}%
+\contentsline {paragraph}{Why Direct Schreier--Sims Enumeration Was Avoided.}{15}{section*.5}%
+\contentsline {paragraph}{Finding the Invariants.}{15}{section*.6}%
+\contentsline {paragraph}{Finding the Macro Tools.}{16}{section*.7}%
+\contentsline {paragraph}{Expanded System.}{16}{section*.8}%
+\contentsline {section}{\numberline {10}Scope and Limitations}{16}{section.10}%

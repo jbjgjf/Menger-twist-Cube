@@ -13,11 +13,12 @@ import type { SolverAlgorithm, SolverExplanationStep, SolverMove, SolverRunResul
 import type { PuzzleModel } from '../model/puzzleModel';
 import { isExactlySolved, progressForCubies, progressSummary, stateKey } from './level1State';
 import { level2BlockQuotientAlgorithm } from './level2BlockQuotientSolver';
+import { level2CertifiedAlgorithm } from './level2CertifiedSolver';
 import { emitSolverDebug } from '../debug';
 
 const solverId = 'level2-slice-reduction';
 const solverName = 'level-2-slice-reduction-commutator';
-const solverVersion = '0.3.0';
+const solverVersion = '0.4.0';
 const primaryComplexityEstimate =
   'One-time commutator tool-library construction (~5s), then per solve: O(orbits) parity normalization, ' +
   '~160 conjugated pure-permutation placements found by pair-BFS over <=9120 states each (3-, 5- and double ' +
@@ -26,9 +27,9 @@ const primaryComplexityEstimate =
 /*
  * Level 2 slice-reduction solver.
  *
- * Solves every reachable Level 2 state — scrambles may use single-layer (scale-1)
- * slices, scale-3 block layers, depth-1 block extensions, depth-1.5 slab twists and
- * depth-2 cell rolls. Method (documented in docs/algorithms/level2-slice-reduction-solver.md):
+ * The bounded short-solution pass handles the full standard move alphabet.
+ * If it cannot produce a verified solution, the certified reduction solves
+ * the original state. Short-solution phases:
  *
  *   0. fast path: block-rigid states are delegated to the block-quotient solver
  *   1. orbit parity normalization (F2 linear system over quarter-turn parity vectors)
@@ -1259,7 +1260,20 @@ const applySolverMoveToCubies = (cubies: Cubie[], move: SolverMove, puzzle: Meng
   return cubies;
 };
 
-const solve = async (
+const replayLegal = (
+  model: PuzzleModel<MengerPuzzleState, SolverMove>,
+  puzzle: MengerPuzzleState,
+  moves: SolverMove[],
+): MengerPuzzleState | null => {
+  let current = model.cloneState(puzzle);
+  for (const move of moves) {
+    if (!model.isMoveLegal(current, move)) return null;
+    current = model.applyMove(current, move);
+  }
+  return current;
+};
+
+const tryShortSolution = async (
   model: PuzzleModel<MengerPuzzleState, SolverMove>,
   puzzle: MengerPuzzleState,
 ): Promise<SolverRunResult> => {
@@ -1300,7 +1314,8 @@ const solve = async (
   // Fast path: block-rigid states get the short block-quotient solution.
   emitSolverDebug(solverId, 'solve: trying block-quotient fast path');
   const fastPath = await level2BlockQuotientAlgorithm.solve(model, puzzle);
-  if (fastPath.success) {
+  const blockSolution = fastPath.success ? replayLegal(model, puzzle, fastPath.output_moves) : null;
+  if (blockSolution && isExactlySolved(blockSolution.cubies)) {
     for (const step of fastPath.explanation) {
       if (step.phase === 'state inspection') continue;
       explanation.push({ ...step, phase: `fast path — ${step.phase}` });
@@ -1322,7 +1337,7 @@ const solve = async (
   explanation.push({
     phase: 'fast path check',
     objective: 'Detect block-rigid states solvable by the short block-quotient pipeline.',
-    observation: 'The state is outside the block-rigid class (single-layer slices or slab twists tore blocks apart); running slice reduction.',
+    observation: 'The block quotient did not yield a verified solution; running slice reduction.',
     progress: inputProgress,
   });
 
@@ -1383,14 +1398,13 @@ const solve = async (
   }
 
   const outputMoves: SolverMove[] = optimized.map((atom) => atomToSolverMove(lib, atom, 'slice-reduction commutator plan'));
-  let verifyCubies = cloneCubies(puzzle.cubies);
-  for (const move of outputMoves) verifyCubies = applySolverMoveToCubies(verifyCubies, move, puzzle);
-  const finalProgress = progressForCubies(verifyCubies);
-  const solved = isExactlySolved(verifyCubies);
+  const verified = replayLegal(model, puzzle, outputMoves);
+  const solved = verified !== null && isExactlySolved(verified.cubies);
+  const finalProgress = verified ? progressForCubies(verified.cubies) : inputProgress;
   explanation.push({
     phase: 'final verification',
     objective: 'Replay the full move list on the real 400-cell state and require an exact solve.',
-    observation: progressSummary(finalProgress),
+    observation: verified ? progressSummary(finalProgress) : 'Replay rejected an illegal move.',
     progress: finalProgress,
   });
   emitSolverDebug(
@@ -1398,7 +1412,7 @@ const solve = async (
     `solve: finished in ${Math.round(performance.now() - start)}ms — success=${solved}, moves=${outputMoves.length} (raw ${pipeline.atoms.length})`,
   );
   if (!solved) {
-    return failure('Final verification failed.', 'Replaying the generated moves did not exactly solve the real state.');
+    return failure('Final verification failed.', 'The generated moves did not legally replay to the exact solved state.');
   }
 
   return {
@@ -1480,9 +1494,43 @@ const scrambleMovePool = (
   ];
 };
 
-// No `completeIn`: placement searches are budgeted and completeness is unproved
-// (level2-certified is the proved Level 2 solver).
+const solve = async (
+  model: PuzzleModel<MengerPuzzleState, SolverMove>,
+  puzzle: MengerPuzzleState,
+): Promise<SolverRunResult> => {
+  const started = performance.now();
+  const short = await tryShortSolution(model, puzzle);
+  if (short.success || puzzle.level !== 2) return short;
+
+  emitSolverDebug(solverId, `solve: using certified fallback — ${short.notes}`);
+  // Coset reduction also calls this solver with an inner-square state already
+  // in the standard group. Its suffix must use only standard atoms.
+  const certified = await level2CertifiedAlgorithm.solve(model, { ...puzzle, moveSystem: 'standard' });
+  return {
+    ...certified,
+    name: solverName,
+    version: solverVersion,
+    input_state: short.input_state,
+    runtime_ms: performance.now() - started,
+    explanation: [
+      ...short.explanation,
+      {
+        phase: 'certified fallback',
+        objective: 'Solve the original state with the complete standard reduction.',
+        observation: short.notes,
+        progress: short.input_state.progress,
+      },
+      ...certified.explanation,
+    ],
+    final_strategy: `Certified fallback. ${certified.final_strategy}`,
+    notes: `Certified fallback: ${certified.notes}`,
+  };
+};
+
 export const level2SliceReductionAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
+  moveSystemsSupported: ['standard'],
+  // The finite short-solution pass can fail. The certified fallback covers G.
+  completeIn: ['standard'],
   id: solverId,
   name: solverName,
   version: solverVersion,

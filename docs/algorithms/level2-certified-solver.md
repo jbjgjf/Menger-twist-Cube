@@ -4,7 +4,7 @@ Implementation: [`packages/solver-core/src/algorithms/level2CertifiedSolver.ts`]
 
 This is the Level 2 solver that is **proved complete**: for the standard move system (468 atoms) and for the inner-square system (522 atoms) it solves every reachable state, and rejects every unreachable one with the invariant that fails. The proof is [`docs/proofs/level2-completeness.tex`](../proofs/level2-completeness.tex).
 
-It trades length for provability. Typical solutions are about 3,800 atoms, against about 1,300 for [`level2-slice-reduction`](level2-slice-reduction-solver.md), whose completeness is not proved.
+Typical solutions are about 3,800 atoms. [`level2-slice-reduction`](level2-slice-reduction-solver.md) tries a shorter solution first and uses this certified solver as its standard-system fallback. The inner-square coset solver uses the same fallback after reducing to the standard system.
 
 ## Phases
 

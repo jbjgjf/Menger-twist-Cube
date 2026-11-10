@@ -107,3 +107,45 @@ test('coset solver: seeded inner-square scrambles are solved and replay to the e
   assert.ok(cosets[0] > 0 && cosets[1] > 0, `both cosets sampled: ${JSON.stringify(cosets)}`);
   assert.equal(standardOnlyFailures, cosets[1]);
 });
+
+test('L2 short solvers use the standard certified fallback when the short solution fails verification', async () => {
+  const cases = [
+    { model: mengerPuzzleModel, solver: level2SliceReductionAlgorithm, expectedRingMoves: 0 },
+    { model: innerSquareMengerPuzzleModel, solver: level2InnerSquareCosetAlgorithm, expectedRingMoves: 1 },
+  ];
+  for (const { model, solver, expectedRingMoves } of cases) {
+    const solved = model.createState(2);
+    const fineSlice = solved.frames.find((frame) => frame.axisName === 'X' && frame.scale === 1)!;
+    const moves = model.legalMoves(solved);
+    const slice = moves.find((move) => move.frameId === fineSlice.id && move.angle === 90)!;
+    let state = model.applyMove(solved, slice);
+    if (expectedRingMoves) {
+      const ring = moves.find((move) => move.targetId === 'ring:Z+3:inner' && move.angle === 90)!;
+      state = model.applyMove(state, ring);
+    }
+    assert.equal(innerSquareCosetOf(state.cubies), expectedRingMoves);
+
+    // Reject the heuristic's first Level 2 replay move once, so the test
+    // exercises the fallback even if the bounded search finds a solution.
+    let rejected = false;
+    const result = await solver.solve({
+      ...model,
+      isMoveLegal(current, move) {
+        if (current.level === 2 && !rejected) {
+          rejected = true;
+          return false;
+        }
+        return model.isMoveLegal(current, move);
+      },
+    }, state);
+    assert.ok(rejected, solver.id);
+    assert.equal(result.success, true, result.notes);
+    assert.ok(result.explanation.some((step) => step.phase === 'certified fallback'), solver.id);
+    assert.equal(result.output_moves.filter((move) => move.targetId.startsWith('ring:')).length, expectedRingMoves);
+    for (const move of result.output_moves) {
+      assert.equal(model.isMoveLegal(state, move), true, move.notation);
+      state = model.applyMove(state, move);
+    }
+    assert.equal(model.isSolved(state), true, solver.id);
+  }
+});

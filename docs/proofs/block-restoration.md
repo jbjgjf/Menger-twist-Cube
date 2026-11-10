@@ -1,158 +1,146 @@
-# 一般Levelのブロック復元：判定・探索・下界
+# General-Level Block Restoration: Characterization, Search, and Lower Bounds
 
-2026-10-24。n≥2、標準操作系、各対象の90度・逆90度・180度をいずれも1手とする。
-この文書の一般命題は有限の固定操作群についての解析的証明である。
-Level3・4の数値は既存の固定Level位置群証明に依存する。一般nの群位数や効率的な復元上界は仮定しない。
+October 24, 2026. We assume $n \ge 2$, the standard move system, and the atomic-move metric in which each $90^\circ$, $-90^\circ$, and $180^\circ$ turn of a legal target counts as 1 move.
+The general propositions in this document are analytical proofs for finite, fixed move groups.
+Numerical values for Levels 3 and 4 rely on the existing fixed-level position-group proofs. We do not assume a general-level group-order formula or an efficient restoration upper bound for general $n$.
 
-## 1. 葉ブロックの一意分解
+## 1. Unique Decomposition into Leaf Blocks
 
-Level nの位置は、各座標について一意に
+Every Level $n$ position can be written uniquely coordinatewise as
 
 \[
  p=3b+o,\qquad o\in\{-1,0,1\}^3,\quad
- b_i=\lfloor(p_i+1)/3\rfloor
+ b_i=\lfloor(p_i+1)/3\rfloor.
 \]
 
-と表せる。Menger条件は各桁で零が二つ以上ないことなので、bはLevel n−1の位置、
-oはLevel1の20位置である。したがってN=20^n個のセルはB=20^{n−1}個の20セルブロックに分かれる。
-これは描画や部品の現在向きによらない。
+Because the Menger condition forbids two or more zeros in each ternary digit, $b$ is a valid Level $n-1$ position and $o$ belongs to the 20 positions of Level 1. Consequently, the $N = 20^n$ cells partition into $B = 20^{n-1}$ blocks of 20 cells each.
+This decomposition is independent of rendering and of the current orientations of the pieces.
 
-## 2. 復元欠損の零点と計算量
+## 2. Zeros and Complexity of the Restoration Deficit
 
-入力位置写像をf、ホームブロックをC_b、24個の立方体回転群をRとする。
+Let $f$ be the input position map, $C_b$ the home block indexed by $b$, and $R$ an element of the 24-element cube rotation group. Define
 
 \[
  A_b(f)=\max_{c,R}\#\{o: f(3b+o)=3c+Ro\},\qquad
  D(f)=N-\sum_b A_b(f).
 \]
 
-**命題1.** 入力が位置の全単射なら、D(f)=0と、全ホームブロックが相異なる領域に剛体として配置されていることは同値。
+**Proposition 1.** If the input $f$ is a bijection on positions, then $D(f) = 0$ if and only if all home blocks are arranged as rigid bodies in pairwise distinct block regions.
 
-証明：各A_b≤20なのでD=0なら各項は20。各ブロックの全20点に同じc,Rが使える。
-二つのホームブロックが同じ領域へ写れば、それぞれ20点を占めるため全単射に反する。
-逆向きはその剛体配置を最大値の候補に選べばよい。回転の一意性は20点が三次元を張ることから従う。□
+*Proof.* Since each $A_b \le 20$, $D = 0$ implies $A_b = 20$ for every $b$. Thus all 20 sites of each block $b$ admit a common target block $c$ and rotation $R$.
+If two home blocks mapped into the same block region $c$, each would occupy 20 sites there, contradicting bijectivity of $f$.
+Conversely, if every home block is rigidly placed in a distinct block region, choosing that rigid placement as the candidate $(c, R)$ gives $A_b = 20$ for all $b$. Uniqueness of the rotation $R$ follows from the fact that the 20 sites of a Level 1 Menger sponge span three-dimensional space. $\square$
 
-各セルについて、現在領域cと、ホーム局所位置を現在局所位置へ写す回転Rに票を入れる。
-一ブロック当たり高々20×24票であり、存在する票だけを辞書に持てばよい。
-固定サイズ20と24を定数として、辞書操作を平均定数時間とすると、全Dの計算はO(N)。全N²部品対の表は不要。
+For each cell, we cast a vote for its current region $c$ and for each rotation $R$ that maps its home local offset to its current local offset.
+Each block receives at most $20 \times 24$ votes, and only nonzero vote counts need to be stored in a dictionary.
+Treating the fixed sizes 20 and 24 as constants and assuming expected constant-time dictionary operations, computing the total deficit $D$ takes $O(N)$ time; no $N^2$ all-pairs table is required.
 
-**命題2.** 操作aによって位置を変える部品のホームブロック集合をTとする。
-T以外のA_bは変わらない。操作の選択集合をS_aとすると、差分評価は
-O(|S_a|+20×24×|T|)で行える。
+**Proposition 2.** Let $T$ be the set of home blocks containing pieces whose positions change under a move $a$.
+For $b \notin T$, $A_b$ is unchanged. If $S_a$ denotes the selection set of move $a$, the incremental update of $D$ can be evaluated in $O(|S_a| + 20 \times 24 \times |T|)$ time.
 
-証明：位置の変わらない部品だけを含むブロックでは、最大値の全候補の一致数が不変。
-S_aを現在の占有部品で読み、Tを列挙し、そのブロックだけ20点を再評価すればよい。□
+*Proof.* In any block whose pieces all remain stationary, the agreement count for every candidate $(c, R)$ is unchanged.
+It suffices to read the currently occupied pieces in $S_a$, enumerate their home blocks $T$, and re-evaluate the 20 sites only for those blocks in $T$. $\square$
 
-実装はこの差分評価を使い、ビームに残す状態だけを複製する。
-幅wの状態メモリはO(wN)、幾何データはO(N)。別途、合法操作の疎写像を保持する
-O(Σ_a |S_a|)のメモリが必要であり、操作ライブラリ全体をO(N)と主張してはいけない。
+The implementation uses this incremental evaluation and clones only the states retained in the search beam.
+For beam width $w$, state memory is $O(wN)$ and geometric metadata takes $O(N)$. Separately, storing the sparse maps of legal moves requires $O(\sum_a |S_a|)$ memory; one must not claim that the entire move library uses $O(N)$ space.
 
-**命題3.** 操作でk部品の位置が変わるなら|D(fa)−D(f)|≤k。
+**Proposition 3.** If a move $a$ changes the positions of $k$ pieces, then $|D(fa) - D(f)| \le k$.
 
-証明：各ホームブロックでk_b部品が動くと、固定した(c,R)への一致数の変化は高々k_b。
-最大値同士の差も高々k_b。全ブロックで足すとΣk_b=k。□
+*Proof.* If $k_b$ pieces from home block $b$ move, the agreement count for any fixed $(c, R)$ changes by at most $k_b$, so the maximum $A_b$ also changes by at most $k_b$. Summing over all blocks gives $\sum_b k_b = k$. $\square$
 
-このため、全合法手の位置移動数の最大値をk_maxとすると復元距離はceil(D/k_max)以上。
-Dそのものは最短距離ではなく、ビーム探索の評価値として利用する。
+Consequently, if $k_{\max}$ is the maximum number of pieces displaced by any legal atomic move, the restoration distance is at least $\lceil D / k_{\max} \rceil$.
+The deficit $D$ itself is not the exact shortest distance; it serves as the heuristic objective in beam search.
 
-## 3. 復元目標は部分群になる
+## 3. The Restoration Target Forms a Subgroup
 
-位置の全置換群Sym(N)の中で、ブロックを置換し、各ブロック内を24回転で写す置換全体をWとする。
-合成と逆写像も同じ形なのでWは部分群であり、その作用は忠実だから
+Within the full symmetric group $\operatorname{Sym}(N)$ on positions, let $W$ denote the set of permutations that permute the $B$ blocks and act on the interior of each block by one of the 24 cube rotations.
+Because compositions and inverses preserve this form, $W$ is a subgroup, and since its action is faithful,
 
 \[
  |W|=24^B B!.
 \]
 
-合法操作群をG、位置作用をπ、位置群をP=π(G)とする。
-位置的に剛体ブロックを復元した状態全体は
+Let $G$ be the legal move group, $\pi$ the position action homomorphism, and $P = \pi(G)$ the induced position group.
+The set of reachable states in which all blocks are restored as positional rigid bodies forms the subgroup
 
 \[
  H=\pi^{-1}(P\cap W)\le G.
 \]
 
-向きはこの目標に制約を加えない。
+Cell orientations impose no constraint on this target subgroup.
 
-右から操作を掛ける約束では、復元はSchreierグラフの頂点HxからHへの到達問題になる。
-逆手を含む固定生成集合ならこのグラフは有限連結なので、無制限の幅優先探索は必ず終わる。
-頂点数Q=[G:H]=[P:P∩W]に対して復元距離は高々Q−1。
-これは存在・停止の証明であり、実用的な上界ではない。
-実装の有限ビーム・深さ・展開数制限には、この完全性を移せない。
+Under the convention that moves act on the right, block restoration reduces to the reachability problem from the coset $Hx$ to the identity coset $H$ in the Schreier coset graph.
+For any fixed generating set closed under inversion, this coset graph is finite and connected, so an unbounded breadth-first search is guaranteed to terminate.
+With $Q = [G : H] = [P : P \cap W]$ vertices, the restoration distance is at most $Q - 1$.
+This establishes existence and termination, not a practical upper bound.
+Completeness does not transfer to the finite beam-width, depth, and node-expansion limits used in the practical search implementation.
 
-## 4. ブロック復元の最悪手数下界
+## 4. Worst-Case Move-Count Lower Bounds for Block Restoration
 
-|P∩W|≤|W|から
+From $|P \cap W| \le |W|$, the number of cosets satisfies
 
 \[
  Q\ge\left\lceil\frac{|P|}{24^B B!}\right\rceil=:Q_0.
 \]
 
-M個の合法原子手で長さd以下の語は高々
+With $M$ legal atomic moves, the number of words of length at most $d$ is at most
 
 \[
- L_M(d)=1+M+\cdots+M^d=\frac{M^{d+1}-1}{M-1}
+ L_M(d)=1+M+\cdots+M^d=\frac{M^{d+1}-1}{M-1}.
 \]
 
-個。L_M(d)<Q_0ならHからd以内に到達できない剰余類がある。
-生成集合は逆について閉じているので、その状態からHへの復元にもdを超える手数が必要。
+Whenever $L_M(d) < Q_0$, there exists at least one coset unreachable from $H$ within $d$ moves.
+Because the generating set is closed under inversion, restoring a state in that coset to $H$ likewise requires more than $d$ moves.
 
-**固定Levelの系.** [Level3の位置群証明](level3-completeness.tex)と
-[Level4の位置群証明](level4-completeness.md)の
+**Corollary for Fixed Levels.** Using the position group orders
 
 \[
  |P_n|=2^{r_n}\prod_O\frac{|O|!}{2}
 \]
 
-を使うと次の下界を得る。
+established in the [Level 3 completeness proof](level3-completeness.tex) and the [Level 4 completeness proof](level4-completeness.md), we obtain the following worst-case lower bounds:
 
-| Level | N | B | M | パリティ階数 | Q₀の桁数 | 復元最悪手数の下界 |
+| Level | $N$ | $B$ | $M$ | Parity rank | Digits of $Q_0$ | Worst-case restoration lower bound |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | 3 | 8000 | 400 | 3591 | 15 | 9979 | **2807** |
 | 4 | 160000 | 8000 | 44784 | 66 | 199108 | **42809** |
 
-計算は浮動小数点の対数を使わず、BigIntで階乗・商の切上げ・幾何級数を計算し、
-L_M(d−1)<Q₀≤L_M(d)の両側を検査する。
-再現: `node --import tsx research/block-restoration/counting-bound.ts`。
-これは位置的剛体ブロックを任意の位置に戻すだけの下界であり、完成状態までの距離を数えていない。
-既存のGod's number下界を置き換えるものではなく、中間目標の難しさに対する下界である。
+The computation avoids floating-point logarithms: it evaluates factorials, ceiling quotients, and geometric series exactly using `BigInt`, verifying both inequalities $L_M(d-1) < Q_0 \le L_M(d)$.
+Reproduction command: `node --import tsx research/block-restoration/counting-bound.ts`.
+This bound counts only the moves required to reassemble positionally rigid leaf blocks at arbitrary macro positions, not the distance to the fully solved state.
+It does not replace the existing God's-number lower bounds; rather, it establishes a lower bound on the difficulty of the intermediate block-restoration subproblem.
 
-## 5. 下位Levelへの還元に必要な条件
+## 5. Conditions Required for Reduction to the Lower Level
 
-Hの元はブロックへの置換と回転を誘導する。しかし、その誘導状態が下位Levelの合法操作群
-G_{n−1}に属することは、位置的剛体性だけからは導けない。
-細かい操作によって誘導可能な作用が増える可能性があるため、ここは未証明として扱う。
+Every element of $H$ induces a permutation and local rotations of the $B$ blocks. However, positional rigidity alone does not imply that this induced macro-state belongs to the legal move group $G_{n-1}$ of the lower level.
+Because fine-scale moves might synthesize macro-actions outside $G_{n-1}$, we treat membership in $G_{n-1}$ as unproved in general.
 
-**条件付き還元定理.** 次の条件を満たす入力には階層的解法が成り立つ。
+**Conditional Reduction Theorem.** A hierarchical solution succeeds for any input state satisfying the following four conditions:
 
-1. 合法語uで位置的剛体状態へ復元できる。
-2. その誘導された位置・回転状態に、下位Levelの解答語vが存在する。
-3. vの各手に上位Levelの合法な持上げがあり、全セルについてブロック置換・内部位置・向きの作用が一致する。
-4. 持上げ後の位置固定残差に解答語kが存在する。
+1. A legal word $u$ restores the input to a positionally rigid block state.
+2. The induced macro-position and macro-rotation state admits a solving word $v$ at Level $n-1$.
+3. Every move in $v$ admits a legal lift at Level $n$ whose action agrees across all cells on block permutation, internal local offset, and cell orientation.
+4. The position-fixing residual state after lifting admits a solving word $k$.
 
-証明：u後の各セル位置は3b+Ro。条件3の一手は、マクロ回転Qによりこれを
-3b′+QRoへ写し、各部品の向きにもQを掛ける。vの最後で全マクロ位置・回転が完成するので
-全セル位置も完成する。残る向きはkが直す。従ってu lift(v) kは解答語。□
+*Proof.* After applying $u$, each cell's position has the form $3b + Ro$. By Condition 3, each lifted macro-move with macro-rotation $Q$ sends $3b + Ro$ to $3b' + QRo$ and multiplies each piece's orientation on the left by $Q$. At the end of $v$, all macro-positions and macro-rotations are solved, so every cell's position is solved. The remaining orientation residual is then solved by $k$. Thus the concatenated word $u\,\operatorname{lift}(v)\,k$ solves the input. $\square$
 
-各条件に一様な手数上界ρ_n、U_{n−1}、一手の持上げ長λ_n、残差上界κ_nがあれば
-U_n≤ρ_n+λ_n U_{n−1}+κ_n。ただし現時点ではこの全条件を一般nの全状態に示していない。
-一般nの効率的完全解法や直径の改善を、この式だけから主張できない。
+If uniform move-count bounds $\rho_n$ (for restoration), $U_{n-1}$ (for the Level $n-1$ solution), $\lambda_n$ (for lifting a single macro-move), and $\kappa_n$ (for the orientation residual) hold across all states, then $U_n \le \rho_n + \lambda_n U_{n-1} + \kappa_n$. However, we have not established these conditions across all states for general $n$.
+One cannot claim an efficient complete solver or an improved diameter bound for general $n$ from this recurrence alone.
 
-実装では条件2を実際の下位ソルバーの成功で確認し、条件3を使用する各原子手について
-全Nセルで照合する。失敗した商の解答列は出力へ追加しない。
-位置が完成したら独立単セル回転を試し、残差には固定Levelの証明済み方式を適用する。
-探索で復元できなければ元の入力を証明済み方式へ渡す。
-よって、合法手で到達可能性を保ちながら、Level3・4の完全性は既存方式から継承する。
-これは既存の固定Level証明に依存し、一般nの完全性の新証明ではない。
+In the implementation, Condition 2 is verified by the actual success of the lower-level solver, and Condition 3 is checked across all $N$ cells for every atomic move used. Any quotient solution word whose lift fails verification is discarded rather than appended to the output.
+Once positions are solved, the solver applies independent single-cell turns and then invokes the certified fixed-level completion procedure on the remaining orientation residual.
+If the beam search fails to restore the blocks, the original input is passed directly to the certified fixed-level solver.
+Accordingly, while preserving reachability via legal moves, completeness at Levels 3 and 4 is inherited from the certified fixed-level solvers; this relies on the fixed-level proofs and does not constitute a new completeness proof for general $n$.
 
-## 6. 操作を共有する一般条件
+## 6. General Conditions for Sharing Setup Moves
 
-選択位置集合が互いに素な二操作は、位置写像も向きの更新も互いの選択集合を変えず、可換である。
-また共通の準備操作Sを使う工具T_iには、可換性によらず
+Two moves whose selection position sets are disjoint leave each other's position maps and orientation updates within their respective selections invariant, and therefore commute.
+More generally, for any family of tools $T_i$ conjugated by a common setup word $S$, regardless of whether the $T_i$ commute, the identity
 
 \[
  (S T_1 S^{-1})\cdots(S T_k S^{-1})=S(T_1\cdots T_k)S^{-1}
 \]
 
-が成り立つ。語をそのまま連結する場合に比べて、2(k−1)|S|手の準備操作を省ける。
-工具の効果が互いの修正を妨げない条件と、同じSで輸送できる領域族の発見は別に必要。
-この代数恒等式だけでは一般nの漸近改善は示されない。
+holds identically. Compared to concatenating the conjugated words naively, this saves $2(k-1)|S|$ setup moves.
+Ensuring that the tools' effects do not interfere with one another's corrections and finding families of regions transportable by a common setup word $S$ require separate analysis.
+This algebraic identity alone does not establish an asymptotic improvement for general $n$.

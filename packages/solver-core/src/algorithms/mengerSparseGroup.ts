@@ -164,7 +164,7 @@ export const inverseAtom = (group: SparseGroup, a: SparseAtom): SparseAtom => {
   if (!atom) throw new Error(`Missing inverse of ${a.id}`);
   return atom;
 };
-export const inverseWord = (group: SparseGroup, word: SparseAtom[]): SparseAtom[] => word.slice().reverse().map((a) => inverseAtom(group, a));
+export const inverseWord = (group: SparseGroup, word: readonly SparseAtom[]): SparseAtom[] => word.slice().reverse().map((a) => inverseAtom(group, a));
 export const fullAction = (word: readonly SparseAtom[]): SparseAction => {
   // Long isolation words revisit broad frames many times. Composing their
   // selected-site actions costs sum |support(atom)|, whereas tracing their

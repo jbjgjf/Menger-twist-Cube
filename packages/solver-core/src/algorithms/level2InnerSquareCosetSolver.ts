@@ -20,14 +20,12 @@ import { level2SliceReductionAlgorithm } from './level2SliceReductionSolver';
  * does exactly that: compute ψ, apply one ring turn if needed, then hand the
  * state to `level2-slice-reduction`.
  *
- * Completeness: this solver solves every H-reachable state **if and only if**
- * `level2-slice-reduction` solves every G-reachable state. The latter is
- * unproved for Level 2 (wiki §4.7), so this solver is not proved complete
- * either — but it adds no new gap of its own.
+ * The suffix is complete on G because slice reduction falls back to the
+ * certified standard solver. Both cosets of H therefore have a solution.
  */
 const solverId = 'level2-inner-square-coset';
 const solverName = 'Level 2 inner-square coset reduction';
-const solverVersion = '0.1.0';
+const solverVersion = '0.2.0';
 
 const key = (position: readonly number[]): string => position.join(',');
 
@@ -204,10 +202,10 @@ const solve = async (
 /**
  * No `scrambleMovePool`: benchmarks scramble with the model's full legal move
  * set, which under the inner-square model includes the 54 ring atoms.
- * No `completeIn`: it inherits the unproved completeness of level2-slice-reduction.
  */
 export const level2InnerSquareCosetAlgorithm: SolverAlgorithm<MengerPuzzleState, SolverMove> = {
   moveSystemsSupported: ['inner-square'],
+  completeIn: ['inner-square'],
   id: solverId,
   name: solverName,
   version: solverVersion,

@@ -64,7 +64,7 @@ The claim is structural, not “seven random tests passed.”
    descent always exists, which was never proved. The twist group has joint
    constraints — twist sum 0 on the C3 orbits, even flip count on the D4 orbit —
    and the solver now finishes with a certified completion built on them. See
-   `docs/proofs/level3-completeness.tex`, section "2026年10月10日の改訂".)*
+   `docs/proofs/level3-completeness.tex`, section "2026-10-10 Revision".)*
 8. The sparse result is not trusted at the boundary: the real engine performs
    the legality-checked exact replay.
 
