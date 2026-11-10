@@ -228,19 +228,19 @@ export default function OctahedronApp() {
           <div className="pointer-events-auto flex flex-col items-start gap-2">
             <div className="flex gap-2">
               <button onClick={() => setControlsOpen((open) => !open)}>{controlsOpen ? 'Close controls' : 'Controls'}</button>
-              <a href="/" className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700">
+              <a href="/" className="rounded-md bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700">
                 Menger Cube
               </a>
             </div>
 
             {controlsOpen && (
-              <div className="max-h-[calc(100vh-4rem)] w-[min(350px,calc(100vw-1rem))] space-y-3 overflow-y-auto rounded-xl border border-slate-700 bg-slate-900/75 p-3 shadow-2xl backdrop-blur-sm sm:p-4">
+              <div className="max-h-[calc(100vh-4rem)] w-[min(350px,calc(100vw-1rem))] space-y-3 overflow-y-auto rounded-xl bg-slate-900/75 p-3 shadow-2xl backdrop-blur-sm sm:p-4">
                 <div>
                   <h2 className="text-lg font-bold tracking-wide text-white sm:text-xl">Octahedron Puzzle</h2>
                   <p className="text-xs text-slate-400">Turn pyramids and frustums about the six vertex axes.</p>
                 </div>
 
-                <div className="grid grid-cols-[auto_1fr] items-center gap-2 rounded-md border border-slate-700 bg-slate-950/40 p-2 text-xs text-slate-300">
+                <div className="grid grid-cols-[auto_1fr] items-center gap-2 rounded-md bg-slate-950/40 p-2 text-xs text-slate-300">
                   <span className="font-semibold text-slate-100">Level</span>
                   <div className="grid grid-cols-4 gap-2">
                     {octaLevels.map((target) => (
@@ -262,7 +262,7 @@ export default function OctahedronApp() {
                   </span>
                 </div>
 
-                <div className="rounded-md border border-slate-700 bg-slate-950/40 p-2 text-xs text-slate-300">
+                <div className="rounded-md bg-slate-950/40 p-2 text-xs text-slate-300">
                   <p className="mb-2 font-semibold text-slate-100">Turn Navigator</p>
                   <p className="mb-1 text-[10px] uppercase tracking-wider text-slate-500">Axis</p>
                   <div className="mb-2 grid grid-cols-6 gap-1" role="group" aria-label="Turning axis">
@@ -319,7 +319,7 @@ export default function OctahedronApp() {
                   </div>
                 </div>
 
-                {notice && <div className="rounded-md border border-slate-700 bg-slate-950/40 p-2 text-xs text-slate-300">{notice}</div>}
+                {notice && <div className="rounded-md bg-slate-950/40 p-2 text-xs text-slate-300">{notice}</div>}
 
                 <div className="grid grid-cols-2 gap-2">
                   <button disabled={busy || computing} onClick={scramble}>Scramble</button>
@@ -337,7 +337,7 @@ export default function OctahedronApp() {
           <div className="pointer-events-auto flex flex-col items-end gap-2">
             <button onClick={() => setInfoOpen((open) => !open)}>{infoOpen ? 'Close info' : 'Info'}</button>
             {infoOpen && (
-              <div className="w-[min(280px,calc(100vw-1rem))] rounded-lg border border-slate-700 bg-slate-900/70 p-3 text-xs text-slate-300">
+              <div className="w-[min(280px,calc(100vw-1rem))] rounded-lg bg-slate-900/70 p-3 text-xs text-slate-300">
                 <p className="mb-1 font-semibold text-slate-100">How it works</p>
                 <ul className="space-y-1">
                   <li>• Each label (+X, −X, …) marks a turning axis through a vertex.</li>

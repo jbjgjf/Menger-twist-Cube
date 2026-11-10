@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, type MutableRefObject } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
+import { useTheme } from '@menger/theme';
 import {
   BufferGeometry,
   CanvasTexture,
@@ -54,6 +55,7 @@ function Piece({ puzzle, index, rot, highlighted, animation }: {
   highlighted: boolean;
   animation: MutableRefObject<OctaAnimation | null>;
 }) {
+  const theme = useTheme();
   const meshRef = useRef<Mesh>(null);
   const { faces, edges } = useMemo(() => {
     const geometry = octaPieceGeometry(puzzle.pieces[index]!);
@@ -94,7 +96,7 @@ function Piece({ puzzle, index, rot, highlighted, animation }: {
         emissiveIntensity={highlighted ? 0.9 : 0}
       />
       <lineSegments geometry={edges}>
-        <lineBasicMaterial color={highlighted ? '#67e8f9' : '#10121c'} />
+        <lineBasicMaterial color={highlighted ? theme.accentHex : '#10121c'} />
       </lineSegments>
     </mesh>
   );
@@ -171,12 +173,13 @@ function CameraReset({ request }: { request: number }) {
 }
 
 export default function OctahedronScene({ puzzle, state, animation, highlighted, cameraRequest }: Props) {
+  const theme = useTheme();
   return (
     <Canvas className="touch-none" shadows camera={{ position: [6, 6, 6], fov: 50, near: 0.1, far: 100 }}>
-      <color attach="background" args={['#070b14']} />
-      <fog attach="fog" args={['#070b14', 32, 75]} />
+      <color attach="background" args={[theme.background]} />
+      <fog attach="fog" args={[theme.background, 32, 75]} />
       <ambientLight intensity={0.9} />
-      <hemisphereLight args={['#38bdf8', '#070b14', 0.35]} />
+      <hemisphereLight args={['#ffffff', theme.background, 0.3]} />
       <directionalLight castShadow position={[8, 10, 6]} intensity={1.8} shadow-mapSize-width={2048} shadow-mapSize-height={2048} />
       <directionalLight position={[-8, -2, -6]} intensity={0.6} />
 
@@ -196,7 +199,7 @@ export default function OctahedronScene({ puzzle, state, animation, highlighted,
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3.4, 0]} receiveShadow>
         <planeGeometry args={[30, 30]} />
-        <shadowMaterial opacity={0.2} />
+        <shadowMaterial opacity={theme.resolved === 'dark' ? 0.2 : 0.12} />
       </mesh>
 
       <OrbitControls
@@ -210,9 +213,6 @@ export default function OctahedronScene({ puzzle, state, animation, highlighted,
         maxDistance={22}
       />
       <CameraReset request={cameraRequest} />
-      <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-        <GizmoViewport axisColors={['#ef4444', '#38bdf8', '#4ade80']} labelColor="white" />
-      </GizmoHelper>
     </Canvas>
   );
 }

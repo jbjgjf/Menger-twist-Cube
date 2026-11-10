@@ -1,4 +1,4 @@
-This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)  (format=lualatex 2026.10.21)  10 NOV 2026 18:14
+This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)  (format=lualatex 2026.10.21)  10 NOV 2026 18:23
  restricted system commands enabled.
  file:line:error style messages enabled.
 **/Users/shou/hobby/menger-cube/docs/proofs/level2-completeness.tex
@@ -394,34 +394,34 @@ Underfull \hbox (badness 10000) in paragraph at lines 471--472
 \TU/lmr/m/it/10.95 (\TU/lmtt/m/it/10.95 packages/solver-core/src/algorithms/level2CertifiedSolver.ts\TU/lmr/m/it/10.95 )
  []
 
-[12] [13] [14] [15]
-Underfull \hbox (badness 3449) in paragraph at lines 570--571
+[12] [13] [14] [15] [16]
+Underfull \hbox (badness 3449) in paragraph at lines 604--605
 \TU/lmtt/m/n/10.95 docs/research/square-region-rotation-model.md\TU/lmr/m/n/10.95 , where both
  []
 
-[16] (./level2-completeness.aux)
+[17] (./level2-completeness.aux)
  ***********
 LaTeX2e <2026-06-01>
 L3 programming layer <2026-09-09>
  ***********
 Package rerunfilecheck Info: File `level2-completeness.out' has not changed.
-(rerunfilecheck)             Checksum: D45577A66E655BE7467BA1C78B7971B4;4152.
+(rerunfilecheck)             Checksum: 313D8D5CAFDE1C03B75C342240804CB8;4400.
 )
 
 Here is how much of LuaTeX's memory you used:
- 11250 strings out of 475604
+ 11255 strings out of 475604
  125129,794899 words of node,token memory allocated
  612 words of node memory still in use:
    7 hlist, 2 vlist, 2 rule, 2 glue, 4 kern, 1 glyph, 22 attribute, 63 glue_spec, 22 attribute_list, 1 write nodes
-   avail lists: 1:4,2:828,3:254,4:77,5:434,6:64,7:6441,8:65,9:553,10:17,11:437
- 33868 multiletter control sequences out of 65536+600000
+   avail lists: 1:4,2:828,3:254,4:77,5:464,6:64,7:6825,8:65,9:553,10:17,11:480
+ 33870 multiletter control sequences out of 65536+600000
  70 fonts using 5232983 bytes
  76i,13n,78p,597b,530s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmmono10-italic.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman10-italic.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman12-bold.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman10-regular.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman10-bold.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman12-regular.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman17-regular.otf></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/shou/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on level2-completeness.pdf (16 pages, 243725 bytes).
+Output written on level2-completeness.pdf (17 pages, 248128 bytes).
 
-PDF statistics: 442 PDF objects out of 1000 (max. 8388607)
- 373 compressed objects within 4 object streams
- 97 named destinations out of 1000 (max. 1048576)
- 209 words of extra memory for PDF output out of 10000 (max. 100000000)
+PDF statistics: 455 PDF objects out of 1000 (max. 8388607)
+ 385 compressed objects within 4 object streams
+ 100 named destinations out of 1000 (max. 1048576)
+ 217 words of extra memory for PDF output out of 10000 (max. 100000000)
 

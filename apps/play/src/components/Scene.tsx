@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
+import { OrbitControls } from '@react-three/drei';
+import { useTheme } from '@menger/theme';
 import { Quaternion, Vector3 } from 'three';
 import type { Cubie, DragPreview, FrameId, InteractionMode, RotationFrame, TurnTarget } from '../types/puzzle';
 import PuzzleCube from './PuzzleCube';
@@ -116,6 +117,7 @@ function CameraRig({
 
 export default function Scene(props: SceneProps) {
   const controlsRef = useRef<any>(null);
+  const theme = useTheme();
   const [twistActive, setTwistActive] = useState(false);
   const gridSize = 3 ** props.level;
   const cubieSize = 2.65 / gridSize;
@@ -137,11 +139,11 @@ export default function Scene(props: SceneProps) {
 
   return (
     <Canvas className="touch-none" shadows camera={{ position: [6, 6, 6], fov: 50, near: 0.1, far: 100 }}>
-      <color attach="background" args={['#070b14']} />
-      <fog attach="fog" args={['#070b14', 32, 75]} />
+      <color attach="background" args={[theme.background]} />
+      <fog attach="fog" args={[theme.background, 32, 75]} />
 
       <ambientLight intensity={0.9} />
-      <hemisphereLight args={['#38bdf8', '#070b14', 0.35]} />
+      <hemisphereLight args={['#ffffff', theme.background, 0.3]} />
       <directionalLight
         castShadow
         position={[8, 10, 6]}
@@ -196,7 +198,7 @@ export default function Scene(props: SceneProps) {
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -3.4, 0]} receiveShadow>
         <planeGeometry args={[30, 30]} />
-        <shadowMaterial opacity={0.2} />
+        <shadowMaterial opacity={theme.resolved === 'dark' ? 0.2 : 0.12} />
       </mesh>
 
       <OrbitControls
@@ -217,9 +219,6 @@ export default function Scene(props: SceneProps) {
         controlsRef={controlsRef}
       />
 
-      <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-        <GizmoViewport axisColors={['#ef4444', '#38bdf8', '#4ade80']} labelColor="white" />
-      </GizmoHelper>
     </Canvas>
   );
 }

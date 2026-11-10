@@ -12,6 +12,7 @@
   "dependencies": {
     "@menger/engine": "*",
     "@menger/solver-core": "*",
+    "@menger/theme": "*",
     "@react-three/drei": "^10.0.8",
     "@react-three/fiber": "^9.1.2",
     "@vercel/analytics": "^2.0.1",

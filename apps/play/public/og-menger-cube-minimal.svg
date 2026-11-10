@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f5f2"/>
+  <g transform="translate(451 83) scale(2.98)" fill="none" stroke="#171717" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M50 16 79 32.75v33.5L50 83 21 66.25v-33.5L50 16Zm-29 16.75L50 49.5l29-16.75M50 49.5V83"/>
+    <path d="m50 27.2 9.7 5.6-9.7 5.6-9.7-5.6L50 27.2Zm-19.3 22.3 9.6 5.6v11.1l-9.6-5.5V49.5Zm38.6 0-9.6 5.6v11.1l9.6-5.5V49.5Z"/>
+  </g>
+  <text x="600" y="485" text-anchor="middle" fill="#171717" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="38" font-weight="500" letter-spacing="-0.8">Menger Twist Cube</text>
+  <text x="600" y="526" text-anchor="middle" fill="#777773" font-family="Helvetica Neue, Helvetica, sans-serif" font-size="18" letter-spacing="0.4">A puzzle in another dimension.</text>
+</svg>

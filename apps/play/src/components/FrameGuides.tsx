@@ -1,6 +1,7 @@
 import { useMemo, useRef } from 'react';
 import type { ThreeEvent } from '@react-three/fiber';
 import { Torus } from '@react-three/drei';
+import { useTheme } from '@menger/theme';
 import type { FrameId, RotationFrame } from '../types/puzzle';
 
 interface Props {
@@ -36,6 +37,7 @@ export default function FrameGuides({
   onDragPreview,
   onDragActiveChange,
 }: Props) {
+  const theme = useTheme();
   const dragStart = useRef<{ x: number; frame: FrameId } | null>(null);
 
   const orderedFrames = useMemo(() => [...frames].sort((a, b) => b.radius - a.radius), [frames]);
@@ -45,7 +47,7 @@ export default function FrameGuides({
       {orderedFrames.map((frame) => {
         const isActive = selectedFrame === frame.id;
         const isHover = hoveredFrame === frame.id;
-        const color = isActive ? '#f8fafc' : isHover ? '#e2e8f0' : frame.color;
+        const color = isActive || isHover ? theme.accentHex : frame.color;
 
         return (
           <Torus

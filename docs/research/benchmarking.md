@@ -22,7 +22,7 @@ The same `runBenchmark()` call also backs `apps/lab`'s "Run benchmark" button (i
 
 The lab lists only algorithms that declare `completeIn` for the selected move system, meaning they solve every reachable state of it. `level2-slice-reduction` is listed for standard and `level2-inner-square-coset` for inner-square because both have a certified fallback. Generator-subset solvers (`level2-block-quotient`, `level3-block-quotient`) remain available through the CLI.
 
-Its "Moves vs. compute" panel compares every listed solver for one level and move system on identical seeded scrambles. The scrambles come from the reference solver's generator set. It plots the median wall time (log scale) against the median solution length with per-seed points, and marks the Pareto front: the solvers that no other solver beats on both axes. Each solver gets one untimed warm-up solve first, and the solver order rotates per seed. Times come from one browser worker on one device, so they are descriptive and not a performance claim.
+The "Moves vs. compute" page at `/lab/compare` compares every listed solver for one level and move system on identical seeded scrambles. The scrambles come from the reference solver's generator set. It plots the median wall time (log scale) against the median solution length with per-seed points, and marks the Pareto front: the solvers for which no other solver is at least as good on both axes and better on one. The two L2 rotation solvers accept any of the 24 completed orientations. The other solvers use the fixed orientation. Each solver gets one untimed warm-up solve first, and the solver order rotates per seed. Times come from one browser worker on one device, so they are descriptive and not a performance claim.
 
 ## Comparing results
 

@@ -512,6 +512,40 @@ If $\psi(\varepsilon(s))=1$, the solver applies a single square-ring atomic move
 Then $\psi(\varepsilon(s\cdot r))=0$, so $s\cdot r\in G$ is solved by the standard-system solver.
 \end{proof}
 
+\subsection{Solving up to a Whole-Cube Rotation}\label{sec:whole-rotation}
+
+Let $K$ be the group of the 24 proper rotations of a cube.
+For each coordinate axis, a quarter turn of each of the three coarsest slices rotates every cell once about that axis.
+These turns are legal standard moves and the three resulting quarter turns generate $K$.
+Thus $K\subseteq G_S$ in both move systems, and the goal of the two solvers below is to reach any state in $K$.
+
+\begin{corollary}
+Both \code{level2-rotation-target} and \code{level2-rotation-quotient-search}
+solve every reachable state up to a whole-cube rotation, in the standard and expanded move systems.
+\end{corollary}
+
+\begin{proof}
+In this subsection, composition is written right to left, so a move $a$ sends $s$ to $as$.
+Relabeling the home position of each cell by $R\in K$ and replacing its orientation $Q$ by $QR^{-1}$
+represents the state $sR^{-1}$.
+Physical moves select cells by current position and act on their orientations from the left, so the same moves apply after relabeling.
+
+The target selection solver scores the 24 choices using positional cycles and orientation defects at cells already in place, and selects one $R$.
+Since $sR^{-1}\in G_S$, Theorem~\ref{thm:impl} gives a legal word $w$ with $wsR^{-1}=e$.
+On the original input, that word ends at $ws=R$.
+
+The search solver uses the right cosets $sK$ as vertices.
+If the cell at a fixed site has orientation $Q$, the search key represents $sQ^{-1}$.
+For $T\in K$, the state $sT$ has orientation $QT$ at the same site, giving the same key since $sT(QT)^{-1}=sQ^{-1}$.
+Equal keys also imply membership in the same right coset.
+Left multiplication by a legal move preserves this equivalence, so the search can keep one representative per key.
+The solver checks the goal first, then explores one move from each of the input and goal cosets.
+At a meeting vertex, the inverse move from the goal frontier applies to the input representative and ends in $K$.
+This finds a shortest solution whenever one exists within two moves.
+Otherwise Theorem~\ref{thm:impl} supplies a solution ending at $e\in K$.
+Both solvers replay their output on the original input, checking the legality of every move and requiring the endpoint to belong to $K$.
+\end{proof}
+
 \section{Summary of Computational Checks}\label{sec:checks}
 
 We list the computational checks on which the proof relies.

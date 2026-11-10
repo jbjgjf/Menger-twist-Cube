@@ -1,11 +1,9 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useTheme } from '@menger/theme';
 import type { CompareRun } from '../solverWorkerProtocol';
 
-// Categorical slots 1-3 for the dark surface. Validated all-pairs (scatter)
-// against the Lab panel surface #0a1122: CVD ΔE ≥ 9.4, normal-vision ΔE ≥ 20.9,
-// contrast ≥ 3:1. A scatter caps at three series; no level has more complete solvers.
-const seriesColors = ['#3987e5', '#d95926', '#199e70'] as const;
-const surface = '#0a1122';
+// Categorical colors for the five Level 2 solvers on the dark plot surface.
+const seriesColors = ['#3987e5', '#d95926', '#199e70', '#ca8fdb', '#dac354'] as const;
 const chartHeight = 340;
 const margin = { top: 16, right: 28, bottom: 52, left: 68 };
 /** Advance of an 11px monospace glyph, used to keep direct labels inside the plot. */
@@ -75,7 +73,6 @@ export const summarizeComparison = (algorithmIds: string[], runs: CompareRun[]):
     const solved = own.filter((run) => run.success);
     return {
       algorithmId,
-      // Fixed slot per solver, never cycled; a fourth would need faceting instead.
       color: seriesColors[index] ?? '#94a3b8',
       solved: solved.length,
       failed: own.length - solved.length,
@@ -122,6 +119,10 @@ interface Props {
 }
 
 export default function TradeoffChart({ algorithmIds, runs, seedCount }: Props) {
+  const theme = useTheme();
+  const surface = theme.background;
+  const gridStroke = theme.resolved === 'dark' ? '#2c2c2e' : '#d2d2d7';
+  const frontStroke = theme.resolved === 'dark' ? '#c7c7cc' : '#515154';
   const [containerRef, width] = useElementWidth();
   const [hover, setHover] = useState<Hover | null>(null);
   // Marks move when runs stream in or a new comparison starts.
@@ -181,7 +182,7 @@ export default function TradeoffChart({ algorithmIds, runs, seedCount }: Props) 
             aria-label="Solution length against solver time; each large dot is a solver's median, small dots are single seeds.">
             {scales.yTicks.map((tick) => (
               <g key={`y${tick}`}>
-                <line x1={margin.left} x2={width - margin.right} y1={scales.y(tick)} y2={scales.y(tick)} stroke="#1e293b" strokeWidth={1} />
+                <line x1={margin.left} x2={width - margin.right} y1={scales.y(tick)} y2={scales.y(tick)} stroke={gridStroke} strokeWidth={1} />
                 <text x={margin.left - 8} y={scales.y(tick)} dy="0.32em" textAnchor="end" className="fill-slate-500 text-[11px]">
                   {compact.format(tick)}
                 </text>
@@ -189,7 +190,7 @@ export default function TradeoffChart({ algorithmIds, runs, seedCount }: Props) 
             ))}
             {scales.xTicks.map((tick) => (
               <g key={`x${tick}`}>
-                <line x1={scales.x(tick)} x2={scales.x(tick)} y1={margin.top} y2={margin.top + innerHeight} stroke="#1e293b" strokeWidth={1} />
+                <line x1={scales.x(tick)} x2={scales.x(tick)} y1={margin.top} y2={margin.top + innerHeight} stroke={gridStroke} strokeWidth={1} />
                 <text x={scales.x(tick)} y={margin.top + innerHeight + 16} textAnchor="middle" className="fill-slate-500 text-[11px]">
                   {formatMs(tick)}
                 </text>
@@ -202,7 +203,7 @@ export default function TradeoffChart({ algorithmIds, runs, seedCount }: Props) 
               Solution length (moves) — lower is shorter
             </text>
 
-            {frontPath && <path d={frontPath} fill="none" stroke="#cbd5e1" strokeWidth={1.5} />}
+            {frontPath && <path d={frontPath} fill="none" stroke={frontStroke} strokeWidth={1.5} />}
 
             {solvedRuns.map((run) => (
               <circle key={`${run.algorithmId}-${run.seed}`} cx={scales.x(run.wallMs)} cy={scales.y(run.moveCount)} r={4}
@@ -222,7 +223,7 @@ export default function TradeoffChart({ algorithmIds, runs, seedCount }: Props) 
               const labelY = cy - 16 < margin.top + 6 ? cy + 24 : cy - 16;
               return (
                 <g key={s.algorithmId}>
-                  {s.onFront && <circle cx={cx} cy={cy} r={11} fill="none" stroke="#cbd5e1" strokeWidth={1} />}
+                  {s.onFront && <circle cx={cx} cy={cy} r={11} fill="none" stroke={frontStroke} strokeWidth={1} />}
                   <circle cx={cx} cy={cy} r={7} fill={s.color} stroke={surface} strokeWidth={2} />
                   <text x={labelX} y={labelY} className="fill-slate-300 font-mono text-[11px]">
                     {s.algorithmId}

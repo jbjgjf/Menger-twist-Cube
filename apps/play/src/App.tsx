@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useReducer, useState } from 'react';
-import ControlPanel from './components/ControlPanel';
-import MoveHistory from './components/MoveHistory';
 import Scene, { type CameraPreset } from './components/Scene';
+import { Segmented, SettingsAction, SettingsLabel, SettingsMenu } from '@menger/theme';
 import {
   createMove,
   getAffectedCubieIds,
-  getAffectedTurnTargetCubieIds,
   availableScalesForLevel,
   heavyRenderLevels,
   isPlayableLevel,
+  supportedLevels,
   turnTargetSummaryForLevel,
   validateFrameRotation,
   validateTurnTargetRotation,
@@ -97,6 +96,7 @@ const cycleExtensionTarget = (
 };
 
 const animationDurationMs = 380;
+const animationBusyMessage = 'Animation in progress. Please wait.';
 
 const randomAngle = (): TwistAngle => {
   const values: TwistAngle[] = [90, -90, 180];
@@ -108,8 +108,7 @@ export default function PlayApp() {
   const isDesktop = useIsDesktop();
   const [cameraPreset, setCameraPreset] = useState<CameraPreset>('reset');
   const [cameraPresetRequest, setCameraPresetRequest] = useState(0);
-  const [controlsOpen, setControlsOpen] = useState(false);
-  const [infoOpen, setInfoOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const [demoSelectedCubies, setDemoSelectedCubies] = useState<Set<string>>(new Set());
 
   const isDemo = window.location.pathname === '/demo';
@@ -125,7 +124,7 @@ export default function PlayApp() {
       return;
     }
     if (state.puzzle.isAnimating) {
-      dispatch({ type: 'INVALID', message: 'Animation in progress. Please wait.' });
+      dispatch({ type: 'INVALID', message: animationBusyMessage });
       return;
     }
     const selectedFrame = state.puzzle.frameById.get(frame);
@@ -162,7 +161,7 @@ export default function PlayApp() {
       return;
     }
     if (state.puzzle.isAnimating) {
-      dispatch({ type: 'INVALID', message: 'Animation in progress. Please wait.' });
+      dispatch({ type: 'INVALID', message: animationBusyMessage });
       return;
     }
 
@@ -192,14 +191,6 @@ export default function PlayApp() {
     };
 
     requestAnimationFrame(animate);
-  };
-
-  const onMove = (angle: TwistAngle) => {
-    if (state.ui.interactionMode === 'cubie') {
-      runExtensionRotation(state.puzzle.selectedExtension, angle);
-    } else {
-      runMove(state.puzzle.selectedFrame, angle);
-    }
   };
 
   const selectAxis = (axisName: AxisName) => {
@@ -367,28 +358,6 @@ export default function PlayApp() {
     state.ui.interactionMode,
   ]);
 
-  const hoverPreviewCount = useMemo(() => {
-    if (state.ui.interactionMode === 'cubie') {
-      if (!state.puzzle.selectedExtension) return 0;
-      return getAffectedTurnTargetCubieIds(
-        state.puzzle.cubies,
-        state.puzzle.selectedExtension,
-        state.puzzle.turnTargetById,
-      ).size;
-    }
-    const frame = state.ui.hoveredFrame ?? state.puzzle.selectedFrame;
-    if (!frame) return 0;
-    return getAffectedCubieIds(state.puzzle.cubies, frame, state.puzzle.frameById).size;
-  }, [
-    state.puzzle.cubies,
-    state.puzzle.frameById,
-    state.puzzle.selectedExtension,
-    state.puzzle.selectedFrame,
-    state.puzzle.turnTargetById,
-    state.ui.hoveredFrame,
-    state.ui.interactionMode,
-  ]);
-
   const onGuideDrag = (frameId: FrameId, angle: number | null) => {
     dispatch({ type: 'SELECT_FRAME', frameId });
     if (angle === null) {
@@ -412,17 +381,14 @@ export default function PlayApp() {
     () => state.puzzle.turnTargets.filter((target) => target.kind === 'extension'),
     [state.puzzle.turnTargets],
   );
-  const extensionTargetsAtCurrentDepth = useMemo(
-    () => extensionTargetsAtDepth(extensionTargets, state.ui.extensionDepth),
-    [extensionTargets, state.ui.extensionDepth],
-  );
-  const extensionDepths = useMemo(
-    () => extensionDepthsFromTargets(state.puzzle.turnTargets),
-    [state.puzzle.turnTargets],
-  );
-  const selectedExtensionTarget = state.puzzle.selectedExtension
-    ? state.puzzle.turnTargetById.get(state.puzzle.selectedExtension) ?? null
-    : null;
+  const invalidFeedback = state.ui.invalidFeedback;
+  useEffect(() => {
+    if (!invalidFeedback || invalidFeedback === animationBusyMessage) return;
+    setToast(invalidFeedback);
+    const timer = window.setTimeout(() => setToast(null), 2600);
+    return () => window.clearTimeout(timer);
+  }, [invalidFeedback]);
+
   const targetSummary = turnTargetSummaryForLevel(state.puzzle.level);
   const playableLevel = isPlayableLevel(state.puzzle.level, { allowHeavyRendering: isDesktop });
 
@@ -475,10 +441,10 @@ export default function PlayApp() {
           }}
         />
       ) : (
-        <div className="flex h-full w-full items-center justify-center bg-slate-950 px-4 text-slate-100 md:pl-[390px]">
-          <div className="w-full max-w-3xl rounded-lg border border-slate-700 bg-slate-900/80 p-5 shadow-2xl">
-            <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Research / Evaluation UI</p>
-            <h1 className="mt-2 text-2xl font-bold">Level {state.puzzle.level} is outside direct human play.</h1>
+        <div className="flex h-full w-full items-center justify-center bg-slate-950 px-5 text-slate-100">
+          <div className="w-full max-w-3xl rounded-3xl bg-slate-900 p-7">
+            <p className="text-xs font-medium text-cyan-300">Research / Evaluation</p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight">Level {state.puzzle.level} is outside direct human play.</h1>
             {heavyRenderLevels.includes(state.puzzle.level as (typeof heavyRenderLevels)[number]) && !isDesktop ? (
               <p className="mt-3 text-sm leading-6 text-amber-200">
                 Level {state.puzzle.level} renders {(20 ** state.puzzle.level).toLocaleString()} cubies. That is a
@@ -492,17 +458,17 @@ export default function PlayApp() {
               </p>
             )}
             <div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
-              <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
+              <div className="rounded-2xl bg-slate-950/60 p-4">
                 <p className="text-slate-400">Frame targets</p>
-                <p className="mt-1 font-mono text-lg text-white">{targetSummary.frames.toLocaleString()}</p>
+                <p className="mt-1 text-xl font-semibold tracking-tight text-white">{targetSummary.frames.toLocaleString()}</p>
               </div>
-              <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
+              <div className="rounded-2xl bg-slate-950/60 p-4">
                 <p className="text-slate-400">Extension targets</p>
-                <p className="mt-1 font-mono text-lg text-white">{targetSummary.extensions.toLocaleString()}</p>
+                <p className="mt-1 text-xl font-semibold tracking-tight text-white">{targetSummary.extensions.toLocaleString()}</p>
               </div>
-              <div className="rounded-md border border-slate-700 bg-slate-950/50 p-3">
+              <div className="rounded-2xl bg-slate-950/60 p-4">
                 <p className="text-slate-400">Total turn targets</p>
-                <p className="mt-1 font-mono text-lg text-white">{targetSummary.total.toLocaleString()}</p>
+                <p className="mt-1 text-xl font-semibold tracking-tight text-white">{targetSummary.total.toLocaleString()}</p>
               </div>
             </div>
             <div className="mt-4 text-xs leading-5 text-slate-400">
@@ -513,133 +479,47 @@ export default function PlayApp() {
         </div>
       )}
 
-      <header className="pointer-events-none absolute left-1/2 top-2 z-10 w-[min(44rem,calc(100vw-12rem))] -translate-x-1/2 text-center sm:top-3">
-        <p className="hidden text-[10px] font-semibold uppercase tracking-[0.22em] text-cyan-300/80 sm:block">
-          Interactive recursive 3D puzzle
-        </p>
-        <h1 id="game-title" className="truncate text-sm font-bold tracking-wide text-white drop-shadow-lg sm:text-lg">
+      <header className="pointer-events-none absolute left-5 top-4 z-10 sm:left-7 sm:top-5">
+        <h1 id="game-title" className="text-[15px] font-semibold tracking-tight text-slate-100">
           Menger Twist Cube
         </h1>
       </header>
 
-      <div className="pointer-events-none absolute inset-0 flex items-start justify-between gap-3 p-2 sm:p-4">
-        <div className="pointer-events-auto flex flex-col items-start gap-2">
-          <div className="flex gap-2">
-            <button onClick={() => setControlsOpen((open) => !open)}>
-              {controlsOpen ? 'Close controls' : 'Controls'}
-            </button>
-            <a
-              href="/keyboard"
-              className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
-            >
-              Keyboard
-            </a>
-            <a
-              href="/lab"
-              className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
-            >
-              Solver Lab
-            </a>
-            <a
-              href="/octahedron"
-              className="rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-xs font-medium text-slate-100 transition hover:bg-slate-700"
-            >
-              Octahedron
-            </a>
-          </div>
-          {controlsOpen && (
-            <ControlPanel
-              selectedFrame={state.puzzle.selectedFrame}
-              selectedExtensionTarget={selectedExtensionTarget}
-              level={state.puzzle.level}
-              interactionTier={state.puzzle.interactionTier}
-              cubieCount={state.puzzle.cubies.length}
-              frameCount={state.puzzle.frames.filter((f) => f.scale === state.ui.frameScale).length}
-              targetSummary={targetSummary}
-              isAnimating={state.puzzle.isAnimating}
-              invalidFeedback={state.ui.invalidFeedback}
-              interactionMode={state.ui.interactionMode}
-              frameScale={state.ui.frameScale}
-              extensionDepth={state.ui.extensionDepth}
-              extensionDepths={extensionDepths}
-              extensionTargetsAtDepthCount={extensionTargetsAtCurrentDepth.length}
-              availableScales={availableScalesForLevel(state.puzzle.level)}
-              frameById={state.puzzle.frameById}
-              onMove={onMove}
-              onScramble={scramble}
-              onReset={resetPuzzle}
-              onUndo={undoMove}
-              onRedo={redoMove}
-              onToggleTransparent={() => dispatch({ type: 'TOGGLE_TRANSPARENCY' })}
-              onToggleGuides={() => dispatch({ type: 'TOGGLE_GUIDES' })}
-              onSetCameraPreset={requestCameraPreset}
-              onSetLevel={setLevel}
-              onSetFrameScale={setFrameScale}
-              onSetExtensionDepth={(depth) => dispatch({ type: 'SET_EXTENSION_DEPTH', depth })}
-              onCycleExtension={(direction) => {
-                const targetId = cycleExtensionTarget(
-                  direction,
-                  state.puzzle.turnTargets,
-                  state.puzzle.selectedExtension,
-                  state.ui.extensionDepth,
-                );
-                if (targetId) dispatch({ type: 'SELECT_EXTENSION', targetId });
-              }}
-              onSelectAxis={selectAxis}
-              onCycleLayer={cycleLayer}
+      <div className="absolute right-3 top-3 z-10 sm:right-5 sm:top-4">
+        <SettingsMenu>
+          <div>
+            <SettingsLabel>Level</SettingsLabel>
+            <Segmented
+              options={supportedLevels.map((level) => ({ id: level, label: String(level) }))}
+              value={state.puzzle.level}
+              onChange={setLevel}
+              disabled={state.puzzle.isAnimating}
             />
-          )}
-        </div>
-
-        {playableLevel && <div className="pointer-events-auto flex flex-col items-end gap-2">
-          <button onClick={() => setInfoOpen((open) => !open)}>
-            {infoOpen ? 'Close info' : 'Info'}
-          </button>
-          {infoOpen && <div className="w-[min(280px,calc(100vw-1rem))] space-y-3">
-          <div className="rounded-lg border border-slate-700 bg-slate-900/70 p-3 text-xs text-slate-300">
-            <p className="mb-1 font-semibold text-slate-100">
-              Interaction hints
-              <span className={`ml-2 rounded px-1.5 py-0.5 text-[10px] font-bold ${state.ui.interactionMode === 'cubie' ? 'bg-amber-500/30 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>
-                {state.ui.interactionMode === 'cubie' ? 'EXTENSION MODE' : 'SLICE MODE'}
-              </span>
-            </p>
-            <ul className="space-y-1">
-              <li>• Tab: toggle Slice / Extension mode</li>
-              {state.ui.interactionMode === 'slice' ? (
-                <>
-                  <li>• Tap cubie face: select frame (current scale ×{state.ui.frameScale})</li>
-                  <li>• Drag highlighted cubies: preview and release to turn</li>
-                  <li>• X/Y/Z: select axis &nbsp; [/]: prev/next layer</li>
-                  {availableScalesForLevel(state.puzzle.level).length > 1 && (
-                    <li>• -/=: thinner/thicker slices</li>
-                  )}
-                  <li>• A/D/S or J/L/K: rotate selected frame</li>
-                  <li>• 1-9: quick select, Q/E: cycle frame</li>
-                </>
-              ) : (
-                <>
-                  <li>• Tap an edge block: select extension target</li>
-                  <li>• -/=: D block / D.5 slab / deeper target</li>
-                  <li>• Q/E: previous/next extension target</li>
-                  <li>• A/D/S or J/L/K: rotate selected extension</li>
-                </>
-              )}
-              <li>• Drag empty space: orbit view</li>
-              <li>• Current target affects {hoverPreviewCount} cubies</li>
-            </ul>
           </div>
-          <MoveHistory moves={state.puzzle.moveHistory} />
-          </div>}
-        </div>}
+          <div className="-mx-2 grid grid-cols-2 gap-0.5">
+            <SettingsAction onClick={undoMove}>Undo</SettingsAction>
+            <SettingsAction onClick={redoMove}>Redo</SettingsAction>
+            <SettingsAction onClick={scramble} disabled={!playableLevel}>Scramble</SettingsAction>
+            <SettingsAction onClick={resetPuzzle}>Reset</SettingsAction>
+          </div>
+        </SettingsMenu>
       </div>
+
+      <p
+        role="status"
+        aria-live="polite"
+        className={`pointer-events-none absolute bottom-7 left-1/2 z-10 -translate-x-1/2 rounded-full bg-slate-900/80 px-4 py-2 text-xs text-slate-200 ring-1 ring-slate-100/10 backdrop-blur-xl transition-opacity duration-300 ${toast ? 'opacity-100' : 'opacity-0'}`}
+      >
+        {toast ?? '\u00a0'}
+      </p>
     </section>
 
-    <article id="about" className="border-t border-slate-800 bg-slate-950 px-5 py-14 sm:px-8">
+    <article id="about" className="bg-slate-950 px-6 py-24 sm:px-10">
       <div className="mx-auto max-w-5xl">
         <div className="grid gap-10 lg:grid-cols-[1.35fr_.65fr]">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300">About the puzzle</p>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white">A twisty cube built from recursive geometry</h2>
+            <p className="text-sm font-medium text-cyan-300">About the puzzle</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight text-white">A twisty cube built from recursive geometry</h2>
             <p className="mt-5 text-base leading-7 text-slate-300">
               Menger Twist Cube is a free interactive 3D puzzle inspired by the Menger sponge, a classic fractal formed by
               repeatedly dividing a cube and removing its central sections. This browser game turns that mathematical idea
@@ -653,40 +533,40 @@ export default function PlayApp() {
               move follows the same geometry and collision rules used by the project&apos;s solver engine.
             </p>
           </div>
-          <nav aria-label="Explore Menger Cube" className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-200">Explore</h2>
+          <nav aria-label="Explore Menger Cube" className="rounded-3xl bg-slate-900 p-6">
+            <h2 className="text-sm font-semibold text-slate-200">Explore</h2>
             <ul className="mt-4 space-y-3 text-sm">
               <li><a className="text-cyan-300 hover:text-cyan-200" href="#game-title">Play the 3D puzzle</a></li>
               <li><a className="text-cyan-300 hover:text-cyan-200" href="/keyboard">Read the keyboard guide</a></li>
               <li><a className="text-cyan-300 hover:text-cyan-200" href="/lab">Open the solver algorithm lab</a></li>
               <li><a className="text-cyan-300 hover:text-cyan-200" href="/octahedron">Try the octahedron puzzle</a></li>
             </ul>
-            <p className="mt-5 border-t border-slate-800 pt-5 text-xs leading-5 text-slate-400">
+            <p className="mt-5 text-xs leading-5 text-slate-400">
               Runs locally in a modern WebGL browser. No account, download, or installation is required.
             </p>
           </nav>
         </div>
 
-        <section className="mt-14" aria-labelledby="how-to-play">
-          <h2 id="how-to-play" className="text-2xl font-bold text-white">How to play Menger Twist Cube</h2>
+        <section className="mt-24" aria-labelledby="how-to-play">
+          <h2 id="how-to-play" className="text-3xl font-semibold tracking-tight text-white">How to play Menger Twist Cube</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
-              <p className="text-sm font-bold text-cyan-300">1. Choose a target</p>
+            <div className="rounded-3xl bg-slate-900 p-6">
+              <p className="text-sm font-semibold text-cyan-300">1. Choose a target</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">Click a cubie face in Slice mode, or switch to Extension mode and select an edge block.</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
-              <p className="text-sm font-bold text-cyan-300">2. Rotate the structure</p>
+            <div className="rounded-3xl bg-slate-900 p-6">
+              <p className="text-sm font-semibold text-cyan-300">2. Rotate the structure</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">Drag the highlighted target, or use A, S, and D for −90°, 180°, and +90° turns.</p>
             </div>
-            <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
-              <p className="text-sm font-bold text-cyan-300">3. Experiment freely</p>
+            <div className="rounded-3xl bg-slate-900 p-6">
+              <p className="text-sm font-semibold text-cyan-300">3. Experiment freely</p>
               <p className="mt-2 text-sm leading-6 text-slate-300">Scramble with G, undo with U, reset with Backspace, and orbit the camera by dragging empty space.</p>
             </div>
           </div>
         </section>
 
-        <section className="mt-14 max-w-3xl" aria-labelledby="faq-title">
-          <h2 id="faq-title" className="text-2xl font-bold text-white">Frequently asked questions</h2>
+        <section className="mt-24 max-w-3xl" aria-labelledby="faq-title">
+          <h2 id="faq-title" className="text-3xl font-semibold tracking-tight text-white">Frequently asked questions</h2>
           <div className="mt-6 space-y-6">
             <div>
               <h3 className="font-semibold text-slate-100">Is Menger Twist Cube free?</h3>

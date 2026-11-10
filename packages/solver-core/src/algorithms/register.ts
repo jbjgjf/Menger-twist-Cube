@@ -1,3 +1,4 @@
+import { level2RotationTargetAlgorithm, level2RotationQuotientSearchAlgorithm } from './level2RotationSolvers';
 import { level2BlockRestorationAlgorithm } from './level2BlockRestorationSolver';
 import { registerAlgorithm } from '../algorithm/registry';
 import { level1QuotientAlgorithm } from './level1QuotientSolver';
@@ -17,6 +18,8 @@ registerAlgorithm(level2BlockQuotientAlgorithm);
 registerAlgorithm(level2SliceReductionAlgorithm);
 registerAlgorithm(level2InnerSquareCosetAlgorithm);
 registerAlgorithm(level2CertifiedAlgorithm);
+registerAlgorithm(level2RotationTargetAlgorithm);
+registerAlgorithm(level2RotationQuotientSearchAlgorithm);
 registerAlgorithm(level3BlockQuotientAlgorithm);
 registerAlgorithm(level3SliceReductionAlgorithm);
 registerAlgorithm(level4SliceReductionAlgorithm);

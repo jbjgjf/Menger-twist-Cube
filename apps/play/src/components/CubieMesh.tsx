@@ -5,6 +5,7 @@ import type { ThreeEvent } from '@react-three/fiber';
 import { Edges } from '@react-three/drei';
 import type { Cubie, DragPreview, FrameId, RotationFrame, TurnTarget } from '../types/puzzle';
 import { rotatePositionAroundPivot } from '@menger/engine';
+import { useTheme } from '@menger/theme';
 
 interface Props {
   cubie: Cubie;
@@ -55,6 +56,7 @@ export default function CubieMesh({
   onClick,
   onDoubleClick,
 }: Props) {
+  const theme = useTheme();
   const previewQuaternion = useMemo(() => {
     if (!dragPreview) return null;
     if (dragPreview.extensionTargetId) {
@@ -151,7 +153,7 @@ export default function CubieMesh({
       {highlighted && (
         <Edges
           threshold={15}
-          color={dragPreview ? '#f8fafc' : '#67e8f9'}
+          color={dragPreview ? theme.foreground : theme.accentHex}
           scale={1.015}
           renderOrder={20}
         />
@@ -159,7 +161,7 @@ export default function CubieMesh({
       {isCubieSelected && (
         <Edges
           threshold={15}
-          color={dragPreview?.cubieId === cubie.id ? '#fde68a' : '#f59e0b'}
+          color={theme.accentHex}
           scale={1.02}
           renderOrder={21}
         />

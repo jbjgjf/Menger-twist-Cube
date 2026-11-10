@@ -22,6 +22,7 @@ export { level2BlockQuotientAlgorithm, warmLevel2Solver } from './algorithms/lev
 export { level2SliceReductionAlgorithm, warmLevel2SliceReductionSolver } from './algorithms/level2SliceReductionSolver';
 export { level2InnerSquareCosetAlgorithm, innerSquareCosetOf } from './algorithms/level2InnerSquareCosetSolver';
 export { level2CertifiedAlgorithm, warmLevel2CertifiedSolver } from './algorithms/level2CertifiedSolver';
+export { level2RotationTargetAlgorithm, level2RotationQuotientSearchAlgorithm } from './algorithms/level2RotationSolvers';
 export { level3BlockQuotientAlgorithm, warmLevel3BlockQuotientSolver } from './algorithms/level3BlockQuotientSolver';
 export { level3SliceReductionAlgorithm, warmLevel3SliceReductionSolver } from './algorithms/level3SliceReductionSolver';
 export { level4SliceReductionAlgorithm, warmLevel4SliceReductionSolver } from './algorithms/level4SliceReductionSolver';

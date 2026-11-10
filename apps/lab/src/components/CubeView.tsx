@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { BoxGeometry, Group, MathUtils, MeshStandardMaterial, Vector3 } from 'three';
 import type { Vector3Tuple } from 'three';
+import { useTheme } from '@menger/theme';
 import type { Cubie, MengerPuzzleState } from '@menger/engine';
 import type { SolverMove } from '@menger/solver-core';
 
@@ -119,6 +120,7 @@ function RotatingSlice({
 }
 
 export default function CubeView({ puzzle, cubies, activeMove, progressRef, tick }: Props) {
+  const theme = useTheme();
   const resolved = useMemo(() => resolveMove(activeMove, puzzle, cubies), [activeMove, puzzle, cubies]);
   const staticCubies = useMemo(
     () => (resolved ? cubies.filter((cubie) => !resolved.affectedIds.has(cubie.id)) : cubies),
@@ -132,7 +134,7 @@ export default function CubeView({ puzzle, cubies, activeMove, progressRef, tick
       camera={{ position: [cameraDistance, cameraDistance * 0.8, cameraDistance * 1.15], fov: 42 }}
       className="rounded-lg"
     >
-      <color attach="background" args={['#020617']} />
+      <color attach="background" args={[theme.background]} />
       <ambientLight intensity={1.1} />
       <directionalLight position={[14, 20, 12]} intensity={1.4} />
       <directionalLight position={[-12, -8, -14]} intensity={0.5} />

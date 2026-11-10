@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1794302047.81784 "/Users/shou/hobby/menger-cube/docs/proofs/level2-completeness.tex" "level2-completeness.pdf" "level2-completeness" 1794302048.52557 0
+["pdflatex"] 1794302582.87093 "/Users/shou/hobby/menger-cube/docs/proofs/level2-completeness.tex" "level2-completeness.pdf" "level2-completeness" 1794302583.6739 0
   "/Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmmono10-italic.otf" 1255129361 63584 4d362a77d55d0d8683d2b315bd34f34b ""
   "/Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmmono10-regular.otf" 1255129361 64684 15a2082c8e31f411875a86ea2d29a0ee ""
   "/Users/shou/Library/TinyTeX/texmf-dist/fonts/opentype/public/lm/lmroman10-bold.otf" 1255129361 111240 0af0b64d6d3df41bead3f9de314afbd4 ""
@@ -170,11 +170,11 @@
   "/Users/shou/Library/TinyTeX/texmf-var/luatex-cache/generic/fonts/otl/lmroman8-regular.luc" 1793880609.30232 128150 c6cca98aa05abf6d071d55aa6a3f29a2 ""
   "/Users/shou/Library/TinyTeX/texmf-var/luatex-cache/generic/names/luaotfload-names.luc.gz" 1793880607.36024 101638 14844007671e811f7c21d539643cfcd2 ""
   "/Users/shou/Library/TinyTeX/texmf-var/web2c/luahbtex/lualatex.fmt" 1792553115 6858866 1be272a37d47c2c5705edd517f7e95c9 ""
-  "/Users/shou/hobby/menger-cube/docs/proofs/level2-completeness.tex" 1794302047.64235 38595 8193db70596ecac6cd37babacd3e5d72 ""
-  "level2-completeness.aux" 1794302048.41603 6907 1680d6f96a385af89b4b5fe760426b34 "pdflatex"
-  "level2-completeness.out" 1794302048.41669 4152 d45577a66e655be7467ba1c78b7971b4 "pdflatex"
-  "level2-completeness.tex" 1794302047.64235 38595 8193db70596ecac6cd37babacd3e5d72 ""
-  "level2-completeness.toc" 1794302048.41695 2653 bd348d4c3204266bd3592b68c87a3c35 "pdflatex"
+  "/Users/shou/hobby/menger-cube/docs/proofs/level2-completeness.tex" 1794302581.88016 40860 11c3866111ca6305e24dcf2349d7bb4b ""
+  "level2-completeness.aux" 1794302583.56201 7146 8551035a6216497f93daa3db3aeddb09 "pdflatex"
+  "level2-completeness.out" 1794302583.56282 4400 313d8d5cafde1c03b75c342240804cb8 "pdflatex"
+  "level2-completeness.tex" 1794302581.88016 40860 11c3866111ca6305e24dcf2349d7bb4b ""
+  "level2-completeness.toc" 1794302583.56351 2755 1d905d35f0e8a4ed9fdadb32f6660c4e "pdflatex"
   "preamble.tex" 1794302047.66135 1015 3d1654d17003a4477d38b96098d2c172 ""
   (generated)
   "level2-completeness.aux"

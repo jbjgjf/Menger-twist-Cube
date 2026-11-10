@@ -31,7 +31,7 @@ export default defineConfig({
     target: 'esnext',
   },
   optimizeDeps: {
-    exclude: ['cubing', 'cubing/kpuzzle', 'cubing/puzzles', 'cubing/search', '@menger/engine', '@menger/solver-core'],
+    exclude: ['cubing', 'cubing/kpuzzle', 'cubing/puzzles', 'cubing/search', '@menger/engine', '@menger/solver-core', '@menger/theme'],
     esbuildOptions: {
       target: 'esnext',
     },
