@@ -1,12 +1,12 @@
-## Level 2・3・4 構成的解法
+## Level 2, 3, and 4 Constructive Solutions
 
-- [概要と結論](Home)
-- [1. 数学的準備](Mathematical-Preliminaries)
-- [2. 回転手の定義](Move-System)
-- [3. 証明の設計](Proof-Architecture)
+- [Overview and Conclusions](Home)
+- [1. Mathematical Preliminaries](Mathematical-Preliminaries)
+- [2. Definition of Rotation Moves](Move-System)
+- [3. Proof Architecture](Proof-Architecture)
 - [4. Level 2](Level-2-Complete-Answer)
 - [5. Level 3](Level-3-Complete-Answer)
-- [6. Level 4と一般n](Level-4-Complete-Answer)
-- [付録A：164軌道](Level-3-Orbit-Catalogue)
-- [付録B：検証と再現](Verification-and-Reproducibility)
-- 論文形式の証明：リポジトリの `docs/proofs/`
+- [6. Level 4 and General n](Level-4-Complete-Answer)
+- [Appendix A: 164 Orbits](Level-3-Orbit-Catalogue)
+- [Appendix B: Verification and Reproducibility](Verification-and-Reproducibility)
+- Formal paper-style proofs: `docs/proofs/` in the repository

@@ -1,13 +1,13 @@
-# 付録A：Level 3 の164軌道一覧
+# Appendix A: Catalogue of the 164 Orbits of Level 3
 
-この表は現行の3,591合法原子手から軌道を再計算し、各軌道について代表位置、三階層桁、サイズ、完成位置での向き自由度、合法一セル回転の有無、保存済み純粋工具の支持幅と語長を対応させたものである。
+This table recomputes the position orbits from the current 3,591 legal atomic moves and lists, for each orbit, its representative position, three-tier hierarchical digits, orbit size, orientation freedom at the home position, presence of a legal single-cell roll, and the support size and word length of its stored pure tool.
 
-軌道IDは現在の正準セル順と union-find 列挙順に依存する実装上の識別子であり、数学的不変量ではない。数学的な識別には class、代表桁、軌道サイズを併用する。代表位置は各軌道で正準配列中最初に現れる位置である。
+The orbit ID is an implementation identifier that depends on the canonical cell ordering and union-find traversal order; it is not a mathematical invariant. For mathematical identification, use the coordinate class, representative digits, and orbit size together. The representative position is the first position of the orbit appearing in the canonical cell array.
 
-- orientation freedom は完成位置で到達可能な24立方体回転の個数。
-- legal roll はその軌道中に物理的に合法な深さ3一セル回転位置が存在すること。
-- tool support は純粋工具が位置を動かすセル数。
-- tool length はその保存語を構成する合法原子手数。
+- `orientation freedom` is the number of the 24 cube orientations reachable when the cell returns to its home position.
+- `legal roll` indicates whether a physically legal depth-3 single-cell rotation exists at positions within that orbit.
+- `tool support` is the number of cells whose positions are moved by the stored base pure tool.
+- `tool length` is the number of legal atomic moves composing that stored tool word.
 
 | ID | class | representative p | digits (B;b;o) | size | orientation freedom | legal roll | tool support | tool length |
 | --- | --- | --- | --- | ---: | ---: | --- | ---: | ---: |

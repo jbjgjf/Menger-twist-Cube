@@ -1,79 +1,79 @@
-# 3. 完全性証明の設計
+# 3. Proof Architecture for Completeness
 
-## 3.1 四段階への分解
+## 3.1 Four-Stage Decomposition
 
-状態 $(\sigma,\rho)$ を解く問題を、(1)位置軌道、(2)軌道ごとの偶奇、(3)軌道内部の位置、(4)位置固定後の向き、へ分ける。
+We decompose the problem of solving a reachable state $(\sigma,\rho)$ into four stages: (1) position orbits, (2) orbit-wise permutation parities, (3) positions within each orbit, and (4) cell orientations once all positions are fixed.
 
-## 3.2 軌道
+## 3.2 Orbits
 
-合法原子手集合を $S$、位置集合を $P$ とする。頂点集合を $P$ とし、$s(x)\ne x$ のとき $x$ と $s(x)$ を辺で結ぶ無向グラフ $\Gamma$ を作る。
+Let $S$ be the set of legal atomic moves and $P$ be the set of cell positions. We construct an undirected graph $\Gamma$ with vertex set $P$ by placing an edge between $x$ and $s(x)$ whenever $s\in S$ and $s(x)\ne x$.
 
-**補題3。** $\Gamma$ の連結成分は $G=\langle S\rangle$ の位置軌道と一致する。
+**Lemma 3.** The connected components of $\Gamma$ coincide with the position orbits of $G=\langle S\rangle$.
 
-**証明。** 同じ連結成分なら各辺の生成元または逆元を順に作用させて移動できる。逆に群の元は生成元と逆元の積なので、到達できる二点の間には対応する道がある。$\square$
+**Proof.** If two points lie in the same connected component, one can move from one to the other by sequentially applying the generators (or their inverses) corresponding to the edges along a connecting path. Conversely, every element of $G$ is a finite product of generators and their inverses, so any two points in the same $G$-orbit are connected by a path in $\Gamma$. $\square$
 
-実装は union-find でこの連結成分を計算する。
+The implementation computes these connected components via a union-find data structure.
 
-## 3.3 軌道偶奇
+## 3.3 Orbit Parity
 
-軌道を $\Omega_1,\ldots,\Omega_r$ とする。偶奇写像を
+Let the position orbits be $\Omega_1,\ldots,\Omega_r$. We define the orbit parity map
 
 $$
 \varepsilon:G\to\mathbf F_2^r,
 \quad
-\varepsilon(g)_i=0\ (g|_{\Omega_i}\text{が偶}),\quad1\ (\text{奇})
+\varepsilon(g)_i=0\ (g|_{\Omega_i}\text{ is even}),\quad1\ (\text{odd})
 $$
 
-と定める。符号の積法則より $\varepsilon(gh)=\varepsilon(g)+\varepsilon(h)$ である。従って到達可能状態の偶奇ベクトルは生成元ベクトルの線形結合であり、掃き出し法で消去できる。
+By the multiplicative property of the permutation sign, $\varepsilon(gh)=\varepsilon(g)+\varepsilon(h)$ in $\mathbf F_2^r$. Therefore, the parity vector of any reachable state is an $\mathbf F_2$-linear combination of the generator parity vectors and can be eliminated via Gaussian elimination.
 
-## 3.4 純粋工具
+## 3.4 Pure Tools
 
-軌道 $\Omega$ の純粋位置工具とは、$T\in G$ で次を満たすものをいう。
+A **pure position tool** for an orbit $\Omega$ is an element $T\in G$ satisfying the following three conditions:
 
-1. $\Omega$ 外では位置も向きも変えない。
-2. $\Omega$ 内でも位置を固定するセルに向きの副作用を残さない。
-3. $\Omega$ 内の少なくとも三点を非自明に置換する。
+1. Outside $\Omega$, $T$ changes neither the position nor the orientation of any cell.
+2. Inside $\Omega$, $T$ leaves no orientation side effects on any cell whose position is fixed by $T$.
+3. Inside $\Omega$, $T$ nontrivially permutes at least three points.
 
-Level 3 では全164軌道に支持幅3、4、6のいずれかの工具がある。共役によって支持を軌道内の別位置へ運べる。
+In Level 3, every one of the 164 orbits possesses a base pure tool of support size 3, 4, or 6. By Lemma 2, conjugation transports the support of a pure tool to other positions within the same orbit without introducing side effects outside the orbit.
 
-## 3.5 任意の偶置換を解く
+## 3.5 Solving Arbitrary Even Permutations
 
-**補題4。** 任意の有限偶置換は3-cycleの積で表せる。
+**Lemma 4.** Every finite even permutation can be expressed as a product of 3-cycles.
 
-**証明。** 置換を巡回へ分解する。長さ3以上の巡回は、先頭点を共有する3-cycleで順次短くできる。残る互換は偶数個であり、二互換ずつ二個以下の3-cycleへ変形できる。$\square$
+**Proof.** Decompose the permutation into disjoint cycles. Any cycle of length 3 or greater can be shortened step by step using 3-cycles that share its leading element. After all cycles of length $\ge3$ are reduced, the remaining 2-cycles (transpositions) must be even in number because the original permutation is even; each pair of transpositions can then be written as a product of at most two 3-cycles. $\square$
 
-軌道 $\Omega$ 上の作用群が $\operatorname{Alt}(\Omega)$ を含み、純粋な3-cycleを一つ持てば、共役によって任意の順序付き三点上の3-cycleを作れる。従って偶奇正規化後の全位置を解ける。
+If the induced permutation group on an orbit $\Omega$ contains $\operatorname{Alt}(\Omega)$ and we possess a single pure 3-cycle on $\Omega$, then conjugation yields a pure 3-cycle on any ordered triple of distinct points in $\Omega$ (since $\operatorname{Alt}(\Omega)$ is $(|\Omega|-2)$-transitive, and in particular 3-transitive for $|\Omega|\ge5$). Consequently, every even permutation on $\Omega$ after parity normalization can be solved without disturbing any other orbit.
 
-支持4または6の工具しかない場合、二つの共役変種を合成して共通作用を相殺し、支持3の工具を導出する。実装は有限探索後に全支持上の作用を検査する。
+When the initial base tool for an orbit has support size 4 or 6, two conjugate variants are composed to cancel overlapping actions and derive a pure 3-cycle of support size 3. The implementation finds these conjugates by finite search and exhaustively verifies the resulting action across all cells.
 
-## 3.6 向き自由度
+## 3.6 Orientation Freedom
 
-一セルの状態を $(x,R)\in\Omega\times C$ とする。各合法原子手はこの有限集合上の遷移になる。完成位置 $x_0$ に戻ったとき可能な向き
+Represent the state of a single cell within an orbit $\Omega$ as a pair $(x,R)\in\Omega\times C$. Each legal atomic move induces a transition on this finite state set. The set of orientations reachable when a cell returns to its home position $x_0$,
 
 $$
-H_{x_0}=\{R:(x_0,R)\text{が到達可能}\}
+H_{x_0}=\{R:(x_0,R)\text{ is reachable}\}
 $$
 
-は $C$ の部分群である。高々 $24|\Omega|$ 状態の幅優先探索で完全列挙できる。
+forms a subgroup of $C$. Because $|\Omega\times C|=24|\Omega|$, this subgroup can be enumerated exhaustively by breadth-first search.
 
-位置を変えない向き工具による完成までの最短距離を各セルで $d_x$ とし、$\Phi=\sum_xd_x$ と置く。毎回 $\Phi$ を真に減らせれば、非負整数の無限降下はないので向き修正は有限回で停止する。
+Let $d_x$ denote the shortest word-metric distance to the identity orientation for cell $x$ using position-fixing orientation tools, and define the potential $\Phi=\sum_x d_x$. Whenever each step strictly reduces $\Phi$ (or when a guaranteed completion phase eliminates remaining orientation invariants pair by pair), the absence of infinite descent in $\mathbf Z_{\ge0}$ guarantees that orientation correction terminates in finitely many steps.
 
-## 3.7 証明依存関係
+## 3.7 Proof Dependency Graph
 
 ```text
-合法原子手の完全列挙
-  ├─→ 位置軌道 ─→ 各軌道が Alt(Ω) を含む ─→ 純粋工具
-  ├─→ 軌道偶奇ベクトル ─→ GF(2) による正規化      │
-  └─→ 位置×24向きオートマトン ─→ 向き工具          │
-                         ↓                          ↓
-                  ポテンシャル降下          3-cycle 分解
-                         └────────┬─────────────────┘
-                                  ↓
-                            完成状態へ到達
-                                  ↓
-                    実エンジンで合法性付き再生
+Exhaustive enumeration of legal atomic moves
+  ├─→ Position orbits ─→ Each orbit contains Alt(Ω) ─→ Pure tools
+  ├─→ Orbit parity vectors ─→ Normalization over GF(2)   │
+  └─→ Position × 24-orientation automaton ─→ Orientation tools
+                         ↓                               ↓
+                  Potential descent               3-cycle decomposition
+                         └───────────┬───────────────────┘
+                                     ↓
+                           Reach solved state
+                                     ↓
+                 Replay with legality check in actual engine
 ```
 
-Level 2 の現状では「現行合法手だけによる純粋工具と向き生成」が未監査である。Level 3 ではこの依存鎖が閉じている。
+Prior to 2026-10, "pure tools and orientation generation using only currently legal moves" had not yet been audited for Level 2, whereas for Level 3 this entire dependency chain was already closed.
 
-**2026-10 追記。** Level 2 でもこの依存鎖は閉じた（`docs/proofs/level2-completeness.tex`）。Level 2 では、各軌道が交代群を含むことを Jordan の定理ではなく、順序付き三点への推移性の全探索で直接示している。
+**Addendum (2026-10).** This dependency chain is now completely closed for Level 2 as well (`docs/proofs/level2-completeness.tex`). In Level 2, rather than invoking Jordan's theorem, the fact that each orbit contains the alternating group is proved directly by exhaustive verification of transitivity on ordered triples.

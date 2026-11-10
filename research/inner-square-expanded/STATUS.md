@@ -1,32 +1,32 @@
-# 引継ぎ時点の確定状況
+# Confirmed Status at Handoff
 
 PR: https://github.com/jbjgjf/Menger-twist-Cube/pull/13
-ブランチ: `codex/inner-square-complete-l3-l4`。2026-10-25 JST。
+Branch: `codex/inner-square-complete-l3-l4`. As of 2026-10-25 JST.
 
-## 完了したもの
+## Completed Items
 
-1. Level2/3/4の全平面型と全候補を監査。全て列挙完了、受理手の厳密証明、棄却の有理数衝突証拠を確認。
-2. Level3/4の共同署名、核の構成、完全ソルバー、群位数と数え上げ下界を検証。
-3. 全54個のLevel2内面原子手と全1,974個のLevel3内面原子手の持上げを確認。一般nの復元下界と共有条件を証明。
-4. 混合43入力で完全方式・案D・階層復元を照合。直接構成2入力も完全解答・案Dの全原子手再生まで成功。
+1. Audited all plane types and all candidate moves for Levels 2, 3, and 4. Exhaustive enumeration is complete, with exact proofs for all accepted legal moves and exact rational collision certificates for all rejected candidates.
+2. Verified the joint signature, kernel construction, complete solvers, exact group orders, and counting lower bounds for Levels 3 and 4.
+3. Verified macro lifting for all 54 Level 2 inner-square atomic moves and all 1,974 Level 3 inner-square atomic moves. Proved the general-$n$ restoration lower bound and shared-correction conditions.
+4. Cross-checked the baseline certified solver, Plan D, and hierarchical restoration across 43 mixed benchmark inputs. Also succeeded on 2 directly constructed invariant-consistent states through full atomic-move replay for both the certified solver and Plan D.
 
-全43試行で階層復元の手数は案Dと同じ。構造利用による追加改善とは数えない。
-局所共有例はLevel3/4とも四修正16→10手、8葉ブロックで全作用を確認。
+Across all 43 trials, the move count of hierarchical restoration equals that of Plan D; it is therefore not counted as an additional improvement over Plan D.
+For the local shared-correction construction, four simultaneous corrections are reduced from 16 moves to 10 moves at both Levels 3 and 4, with full action verified across all 8-leaf blocks.
 
-## 1,000手入力の案D平均削減率
+## Average Move Reduction Rate of Plan D on 1,000-Move Scrambles
 
-- Level2: 1.286%（10入力）
-- Level3: 4.679%（10入力）
-- Level4: 1.242%（3入力）
+- Level 2: 1.286% (10 inputs)
+- Level 3: 4.679% (10 inputs)
+- Level 4: 1.242% (3 inputs)
 
-## 検証記録
+## Verification Record
 
-`npm run typecheck`、`npm run build`、60件の試験、全群証明、独立像照合、全輸送表、全向き工具、全内面持上げ、共有語、成果物整合性検査を完了。
-実行環境・ソース一覧は `out/source-manifest.json`。入力・実装ハッシュは各試行JSON。再集計は `report.py`。
+Completed `npm run typecheck`, `npm run build`, 60 automated test suites, full-group proofs, independent image cross-checks, exhaustive transport tables, all orientation tools, all inner-square macro liftings, shared words, and artifact integrity checks.
+The execution environment and source inventory are recorded in `out/source-manifest.json`. Input and implementation hashes are recorded in each trial JSON. Summary aggregation is reproducible via `report.py`.
 
-## 残る研究
+## Remaining Research Directions
 
-全nでの工具存在と効率的完全性、共有語の深い解答への自動配置、先行研究との新規性比較、外部専門家の証明レビュー。
-Vercelの自動プレビュー3件は失敗。ログ参照はチーム権限403で原因未確定。ローカル全ビルドは成功。
+Existence of pure tools and efficient completeness for general $n$, automated scheduling of shared correction words within deep full-solve sequences, novelty comparison against prior literature, and external expert review of the proofs.
+Three automated Vercel preview deployments failed; log inspection returned HTTP 403 due to team permission restrictions, leaving the deployment error cause unconfirmed. All local workspace builds succeed.
 
-継続時は `HANDOFF.md` のClaude Science向けプロンプトを使う。
+When resuming work, use the prompt for Claude Science in `HANDOFF.md`.

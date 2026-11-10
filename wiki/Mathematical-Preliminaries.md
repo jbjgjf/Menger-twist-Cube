@@ -1,112 +1,112 @@
-# 1. 数学的準備
+# 1. Mathematical Preliminaries
 
-## 1.1 集合、写像、置換
+## 1.1 Sets, Maps, and Permutations
 
-集合 $X$ から集合 $Y$ への写像を $f:X\to Y$ と書く。すべての $y\in Y$ がちょうど一つの $x\in X$ の像であるとき、$f$ は全単射である。有限個の駒を入れ替える操作は、駒の場所集合からそれ自身への全単射、すなわち**置換**になる。
+A map from a set $X$ to a set $Y$ is written $f:X\to Y$. When every $y\in Y$ is the image of exactly one $x\in X$, $f$ is a bijection. An operation that rearranges a finite collection of pieces is a bijection from the set of piece locations to itself—that is, a **permutation**.
 
-写像 $f$ のあとに $g$ を行う合成を $gf$ と書く。全単射には逆写像 $f^{-1}$ があり、$f^{-1}f=ff^{-1}=1$ である。$1$ は何も変えない恒等写像である。
+The composition of applying $f$ followed by $g$ is written $gf$. Every bijection has an inverse map $f^{-1}$ satisfying $f^{-1}f=ff^{-1}=1$, where $1$ denotes the identity map that leaves every element unchanged.
 
-例えば
+For example, the permutation that maps
 
 $$
 a\mapsto b,\qquad b\mapsto c,\qquad c\mapsto a
 $$
 
-で他を動かさない置換を $(a\ b\ c)$ と書き、3-cycle（三点巡回）という。
+and leaves all other elements fixed is written $(a\ b\ c)$ and is called a **3-cycle**.
 
-二点だけを交換する置換を互換という。任意の有限置換は互換の積で表せ、必要な互換数の偶奇は表し方によらない。偶数個なら偶置換、奇数個なら奇置換である。長さ $k$ の巡回置換は $k-1$ 個の互換で表せるので、3-cycle は偶、4-cycle は奇である。
+A permutation that swaps only two elements is called a **transposition**. Every finite permutation can be written as a product of transpositions, and the parity (even or odd) of the number of transpositions required is invariant under the choice of decomposition. A permutation is an **even permutation** if it can be written as a product of an even number of transpositions, and an **odd permutation** if it requires an odd number. Since a cycle of length $k$ can be written as a product of $k-1$ transpositions, a 3-cycle is even and a 4-cycle is odd.
 
-置換 $\pi$ の符号を $\operatorname{sgn}(\pi)=+1$（偶）または $-1$（奇）と定めると、
+Defining the sign of a permutation $\pi$ as $\operatorname{sgn}(\pi)=+1$ (even) or $-1$ (odd), the multiplicative property
 
 $$
 \operatorname{sgn}(\pi\sigma)=\operatorname{sgn}(\pi)\operatorname{sgn}(\sigma)
 $$
 
-が成り立つ。
+holds.
 
-## 1.2 群
+## 1.2 Groups
 
-同じ集合上の置換を合成すると再び置換になり、恒等置換と逆置換を持つ。このように結合則、単位元、逆元を備えた演算の集合を**群**という。
+Composing two permutations on the same set yields another permutation, and the set of permutations is closed under taking the identity and inverses. A set equipped with an operation satisfying associativity, the existence of an identity element, and the existence of inverse elements is called a **group**.
 
-$m$ 点の全置換群を $\operatorname{Sym}(m)$、偶置換だけの群を $\operatorname{Alt}(m)$ と書く。本稿で必要な意味は次である。
+The group of all permutations on $m$ points is denoted $\operatorname{Sym}(m)$ (the symmetric group), and the subgroup consisting of all even permutations is denoted $\operatorname{Alt}(m)$ (the alternating group). In this document, their significance is as follows:
 
-- パズルの合法手を合成してできる全操作が群を作る。
-- その群が、ある場所集合をどこまで入れ替えられるかを調べる。
-- $\operatorname{Alt}(m)$ を含めば、その集合上の任意の偶置換を実現できる。
+- All operations obtainable by composing legal moves of the puzzle form a group.
+- We investigate to what extent that group can permute a given subset of positions.
+- If the induced group on an $m$-element set contains $\operatorname{Alt}(m)$, then every even permutation on that set can be realized.
 
-## 1.3 群作用と軌道
+## 1.3 Group Actions and Orbits
 
-群 $G$ の各要素が集合 $X$ の置換として働くとき、$G$ は $X$ に作用するという。点 $x\in X$ の**軌道**を
+When each element of a group $G$ acts as a permutation of a set $X$, we say that $G$ **acts** on $X$. The **orbit** of a point $x\in X$ is defined as
 
 $$
 Gx=\{g(x)\mid g\in G\}
 $$
 
-と定める。これは $x$ が合法操作によって行ける場所すべてである。
+This is the set of all locations that $x$ can reach via legal move sequences.
 
-### 小例
+### Small Example
 
-$X=\{1,2,3,4,5,6\}$ とし、使える操作が $(1\ 2\ 3)$ と $(4\ 5)$ だけなら、軌道は
+If $X=\{1,2,3,4,5,6\}$ and the only available operations are $(1\ 2\ 3)$ and $(4\ 5)$, then the orbits are
 
 $$
 \{1,2,3\},\qquad \{4,5\},\qquad \{6\}
 $$
 
-である。1番の駒は4番へ行けない。解法は各軌道を独立に扱う必要がある。
+Piece 1 can never move to position 4. Any solver must therefore handle each orbit as an invariant set.
 
-**クラス**は座標の形など見やすい不変量による粗い分類である。**軌道**は全合法手で実際に行き来できる場所の集合である。一クラスが複数軌道に分かれることはある。
+A **class** is a coarse partition defined by transparent coordinate invariants (such as digit types). An **orbit** is the exact set of positions mutually reachable via legal moves. A single coordinate class may split into multiple orbits.
 
-## 1.4 交換子と共役
+## 1.4 Commutators and Conjugation
 
-二操作 $A,B$ の**交換子**を
+The **commutator** of two operations $A$ and $B$ is defined as
 
 $$
 [A,B]=ABA^{-1}B^{-1}
 $$
 
-と定める。二操作が可換なら交換子は恒等操作になる。局所的にだけ非可換な二操作を選ぶと、大部分が相殺され、少数の駒だけが動く。
+If $A$ and $B$ commute, their commutator is the identity operation. By choosing two operations that fail to commute only on a small overlapping region, almost all of their actions cancel out, leaving only a small number of pieces moved.
 
-操作 $T$ の $U$ による**共役**は $UTU^{-1}$ である。$U$ で対象を作業位置へ運び、$T$ を行い、$U^{-1}$ で周囲を戻す操作と解釈できる。
+The **conjugate** of an operation $T$ by $U$ is $UTU^{-1}$. Intuitively, $U^{-1}$ (or $U$, depending on left/right convention; here $UTU^{-1}$ applies $U^{-1}$ first to the point $x$) moves target pieces into the working support of $T$, $T$ performs the local modification, and $U$ restores the surrounding pieces back to their original locations.
 
-**補題1（交換子の偶奇）。** 有限集合上の任意の置換 $A,B$ に対して $[A,B]$ は偶置換である。
+**Lemma 1 (Parity of a Commutator).** For any permutations $A,B$ on a finite set, $[A,B]$ is an even permutation.
 
-**証明。**
+**Proof.**
 
 $$
 \operatorname{sgn}([A,B])
 =\operatorname{sgn}(A)^2\operatorname{sgn}(B)^2=1.
 $$
 
-よって偶置換である。$\square$
+Hence $[A,B]$ is even. $\square$
 
-**補題2（共役による支持の運搬）。** $T$ が点集合 $S$ の外を固定するなら、$UTU^{-1}$ は $U(S)$ の外を固定する。
+**Lemma 2 (Transport of Support under Conjugation).** If $T$ fixes all points outside a subset $S$, then $UTU^{-1}$ fixes all points outside $U(S)$.
 
-**証明。** $x\notin U(S)$ なら $U^{-1}(x)\notin S$ なので $T(U^{-1}(x))=U^{-1}(x)$。従って $UTU^{-1}(x)=x$。$\square$
+**Proof.** If $x\notin U(S)$, then $U^{-1}(x)\notin S$, so $T(U^{-1}(x))=U^{-1}(x)$. Consequently, $UTU^{-1}(x)=x$. $\square$
 
-## 1.5 0と1だけの線形代数
+## 1.5 Linear Algebra over $\{0,1\}$
 
-$\mathbf F_2=\{0,1\}$ 上では $1+1=0$ とする。これは偶奇だけを追跡する計算である。
+Over the two-element field $\mathbf F_2=\{0,1\}$, addition satisfies $1+1=0$. Arithmetic over $\mathbf F_2$ tracks parity (even vs. odd).
 
-軌道が $r$ 個あるとき、各軌道の置換が偶か奇かを
+When there are $r$ orbits, the parities of the induced permutations on each orbit are represented by a vector
 
 $$
 v=(v_1,\ldots,v_r)\in\mathbf F_2^r
 $$
 
-で表す。原子手 $g_j$ の偶奇効果を列ベクトル $a_j$ とすれば、使用する手の偶奇 $x_j$ は
+If the parity effect of an atomic move $g_j$ is represented by the column vector $a_j\in\mathbf F_2^r$, then the indicator variables $x_j\in\mathbf F_2$ for whether to apply each move once must satisfy
 
 $$
 a_1x_1+\cdots+a_kx_k=v
 $$
 
-を満たせばよい。これは高校数学の連立一次方程式と同じ掃き出し法で解ける。
+This system of linear equations over $\mathbf F_2$ can be solved by standard Gaussian elimination.
 
-## 1.6 幅優先探索と停止性
+## 1.6 Breadth-First Search and Termination
 
-有限グラフで出発点から辺一本、二本、三本の順に調べる方法を幅優先探索という。打ち切りなしなら、到達可能な頂点への経路を必ず発見し、到達不能なら全探索後に判定する。「深さ20まで」のような上限を置くと完全性証明にはならない。
+Exploring a finite graph from a starting vertex in order of edge distance 1, 2, 3, and so on is called **breadth-first search (BFS)**. When executed without an artificial depth cutoff, BFS is guaranteed to find a shortest path to any reachable vertex, or to certify unreachability after exhausting the finite connected component. Imposing a heuristic cutoff such as "search up to depth 20" invalidates a proof of completeness.
 
-別の停止証明として、状態ごとに非負整数 $\Phi$ を定め、一回の処理で必ず $\Phi_{new}<\Phi_{old}$ とする方法がある。非負整数は無限に減少できないので有限回で停止する。
+A second method for proving termination is to define a non-negative integer potential $\Phi\in\mathbf Z_{\ge0}$ for each state and prove that each step strictly decreases it: $\Phi_{\mathrm{new}}<\Phi_{\mathrm{old}}$. Because a non-negative integer cannot decrease infinitely many times, the process must terminate in finitely many steps.
 
-## 1.7 計算機証明
+## 1.7 Computer-Assisted Proofs
 
-有限だが巨大な場合分けをプログラムで列挙する証明を、本稿では計算機証明と呼ぶ。ただし乱数例の成功とは区別する。計算機証明として使う箇所では、入力集合、検査する性質、証明書、再検査法、そこから導ける命題を明示する。
+In this document, a proof that exhaustively enumerates a finite—though potentially large—case analysis by computer program is called a **computer-assisted proof**. We strictly distinguish such proofs from empirical successes on random scrambles. Wherever a computer-assisted proof is invoked, we explicitly specify the finite input domain, the property verified, the saved certificate, the independent verification procedure, and the mathematical proposition deduced from it.

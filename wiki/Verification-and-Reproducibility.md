@@ -1,101 +1,101 @@
-# 証拠、再現方法、用語上の注意
+# Verification, Reproducibility, and Terminology Notes
 
-## 1. 何を計算機に任せ、何を数学で保証するか
+## 1. What Is Delegated to the Computer and What Is Guaranteed by Mathematics
 
-本解法は「乱数で何度か成功したから正しい」というものではありません。計算機は有限だが大きい対象を列挙し、数学はその列挙結果から一般の場合を結論します。
+This solution is not based on the claim that "it succeeded several times on random scrambles, so it must be correct." Instead, the computer exhaustively enumerates finite—though large—objects, and mathematical theorems deduce universal completeness from those finite certificates.
 
-| 計算機が確認するもの | そこから使う数学的結論 |
+| What the computer verifies | Mathematical conclusion deduced from it |
 | --- | --- |
-| 全合法原子手と軌道分解 | 駒は所属軌道から出ない |
-| 各軌道の置換群の証明書 | 各軌道で全偶置換が可能 |
-| 164 個の純粋工具の全セル作用 | 軌道を一つずつ独立に解ける |
-| 位置×24向きの有限オートマトン | 必要な向き修正が尽くされている |
-| 偶奇ベクトルの行基本変形 | 到達可能な偶奇を正規化できる |
-| 実エンジンでの全出力手再生 | 返された個々の答えが合法で正しい |
+| All legal atomic moves and orbit decomposition | Pieces never leave their home position orbits |
+| Permutation group certificates for each orbit | Every even permutation is realizable on every orbit |
+| Full-cell action of the 164 pure tools | Orbits can be solved one by one independently |
+| Finite automaton on $(\text{position}\times 24\text{ orientations})$ | All reachable orientation states are accounted for |
+| Row reduction of orbit parity vectors | Every reachable orbit parity vector can be normalized |
+| Full move-by-move replay in the actual engine | Every individual returned solution is legal and exact |
 
-## 2. Level 3 の実測記録
+## 2. Empirical Benchmark Record for Level 3
 
-すべて、各出力手の合法性を確認しながら実エンジンで再生し、最後に全 8,000 セルの完全一致を要求した結果です。
+All trials below were replayed move-by-move in the actual puzzle engine with per-move legality checks, requiring exact agreement across all 8,000 cells at the end of the sequence.
 
-| seed | スクランブル長 | 結果 | 実行時間 | 解答手数 |
+| seed | Scramble length | Result | Execution time | Solution move count |
 | ---: | ---: | --- | ---: | ---: |
-| 1 | 5 | 成功 | 138.1 秒 | 256,171 |
-| 2 | 5 | 成功 | 112.1 秒 | 111,830 |
-| 1 | 20 | 成功 | 209.9 秒 | 364,550 |
-| 3 | 20 | 成功 | 154.8 秒 | 282,245 |
-| 4 | 20 | 成功 | 249.0 秒 | 358,331 |
-| 5 | 20 | 成功 | 197.8 秒 | 350,246 |
-| 6 | 100 | 成功 | 284.2 秒 | 424,519 |
+| 1 | 5 | Success | 138.1 s | 256,171 |
+| 2 | 5 | Success | 112.1 s | 111,830 |
+| 1 | 20 | Success | 209.9 s | 364,550 |
+| 3 | 20 | Success | 154.8 s | 282,245 |
+| 4 | 20 | Success | 249.0 s | 358,331 |
+| 5 | 20 | Success | 197.8 s | 350,246 |
+| 6 | 100 | Success | 284.2 s | 424,519 |
 
-七例は実装バグを見つける証拠にはなりますが、完全性そのものは有限軌道・純粋な3-cycle・打ち切りなし探索・向きの不変量と二点工具の議論から得られます。この表は 2026-10-10 の改訂より前の実装で測ったものです。
+While these seven trials provide regression evidence against implementation bugs, completeness itself follows from the mathematical proof combining finite orbits, pure 3-cycles, uncutoff BFS, orientation invariants, and two-cell orientation tools. Note that the table above was measured using the solver implementation prior to the 2026-10-10 revision.
 
-## 3. 再現コマンド
+## 3. Reproducibility Commands
 
-高速な Level 3 構造監査は次で実行できます。
+Run the fast Level 3 structural audit with:
 
 ```sh
 npm run verify:l3
 ```
 
-内容は、保存済み純粋工具の監査、疎シミュレータと実エンジンの比較、軌道置換群の証明書検査です。
+This audits the stored pure tools, performs differential testing between the sparse simulator and the actual engine, and verifies the permutation group certificates for all 164 orbits.
 
-完全性証明の計算機検査（C1–C9、数秒）と回帰テストは次です。
+Run the completeness proof computer checks (C1–C9, taking a few seconds) and regression tests with:
 
 ```sh
 npm run prove:l3
 npm run test:l3
 ```
 
-`test:l3` は、不変量を満たす状態を原子手を使わずに直接構成して解かせ、ねじれ和または反転偶奇を破った状態が拒否されることを確認します。
+`test:l3` directly constructs synthetic states satisfying the group invariants without using atomic moves, verifies that the solver solves them, and confirms that states violating the twist-sum or flip-parity invariants are rejected.
 
-Level 3 の一回の解答を再現する例：
+To reproduce a single full Level 3 solve benchmark:
 
 ```sh
 npm run bench -- --algorithm=level3-slice-reduction --level=3 --seeds=6 --length=100
 ```
 
-数分と大きな出力列を要します。
+Note that this takes several minutes and produces a long output move sequence.
 
-Level 2 の実験的ベンチマーク例：
+To run an experimental benchmark for the heuristic Level 2 solver:
 
 ```sh
 npm run bench -- --algorithm=level2-slice-reduction --level=2 --count=10 --length=50
 ```
 
-この成功は現行物理モデルでの完全性証明を代替しません。
+Empirical benchmark success with `level2-slice-reduction` does not substitute for a formal completeness proof in the current physical model.
 
-Level 2 の完全性の証明が依拠する計算機検査は、次で再実行できます。
+The exhaustive computer checks underlying the formal completeness proof for Level 2 (`level2-certified`) can be re-executed with:
 
 ```sh
-npm run prove:l2   # 検査 C1–C9（全探索）
-npm run test:l2    # 不変量を満たす状態を直接構成して解く試験を含む
+npm run prove:l2   # Checks C1–C9 (exhaustive search)
+npm run test:l2    # Includes solving states constructed directly from the invariants
 ```
 
-## 4. ソース内の証拠
+## 4. Evidence in the Source Repository
 
-- `docs/proofs/level2-completeness.tex`、`docs/proofs/level3-completeness.tex`：論文形式の証明
-- `packages/solver-core/src/algorithms/level2CertifiedSolver.ts`：Level 2 完全解法（証明の対象）
-- `research/level2-completeness/certify.ts`：Level 2 の証明が依拠する計算機検査
-- `packages/solver-core/src/algorithms/level2SliceReductionSolver.ts`：Level 2 構成的解法（短いが完全性は未証明）
-- `packages/solver-core/src/algorithms/level3SliceReductionSolver.ts`：Level 3 完全解法
-- `packages/solver-core/src/algorithms/level3SliceReductionToolData.ts`：164 軌道の純粋工具データ
-- `research/scratch/l3-orbit-groups.ts`：各軌道の置換群証明書
-- `research/scratch/l3-audit-tooldata.ts`：純粋工具監査
-- `research/scratch/l3-sim-vs-engine.ts`：疎シミュレータと実エンジンの比較
-- `docs/architecture/rotation-legality-design-log.md`：物理衝突判定と Level 2 の未再検証事項
-- `docs/research/level3-solver-completion-audit.md`：Level 3 完成監査
-- `docs/research/square-region-rotation-model.md`, `docs/research/square-region-rotation-impact.md`：正方形断面の内面回転を網羅した拡張モデルの定義と、Level 2 の差分・群比較（`npm run audit:square`, `npm run test:square`）
+- `docs/proofs/level2-completeness.tex`, `docs/proofs/level3-completeness.tex`: Formal paper-style completeness proofs
+- `packages/solver-core/src/algorithms/level2CertifiedSolver.ts`: Certified complete solver for Level 2 (subject of the formal proof)
+- `research/level2-completeness/certify.ts`: Exhaustive computer checks supporting the Level 2 proof
+- `packages/solver-core/src/algorithms/level2SliceReductionSolver.ts`: Constructive heuristic solver for Level 2 (shorter solutions, completeness unproved)
+- `packages/solver-core/src/algorithms/level3SliceReductionSolver.ts`: Certified complete solver for Level 3
+- `packages/solver-core/src/algorithms/level3SliceReductionToolData.ts`: Pure tool data for all 164 orbits of Level 3
+- `research/scratch/l3-orbit-groups.ts`: Permutation group certificates for each Level 3 orbit
+- `research/scratch/l3-audit-tooldata.ts`: Pure tool audit script
+- `research/scratch/l3-sim-vs-engine.ts`: Differential test comparing the sparse simulator against the actual engine
+- `docs/architecture/rotation-legality-design-log.md`: Physical collision detection design log and legacy Level 2 verification notes
+- `docs/research/level3-solver-completion-audit.md`: Level 3 solver completion audit
+- `docs/research/square-region-rotation-model.md`, `docs/research/square-region-rotation-impact.md`: Definition of the expanded move model incorporating inner-square cross-section rotations, and differential/group comparisons for Level 2 (`npm run audit:square`, `npm run test:square`)
 
-## 5. 残っている研究課題
+## 5. Remaining Research Directions
 
 ### Level 2
 
-完全性は 2026-10 に証明されました（`docs/proofs/level2-completeness.tex`）。残る課題は効率です。証明済みの解法 `level2-certified` は約3,800手、未証明の `level2-slice-reduction` は約1,300手であり、短い解法の完全性の証明、または証明済みの解法の短縮が次の課題です。
+Completeness was proved in 2026-10 (`docs/proofs/level2-completeness.tex`). The remaining challenge is move efficiency: the certified complete solver `level2-certified` averages roughly 3,800 moves, whereas the uncertified solver `level2-slice-reduction` averages roughly 1,300 moves. Proving completeness for the shorter solver or compressing the certified solver is the natural next step.
 
 ### Level 3
 
-完全性ではなく効率が課題です。工具を最短の準備手から再構成すること、連続する準備手と逆準備手を相殺すること、広い工具で一度に多くのセルを完成させることが候補です。
+Here too, the remaining challenge is move efficiency rather than completeness. Promising directions include synthesizing base tools from shortest setup words, canceling adjacent setup and inverse-setup words across consecutive steps, and utilizing wider-support tools to solve multiple cells simultaneously during the early stages.
 
-### God's number
+### God's Number
 
-Level 3 では、群の位数 $|G_3|\approx10^{11918.138}$ から情報量による下界 3353 手が得られます（位置群だけなら 3207）。意味のある上界や正確な値は分かっていません。Level 2 の到達可能状態数は $|G|\approx2.66\times10^{575}$ と決定されました。情報量による下界は216手です。
+For Level 3, the group order $|G_3|\approx10^{11918.138}$ yields an information-theoretic lower bound of 3,353 moves (or 3,207 moves from the position group alone). Tight upper bounds and the exact value of God's number remain open. For Level 2, the number of reachable states has been determined as $|G|\approx2.66\times10^{575}$, yielding an information-theoretic lower bound of 216 moves.

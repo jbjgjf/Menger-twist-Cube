@@ -1,48 +1,48 @@
-# メンガー・ツイスト・キューブの構成的解法
+# Constructive Solutions for the Menger Twist Cube
 
-**2026-10-15：** [Level4の完全解法と一般nへの結果](Level-4-Complete-Answer)を追加。
-全3,050軌道の独立工具、正確な群位数、`52,662 ≤ G4 ≤ 23,645,070` の上下界、
-一般nの合法手数の式と `Ω(20^n/n)` 下界をまとめた。
+**2026-10-15:** Added [Complete Solution for Level 4 and Results for General n](Level-4-Complete-Answer).
+This summarizes the independent tools for all 3,050 orbits, the exact group order, the lower and upper bounds `52,662 ≤ G4 ≤ 23,645,070`,
+and the general-$n$ formula for the number of legal moves along with the `Ω(20^n/n)` lower bound.
 
-## Level 2 と Level 3 の数学、アルゴリズム、計算機証明
+## Mathematics, Algorithms, and Computer-Assisted Proofs for Level 2 and Level 3
 
-版：2026-09-06
+Version: 2026-09-06
 
-本稿は、メンガーのスポンジ型回転パズルを数学的対象として定義し、Level 2 と Level 3 の解法を構成的に記述する。読者には高校数学修了程度を想定する。置換群、有限体、群作用など高校課程外の概念は、必要な箇所で定義し、小さい具体例を経て使用する。
+This document defines the Menger sponge twisty puzzle as a mathematical object and constructively describes solutions for Level 2 and Level 3. We assume the reader has a background roughly equivalent to high school mathematics. Concepts beyond the standard high school curriculum—such as permutation groups, finite fields, and group actions—are defined where needed and introduced through small concrete examples.
 
-本稿の目的は操作手順の紹介だけではない。次の三つを分離して答えることである。
+The purpose of this document is not merely to present procedural move sequences, but to separate and answer three distinct questions:
 
-1. ある出力手列が本当にパズルを解くかという**健全性**。
-2. 到達可能な任意の状態に対して手順が成功するかという**完全性**。
-3. その手順が短いか、最短かという**効率・最適性**。
+1. **Soundness:** Does a given output move sequence genuinely solve the puzzle?
+2. **Completeness:** Does the procedure succeed for every reachable state?
+3. **Efficiency and Optimality:** Is the resulting move sequence short, or shortest possible?
 
-## 結論
+## Summary of Results
 
 |  | Level 2 | Level 3 |
 | --- | --- | --- |
-| セル数 | 400 | 8,000 |
-| 現行物理モデルの合法原子手 | 468 | 3,591 |
-| 位置軌道 | 11 | 164 |
-| 一般解法 | あり（`level2-certified`） | あり |
-| 完全性 | **証明済み**（2026-10） | **証明済み** |
-| 最短性 | なし | なし |
+| Number of cells | 400 | 8,000 |
+| Legal atomic moves in the current physical model | 468 | 3,591 |
+| Position orbits | 11 | 164 |
+| General solver | Yes (`level2-certified`) | Yes |
+| Completeness | **Proved** (2026-10) | **Proved** |
+| Optimality (shortest paths) | No | No |
 
-Level 3 の「完全」は、現在の衝突判定を通る合法手だけから到達可能な任意の状態を、有限手で完成へ戻せるという意味である。代表的な実測解は約11万〜42万手であり、最短解法ではない。
+For Level 3, "complete" means that any state reachable solely via legal moves passing the current collision check can be returned to the solved state in a finite number of moves. Typical measured solutions require approximately 110,000 to 420,000 moves and are not shortest-path solutions.
 
-**2026-10 追記。** Level 2 の現行物理モデルの完全性は証明された。到達可能な状態の集合は不変量（軌道偶奇、二つの角軌道のねじれ和、一つの辺軌道の反転偶奇）で完全に特徴づけられ、解法 `level2-certified` がその全体を解く。証明は `docs/proofs/level2-completeness.tex` にある。Level 3 の証明も同じ形式で `docs/proofs/level3-completeness.tex` に移した。以下の段落は、この証明より前の状況の記述である。
+**Addendum (2026-10).** Completeness for the current physical model of Level 2 has been proved. The set of reachable states is completely characterized by invariants (orbit parities, the twist sums of the two corner orbits, and the flip parity of one edge orbit), and the solver `level2-certified` solves the entire reachable set. The proof is in `docs/proofs/level2-completeness.tex`. The proof for Level 3 has also been migrated to the same format in `docs/proofs/level3-completeness.tex`. The paragraph below describes the status prior to this proof.
 
-Level 2 には、衝突判定導入前の抽象回転モデルに対する構成的解法がある。しかし、その証明と工具ライブラリは、現在は禁止されている一セル回転も含んでいた。現行物理モデルでもベンチマークは成功するが、有限個の成功例は完全性証明ではない。本稿はこの差を明示する。
+Level 2 previously had a constructive solver for the abstract rotation model prior to the introduction of collision detection. However, that proof and its tool library relied on single-cell rotations that are now prohibited. Although benchmarks succeed under the current physical model as well, a finite number of successful trials does not constitute a proof of completeness. This document makes that distinction explicit.
 
-## 本文
+## Contents
 
-1. [数学的準備](Mathematical-Preliminaries)
-2. [回転手の厳密な定義と Level 2・3 の比較](Move-System)
-3. [完全性証明の設計](Proof-Architecture)
-4. [Level 2：構成的解法と未解決部分](Level-2-Complete-Answer)
-5. [Level 3：完全性定理と証明](Level-3-Complete-Answer)
-6. [Level 3 の164軌道一覧](Level-3-Orbit-Catalogue)
-7. [検証、再現方法、証明の限界](Verification-and-Reproducibility)
+1. [Mathematical Preliminaries](Mathematical-Preliminaries)
+2. [Strict Definition of Rotation Moves and Comparison of Levels 2 and 3](Move-System)
+3. [Proof Architecture for Completeness](Proof-Architecture)
+4. [Level 2: Constructive Solver and Previously Open Parts](Level-2-Complete-Answer)
+5. [Level 3: Completeness Theorem and Proof](Level-3-Complete-Answer)
+6. [Catalogue of the 164 Orbits of Level 3](Level-3-Orbit-Catalogue)
+7. [Verification, Reproducibility, and Proof Scope](Verification-and-Reproducibility)
 
-## 読み方
+## How to Read This Document
 
-最初から順に読めば、集合、写像、置換から出発して Level 3 の主定理まで到達する。すでに群論に慣れている読者は、第2章で記号を確認したあと、第3章と第5章を読めばよい。実装を監査したい読者は、第6章と第7章を併読されたい。
+Reading sequentially from the beginning takes you from sets, maps, and permutations all the way to the main theorem for Level 3. Readers already familiar with group theory may check the notation in Chapter 2 and proceed directly to Chapters 3 and 5. Readers wishing to audit the implementation are encouraged to read Chapters 6 and 7 alongside the text.
