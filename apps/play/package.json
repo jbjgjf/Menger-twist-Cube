@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "node scripts/write-deployment-version.mjs && tsc --noEmit -p tsconfig.app.json && vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json"
+    "typecheck": "tsc --noEmit -p tsconfig.app.json && tsc --noEmit -p tsconfig.node.json",
+    "generate:branding": "swift scripts/generate-social-image.swift public/og-menger-cube-minimal.png && swift scripts/generate-icon.swift public/apple-touch-icon.png && sips -z 48 48 public/apple-touch-icon.png --out public/favicon-48.png"
   },
   "dependencies": {
     "@menger/engine": "*",
